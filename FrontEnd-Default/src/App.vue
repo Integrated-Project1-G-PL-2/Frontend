@@ -1,47 +1,46 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+
+  const tasks = [
+    {
+      id:'1',
+      title:'This is task title',
+      assignees:'This is assignees',
+      status:'This is status'
+    },
+    {
+      id:'2',
+      title:'This is second task title',
+      assignees:'This is second assignees',
+      status:'This is second status'
+    }
+  ]
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <div class="bg-white relative border rounded-lg">
+    <h1 class="font-bold text-center">IT-Bangmod Kradan Kanban</h1>
+    <table class="w-full text-sm text-left text-gray-500">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+        <tr>
+          <th class="px-4 py-3"></th>
+          <th class="px-4 py-3">Title</th>
+          <th class="px-4 py-3">Assignees</th>
+          <th class="px-4 py-3">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="task in tasks" :key="task.id" class="itbkk-item border-b">
+        <td class="px-4 py-3">{{ task.id }}</td>
+        <td class="itbkk-title px-4 py-3">{{ task.title }}</td>
+        <td class="itbkk-assignees px-4 py-3">{{ task.assignees }}</td>
+        <td class="itbkk-status px-4 py-3">{{ task.status }}</td>
+        </tr>
+      </tbody>
+    </table>
+  
+  </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-}
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
 </style>
