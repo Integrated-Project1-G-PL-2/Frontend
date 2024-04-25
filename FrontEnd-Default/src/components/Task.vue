@@ -8,7 +8,8 @@ import {
   editItem
 } from '../utils/fetchUtils.js'
 import TaskManager from '../utils/TaskManager.js'
-// import TaskDetail from "../TaskDetail.vue"
+import TaskDetail from '@/TaskDetail.vue'
+// import TaskDetail from '../TaskDetail.vue'
 const showTaskDetail = ref(false)
 const taskManager = new TaskManager()
 onMounted(async () => {
@@ -38,6 +39,7 @@ const openPopUpToAdd = (todo) => {
         Add New Task Detail
       </button>
     </div>
+    <Teleport to="addEditPopUP"> </Teleport>
     <table class="w-full text-sm text-left text-gray-500">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50">
         <tr>

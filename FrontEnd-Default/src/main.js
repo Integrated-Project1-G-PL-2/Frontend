@@ -3,6 +3,7 @@ import './assets/main.css'
 import { createApp } from 'vue'
 import App from './App.vue'
 import Task from './components/Task.vue'
+import TaskDetail from './TaskDetail.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
