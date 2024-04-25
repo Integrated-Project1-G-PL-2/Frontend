@@ -1,19 +1,13 @@
 <script setup>
-
-  const tasks = [
-    {
-      id:'1',
-      title:'This is task title',
-      assignees:'This is assignees',
-      status:'This is status'
-    },
-    {
-      id:'2',
-      title:'This is second task title',
-      assignees:'This is second assignees',
-      status:'This is second status'
-    }
-  ]
+import { onMounted, ref } from "vue";
+import { getItems, getItemById, deleteItemById, addItem, editItem } from "./utils/fetchUtils.js"
+import  TaskManager  from "./utils/TaskManager.js";
+import TaskDetail from "./TaskDetail.vue"
+const showTaskDetail =  ref(false)
+const taskManager = new TaskManager()
+onMounted(async () => {
+   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
+})
 </script>
 
 <template>
@@ -29,18 +23,19 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="task in tasks" :key="task.id" class="itbkk-item border-b">
+        <tr v-for="task in taskManager.getTasks()" :key="task.id" class="itbkk-item border-b" @click="showTaskDetail = true">
         <td class="px-4 py-3">{{ task.id }}</td>
-        <td class="itbkk-title px-4 py-3">{{ task.title }}</td>
-        <td class="itbkk-assignees px-4 py-3">{{ task.assignees }}</td>
-        <td class="itbkk-status px-4 py-3">{{ task.status }}</td>
+        <td class="itbkk-title px-4 py-3"><div class="hover:text-sky-500">{{ task.taskTitle }}</div></td>
+        <td class="itbkk-assignees px-4 py-3">{{ task.taskAssignees }}</td>
+        <td class="itbkk-status px-4 py-3"><div class="w-full bg-emerald-500 flex justify-center rounded-md"><p>{{ task.taskStatus }}</p></div></td>
         </tr>
       </tbody>
     </table>
-  
   </div>
+  <teleport to="body" v-if="!showTaskDetail">
+    <TaskDetail></TaskDetail>
+  </teleport>
 </template>
-
 <style scoped>
 
 </style>
