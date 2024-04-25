@@ -1,4 +1,10 @@
-<script setup></script>
+<script setup>
+import { ref } from 'vue'
+
+import ButtonSetting from './components/ButtonSetting.vue'
+
+defineProps({ id: String })
+</script>
 
 <template>
   <!-- <div class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[100px]">
@@ -89,6 +95,11 @@
       >
         Design Backend API for PBI 1,2
       </h1>
+      <slot name="btn">
+        <form method="dialog" class="flex justify-center">
+          <ButtonSetting class="w-full" styleType="close" title="close" />
+        </form>
+      </slot>
     </div>
     <div class="bg-white text-sm flex">
       <!-- Description Section -->
