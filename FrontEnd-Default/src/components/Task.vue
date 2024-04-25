@@ -39,7 +39,6 @@ const openPopUpToAdd = (todo) => {
         Add New Task Detail
       </button>
     </div>
-    <Teleport to="addEditPopUP"> </Teleport>
     <table class="w-full text-sm text-left text-gray-500">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50">
         <tr>
@@ -70,8 +69,8 @@ const openPopUpToAdd = (todo) => {
       </tbody>
     </table>
   </div>
-  <!-- <teleport to="body" v-if="!showTaskDetail">
-    <TaskDetail></TaskDetail>
-  </teleport> -->
+  <teleport to="body" v-if="!showTaskDetail">
+    <TaskDetail v-show="showPopUp"></TaskDetail>
+  </teleport>
 </template>
 <style scoped></style>
