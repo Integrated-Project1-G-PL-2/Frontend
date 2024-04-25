@@ -14,6 +14,10 @@ const taskManager = new TaskManager()
 onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
 })
+const openPopUpToAdd = (todo) => {
+  editingTodo.value = todo
+  showModal.value = true
+}
 </script>
 
 <template>
