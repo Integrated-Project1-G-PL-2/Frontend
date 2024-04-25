@@ -6,18 +6,17 @@ import Task from './components/Task.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes: [
-        { path: "/",
-        redirect:'/task'},
-        {
-        path: '/task', component: Task }
-        
-    ]
-});
+  history: createWebHistory(),
+  routes: [
+    { path: '/', redirect: '/task' },
+    {
+      path: '/task',
+      component: Task
+    }
+  ]
+})
 
 const app = createApp(App)
-app.use(router);
+app.use(router)
 app.mount('#app')
 // createApp(App).mount('#app')
-
