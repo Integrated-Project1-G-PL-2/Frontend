@@ -38,7 +38,7 @@ const clearPopUP = (flag) => {
     <div class="flex justify-end">
       <button
         @click="openPopUpToAdd"
-        class="px-2 py-0.5 font-bold text-emerald-500 rounded-lg hover:text-green-500"
+        class="px-2 py-0.5 font-bold text-emerald-500 rounded-lg hover:text-green-500 mr-10"
       >
         Task Details
       </button>
