@@ -26,6 +26,9 @@ const openPopUpToAdd = (todo) => {
   editingToAdd.value = todo
   showPopUp.value = true
 }
+const clearPopUP = (flag) => {
+  showTaskDetail.value = flag
+}
 </script>
 
 <template>
@@ -70,7 +73,7 @@ const openPopUpToAdd = (todo) => {
     </table>
   </div>
   <teleport to="body" v-if="!showTaskDetail">
-    <TaskDetail v-show="showPopUp"></TaskDetail>
+    <TaskDetail v-show="showPopUp" @click="showPopUp = false"></TaskDetail>
   </teleport>
 </template>
 <style scoped></style>
