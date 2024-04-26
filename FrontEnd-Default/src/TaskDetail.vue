@@ -27,10 +27,10 @@ defineProps({ id: String })
         </div>
     </div>
 </div> -->
-  <div
+  <!-- <div
     class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[100px]"
-  >
-    <!-- <div class="container mx-auto px-4 py-8 border- 4 bg-orange-50">
+  > -->
+  <!-- <div class="container mx-auto px-4 py-8 border- 4 bg-orange-50">
       <h1 class="text-2xl font-bold mb-6">Design Backend API for PBI 1,2</h1>
       <form class="flex flex-col gap-4">
         <div class="flex flex-col">
@@ -86,11 +86,13 @@ defineProps({ id: String })
         </div>
       </form>
     </div> -->
-    <div
+
+  <!-- kong -->
+  <!-- <div
       class="container mx-auto px-4 py-8 border- 4 bg-white relative border divide-x flex"
-    >
-      <!-- Title Section -->
-      <h1
+    > -->
+  <!-- Title Section -->
+  <!-- <h1
         class="itbkk-title font-bold text-2xl text-justify bg-gray-50 h-[50px]"
       >
         Design Backend API for PBI 1,2
@@ -101,9 +103,9 @@ defineProps({ id: String })
         </form>
       </slot>
     </div>
-    <div class="bg-white text-sm flex">
-      <!-- Description Section -->
-      <Field class="flex-grow mr-2">
+    <div class="bg-white text-sm flex"> -->
+  <!-- Description Section -->
+  <!-- <Field class="flex-grow mr-2">
         <div
           class="itbkk-status md:flex font-bold w-[60px] flex flex-col p-4 gap-2"
         >
@@ -118,8 +120,8 @@ defineProps({ id: String })
           </p>
         </div>
       </Field>
-      <!-- Assignees Section -->
-      <div class="itbkk-assignees md:flex font-bold flex flex-col p-4 gap-2">
+      <-- Assignees Section -->
+  <!-- <div class="itbkk-assignees md:flex font-bold flex flex-col p-4 gap-2">
         <Label>Assignees</Label>
         <p>
           <textarea
@@ -127,28 +129,28 @@ defineProps({ id: String })
           >
 Pang;Pong</textarea
           >
-        </p>
-        <!-- Status Section -->
-        <Label>Status</Label>
+        </p> -->
+  <!-- Status Section -->
+  <!-- <Label>Status</Label>
         <select
           class="justify-center h-[40px] w-[400px] border border-black bg-white text-gray-300"
         >
           <option value="itbkk-status ">Status</option>
           <option value="itbkk-status">1</option>
           <option value="itbkk-status">2</option>
-        </select>
-        <!-- Timezone Section -->
-        TimeZone :<input class="w-[200px] border border-black bg-white" />
+        </select>  -->
+  <!-- Timezone Section -->
+  <!-- TimeZone :<input class="w-[200px] border border-black bg-white" />
         <div class="itbkk-timezone bg-gray-100"></div>
         Created On :<input class="w-[200px] border border-black bg-white" />
         <div class="itbkk-created-on bg-gray-100"></div>
         Updated On :<input class="w-[200px] border border-black bg-white" />
         <div class="itbkk-updated-on bg-gray-100"></div>
       </div>
-    </div>
+    </div> -->
 
-    <!-- Button Section -->
-    <div
+  <!-- Button Section -->
+  <!-- <div
       class="itbkk-button bg-gray-50 relative border h-[48px] flex justify-end gap-2"
     >
       <button
@@ -162,7 +164,7 @@ Pang;Pong</textarea
         Close
       </button>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <style scoped></style>
