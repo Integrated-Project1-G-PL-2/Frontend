@@ -1,6 +1,21 @@
 <script setup>
 defineProps({ id: String })
 defineEmits(['saveDetail', 'closePopUp'])
+import { onMounted, ref } from 'vue'
+import { getItems } from './utils/fetchUtils.js'
+
+const timezone = ref('')
+const createdOn = ref('')
+const updatedOn = ref('')
+
+onMounted(async () => {
+  const items = await getItems(import.meta.env.VITE_BASE_URL)
+  if (items.length > 0) {
+    timezone.value = items[0].timezone
+    createdOn.value = items[0].created_on
+    updatedOn.value = items[0].updated_on
+  }
+})
 </script>
 
 <template>
@@ -52,15 +67,15 @@ defineEmits(['saveDetail', 'closePopUp'])
             </div>
             <div class="mt-10 ml-4">
               <div class="itbkk-timezone">
-                <div>TimeZone :</div>
+                <div>TimeZone : {{ timezone }}</div>
                 <div></div>
               </div>
               <div class="itbkk-created-on">
-                <div>Created On :</div>
+                <div>Created On : {{ createdOn }}</div>
                 <div></div>
               </div>
               <div class="itbkk-updated-on">
-                <div>Updated On :</div>
+                <div>Updated On : {{ updatedOn }}</div>
                 <div></div>
               </div>
             </div>
