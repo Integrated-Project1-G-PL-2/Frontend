@@ -4,7 +4,7 @@ defineEmits(['saveDetail', 'closePopUp'])
 import { onMounted, ref } from 'vue'
 import { getItems } from './utils/fetchUtils.js'
 
-const timezone = ref('')
+const timeZone = ref('')
 const createdOn = ref('')
 const updatedOn = ref('')
 
@@ -67,7 +67,7 @@ onMounted(async () => {
             </div>
             <div class="mt-10 ml-4">
               <div class="itbkk-timezone">
-                <div>TimeZone : {{ timezone }}</div>
+                <div>TimeZone : {{ timeZone }}</div>
                 <div></div>
               </div>
               <div class="itbkk-created-on">
