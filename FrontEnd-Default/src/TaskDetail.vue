@@ -166,8 +166,8 @@ Pang;Pong</textarea
   >
     <div class="w-[90%] m-[auto]">
       <div class="flex flex-col justify-between bg-white p-4">
-        <div class="w-full h-[10%] mt-2">
-          <h1 class="itbkk-title text-xl font-bold text-justify">
+        <div class="itbkk-title w-full h-[10%] mt-2">
+          <h1 class="text-xl font-bold text-justify">
             Design Backend API for PBI 1,2
           </h1>
         </div>
@@ -177,7 +177,7 @@ Pang;Pong</textarea
             <div class="pl-4 mt-4">Description</div>
             <div class="w-full h-[420px]">
               <textarea
-                class="w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                 placeholder="Enter your text here..."
               ></textarea>
             </div>
@@ -187,7 +187,7 @@ Pang;Pong</textarea
               <div class="pl-4 mt-4">Assignees</div>
               <div class="h-[150px]">
                 <textarea
-                  class="w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bbg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                  class="itbkk-assignees w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bbg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                   placeholder="Enter your text here..."
                 ></textarea>
               </div>
@@ -195,10 +195,10 @@ Pang;Pong</textarea
             <div class="w-full h-[100px]">
               <label class="form-control w-full pl-4">
                 <div class="label">
-                  <span class="label-text">Status</span>
+                  <span class="label-text ml-4">Status</span>
                 </div>
                 <select
-                  class="itbkk-status select select-bordered w-full bg-inherit border-gray-100 rounded-md text-gray-300"
+                  class="itbkk-status mt-1 ml-4 select select-bordered w-[95%] h-[40px] px-4 py-2 bg-inherit border-2 border-gray-200 text-gray-400 rounded-md"
                 >
                   <option disabled selected>Status</option>
                   <option>To do</option>
@@ -223,19 +223,19 @@ Pang;Pong</textarea
             </div>
           </div>
         </div>
-        <div
-          class="flex flex-row w-full justify-end itbkk-button bg-gray-50 relative border h-[48px] gap-2"
-        >
-          <div
-            class="itbkk-button bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[10px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200"
+        <div class="flex flex-row w-full justify-end border-t">
+          <button
+            class="itbkk-button bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3"
+            @click="$emit('setDetail', false)"
           >
-            <div @click="$emit('setDetail', false)" class="btn">Ok</div>
-          </div>
-          <div
-            class="itbkk-button bg-gray-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[10px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200"
+            <div class="btn text-center">Ok</div>
+          </button>
+          <button
+            class="itbkk-button bg-gray-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3"
+            @click="$emit('setDetail', false)"
           >
-            <div @click="$emit('setDetail', false)" class="btn">close</div>
-          </div>
+            <div class="btn text-center">Close</div>
+          </button>
         </div>
       </div>
     </div>
