@@ -25,6 +25,7 @@ const editingToAdd = ref({
 const openPopUpToAdd = (todo) => {
   editingToAdd.value = todo
   showPopUp.value = true
+  showTaskDetail.value = false
 }
 const clearPopUP = (flag) => {
   showTaskDetail.value = flag
