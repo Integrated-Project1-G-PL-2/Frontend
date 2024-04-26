@@ -73,7 +73,9 @@ const clearPopUP = (flag) => {
     </table>
   </div>
   <teleport to="body" v-if="!showTaskDetail">
-    <TaskDetail v-show="showPopUp" @click="showPopUp = false"></TaskDetail>
+    <div v-show="showPopUp">
+      <TaskDetail @closePopUp="clearPopUP"></TaskDetail>
+    </div>
   </teleport>
 </template>
 <style scoped></style>
