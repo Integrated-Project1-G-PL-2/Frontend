@@ -40,7 +40,7 @@ const clearPopUP = (flag) => {
         @click="openPopUpToAdd"
         class="px-2 py-0.5 font-bold text-emerald-500 rounded-lg hover:text-green-500 mr-10"
       >
-        Add New Task Details
+        Task Details
       </button>
     </div>
     <table class="w-full text-sm text-left text-gray-500">
