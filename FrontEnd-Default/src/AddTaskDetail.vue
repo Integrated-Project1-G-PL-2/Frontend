@@ -71,7 +71,7 @@ defineEmits(['saveAddDetail', 'closeAddPopUp'])
             class="itbkk-button bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
             @click="$emit('saveAddDetail', true)"
           >
-            <div class="btn text-center">Ok</div>
+            <div class="btn text-center">Save</div>
           </button>
           <button
             class="itbkk-button bg-gray-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
