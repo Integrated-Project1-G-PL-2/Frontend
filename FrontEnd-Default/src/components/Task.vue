@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import {
   getItems,
   getItemById,
@@ -9,12 +9,16 @@ import {
 } from '../utils/fetchUtils.js'
 import TaskManager from '../utils/TaskManager.js'
 import TaskDetail from '@/TaskDetail.vue'
-const showTaskDetail = ref(false)
+const showTaskDetailModal = ref(false)
 const taskManager = new TaskManager()
+const taskDetail = reactive({})
 onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
 })
-
+const showTaskDetail = async function(id){
+  taskDetail.value = await getItemById(import.meta.env.VITE_BASE_URL,id)
+  showTaskDetailModal.value = true
+}
 </script>
 
 <template>
@@ -42,7 +46,7 @@ onMounted(async () => {
           v-for="task in taskManager.getTasks()"
           :key="task.id"
           class="itbkk-item border-b cursor-pointer"
-          @click="showTaskDetail = true"
+          @click="showTaskDetail(task.id)"
         >
           <td class="px-4 py-3">{{ task.id }}</td>
           <td class="itbkk-title px-4 py-3">
@@ -58,8 +62,8 @@ onMounted(async () => {
       </tbody>
     </table>
   </div>
-  <teleport to="body" v-if="showTaskDetail">
-    <TaskDetail></TaskDetail>
+  <teleport to="body" v-if="showTaskDetailModal">
+    <TaskDetail :taskDetail="taskDetail"></TaskDetail>
   </teleport>
 </template>
 <style scoped></style>
