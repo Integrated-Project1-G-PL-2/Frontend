@@ -50,7 +50,19 @@ const clearPopUP = (flag) => {
           </td>
           <td class="itbkk-assignees px-4 py-3">{{ task.taskAssignees }}</td>
           <td class="itbkk-status px-4 py-3">
-            <div class="w-full bg-emerald-500 flex justify-center rounded-md">
+            <div
+              class="w-full bg-emerald-500 flex justify-center rounded-md"
+              :style="{
+                backgroundColor:
+                  task.taskStatus === 'To do'
+                    ? '#FFC0CB'
+                    : task.taskStatus === 'Doing'
+                    ? '#ffff99'
+                    : task.taskStatus === 'No status'
+                    ? 'lightgray'
+                    : '#90EE90'
+              }"
+            >
               <p>{{ task.taskStatus }}</p>
             </div>
           </td>
