@@ -22,7 +22,7 @@ const editingToAdd = ref({
   assignees: '',
   status: ''
 })
-const openPopUpToAdd = (todo) => {
+const openPopUp = (todo) => {
   editingToAdd.value = todo
   showPopUp.value = true
   showTaskDetail.value = false
@@ -37,7 +37,7 @@ const clearPopUP = (flag) => {
     <h1 class="font-bold text-center">IT-Bangmod Kradan Kanban</h1>
     <div class="flex justify-end">
       <button
-        @click="openPopUpToAdd"
+        @click="openPopUp"
         class="px-2 py-0.5 font-bold text-emerald-500 rounded-lg hover:text-green-500 mr-10"
       >
         Task Details
