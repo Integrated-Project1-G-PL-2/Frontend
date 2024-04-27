@@ -11,23 +11,21 @@ import TaskManager from '../utils/TaskManager.js'
 import TaskDetail from '@/TaskDetail.vue'
 const showTaskDetailModal = ref(false)
 const taskManager = new TaskManager()
-
 onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
 })
-const clearPopUP = (flag) => {
-  showTaskDetailModal.value = flag
-}
+
 const showTaskDetail = async function (e) {
   showTaskDetailModal.value = true
   console.log(e)
 }
+const clearPopUP = (flag) => {
+  showTaskDetailModal.value = flag
+}
 </script>
 
 <template>
-  <div
-    class="bg-white relative border rounded-lg gap-3 bg-btn-none-active flex flex-col scr-m:w-[961.15px] scr-m:h-[550px] scr-l:w-[1246px] scr-l:h-[713px] p-3 scr-m:p-6 scr-m:overflow-hidden overflow-y-scroll scr-l:p-10"
-  >
+  <div class="bg-white relative border rounded-lg">
     <h1 class="font-bold text-center">IT-Bangmod Kradan Kanban</h1>
     <div class="flex justify-end"></div>
     <table class="w-full text-sm text-left text-gray-500">
