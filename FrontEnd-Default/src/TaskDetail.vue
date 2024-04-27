@@ -51,7 +51,7 @@ const formatedTask = computed(() => {
             <div class="w-full h-[420px]">
               <textarea
                 v-model="formatedTask.taskDescription"
-                class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
               ></textarea>
             </div>
           </div>
@@ -61,7 +61,7 @@ const formatedTask = computed(() => {
               <div class="h-[150px]">
                 <textarea
                   v-model="formatedTask.taskAssignees"
-                  class="itbkk-assignees w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bbg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                  class="itbkk-assignees w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bbg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
                 ></textarea>
               </div>
             </div>
