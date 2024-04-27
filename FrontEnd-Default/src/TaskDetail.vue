@@ -35,6 +35,7 @@ onMounted(async () => {
             <div class="pl-4 mt-4">Description</div>
             <div class="w-full h-[420px]">
               <textarea
+                v-model="description"
                 class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
               ></textarea>
             </div>
@@ -44,6 +45,7 @@ onMounted(async () => {
               <div class="pl-4 mt-4">Assignees</div>
               <div class="h-[150px]">
                 <textarea
+                  v-model="taskAssignees"
                   class="itbkk-assignees w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bbg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                 ></textarea>
               </div>
@@ -54,6 +56,7 @@ onMounted(async () => {
                   <span class="label-text ml-4">Status</span>
                 </div>
                 <select
+                  v-model="taskStatus"
                   class="itbkk-status mt-1 ml-4 select select-bordered w-[95%] h-[40px] px-4 py-2 bg-inherit border-2 border-gray-200 text-gray-400 rounded-md"
                 >
                   <option disabled selected>Status</option>
