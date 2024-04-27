@@ -46,7 +46,7 @@ const showTaskDetail = async function(e) {
           v-for="task in taskManager.getTasks()"
           :key="task.id"
           class="itbkk-item border-b cursor-pointer"
-          @click="showTaskDetail = true"
+          @click="showTaskDetail"
         >
           <td class="px-4 py-3">{{ task.id }}</td>
           <td class="itbkk-title px-4 py-3">
