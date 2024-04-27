@@ -15,23 +15,19 @@ const taskDetail = reactive({})
 onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
 })
-const showTaskDetail = async function(id){
-  taskDetail.value = await getItemById(import.meta.env.VITE_BASE_URL,id)
+const showTaskDetail = async function (id) {
+  taskDetail.value = await getItemById(import.meta.env.VITE_BASE_URL, id)
   showTaskDetailModal.value = true
+}
+const clearPopUP = (flag) => {
+  showTaskDetailModal.value = flag
 }
 </script>
 
 <template>
   <div class="bg-white relative border rounded-lg">
     <h1 class="font-bold text-center">IT-Bangmod Kradan Kanban</h1>
-    <div class="flex justify-end">
-      <button
-        @click="addPopUp"
-        class="px-2 py-0.5 font-bold text-emerald-500 rounded-lg hover:text-green-500 mr-10"
-      >
-        Add New Task Details
-      </button>
-    </div>
+    <div class="flex justify-end"></div>
     <table class="w-full text-sm text-left text-gray-500">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50">
         <tr>
@@ -63,7 +59,7 @@ const showTaskDetail = async function(id){
     </table>
   </div>
   <teleport to="body" v-if="showTaskDetailModal">
-    <TaskDetail :taskDetail="taskDetail"></TaskDetail>
+    <TaskDetail :taskDetail="taskDetail" @closePopUp="clearPopUP"></TaskDetail>
   </teleport>
 </template>
 <style scoped></style>
