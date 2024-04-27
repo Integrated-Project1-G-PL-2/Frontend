@@ -9,12 +9,15 @@ import {
 } from '../utils/fetchUtils.js'
 import TaskManager from '../utils/TaskManager.js'
 import TaskDetail from '@/TaskDetail.vue'
-const showTaskDetail = ref(false)
+const showTaskDetailModal = ref(false)
 const taskManager = new TaskManager()
 onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
 })
-
+const showTaskDetail = async function (e) {
+  showTaskDetailModal.value = true
+  console.log(e)
+}
 </script>
 
 <template>
@@ -42,7 +45,7 @@ onMounted(async () => {
           v-for="task in taskManager.getTasks()"
           :key="task.id"
           class="itbkk-item border-b cursor-pointer"
-          @click="showTaskDetail = true"
+          @click="showTaskDetail"
         >
           <td class="px-4 py-3">{{ task.id }}</td>
           <td class="itbkk-title px-4 py-3">
