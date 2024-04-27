@@ -9,6 +9,7 @@ import {
 } from '../utils/fetchUtils.js'
 import TaskManager from '../utils/TaskManager.js'
 import TaskDetail from '@/TaskDetail.vue'
+import AddTaskDeatail from '@/AddTaskDetail.vue'
 // import TaskDetail from '../TaskDetail.vue'
 const showTaskDetail = ref(false)
 const taskManager = new TaskManager()
@@ -16,19 +17,28 @@ onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
 })
 const showPopUp = ref(false)
+const showPopUpToAdd = ref(false)
+const showAddTaskDetail = ref(false)
 const editingToAdd = ref({
   id: undefined,
   title: '',
   assignees: '',
   status: ''
 })
-const openPopUp = (todo) => {
-  editingToAdd.value = todo
+const openPopUp = () => {
   showPopUp.value = true
   showTaskDetail.value = false
 }
+const addPopUp = (todo) => {
+  editingToAdd.value = todo
+  showPopUpToAdd.value = true
+  showAddTaskDetail.value = false
+}
 const clearPopUP = (flag) => {
   showTaskDetail.value = flag
+}
+const clearAddPopUp = (flag) => {
+  showAddTaskDetail.value = flag
 }
 </script>
 
@@ -37,7 +47,7 @@ const clearPopUP = (flag) => {
     <h1 class="font-bold text-center">IT-Bangmod Kradan Kanban</h1>
     <div class="flex justify-end">
       <button
-        @click="openPopUp"
+        @click="addPopUp"
         class="px-2 py-0.5 font-bold text-emerald-500 rounded-lg hover:text-green-500 mr-10"
       >
         Add New Task Details
@@ -76,6 +86,11 @@ const clearPopUP = (flag) => {
   <teleport to="body" v-if="!showTaskDetail">
     <div v-show="showPopUp">
       <TaskDetail @closePopUp="clearPopUP"></TaskDetail>
+    </div>
+  </teleport>
+  <teleport to="body" v-if="!showAddTaskDetail">
+    <div v-show="showPopUpToAdd">
+      <AddTaskDeatail @closeAddPopUp="clearAddPopUp"></AddTaskDeatail>
     </div>
   </teleport>
 </template>
