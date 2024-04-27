@@ -40,7 +40,7 @@ const clearPopUP = (flag) => {
         @click="openPopUp"
         class="px-2 py-0.5 font-bold text-emerald-500 rounded-lg hover:text-green-500 mr-10"
       >
-        Task Details
+        Add New Task Details
       </button>
     </div>
     <table class="w-full text-sm text-left text-gray-500">
@@ -57,7 +57,7 @@ const clearPopUP = (flag) => {
           v-for="task in taskManager.getTasks()"
           :key="task.id"
           class="itbkk-item border-b"
-          @click="showTaskDetail = true"
+          @click="openPopUp"
         >
           <td class="px-4 py-3">{{ task.id }}</td>
           <td class="itbkk-title px-4 py-3">
