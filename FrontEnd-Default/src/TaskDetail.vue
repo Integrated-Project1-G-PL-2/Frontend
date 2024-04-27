@@ -11,7 +11,7 @@ const updatedOn = ref('')
 onMounted(async () => {
   const items = await getItems(import.meta.env.VITE_BASE_URL)
   if (items.length > 0) {
-    timezone.value = items[0].timezone
+    timeZone.value = items[0].timezone
     createdOn.value = items[0].created_on
     updatedOn.value = items[0].updated_on
   }
