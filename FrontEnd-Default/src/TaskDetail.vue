@@ -1,6 +1,6 @@
 <script setup>
 defineProps({ id: String })
-defineEmits(['saveDetail', 'closePopUp'])
+defineEmits(['closePopUp'])
 import { onMounted, ref } from 'vue'
 import { getItems } from './utils/fetchUtils.js'
 
@@ -82,7 +82,7 @@ onMounted(async () => {
         <div class="flex flex-row w-full justify-end border-t">
           <button
             class="itbkk-button bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
-            @click="$emit('saveDetail', true)"
+            @click="$emit('closePopUp', true)"
           >
             <div class="btn text-center">Ok</div>
           </button>
