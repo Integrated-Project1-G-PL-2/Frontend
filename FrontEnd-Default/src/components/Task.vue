@@ -27,36 +27,37 @@ const clearPopUP = (flag) => {
 <template>
   <div class="bg-white relative border rounded-lg">
     <h1 class="font-bold text-center">IT-Bangmod Kradan Kanban</h1>
-    <div class="flex justify-end"></div>
-    <table class="w-full text-sm text-left text-gray-500">
-      <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-        <tr>
-          <th class="px-4 py-3"></th>
-          <th class="px-4 py-3">Title</th>
-          <th class="px-4 py-3">Assignees</th>
-          <th class="px-4 py-3">Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="task in taskManager.getTasks()"
-          :key="task.id"
-          class="itbkk-item border-b cursor-pointer"
-          @click="showTaskDetail"
-        >
-          <td class="px-4 py-3">{{ task.id }}</td>
-          <td class="itbkk-title px-4 py-3">
-            <div class="hover:text-sky-500">{{ task.taskTitle }}</div>
-          </td>
-          <td class="itbkk-assignees px-4 py-3">{{ task.taskAssignees }}</td>
-          <td class="itbkk-status px-4 py-3">
-            <div class="w-full bg-emerald-500 flex justify-center rounded-md">
-              <p>{{ task.taskStatus }}</p>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="absolute w-full flex justify-center">
+      <table class="w-full text-sm text-left text-gray-500">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+          <tr>
+            <th class="px-4 py-3"></th>
+            <th class="px-4 py-3">Title</th>
+            <th class="px-4 py-3">Assignees</th>
+            <th class="px-4 py-3">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="task in taskManager.getTasks()"
+            :key="task.id"
+            class="itbkk-item border-b cursor-pointer"
+            @click="showTaskDetail"
+          >
+            <td class="px-4 py-3">{{ task.id }}</td>
+            <td class="itbkk-title px-4 py-3">
+              <div class="hover:text-sky-500">{{ task.taskTitle }}</div>
+            </td>
+            <td class="itbkk-assignees px-4 py-3">{{ task.taskAssignees }}</td>
+            <td class="itbkk-status px-4 py-3">
+              <div class="w-full bg-emerald-500 flex justify-center rounded-md">
+                <p>{{ task.taskStatus }}</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
   <teleport to="body" v-if="showTaskDetailModal">
     <TaskDetail @closePopUp="clearPopUP"></TaskDetail>
