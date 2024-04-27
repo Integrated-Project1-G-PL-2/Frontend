@@ -4,9 +4,9 @@ defineEmits(['closePopUp'])
 
 <template>
   <div
-    class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[100px]"
+    class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[100px] flex-wrap"
   >
-    <div class="w-[90%] m-[auto]">
+    <div class="w-[90%] m-[auto] max-w-[960px]">
       <div class="flex flex-col justify-between bg-white p-4">
         <div class="itbkk-title w-full h-[10%] mt-2">
           <h1 class="text-xl font-bold text-justify">
@@ -20,7 +20,7 @@ defineEmits(['closePopUp'])
             <div class="w-full h-[420px]">
               <textarea
                 v-model="description"
-                class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
               ></textarea>
             </div>
           </div>
@@ -30,7 +30,7 @@ defineEmits(['closePopUp'])
               <div class="h-[150px]">
                 <textarea
                   v-model="taskAssignees"
-                  class="itbkk-assignees w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bbg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                  class="itbkk-assignees w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bbg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
                 ></textarea>
               </div>
             </div>
@@ -66,14 +66,14 @@ defineEmits(['closePopUp'])
             </div>
           </div>
         </div>
-        <div class="flex flex-row w-full justify-end border-t">
+        <div class="flex flex-row w-full justify-end border-t flex-wrap">
           <button
-            class="itbkk-button bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
+            class="itbkk-button bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2 flex-wrap"
           >
             <div class="btn text-center">Ok</div>
           </button>
           <button
-            class="itbkk-button bg-gray-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
+            class="itbkk-button bg-gray-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2 flex-wrap"
             @click="$emit('closePopUp', false)"
           >
             <div class="btn text-center">Close</div>
