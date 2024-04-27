@@ -73,6 +73,16 @@ const formatedTask = computed(() => {
                 <select
                   v-model="formatedTask.taskStatus"
                   class="itbkk-status mt-1 ml-4 select select-bordered w-[95%] h-[40px] px-4 py-2 bg-inherit border-2 border-gray-200 text-gray-400 rounded-md"
+                  :style="{
+                    backgroundColor:
+                      formatedTask.taskStatus === 'To do'
+                        ? '#FFC0CB'
+                        : formatedTask.taskStatus === 'Doing'
+                        ? '#ffff99'
+                        : formatedTask.taskStatus === 'No status'
+                        ? 'lightgray'
+                        : '#90EE90'
+                  }"
                 >
                   <option disabled selected>Status</option>
                   <option value="To do">To do</option>
