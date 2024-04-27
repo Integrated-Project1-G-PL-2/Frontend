@@ -1,5 +1,5 @@
 <script setup>
-
+defineEmits(['closePopUp'])
 </script>
 
 <template>
@@ -52,15 +52,15 @@
             </div>
             <div class="mt-10 ml-4">
               <div class="itbkk-timezone">
-                <div>TimeZone : </div>
+                <div>TimeZone :</div>
                 <div></div>
               </div>
               <div class="itbkk-created-on">
-                <div>Created On : </div>
+                <div>Created On :</div>
                 <div></div>
               </div>
               <div class="itbkk-updated-on">
-                <div>Updated On : </div>
+                <div>Updated On :</div>
                 <div></div>
               </div>
             </div>
@@ -69,12 +69,12 @@
         <div class="flex flex-row w-full justify-end border-t">
           <button
             class="itbkk-button bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
-
           >
             <div class="btn text-center">Ok</div>
           </button>
           <button
             class="itbkk-button bg-gray-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
+            @click="$emit('closePopUp', false)"
           >
             <div class="btn text-center">Close</div>
           </button>
