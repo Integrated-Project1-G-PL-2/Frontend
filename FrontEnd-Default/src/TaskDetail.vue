@@ -1,21 +1,5 @@
 <script setup>
-defineProps({ id: String })
-defineEmits(['closePopUp'])
-import { onMounted, ref } from 'vue'
-import { getItems } from './utils/fetchUtils.js'
 
-const timeZone = ref('')
-const createdOn = ref('')
-const updatedOn = ref('')
-
-onMounted(async () => {
-  const items = await getItems(import.meta.env.VITE_BASE_URL)
-  if (items.length > 0) {
-    timeZone.value = items[0].timezone
-    createdOn.value = items[0].created_on
-    updatedOn.value = items[0].updated_on
-  }
-})
 </script>
 
 <template>
@@ -68,15 +52,15 @@ onMounted(async () => {
             </div>
             <div class="mt-10 ml-4">
               <div class="itbkk-timezone">
-                <div>TimeZone : {{ timeZone }}</div>
+                <div>TimeZone : </div>
                 <div></div>
               </div>
               <div class="itbkk-created-on">
-                <div>Created On : {{ createdOn }}</div>
+                <div>Created On : </div>
                 <div></div>
               </div>
               <div class="itbkk-updated-on">
-                <div>Updated On : {{ updatedOn }}</div>
+                <div>Updated On : </div>
                 <div></div>
               </div>
             </div>
@@ -85,13 +69,12 @@ onMounted(async () => {
         <div class="flex flex-row w-full justify-end border-t">
           <button
             class="itbkk-button bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
-            @click="$emit('closePopUp', true)"
+
           >
             <div class="btn text-center">Ok</div>
           </button>
           <button
             class="itbkk-button bg-gray-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
-            @click="$emit('closePopUp', true)"
           >
             <div class="btn text-center">Close</div>
           </button>

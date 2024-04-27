@@ -9,37 +9,12 @@ import {
 } from '../utils/fetchUtils.js'
 import TaskManager from '../utils/TaskManager.js'
 import TaskDetail from '@/TaskDetail.vue'
-import AddTaskDeatail from '@/AddTaskDetail.vue'
-// import TaskDetail from '../TaskDetail.vue'
 const showTaskDetail = ref(false)
 const taskManager = new TaskManager()
 onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
 })
-const showPopUp = ref(false)
-const showPopUpToAdd = ref(false)
-const showAddTaskDetail = ref(false)
-const editingToAdd = ref({
-  id: undefined,
-  title: '',
-  assignees: '',
-  status: ''
-})
-const openPopUp = () => {
-  showPopUp.value = true
-  showTaskDetail.value = false
-}
-const addPopUp = (todo) => {
-  editingToAdd.value = todo
-  showPopUpToAdd.value = true
-  showAddTaskDetail.value = false
-}
-const clearPopUP = (flag) => {
-  showTaskDetail.value = flag
-}
-const clearAddPopUp = (flag) => {
-  showAddTaskDetail.value = flag
-}
+
 </script>
 
 <template>
@@ -67,7 +42,7 @@ const clearAddPopUp = (flag) => {
           v-for="task in taskManager.getTasks()"
           :key="task.id"
           class="itbkk-item border-b cursor-pointer"
-          @click="openPopUp"
+          @click="showTaskDetail = true"
         >
           <td class="px-4 py-3">{{ task.id }}</td>
           <td class="itbkk-title px-4 py-3">
@@ -83,15 +58,8 @@ const clearAddPopUp = (flag) => {
       </tbody>
     </table>
   </div>
-  <teleport to="body" v-if="!showTaskDetail">
-    <div v-show="showPopUp">
-      <TaskDetail @closePopUp="clearPopUP"></TaskDetail>
-    </div>
-  </teleport>
-  <teleport to="body" v-if="!showAddTaskDetail">
-    <div v-show="showPopUpToAdd">
-      <AddTaskDeatail @closeAddPopUp="clearAddPopUp"></AddTaskDeatail>
-    </div>
+  <teleport to="body" v-if="showTaskDetail">
+    <TaskDetail></TaskDetail>
   </teleport>
 </template>
 <style scoped></style>
