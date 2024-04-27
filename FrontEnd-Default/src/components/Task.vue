@@ -56,7 +56,7 @@ const clearPopUP = (flag) => {
         <tr
           v-for="task in taskManager.getTasks()"
           :key="task.id"
-          class="itbkk-item border-b"
+          class="itbkk-item border-b cursor-pointer"
           @click="openPopUp"
         >
           <td class="px-4 py-3">{{ task.id }}</td>
