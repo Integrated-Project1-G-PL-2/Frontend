@@ -9,13 +9,13 @@ console.log(prop.taskDetail.value);
 
 const formatedTask = computed(() =>{
   return {
-    createdOn: new Date(task.createdOn).toLocaleString('en-GB').replaceAll('/','-').replace(',',''),
+    createdOn: new Date(task.createdOn).toLocaleString('en-GB').replace(',',''),
     id:task.id,
     taskAssignees:task.taskAssignees != null ? task.taskAssignees : "Unassigned",
     taskDescription:task.taskDescription != null ? task.taskDescription : "No Description Provided",
     taskStatus:  task.taskStatus.charAt(0).toUpperCase() + task.taskStatus.slice(1).replace(/_/g, " "),
     taskTitle:task.taskTitle,
-    updatedOn:new Date(task.updatedOn).toLocaleString('en-GB').replaceAll('/','-').replace(',',''),
+    updatedOn:new Date(task.updatedOn).toLocaleString('en-GB').replace(',',''),
   }
 })
 </script>
@@ -40,7 +40,8 @@ const formatedTask = computed(() =>{
                 v-model="formatedTask.taskDescription"
                 :class="task.taskAssignees == null ? 'italic text-gray-500 '  : ''"
                 class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-              ></textarea>
+                placeholder="No Description Provided"
+              >{{ formatedTask.taskDescription }}</textarea>
             </div>
           </div>
           <div class="w-[30%] h-[50%] flex-col">

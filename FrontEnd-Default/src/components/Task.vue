@@ -23,7 +23,7 @@ const showTaskDetail = async function(id){
   router.push({ name: 'TaskDetail', params: { id: id } })
   taskDetail.value = await getItemById(import.meta.env.VITE_BASE_URL,id)
   if (taskDetail.value.status == '404') {
-    alert("The requested task dose not exist");
+    alert("The requested task does not exist");
     router.replace({ name: 'Task'})
     return 
   }
@@ -59,13 +59,13 @@ if(route.params.id){
           v-for="task in taskManager.getTasks()"
           :key="task.id"
           class="itbkk-item border-b cursor-pointer"
-          @click="[showTaskDetail(task.id) , ]"
+          @click="showTaskDetail(task.id) "
         >
           <td class="px-4 py-3">{{ task.id }}</td>
           <td class="itbkk-title px-4 py-3">
             <div class="hover:text-sky-500">{{ task.taskTitle }}</div>
           </td>
-          <td class="itbkk-assignees px-4 py-3">{{ task.taskAssignees }}</td>
+          <td class="itbkk-assignees px-4 py-3" :class="task.taskAssignees == null ? 'italic' : ''">{{ task.taskAssignees == null ? "Unassigned" : task.taskAssignees }}</td>
           <td class="itbkk-status px-4 py-3">
             <div class="w-full bg-emerald-500 flex justify-center rounded-md">
               <p>{{ task.taskStatus }}</p>
