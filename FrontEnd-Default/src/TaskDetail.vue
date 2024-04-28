@@ -113,15 +113,15 @@ const formatedTask = computed(() => {
         </div>
         <div class="flex flex-row w-full justify-end border-t">
           <button
-            class="itbkk-button bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
+            class="itbkk-button bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m  text-center  gap-2 hover:text-gray-200 mr-3 mt-2"
           >
-            <div class="btn text-center">Ok</div>
+            <div class="btn ">Ok</div>
           </button>
           <button
-            class="itbkk-button border border-red-500 bg-gray-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m  text-end flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
+            class="itbkk-button bg-gray-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m   text-center  gap-2 hover:text-gray-200 mr-3 mt-2"
             @click="$emit('closePopUp', false)"
           >
-            Close
+            <div class="btn ">Close</div>
           
           </button>
         </div>
