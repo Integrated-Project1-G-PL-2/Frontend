@@ -28,7 +28,7 @@ const formatedTask = computed(() =>{
       <div class="flex flex-col justify-between bg-white p-4">
         <div class="itbkk-title w-full h-[10%] mt-2">
           <h1 class="text-xl font-bold text-justify">
-            Design Backend API for PBI 1,2
+            {{ formatedTask.taskTitle }}
           </h1>
         </div>
         <div class="border-b w-full mt-4"></div>

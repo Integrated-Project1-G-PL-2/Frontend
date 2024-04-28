@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, reactive, ref, watch } from 'vue'
 import {
   getItems,
   getItemById,
@@ -15,14 +15,22 @@ const route = useRoute()
 const showTaskDetailModal = ref(false)
 const taskManager = new TaskManager()
 const taskDetail = reactive({})
-
+const path = reactive({})
 onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
 })
 const showTaskDetail = async function(id){
   router.push({ name: 'TaskDetail', params: { id: id } })
   taskDetail.value = await getItemById(import.meta.env.VITE_BASE_URL,id)
+  if (taskDetail.value.status == '404') {
+    alert("The requested task dose not exist");
+    router.replace({ name: 'Task'})
+    return 
+  }
   showTaskDetailModal.value = true
+}
+if(route.params.id){
+  showTaskDetail(route.params.id)
 }
 </script>
 

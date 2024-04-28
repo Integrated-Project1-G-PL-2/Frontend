@@ -9,7 +9,7 @@ export default class TaskManagement {
   setTasks(tasks = []) {
     this.tasks.length = 0
     tasks.forEach(task => {
-        task.taskStatus = task.taskStatus.charAt(0).toUpperCase() + task.taskStatus.slice(1).replace(/_/g, " ");
+        task.taskStatus = task.taskStatus.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());;
         this.tasks.push(task)}
     );
   }
