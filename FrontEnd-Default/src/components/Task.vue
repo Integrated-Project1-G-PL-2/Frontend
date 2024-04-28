@@ -25,7 +25,7 @@ const clearPopUP = (flag) => {
 </script>
 
 <template>
-  <div class="bg-white relative border rounded-lg">
+  <div class="bg-white relative border rounded-lg overflow-auto">
     <h1 class="font-bold text-center">IT-Bangmod Kradan Kanban</h1>
     <div class="flex justify-end"></div>
     <table class="w-full text-sm text-left text-gray-500">
