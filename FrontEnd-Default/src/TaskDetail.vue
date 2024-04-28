@@ -6,12 +6,13 @@ const prop = defineProps({
 })
 const task = reactive(prop.taskDetail.value)
 console.log(prop.taskDetail.value);
+
 const formatedTask = computed(() =>{
   return {
     createdOn: new Date(task.createdOn).toLocaleString('en-GB').replaceAll('/','-').replace(',',''),
     id:task.id,
-    taskAssignees:task.taskAssignees == null ? task.taskAssignees : "No Description Provided",
-    taskDescription:task.taskDescription == null ? task.taskDescription : "No Description Provided",
+    taskAssignees:task.taskAssignees != null ? task.taskAssignees : "Unassigned",
+    taskDescription:task.taskDescription != null ? task.taskDescription : "No Description Provided",
     taskStatus:  task.taskStatus.charAt(0).toUpperCase() + task.taskStatus.slice(1).replace(/_/g, " "),
     taskTitle:task.taskTitle,
     updatedOn:new Date(task.updatedOn).toLocaleString('en-GB').replaceAll('/','-').replace(',',''),
@@ -37,7 +38,7 @@ const formatedTask = computed(() =>{
             <div class="w-full h-[420px]">
               <textarea
                 v-model="formatedTask.taskDescription"
-                
+                :class="task.taskAssignees == null ? 'italic text-gray-500 '  : ''"
                 class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
               ></textarea>
             </div>
@@ -49,6 +50,7 @@ const formatedTask = computed(() =>{
                 <textarea
                 v-model="formatedTask.taskAssignees"
                   class="itbkk-assignees w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bbg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                  :class="task.taskAssignees == null ? 'italic text-gray-500 '  : ''"
                 ></textarea>
               </div>
             </div>
