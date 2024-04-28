@@ -22,7 +22,7 @@ const formatedTask = computed(() =>{
 
 <template>
   <div
-    class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[100px]"
+    class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[100px] overflow-auto"
   >
     <div class="w-[90%] m-[auto]">
       <div class="flex flex-col justify-between bg-white p-4">
@@ -89,16 +89,16 @@ const formatedTask = computed(() =>{
         </div>
         <div class="flex flex-row w-full justify-end border-t">
           <button
-            class="itbkk-button bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
+            class="itbkk-button bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
             @click="[$emit('showTaskDetailModal',false) , $router.replace({ name: 'Task'})]"
           >
-            <div class="btn text-center">Ok</div>
+            <div class="btn">Ok</div>
           </button>
           <button
             @click="[$emit('showTaskDetailModal',false) , $router.replace({ name: 'Task'})]"
-            class="itbkk-button bg-gray-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
+            class="itbkk-button bg-gray-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
           >
-            <div class="btn text-center">Close</div>
+            <div class="btn">Close</div>
           </button>
         </div>
       </div>

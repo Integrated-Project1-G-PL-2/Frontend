@@ -35,7 +35,7 @@ if(route.params.id){
 </script>
 
 <template>
-  <div class="bg-white relative border rounded-lg">
+  <div class="bg-white relative border rounded-lg overflow-auto">
     <h1 class="font-bold text-center">IT-Bangmod Kradan Kanban</h1>
     <div class="flex justify-end">
       <button
@@ -67,7 +67,17 @@ if(route.params.id){
           </td>
           <td class="itbkk-assignees px-4 py-3" :class="task.taskAssignees == null ? 'italic' : ''">{{ task.taskAssignees == null ? "Unassigned" : task.taskAssignees }}</td>
           <td class="itbkk-status px-4 py-3">
-            <div class="w-full bg-emerald-500 flex justify-center rounded-md">
+            <div class="w-full bg-emerald-500 flex justify-center rounded-md" 
+            :style="{
+                backgroundColor:
+                  task.taskStatus === 'To Do'
+                    ? '#FFC0CB'
+                    : task.taskStatus === 'Doing'
+                    ? '#ffff99'
+                    : task.taskStatus === 'No Status'
+                    ? 'lightgray'
+                    : '#90EE90'
+              }">
               <p>{{ task.taskStatus }}</p>
             </div>
           </td>
