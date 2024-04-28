@@ -2,19 +2,7 @@ import './assets/main.css'
 
 import { createApp } from 'vue'
 import App from './App.vue'
-import Task from './components/Task.vue'
-import { createRouter, createWebHistory } from 'vue-router'
-
-const router = createRouter({
-  history: createWebHistory(),
-  routes: [
-    { path: '/', redirect: '/task' },
-    {
-      path: '/task',
-      component: Task
-    }
-  ]
-})
+import router from '../router/index.js'
 
 const app = createApp(App)
 app.use(router)

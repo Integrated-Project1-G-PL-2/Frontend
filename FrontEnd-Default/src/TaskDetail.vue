@@ -1,6 +1,6 @@
 <script setup>
 import { computed, reactive } from 'vue';
-
+defineEmits(['showTaskDetailModal'])
 const prop = defineProps({
   taskDetail: Object
 })
@@ -89,11 +89,12 @@ const formatedTask = computed(() =>{
         <div class="flex flex-row w-full justify-end border-t">
           <button
             class="itbkk-button bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
-            
+            @click="[$emit('showTaskDetailModal',false) , $router.replace({ name: 'Task'})]"
           >
             <div class="btn text-center">Ok</div>
           </button>
           <button
+            @click="[$emit('showTaskDetailModal',false) , $router.replace({ name: 'Task'})]"
             class="itbkk-button bg-gray-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
           >
             <div class="btn text-center">Close</div>

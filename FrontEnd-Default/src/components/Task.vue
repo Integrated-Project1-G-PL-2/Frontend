@@ -9,13 +9,18 @@ import {
 } from '../utils/fetchUtils.js'
 import TaskManager from '../utils/TaskManager.js'
 import TaskDetail from '@/TaskDetail.vue'
+import { useRoute, useRouter } from 'vue-router'
+const router = useRouter()
+const route = useRoute()
 const showTaskDetailModal = ref(false)
 const taskManager = new TaskManager()
 const taskDetail = reactive({})
+
 onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
 })
 const showTaskDetail = async function(id){
+  router.push({ name: 'TaskDetail', params: { id: id } })
   taskDetail.value = await getItemById(import.meta.env.VITE_BASE_URL,id)
   showTaskDetailModal.value = true
 }
@@ -46,7 +51,7 @@ const showTaskDetail = async function(id){
           v-for="task in taskManager.getTasks()"
           :key="task.id"
           class="itbkk-item border-b cursor-pointer"
-          @click="showTaskDetail(task.id)"
+          @click="[showTaskDetail(task.id) , ]"
         >
           <td class="px-4 py-3">{{ task.id }}</td>
           <td class="itbkk-title px-4 py-3">
@@ -63,7 +68,7 @@ const showTaskDetail = async function(id){
     </table>
   </div>
   <teleport to="body" v-if="showTaskDetailModal">
-    <TaskDetail :taskDetail="taskDetail"></TaskDetail>
+    <TaskDetail :taskDetail="taskDetail" @showTaskDetailModal="showTaskDetailModal = false"></TaskDetail>
   </teleport>
 </template>
 <style scoped></style>

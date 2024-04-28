@@ -67,13 +67,12 @@ defineEmits(['saveAddDetail', 'closeAddPopUp'])
         <div class="flex flex-row w-full justify-end border-t">
           <button
             class="itbkk-button bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
-            @click="$emit('saveAddDetail', true)"
+            @click="[$emit('saveAddDetail', true), $router.replace({ name: 'task'})]"
           >
             <div class="btn text-center">Save</div>
           </button>
           <button
             class="itbkk-button bg-gray-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
-            @click="$emit('closeAddPopUp', true)"
           >
             <div class="btn text-center">Close</div>
           </button>
