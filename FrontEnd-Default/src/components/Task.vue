@@ -19,12 +19,7 @@ const taskDetail = reactive({})
 const path = reactive({})
 const showPopUpToAdd = ref(false)
 const showAddTaskDetail = ref(false)
-const editingToAdd = ref({
-  id: undefined,
-  title: '',
-  assignees: '',
-  status: ''
-})
+
 onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
 })
@@ -42,7 +37,6 @@ if (route.params.id) {
   showTaskDetail(route.params.id)
 }
 const addPopUp = (todo) => {
-  editingToAdd.value = todo
   showPopUpToAdd.value = true
   showAddTaskDetail.value = false
 }
