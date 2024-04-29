@@ -43,27 +43,38 @@ const addPopUp = (todo) => {
 const clearAddPopUp = (flag) => {
   showAddTaskDetail.value = flag
 }
+const taskBox = ref(new TaskManagement())
 const selectedItem1 = ref('')
 const selectedItem2 = ref('')
-const itemsName = ref('')
+const taskTitle = ref('')
 const isPerTime = ref(true)
-const itemStorage = ref({ id: undefined, name: '', ability: '', isTurn: '' })
+const taskStorage = ref({
+  id: undefined,
+  taskTitle: '',
+  taskAssignees: '',
+  taskStatus: ''
+})
 const saveItems = async () => {
   const addedItem = await addItem(import.meta.env.VITE_BASE_URL, {
-    name: itemsName.value,
-    ability: [selectedItem1.value, selectedItem2.value],
-    isTurn: isPerTime.value
+    taskTitle: taskDetail.value,
+    taskAssignees: [selectedItem1.value, selectedItem2.value],
+    taskStatus: isPerTime.value
   })
 
   if (addedItem !== undefined) {
-    customItems.value.addTypeItem({
+    taskBox.value.addTypeItem({
       id: addedItem.id,
-      name: addedItem.name,
-      ability: addedItem.ability,
-      isTurn: addedItem.isTurn
+      taskTitle: addedItem.name,
+      taskAssignees: addedItem.ability,
+      taskStatus: addedItem.isTurn
     })
   }
-  itemStorage.value = { id: undefined, name: '', ability: '', isTurn: '' }
+  taskStorage.value = {
+    id: undefined,
+    taskTitle: '',
+    taskAssignees: '',
+    taskStatus: ''
+  }
 }
 </script>
 
