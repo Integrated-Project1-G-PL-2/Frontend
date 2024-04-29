@@ -43,6 +43,28 @@ const addPopUp = (todo) => {
 const clearAddPopUp = (flag) => {
   showAddTaskDetail.value = flag
 }
+const selectedItem1 = ref('')
+const selectedItem2 = ref('')
+const itemsName = ref('')
+const isPerTime = ref(true)
+const itemStorage = ref({ id: undefined, name: '', ability: '', isTurn: '' })
+const saveItems = async () => {
+  const addedItem = await addItem(import.meta.env.VITE_BASE_URL, {
+    name: itemsName.value,
+    ability: [selectedItem1.value, selectedItem2.value],
+    isTurn: isPerTime.value
+  })
+
+  if (addedItem !== undefined) {
+    customItems.value.addTypeItem({
+      id: addedItem.id,
+      name: addedItem.name,
+      ability: addedItem.ability,
+      isTurn: addedItem.isTurn
+    })
+  }
+  itemStorage.value = { id: undefined, name: '', ability: '', isTurn: '' }
+}
 </script>
 
 <template>
@@ -111,7 +133,8 @@ const clearAddPopUp = (flag) => {
   </teleport>
   <teleport to="body" v-if="!showAddTaskDetail">
     <div v-show="showPopUpToAdd">
-      <AddTaskDetail @closeAddPopUp="clearAddPopUp"> </AddTaskDetail>
+      <AddTaskDetail @closeAddPopUp="clearAddPopUp" @saveAddDetail="saveItems">
+      </AddTaskDetail>
     </div>
   </teleport>
 </template>
