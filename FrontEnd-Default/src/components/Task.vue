@@ -9,6 +9,7 @@ import {
 } from '../utils/fetchUtils.js'
 import TaskManager from '../utils/TaskManager.js'
 import TaskDetail from '@/TaskDetail.vue'
+import AddTaskDetail from '@/AddTaskDetail.vue'
 import { useRoute, useRouter } from 'vue-router'
 const router = useRouter()
 const route = useRoute()
@@ -16,6 +17,14 @@ const showTaskDetailModal = ref(false)
 const taskManager = new TaskManager()
 const taskDetail = reactive({})
 const path = reactive({})
+const showPopUpToAdd = ref(false)
+const showAddTaskDetail = ref(false)
+const editingToAdd = ref({
+  id: undefined,
+  title: '',
+  assignees: '',
+  status: ''
+})
 onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
 })
@@ -31,6 +40,14 @@ const showTaskDetail = async function (id) {
 }
 if (route.params.id) {
   showTaskDetail(route.params.id)
+}
+const addPopUp = (todo) => {
+  editingToAdd.value = todo
+  showPopUpToAdd.value = true
+  showAddTaskDetail.value = false
+}
+const clearAddPopUp = (flag) => {
+  showAddTaskDetail.value = flag
 }
 </script>
 
@@ -97,6 +114,11 @@ if (route.params.id) {
       :taskDetail="taskDetail"
       @showTaskDetailModal="showTaskDetailModal = false"
     ></TaskDetail>
+  </teleport>
+  <teleport to="body" v-if="!showAddTaskDetail">
+    <div v-show="showPopUpToAdd">
+      <AddTaskDetail @closeAddPopUp="clearAddPopUp"> </AddTaskDetail>
+    </div>
   </teleport>
 </template>
 <style scoped></style>
