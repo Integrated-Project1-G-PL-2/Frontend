@@ -1,5 +1,11 @@
 <script setup>
+import { reactive } from 'vue'
 defineEmits(['saveAddDetail', 'closeAddPopUp'])
+const taskDetailForm = reactive({
+  taskTitle: '',
+  taskAssignees: '',
+  taskStatus: ''
+})
 </script>
 
 <template>
@@ -17,9 +23,11 @@ defineEmits(['saveAddDetail', 'closeAddPopUp'])
             <div class="pl-4 mt-4">Description</div>
             <div class="w-full h-[420px]">
               <textarea
+                v-model.trim="taskDetailForm.taskTitle"
                 class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                 placeholder="Enter your text here..."
-              ></textarea>
+                >{{ taskDetailForm.taskTitle }}</textarea
+              >
             </div>
           </div>
           <div class="w-[30%] h-[50%] flex-col">
@@ -27,9 +35,11 @@ defineEmits(['saveAddDetail', 'closeAddPopUp'])
               <div class="pl-4 mt-4">Assignees</div>
               <div class="h-[150px]">
                 <textarea
+                  v-model.trim="taskDetailForm.taskAssignees"
                   class="itbkk-assignees w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bbg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                   placeholder="Enter your text here..."
-                ></textarea>
+                  >{{ taskDetailForm.taskAssignees }}</textarea
+                >
               </div>
             </div>
             <div class="w-full h-[100px]">
@@ -54,6 +64,9 @@ defineEmits(['saveAddDetail', 'closeAddPopUp'])
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
             @click="
               ;[$emit('saveAddDetail', true), $router.replace({ name: 'task' })]
+            "
+            :disabled="
+              !taskDetailForm.taskTitle || !taskDetailForm.taskAssignees
             "
           >
             <div class="btn text-center">Ok</div>

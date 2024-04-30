@@ -56,9 +56,9 @@ const clearAddPopUp = async function () {
     <div class="flex justify-end">
       <button
         @click="showAddPopUpTaskDetail"
-        class="px-2 py-0.5 font-bold text-emerald-500 rounded-lg hover:text-green-500 mr-10"
+        class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2"
       >
-        Add New Task Details
+        ✚ Add New Task
       </button>
     </div>
     <table class="w-full text-sm text-left text-gray-500">
