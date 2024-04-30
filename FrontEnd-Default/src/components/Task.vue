@@ -36,14 +36,17 @@ const showTaskDetail = async function (id) {
 if (route.params.id) {
   showTaskDetail(route.params.id)
 }
-const addPopUp = (todo) => {
-  showPopUpToAdd.value = true
+
+const showAddPopUpTaskDetail = async function () {
+  router.push({ name: 'AddTaskDetail' })
+  showAddTaskDetail.value = true
+}
+const clearAddPopUp = async function () {
+  router.push({ name: 'Task' })
   showAddTaskDetail.value = false
 }
-const clearAddPopUp = (flag) => {
-  showAddTaskDetail.value = flag
-}
-const taskBox = ref(new TaskManagement())
+
+// const taskBox = ref(new TaskManagement())
 const selectedItem1 = ref('')
 const selectedItem2 = ref('')
 const taskTitle = ref('')
@@ -83,7 +86,7 @@ const saveItems = async () => {
     <h1 class="font-bold text-center">IT-Bangmod Kradan Kanban</h1>
     <div class="flex justify-end">
       <button
-        @click="addPopUp"
+        @click="showAddPopUpTaskDetail"
         class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2"
       >
         Add New Task Details
@@ -142,11 +145,9 @@ const saveItems = async () => {
       @showTaskDetailModal="showTaskDetailModal = false"
     ></TaskDetail>
   </teleport>
-  <teleport to="body" v-if="!showAddTaskDetail">
-    <div v-show="showPopUpToAdd">
-      <AddTaskDetail @closeAddPopUp="clearAddPopUp" @saveAddDetail="saveItems">
-      </AddTaskDetail>
-    </div>
+  <teleport to="body" v-if="showAddTaskDetail">
+    <AddTaskDetail @closeAddPopUp="clearAddPopUp" @saveAddDetail="saveItems">
+    </AddTaskDetail>
   </teleport>
 </template>
 <style scoped></style>
