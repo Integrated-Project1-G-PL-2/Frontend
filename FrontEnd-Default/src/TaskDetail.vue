@@ -5,16 +5,16 @@ const prop = defineProps({
   taskDetail: Object
 })
 const task = reactive(prop.taskDetail.value)
-console.log(prop.taskDetail.value);
+
 
 const formatedTask = computed(() =>{
   return {
     createdOn: new Date(task.createdOn).toLocaleString('en-GB').replace(',',''),
     id:task.id,
-    taskAssignees:task.taskAssignees != null ? task.taskAssignees : "Unassigned",
-    taskDescription:task.taskDescription != null ? task.taskDescription : "No Description Provided",
-    taskStatus:  task.taskStatus.charAt(0).toUpperCase() + task.taskStatus.slice(1).replace(/_/g, " "),
-    taskTitle:task.taskTitle,
+    taskAssignees:task.assignees != null ? task.assignees : "Unassigned",
+    taskDescription:task.description != null ? task.description : "No Description Provided",
+    taskStatus:  task.status.toLowerCase().replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase()),
+    taskTitle:task.title,
     updatedOn:new Date(task.updatedOn).toLocaleString('en-GB').replace(',',''),
   }
 })
@@ -64,10 +64,10 @@ const formatedTask = computed(() =>{
                   class="itbkk-status mt-1 ml-4 select select-bordered w-[95%] h-[40px] px-4 py-2 bg-inherit border-2 border-gray-200 text-gray-400 rounded-md"
                 >
                   <option disabled selected>Status</option>
-                  <option value="To do">To do</option>
+                  <option value="To Do">To Do</option>
                   <option value="Doing">Doing</option>
                   <option value="Done">Done</option>
-                  <option value="No status">No status</option>
+                  <option value="No Status">No Status</option>
                 </select>
               </label>
             </div>

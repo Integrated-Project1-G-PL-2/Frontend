@@ -63,22 +63,22 @@ if(route.params.id){
         >
           <td class="px-4 py-3">{{ task.id }}</td>
           <td class="itbkk-title px-4 py-3">
-            <div class="hover:text-sky-500">{{ task.taskTitle }}</div>
+            <div class="hover:text-sky-500">{{ task.title }}</div>
           </td>
-          <td class="itbkk-assignees px-4 py-3" :class="task.taskAssignees == null ? 'italic' : ''">{{ task.taskAssignees == null ? "Unassigned" : task.taskAssignees }}</td>
+          <td class="itbkk-assignees px-4 py-3" :class="task.assignees == null ? 'italic' : ''">{{ task.assignees == null ? "Unassigned" : task.assignees }}</td>
           <td class="itbkk-status px-4 py-3">
             <div class="w-full bg-emerald-500 flex justify-center rounded-md" 
             :style="{
                 backgroundColor:
-                  task.taskStatus === 'To Do'
+                  task.status === 'To Do'
                     ? '#FFC0CB'
-                    : task.taskStatus === 'Doing'
+                    : task.status === 'Doing'
                     ? '#ffff99'
-                    : task.taskStatus === 'No Status'
+                    : task.status === 'No Status'
                     ? 'lightgray'
                     : '#90EE90'
               }">
-              <p>{{ task.taskStatus }}</p>
+              <p>{{ task.status }}</p>
             </div>
           </td>
         </tr>

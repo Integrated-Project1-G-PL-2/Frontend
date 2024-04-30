@@ -9,8 +9,9 @@ export default class TaskManagement {
   setTasks(tasks = []) {
     this.tasks.length = 0
     tasks.forEach(task => {
-        task.taskStatus = task.taskStatus.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());;
+        task.status = task.status.toLowerCase().replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase());
         this.tasks.push(task)}
     );
+    console.log(tasks);
   }
 }
