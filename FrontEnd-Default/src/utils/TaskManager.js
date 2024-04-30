@@ -12,6 +12,5 @@ export default class TaskManagement {
         task.status = task.status.toLowerCase().replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase());
         this.tasks.push(task)}
     );
-    console.log(tasks);
   }
 }
