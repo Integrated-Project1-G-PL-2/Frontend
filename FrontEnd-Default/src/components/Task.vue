@@ -17,7 +17,7 @@ const showTaskDetailModal = ref(false)
 const taskManager = new TaskManager()
 const taskDetail = reactive({})
 const path = reactive({})
-const showPopUpToAdd = ref(false)
+const taskBox = ref(new taskManager())
 const showAddTaskDetail = ref(false)
 onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
@@ -47,6 +47,38 @@ const showAddPopUpTaskDetail = async function () {
 const clearAddPopUp = async function () {
   router.push({ name: 'Task' })
   showAddTaskDetail.value = false
+}
+
+const assignees = ref('')
+const title = ref('')
+const status = ref(true)
+const taskStorage = ref({
+  id: undefined,
+  taskTitle: '',
+  taskAssignees: '',
+  taskStatus: ''
+})
+const saveTaskDetail = async () => {
+  const addedItem = await addItem(import.meta.env.VITE_BASE_URL, {
+    taskTitle: title.value,
+    taskAssignees: assignees.value,
+    taskStatus: status.value
+  })
+
+  if (addedItem !== undefined) {
+    taskBox.value.addTypeItem({
+      id: addedItem.id,
+      taskTitle: addedItem.taskTitle,
+      taskAssignees: addedItem.taskAssignees,
+      taskStatus: addedItem.taskStatus
+    })
+  }
+  taskStorage.value = {
+    id: undefined,
+    taskTitle: '',
+    taskAssignees: '',
+    taskStatus: ''
+  }
 }
 </script>
 
@@ -115,7 +147,10 @@ const clearAddPopUp = async function () {
     ></TaskDetail>
   </teleport>
   <teleport to="body" v-if="showAddTaskDetail">
-    <AddTaskDetail @closeAddPopUp="clearAddPopUp" @saveAddDetail="saveItems">
+    <AddTaskDetail
+      @closeAddPopUp="clearAddPopUp"
+      @saveAddDetail="saveTaskDetail"
+    >
     </AddTaskDetail>
   </teleport>
 </template>
