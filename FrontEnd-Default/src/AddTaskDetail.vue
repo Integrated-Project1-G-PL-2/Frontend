@@ -61,11 +61,11 @@ defineEmits(['saveAddDetail', 'closeAddPopUp'])
           </button>
           <button
             class="itbkk-button-cancel bg-gray-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
-            @click="$emit('closeAddPopUp', true)"
+            @click="
+              ;[$emit('closeAddPopUp', true), $router.replace({ name: 'Task' })]
+            "
           >
-            <div class="btn text-center">
-              <RouterLink to="/">Close</RouterLink>
-            </div>
+            <div class="btn text-center">Close</div>
           </button>
         </div>
       </div>

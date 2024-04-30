@@ -40,6 +40,11 @@ if (route.params.id) {
 const showAddPopUpTaskDetail = async function () {
   router.push({ name: 'AddTaskDetail' })
   showAddTaskDetail.value = true
+  if (taskDetail.value.status == '404') {
+    alert('The requested task does not exist')
+    router.replace({ name: 'Task' })
+    return
+  }
 }
 const clearAddPopUp = async function () {
   router.push({ name: 'Task' })
