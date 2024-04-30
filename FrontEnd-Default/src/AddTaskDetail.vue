@@ -1,5 +1,5 @@
 <script setup>
-import { reactive } from 'vue'
+import { ref, reactive } from 'vue'
 defineEmits(['saveAddDetail', 'closeAddPopUp'])
 const taskDetailForm = reactive({
   taskTitle: '',
@@ -26,8 +26,7 @@ const taskDetailForm = reactive({
                 v-model.trim="taskDetailForm.taskTitle"
                 class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                 placeholder="Enter your text here..."
-                >{{ taskDetailForm.taskTitle }}</textarea
-              >
+              ></textarea>
             </div>
           </div>
           <div class="w-[30%] h-[50%] flex-col">
@@ -38,8 +37,7 @@ const taskDetailForm = reactive({
                   v-model.trim="taskDetailForm.taskAssignees"
                   class="itbkk-assignees w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bbg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                   placeholder="Enter your text here..."
-                  >{{ taskDetailForm.taskAssignees }}</textarea
-                >
+                ></textarea>
               </div>
             </div>
             <div class="w-full h-[100px]">
@@ -48,6 +46,7 @@ const taskDetailForm = reactive({
                   <span class="label-text ml-4">No Status</span>
                 </div>
                 <select
+                  v-model="taskDetailForm.taskStatus"
                   class="itbkk-status mt-1 ml-4 select select-bordered w-[95%] h-[40px] px-4 py-2 bg-inherit border-2 border-gray-200 text-gray-400 rounded-md"
                 >
                   <option disabled selected>No Status</option>
@@ -66,7 +65,9 @@ const taskDetailForm = reactive({
               ;[$emit('saveAddDetail', true), $router.replace({ name: 'task' })]
             "
             :disabled="
-              !taskDetailForm.taskTitle || !taskDetailForm.taskAssignees
+              !taskDetailForm.taskTitle ||
+              !taskDetailForm.taskAssignees ||
+              !taskDetailForm.taskStatus
             "
           >
             <div class="btn text-center">Ok</div>
