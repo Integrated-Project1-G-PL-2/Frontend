@@ -10,27 +10,43 @@ import {
 import TaskManager from '../utils/TaskManager.js'
 import TaskDetail from '@/TaskDetail.vue'
 import { useRoute, useRouter } from 'vue-router'
+import AddTaskDetail from '@/AddTaskDetail.vue'
 const router = useRouter()
 const route = useRoute()
 const showTaskDetailModal = ref(false)
 const taskManager = new TaskManager()
 const taskDetail = reactive({})
 const path = reactive({})
+const showPopUpToAdd = ref(false)
+const showAddTaskDetail = ref(false)
 onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
 })
-const showTaskDetail = async function(id){
+const showTaskDetail = async function (id) {
   router.push({ name: 'TaskDetail', params: { id: id } })
-  taskDetail.value = await getItemById(import.meta.env.VITE_BASE_URL,id)
+  taskDetail.value = await getItemById(import.meta.env.VITE_BASE_URL, id)
   if (taskDetail.value.status == '404') {
-    alert("The requested task does not exist");
-    router.replace({ name: 'Task'})
-    return 
+    alert('The requested task does not exist')
+    router.replace({ name: 'Task' })
+    return
   }
   showTaskDetailModal.value = true
 }
-if(route.params.id){
+if (route.params.id) {
   showTaskDetail(route.params.id)
+}
+const showAddPopUpTaskDetail = async function () {
+  router.push({ name: 'AddTaskDetail' })
+  showAddTaskDetail.value = true
+  if (taskDetail.value.status == '404') {
+    alert('The requested task does not exist')
+    router.replace({ name: 'Task' })
+    return
+  }
+}
+const clearAddPopUp = async function () {
+  router.push({ name: 'Task' })
+  showAddTaskDetail.value = false
 }
 </script>
 
@@ -39,7 +55,7 @@ if(route.params.id){
     <h1 class="font-bold text-center">IT-Bangmod Kradan Kanban</h1>
     <div class="flex justify-end">
       <button
-        @click="addPopUp"
+        @click="showAddPopUpTaskDetail"
         class="px-2 py-0.5 font-bold text-emerald-500 rounded-lg hover:text-green-500 mr-10"
       >
         Add New Task Details
@@ -59,16 +75,22 @@ if(route.params.id){
           v-for="task in taskManager.getTasks()"
           :key="task.id"
           class="itbkk-item border-b cursor-pointer"
-          @click="showTaskDetail(task.id) "
+          @click="showTaskDetail(task.id)"
         >
           <td class="px-4 py-3">{{ task.id }}</td>
           <td class="itbkk-title px-4 py-3">
             <div class="hover:text-sky-500">{{ task.title }}</div>
           </td>
-          <td class="itbkk-assignees px-4 py-3" :class="task.assignees == null ? 'italic' : ''">{{ task.assignees == null ? "Unassigned" : task.assignees }}</td>
+          <td
+            class="itbkk-assignees px-4 py-3"
+            :class="task.assignees == null ? 'italic' : ''"
+          >
+            {{ task.assignees == null ? 'Unassigned' : task.assignees }}
+          </td>
           <td class="itbkk-status px-4 py-3">
-            <div class="w-full bg-emerald-500 flex justify-center rounded-md" 
-            :style="{
+            <div
+              class="w-full bg-emerald-500 flex justify-center rounded-md"
+              :style="{
                 backgroundColor:
                   task.status === 'To Do'
                     ? '#FFC0CB'
@@ -77,7 +99,8 @@ if(route.params.id){
                     : task.status === 'No Status'
                     ? 'lightgray'
                     : '#90EE90'
-              }">
+              }"
+            >
               <p>{{ task.status }}</p>
             </div>
           </td>
@@ -86,7 +109,14 @@ if(route.params.id){
     </table>
   </div>
   <teleport to="body" v-if="showTaskDetailModal">
-    <TaskDetail :taskDetail="taskDetail" @showTaskDetailModal="showTaskDetailModal = false"></TaskDetail>
+    <TaskDetail
+      :taskDetail="taskDetail"
+      @showTaskDetailModal="showTaskDetailModal = false"
+    ></TaskDetail>
+  </teleport>
+  <teleport to="body" v-if="showAddTaskDetail">
+    <AddTaskDetail @closeAddPopUp="clearAddPopUp" @saveAddDetail="saveItems">
+    </AddTaskDetail>
   </teleport>
 </template>
 <style scoped></style>
