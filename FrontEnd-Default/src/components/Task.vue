@@ -80,6 +80,19 @@ const saveTaskDetail = async () => {
     taskStatus: ''
   }
 }
+
+const formatedTask = computed(() => {
+  return {
+    createdOn: new Date(task.createdOn)
+      .toLocaleString('en-GB')
+      .replace(',', ''),
+    taskStatus: task.status
+      .toLowerCase()
+      .replace('_', ' ')
+      .replace(/\b\w/g, (c) => c.toUpperCase()),
+    updatedOn: new Date(task.updatedOn).toLocaleString('en-GB').replace(',', '')
+  }
+})
 </script>
 
 <template>
