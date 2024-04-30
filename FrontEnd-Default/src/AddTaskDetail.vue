@@ -1,5 +1,4 @@
 <script setup>
-defineProps({ id: String })
 defineEmits(['saveAddDetail', 'closeAddPopUp'])
 </script>
 
