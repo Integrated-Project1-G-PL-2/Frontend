@@ -73,7 +73,7 @@ const taskDetailForm = reactive({
             :style="{
                 backgroundColor:
                 !taskDetailForm.taskTitle 
-                    ? '#e2e8f0' :  '#4ade80'
+                    ? '#cbd5e1' :  '#4ade80'
               }"
             :disabled=" 
               !taskDetailForm.taskTitle 
