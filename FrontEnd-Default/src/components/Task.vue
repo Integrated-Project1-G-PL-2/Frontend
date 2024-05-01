@@ -17,7 +17,7 @@ const showTaskDetailModal = ref(false)
 const taskManager = new TaskManager()
 const taskDetail = reactive({})
 const path = reactive({})
-const taskBox = ref(new taskManager())
+// const taskBox = ref(new TaskManager())
 const showAddTaskDetail = ref(false)
 onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
