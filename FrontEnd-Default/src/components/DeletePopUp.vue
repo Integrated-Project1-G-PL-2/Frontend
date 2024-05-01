@@ -14,7 +14,7 @@ defineEmits(['confirmDetail', 'cancelDetail'])
         </div>
 
         <div class="w-[70%] h-[100%]">
-          <div class="pl-4 mt-4">Are you sure to delete?</div>
+          <div class="itbkk-message pl-4 mt-4">Are you sure to delete?</div>
         </div>
       </div>
       <div class="flex flex-row w-full justify-end border-t h-[60%]">

@@ -59,7 +59,6 @@ const showAddPopUpTaskDetail = async function () {
     router.replace({ name: 'Task' })
     return
   }
-  showDeleteTaskDetail.value = true
 }
 const showDeletePopUpTaskDetail = async function (id) {
   router.push({ name: 'DeleteTaskDetail', params: { id: id } })
