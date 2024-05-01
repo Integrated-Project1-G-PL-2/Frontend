@@ -16,4 +16,14 @@ export default class TaskManagement {
       this.tasks.push(task)
     })
   }
+  _taskDetails = [];
+  constructor(title, assignees, status) {
+    this.title = title;
+    this.assignees = assignees;
+    this.status = status;
+  }
+  addItem(typeItem) {
+    if (this._items.length < this.limitItem)
+      this._items.push(new Item(typeItem));
+  }
 }
