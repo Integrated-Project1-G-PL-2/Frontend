@@ -33,7 +33,6 @@ const taskDetailForm = reactive({
             <div class="pl-4 mt-4">Description</div>
             <div class="w-full h-[420px]">
               <textarea
-                v-model.trim="taskDetailForm.taskTitle"
                 class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                 placeholder="Enter your text here..."
               ></textarea>
@@ -70,12 +69,13 @@ const taskDetailForm = reactive({
         <div class="flex flex-row w-full justify-end border-t">
           <button
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
-            :disabled="
+            v-if="
               taskDetailForm.taskTitle ||
-              taskDetailForm.taskAssignees ||
-              taskDetailForm.taskStatus === ''
+              taskDetailForm.taskAssignees 
             "
-            @click="console.log(taskDetailForm.taskTitle)"
+           @click="
+              ;[$emit('closeAddPopUp', true), $router.replace({ name: 'Task' })]
+            "
           >
             <div class="btn text-center">Ok</div>
           </button>
