@@ -19,8 +19,8 @@ const taskManager = new TaskManager()
 const taskDetail = reactive({})
 const path = reactive({})
 const taskBox = ref(new TaskManager())
-const showAddTaskDetail = ref(false)
-const showDeleteTaskDetail = ref(false)
+const showAddTaskDetail = ref(false) // open = true
+const showDeleteTaskDetail = ref(false) // open = true
 const showRedAlert = ref(false)
 const showGreenAlert = ref(false)
 
