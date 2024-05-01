@@ -74,6 +74,7 @@ const showDeletePopUpTaskDetail = async function (id) {
 const clearAddPopUp = async function () {
   router.push({ name: 'Task' })
   showAddTaskDetail.value = false
+  showAddAlert.value = true
 }
 
 const clearDeletePopUp = async function () {
@@ -125,11 +126,12 @@ const saveTaskDetail = async () => {
       class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
       role="alert"
       v-show="showAddAlert"
+      v-for="task in taskManager.getTasks()"
     >
       <strong class="font-bold">Success!!</strong>
       <p>
         <span class="itbkk-message block sm:inline">
-          The task "" is added successfully</span
+          The task "{{ task.title }}" is added successfully</span
         >
       </p>
       <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
