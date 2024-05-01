@@ -111,6 +111,12 @@ const saveTaskDetail = async () => {
     taskAssignees: '',
     taskStatus: ''
   }
+  if (taskDetail.value.status == '404') {
+    alert('The requested task does not exist')
+    router.replace({ name: 'Task' })
+    return
+  }
+  taskDetail.value.status == '201'
   showAddAlert.value = true
 }
 
