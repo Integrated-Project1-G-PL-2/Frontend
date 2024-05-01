@@ -193,9 +193,10 @@ const saveTaskDetail = async () => {
               🗑️
             </div>
           </td>
-
           <td class="itbkk-title px-4 py-3">
-            <div class="hover:text-sky-500">{{ task.title }}</div>
+            <div class="hover:text-sky-500" @click="showTaskDetail(task.id)">
+              {{ task.title }}
+            </div>
           </td>
           <td
             class="itbkk-assignees px-4 py-3"

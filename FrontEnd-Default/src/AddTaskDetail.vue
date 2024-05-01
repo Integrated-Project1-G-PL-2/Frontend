@@ -6,6 +6,7 @@ const taskDetailForm = reactive({
   taskAssignees: '',
   taskStatus: ''
 })
+
 </script>
 
 <template>
@@ -69,9 +70,13 @@ const taskDetailForm = reactive({
         <div class="flex flex-row w-full justify-end border-t">
           <button
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
-            v-if="
-              taskDetailForm.taskTitle ||
-              taskDetailForm.taskAssignees 
+            :style="{
+                backgroundColor:
+                !taskDetailForm.taskTitle 
+                    ? '#9ca3af' :  '#4ade80'
+              }"
+            :disabled=" 
+              !taskDetailForm.taskTitle 
             "
            @click="
               ;[$emit('closeAddPopUp', true), $router.replace({ name: 'Task' })]
