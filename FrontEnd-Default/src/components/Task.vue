@@ -19,11 +19,25 @@ const taskDetail = reactive({})
 const path = reactive({})
 const taskBox = ref(new TaskManager())
 const showAddTaskDetail = ref(false)
+const showRedAlert = ref(true)
+const showGreenAlert = ref(true)
+
 onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
 })
 const showTaskDetail = async function (id) {
   router.push({ name: 'TaskDetail', params: { id: id } })
+  taskDetail.value = await getItemById(import.meta.env.VITE_BASE_URL, id)
+  if (taskDetail.value.status == '404') {
+    alert('The requested task does not exist')
+    router.replace({ name: 'Task' })
+    return
+  }
+  showTaskDetailModal.value = true
+}
+
+const showEditTaskDetail = async function (id) {
+  router.push({ name: 'EditTaskDetail', params: { id: id } })
   taskDetail.value = await getItemById(import.meta.env.VITE_BASE_URL, id)
   if (taskDetail.value.status == '404') {
     alert('The requested task does not exist')
@@ -80,11 +94,55 @@ const saveTaskDetail = async () => {
     taskStatus: ''
   }
 }
+
+//ฝาก บรรทัด 156
+//@click="showTaskDetail(task.id)"
 </script>
 
 <template>
   <div class="bg-white relative border rounded-lg overflow-auto">
     <h1 class="font-bold text-center">IT-Bangmod Kradan Kanban</h1>
+    <div
+      class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+      role="alert"
+      v-show="showRedAlert"
+    >
+      <strong class="font-bold">Error!</strong>
+      <span class="block sm:inline"> An error occured deleting the task.</span>
+      <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+        <svg
+          class="fill-current h-6 w-6 text-red-500"
+          role="button"
+          viewBox="0 0 20 20"
+          @click="showRedAlert = false"
+        >
+          <path
+            d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"
+          />
+        </svg>
+      </span>
+    </div>
+    <div
+      class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
+      role="alert"
+      v-show="showGreenAlert"
+    >
+      <strong class="font-bold">Successful!</strong>
+      <span class="block sm:inline"> Delete completed.</span>
+      <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+        <svg
+          class="fill-current h-6 w-6 text-green-500"
+          role="button"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          @click="showGreenAlert = false"
+        >
+          <path
+            d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"
+          />
+        </svg>
+      </span>
+    </div>
     <div class="flex justify-end">
       <button
         @click="showAddPopUpTaskDetail"
@@ -107,9 +165,16 @@ const saveTaskDetail = async () => {
           v-for="task in taskManager.getTasks()"
           :key="task.id"
           class="itbkk-item border-b cursor-pointer"
-          @click="showTaskDetail(task.id)"
+          @click="showEditTaskDetail(task.id)"
         >
-          <td class="px-4 py-3">{{ task.id }}</td>
+          <td class="px-4 py-3">
+            {{ task.id }}
+            <div class="inline-flex" @click="showTaskDetail(task.id)">⚙️</div>
+            <div class="inline-flex" @click="console.log('open delete menu')">
+              🗑️
+            </div>
+          </td>
+
           <td class="itbkk-title px-4 py-3">
             <div class="hover:text-sky-500">{{ task.title }}</div>
           </td>
