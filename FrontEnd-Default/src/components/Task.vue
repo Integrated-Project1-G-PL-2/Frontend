@@ -116,8 +116,9 @@ const saveTaskDetail = async () => {
     router.replace({ name: 'Task' })
     return
   }
-  taskDetail.value.status == '201'
   showAddAlert.value = true
+  taskDetail.value.status == '201'
+  console.log(taskDetail.value.status)
 }
 
 //ฝาก บรรทัด 156
