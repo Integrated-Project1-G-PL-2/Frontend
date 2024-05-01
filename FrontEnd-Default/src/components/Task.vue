@@ -17,7 +17,7 @@ const showTaskDetailModal = ref(false)
 const taskManager = new TaskManager()
 const taskDetail = reactive({})
 const path = reactive({})
-// const taskBox = ref(new TaskManager())
+const taskBox = ref(new TaskManager())
 const showAddTaskDetail = ref(false)
 onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
@@ -80,19 +80,6 @@ const saveTaskDetail = async () => {
     taskStatus: ''
   }
 }
-
-const formatedTask = computed(() => {
-  return {
-    createdOn: new Date(task.createdOn)
-      .toLocaleString('en-GB')
-      .replace(',', ''),
-    taskStatus: task.status
-      .toLowerCase()
-      .replace('_', ' ')
-      .replace(/\b\w/g, (c) => c.toUpperCase()),
-    updatedOn: new Date(task.updatedOn).toLocaleString('en-GB').replace(',', '')
-  }
-})
 </script>
 
 <template>
