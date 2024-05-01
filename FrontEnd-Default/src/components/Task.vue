@@ -21,7 +21,7 @@ const path = reactive({})
 const taskBox = ref(new TaskManager())
 const showAddTaskDetail = ref(false)
 const showDeleteTaskDetail = ref(false)
-const showAddAlert = ref(true) // open = true
+const showAddAlert = ref(false) // open = true
 const showRedAlert = ref(false) // open = true
 const showGreenAlert = ref(false) // open = true
 
@@ -111,6 +111,7 @@ const saveTaskDetail = async () => {
     taskAssignees: '',
     taskStatus: ''
   }
+  showAddAlert.value = true
 }
 
 //ฝาก บรรทัด 156

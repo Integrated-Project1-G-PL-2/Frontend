@@ -79,7 +79,7 @@ const taskDetailForm = reactive({
               !taskDetailForm.taskTitle 
             "
            @click="
-              ;[$emit('closeAddPopUp', true), $router.replace({ name: 'Task' })]
+              ;[$emit('saveAddDetail', true), $router.replace({ name: 'Task' })]
             "
           >
             <div class="btn text-center">Ok</div>
