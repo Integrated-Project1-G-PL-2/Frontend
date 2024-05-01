@@ -24,7 +24,7 @@ const taskDetailForm = reactive({
             <div class="w-full h-[420px]">
               <textarea
                 v-model.trim="taskDetailForm.taskTitle"
-                class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2ผผ bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                 placeholder="Enter your text here..."
               ></textarea>
             </div>
@@ -43,10 +43,9 @@ const taskDetailForm = reactive({
             <div class="w-full h-[100px]">
               <label class="form-control w-full pl-4">
                 <div class="label">
-                  <span class="label-text ml-4">No Status</span>
+                  <span class="label-text ml-4">Status</span>
                 </div>
                 <select
-                  v-model="taskDetailForm.taskStatus"
                   class="itbkk-status mt-1 ml-4 select select-bordered w-[95%] h-[40px] px-4 py-2 bg-inherit border-2 border-gray-200 text-gray-400 rounded-md"
                 >
                   <option disabled selected>No Status</option>
