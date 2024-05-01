@@ -19,10 +19,10 @@ const taskManager = new TaskManager()
 const taskDetail = reactive({})
 const path = reactive({})
 const taskBox = ref(new TaskManager())
-const showAddTaskDetail = ref(false) // open = true
-const showDeleteTaskDetail = ref(false) // open = true
-const showRedAlert = ref(false)
-const showGreenAlert = ref(false)
+const showAddTaskDetail = ref(false)
+const showDeleteTaskDetail = ref(false)
+const showRedAlert = ref(false) // open = true
+const showGreenAlert = ref(false) // open = true
 
 onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
