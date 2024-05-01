@@ -74,7 +74,6 @@ const showDeletePopUpTaskDetail = async function (id) {
 const clearAddPopUp = async function () {
   router.push({ name: 'Task' })
   showAddTaskDetail.value = false
-  showAddAlert.value = true
 }
 
 const clearDeletePopUp = async function () {
