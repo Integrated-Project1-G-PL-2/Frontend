@@ -3,6 +3,7 @@ import Task from '@/components/Task.vue'
 import TaskDetail from '@/TaskDetail.vue'
 import AddTaskDetail from '@/AddTaskDetail.vue'
 import EditTaskDetail from '@/components/EditTaskDetail.vue'
+import DeleteTaskDetail from '@/DeletePopUp.vue'
 const history = createWebHistory()
 const routes = [
   {
@@ -28,6 +29,11 @@ const routes = [
         path: ':id/edit',
         component: EditTaskDetail,
         name: 'EditTaskDetail'
+      },
+      {
+        path: ':id/delete',
+        component: DeleteTaskDetail,
+        name: 'DeleteTaskDetail'
       }
     ]
   }

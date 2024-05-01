@@ -11,6 +11,7 @@ import TaskManager from '../utils/TaskManager.js'
 import TaskDetail from '@/TaskDetail.vue'
 import { useRoute, useRouter } from 'vue-router'
 import AddTaskDetail from '@/AddTaskDetail.vue'
+import DeletePopUp from '@/DeletePopUp.vue'
 const router = useRouter()
 const route = useRoute()
 const showTaskDetailModal = ref(false)
@@ -19,6 +20,7 @@ const taskDetail = reactive({})
 const path = reactive({})
 const taskBox = ref(new TaskManager())
 const showAddTaskDetail = ref(false)
+const showDeleteTaskDetail = ref(false)
 const showRedAlert = ref(true)
 const showGreenAlert = ref(true)
 
@@ -57,10 +59,26 @@ const showAddPopUpTaskDetail = async function () {
     router.replace({ name: 'Task' })
     return
   }
+  showDeleteTaskDetail.value = true
+}
+const showDeletePopUpTaskDetail = async function (id) {
+  router.push({ name: 'DeleteTaskDetail', params: { id: id } })
+  taskDetail.value = await getItemById(import.meta.env.VITE_BASE_URL, id)
+  showDeleteTaskDetail.value = true
+  if (taskDetail.value.status == '404') {
+    alert('The requested task does not exist')
+    router.replace({ name: 'Task' })
+    return
+  }
 }
 const clearAddPopUp = async function () {
   router.push({ name: 'Task' })
   showAddTaskDetail.value = false
+}
+
+const clearDeletePopUp = async function () {
+  router.push({ name: 'Task' })
+  showDeleteTaskDetail.value = false
 }
 
 const assignees = ref('')
@@ -165,12 +183,14 @@ const saveTaskDetail = async () => {
           v-for="task in taskManager.getTasks()"
           :key="task.id"
           class="itbkk-item border-b cursor-pointer"
-          @click="showEditTaskDetail(task.id)"
         >
           <td class="px-4 py-3">
             {{ task.id }}
             <div class="inline-flex" @click="showTaskDetail(task.id)">⚙️</div>
-            <div class="inline-flex" @click="console.log('open delete menu')">
+            <div
+              class="inline-flex"
+              @click="showDeletePopUpTaskDetail(task.id)"
+            >
               🗑️
             </div>
           </td>
@@ -217,6 +237,9 @@ const saveTaskDetail = async () => {
       @saveAddDetail="saveTaskDetail"
     >
     </AddTaskDetail>
+  </teleport>
+  <teleport to="body" v-if="showDeleteTaskDetail">
+    <DeletePopUp @cancelDetail="clearDeletePopUp"> </DeletePopUp>
   </teleport>
 </template>
 <style scoped></style>
