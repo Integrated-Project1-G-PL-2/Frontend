@@ -116,7 +116,14 @@ const saveTaskDetail = async () => {
     router.replace({ name: 'Task' })
     return
   }
+  showAddTaskDetail.value = true
   showAddAlert.value = true
+  taskStorage.value = {
+    id: undefined,
+    taskTitle: '',
+    taskAssignees: '',
+    taskStatus: ''
+  }
   taskDetail.value.status == '201'
   console.log(taskDetail.value.status)
 }

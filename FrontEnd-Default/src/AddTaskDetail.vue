@@ -1,11 +1,19 @@
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 defineEmits(['saveAddDetail', 'closeAddPopUp'])
 const taskDetailForm = reactive({
   taskTitle: '',
   taskAssignees: '',
   taskStatus: ''
 })
+const propTasks = defineProps({
+  detailTask: {
+    type: Object,
+    default : {id: undefined,title:'',assignees:'',status:''}
+  }
+ 
+})
+const previousTask = computed(() => propTasks.detailTask)
 
 </script>
 
@@ -79,7 +87,7 @@ const taskDetailForm = reactive({
               !taskDetailForm.taskTitle 
             "
            @click="
-              ;[$emit('saveAddDetail', true), $router.replace({ name: 'Task' })]
+              ;[$emit('saveAddDetail', previousTask ), $router.replace({ name: 'Task' })]
             "
           >
             <div class="btn text-center">Ok</div>
