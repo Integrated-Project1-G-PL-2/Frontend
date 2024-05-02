@@ -130,6 +130,35 @@ const saveTaskDetail = async () => {
 
 //ฝาก บรรทัด 156
 //@click="showTaskDetail(task.id)"
+const updateTodo = async (newTodo) => {
+  //ADD Mode
+  if (newTodo.id === undefined) {
+    //backend, addItem(url, newItem),  return addedItem
+    const addedItem = await addItem(`${import.meta.env.VITE_BASE_URL}/todos`, {
+      category: newTodo.category,
+      description: newTodo.description
+    })
+    //frontend, addTodo(id, category, desc)
+    myTodos.addTodo(addedItem.id, addedItem.category, addedItem.description)
+  }
+  //EDIT
+  else {
+    //backend, editItem(url, id, editItem),   return editedItem
+    const editedItem = await editItem(
+      `${import.meta.env.VITE_BASE_URL}/todos`,
+      newTodo.id,
+      newTodo
+    )
+    //frontend, updateTodo(id, category, description)
+    myTodos.updateTodo(
+      editedItem.id,
+      editedItem.category,
+      editedItem.description
+    )
+  }
+  showModal.value = false
+  editingTodo.value = { id: undefined, category: '', description: '' }
+}
 </script>
 
 <template>
