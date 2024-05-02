@@ -4,23 +4,13 @@ import TaskManagement from './utils/TaskManager';
 import { addItem } from './utils/fetchUtils';
 const taskManager = TaskManagement
 
-defineEmits(['saveAddDetail', 'closeAddPopUp'])
+defineEmits(['','closeAddPopUp'])
 const taskDetailForm = reactive({
   taskTitle: '',
   taskAssignees: '',
+  taskDetail: '',
   taskStatus: ''
 })
-const propTasks = defineProps({
-  detailTask: {
-    type: Object,
-    default : {id: undefined,title:'',assignees:'',status:''}
-  }
-
-})
-const previousTask = computed(() => propTasks.detailTask)
-// onMounted(async () => {
-//   taskManager.setTasks(await addItem(import.meta.env.VITE_BASE_URL , taskDetailForm))
-// })
 
 const saveTask = async (newDetail) => {
   //ADD Mode
@@ -59,6 +49,7 @@ const saveTask = async (newDetail) => {
             <div class="pl-4 mt-4">Description</div>
             <div class="w-full h-[420px]">
               <textarea
+              v-model.trim="taskDetailForm.description"
                 class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                 placeholder="Enter your text here..."
               ></textarea>
@@ -99,13 +90,11 @@ const saveTask = async (newDetail) => {
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
             :style="{
                 backgroundColor:
-                !taskDetailForm.taskTitle 
+                !taskDetailForm.title 
                     ? '#cbd5e1' :  '#4ade80'
               }"
-         
-           @click="
-              saveTask
-            "
+            :disabled="!taskDetailForm.title "
+           @click="saveTask"
           >
             <div class="btn text-center">Ok</div>
           </button>
