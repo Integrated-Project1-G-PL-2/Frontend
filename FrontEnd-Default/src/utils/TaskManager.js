@@ -1,7 +1,5 @@
 import { reactive } from 'vue'
 export default class TaskManagement {
-  _taskStorage = []
-  previousTask = []
   constructor() {
     this.tasks = reactive([])
     // this.detailTask = previousTask
@@ -19,37 +17,24 @@ export default class TaskManagement {
       this.tasks.push(task)
     })
   }
-
-  addItem(typeItem) {
-    if (this._taskStorage.length < 0) this._taskStorage.push(new Item(typeItem))
-  }
-
-  getAllItemUsed() {
-    return this._taskStorage.filter(({ isUsed }) => isUsed)
-  }
-  addTodos(newTaskDetails) {
-    newTaskDetails.forEach((newTaskDetail) =>
-      this.addTodo(
-        newTaskDetail.id,
-        newTaskDetail.title,
-        newTaskDetail.assignees,
-        newTaskDetail.status
-      )
+  //actions
+  addTasks(newTasks) {
+    newTasks.forEach((newTask) =>
+      addTodo(newTask.id, newTask.title, newTask.description, newTask.status)
     )
   }
-  addTodo(id, title, assignees, status) {
-    this.newTaskDetails.push({
+  addTask(id, title, status) {
+    tasks.value.push({
       id: id,
       title: title,
-      assignees: assignees,
       status: status
     })
   }
-  updateTodo(id, category, description) {
-    this.newTaskDetails = this.newTaskDetails.map((task) => {
-      return task.id === id
-        ? { ...task, title: title, assignees: assignees, status: status }
-        : task
+  updateTask(id, title, status) {
+    tasks.value = tasks.value.map((detail) => {
+      return detail.id === id
+        ? { ...detail, title: title, assignees: assignees, status: status }
+        : detail
     })
   }
 }

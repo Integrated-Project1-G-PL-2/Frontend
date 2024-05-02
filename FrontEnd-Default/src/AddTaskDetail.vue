@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import {reactive, computed } from 'vue'
 defineEmits(['saveAddDetail', 'closeAddPopUp'])
 const taskDetailForm = reactive({
   taskTitle: '',
@@ -11,9 +11,12 @@ const propTasks = defineProps({
     type: Object,
     default : {id: undefined,title:'',assignees:'',status:''}
   }
- 
+
 })
 const previousTask = computed(() => propTasks.detailTask)
+onMounted(async () => {
+  taskManager.setTasks(await addItem(import.meta.env.VITE_BASE_URL ))
+})
 
 </script>
 

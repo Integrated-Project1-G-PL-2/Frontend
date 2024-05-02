@@ -18,7 +18,7 @@ const showTaskDetailModal = ref(false)
 const taskManager = new TaskManager()
 const taskDetail = reactive({})
 const path = reactive({})
-const taskBox = ref(new TaskManager())
+
 const showAddTaskDetail = ref(false)
 const showDeleteTaskDetail = ref(false)
 const showAddAlert = ref(false) // open = true
@@ -81,83 +81,84 @@ const clearDeletePopUp = async function () {
   showDeleteTaskDetail.value = false
 }
 
-const assignees = ref('')
-const title = ref('')
-const status = ref(true)
-const taskStorage = ref({
-  id: undefined,
-  taskTitle: '',
-  taskAssignees: '',
-  taskStatus: ''
-})
-const saveTaskDetail = async () => {
-  const addedItem = await addItem(import.meta.env.VITE_BASE_URL, {
-    taskTitle: title.value,
-    taskAssignees: assignees.value,
-    taskStatus: status.value
-  })
+// const assignees = ref('')
+// const title = ref('')
+// const status = ref(true)
+// const taskStorage = ref({
+//   id: undefined,
+//   taskTitle: '',
+//   taskAssignees: '',
+//   taskStatus: ''
+// })
+// const saveTaskDetail = async () => {
+//   const addedItem = await addItem(import.meta.env.VITE_BASE_URL, {
+//     taskTitle: title.value,
+//     taskAssignees: assignees.value,
+//     taskStatus: status.value
+//   })
 
-  if (addedItem !== undefined) {
-    taskBox.value.addTypeItem({
-      id: addedItem.id,
-      taskTitle: addedItem.taskTitle,
-      taskAssignees: addedItem.taskAssignees,
-      taskStatus: addedItem.taskStatus
-    })
-  }
-  taskStorage.value = {
-    id: undefined,
-    taskTitle: '',
-    taskAssignees: '',
-    taskStatus: ''
-  }
-  if (taskDetail.value.status == '404') {
-    alert('The requested task does not exist')
-    router.replace({ name: 'Task' })
-    return
-  }
-  showAddTaskDetail.value = true
-  showAddAlert.value = true
-  taskStorage.value = {
-    id: undefined,
-    taskTitle: '',
-    taskAssignees: '',
-    taskStatus: ''
-  }
-  taskDetail.value.status == '201'
-  console.log(taskDetail.value.status)
-}
+//   if (addedItem !== undefined) {
+//     taskBox.value.addTypeItem({
+//       id: addedItem.id,
+//       taskTitle: addedItem.taskTitle,
+//       taskAssignees: addedItem.taskAssignees,
+//       taskStatus: addedItem.taskStatus
+//     })
+//   }
+//   taskStorage.value = {
+//     id: undefined,
+//     taskTitle: '',
+//     taskAssignees: '',
+//     taskStatus: ''
+//   }
+//   if (taskDetail.value.status == '404') {
+//     alert('The requested task does not exist')
+//     router.replace({ name: 'Task' })
+//     return
+//   }
+//   showAddTaskDetail.value = true
+//   showAddAlert.value = true
+//   taskStorage.value = {
+//     id: undefined,
+//     taskTitle: '',
+//     taskAssignees: '',
+//     taskStatus: ''
+//   }
+//   taskDetail.value.status == '201'
+//   console.log(taskDetail.value.status)
+// }
 
 //ฝาก บรรทัด 156
 //@click="showTaskDetail(task.id)"
-const updateTodo = async (newTodo) => {
+const saveTask = async (newTodo) => {
   //ADD Mode
   if (newTodo.id === undefined) {
-    //backend, addItem(url, newItem),  return addedItem
-    const addedItem = await addItem(`${import.meta.env.VITE_BASE_URL}/todos`, {
+    const addedTask = await addItem(import.meta.env.VITE_BASE_URL, {
       category: newTodo.category,
       description: newTodo.description
     })
-    //frontend, addTodo(id, category, desc)
-    myTodos.addTodo(addedItem.id, addedItem.category, addedItem.description)
-  }
-  //EDIT
-  else {
-    //backend, editItem(url, id, editItem),   return editedItem
-    const editedItem = await editItem(
-      `${import.meta.env.VITE_BASE_URL}/todos`,
-      newTodo.id,
-      newTodo
-    )
-    //frontend, updateTodo(id, category, description)
-    myTodos.updateTodo(
-      editedItem.id,
-      editedItem.category,
-      editedItem.description
+
+    taskManager.addTask(
+      addedTask.id,
+      addedTask.title,
+      addedTask.assignees,
+      addedTask.status,
+      addedTask.description
     )
   }
+
   showModal.value = false
-  editingTodo.value = { id: undefined, category: '', description: '' }
+  taskStorage.value = {
+    id: undefined,
+    title: '',
+    description: '',
+    assignees: '',
+    status: ''
+  }
+  showAddTaskDetail.value = true
+  showAddAlert.value = true
+  taskDetail.value.status == '201'
+  console.log(taskDetail.value.status)
 }
 </script>
 
@@ -311,10 +312,7 @@ const updateTodo = async (newTodo) => {
     ></TaskDetail>
   </teleport>
   <teleport to="body" v-if="showAddTaskDetail">
-    <AddTaskDetail
-      @closeAddPopUp="clearAddPopUp"
-      @saveAddDetail="saveTaskDetail"
-    >
+    <AddTaskDetail @closeAddPopUp="clearAddPopUp" @saveAddDetail="saveTask">
     </AddTaskDetail>
   </teleport>
   <teleport to="body" v-if="showDeleteTaskDetail">
