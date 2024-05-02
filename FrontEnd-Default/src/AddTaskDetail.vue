@@ -27,6 +27,7 @@ const saveTask = async (newDetail) => {
   <div
     class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[10px]   "
   >
+  <teleport to="body">
   <div
       class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
       role="alert"
@@ -52,6 +53,7 @@ const saveTask = async (newDetail) => {
         </svg>
       </span>
     </div>
+  </teleport>
     <div class="w-[90%]  m-[auto] " >
       <div class="flex flex-col justify-between bg-white p-4">
         <div class="itbkk-title w-full h-[10%] mt-2">
