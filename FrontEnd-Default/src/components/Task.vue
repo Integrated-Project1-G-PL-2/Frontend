@@ -56,12 +56,12 @@ if(route.params.id){
       </thead>
       <tbody>
         <tr
-          v-for="task in taskManager.getTasks()"
+          v-for="(task,index) in taskManager.getTasks()"
           :key="task.id"
           class="itbkk-item border-b cursor-pointer"
           @click="showTaskDetail(task.id) "
         >
-          <td class="px-4 py-3">{{ task.id }}</td>
+          <td class="px-4 py-3">{{ index + 1 }}</td>
           <td class="itbkk-title px-4 py-3">
             <div class="hover:text-sky-500">{{ task.title }}</div>
           </td>
