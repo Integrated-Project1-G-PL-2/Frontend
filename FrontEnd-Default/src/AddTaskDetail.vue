@@ -20,8 +20,6 @@ const saveTask = async (newDetail) => {
     taskManager.addTask(addedTask)
   }
   showAddAlert.value = true
-  taskDetail.value.status == '201'
-  console.log(taskDetail.value.status)
 }
 </script>
 
