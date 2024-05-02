@@ -1,5 +1,5 @@
 import { reactive } from 'vue'
-export default class TaskManagement {
+class TaskManagement {
   constructor() {
     this.tasks = reactive([])
     // this.detailTask = previousTask
@@ -17,24 +17,11 @@ export default class TaskManagement {
       this.tasks.push(task)
     })
   }
+
   //actions
-  addTasks(newTasks) {
-    newTasks.forEach((newTask) =>
-      addTodo(newTask.id, newTask.title, newTask.description, newTask.status)
-    )
-  }
-  addTask(id, title, status) {
-    tasks.value.push({
-      id: id,
-      title: title,
-      status: status
-    })
-  }
-  updateTask(id, title, status) {
-    tasks.value = tasks.value.map((detail) => {
-      return detail.id === id
-        ? { ...detail, title: title, assignees: assignees, status: status }
-        : detail
-    })
+
+  addTask(newTask) {
+    this.tasks.push(newTask)
   }
 }
+export default new TaskManagement()

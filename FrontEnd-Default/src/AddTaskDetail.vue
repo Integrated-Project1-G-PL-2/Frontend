@@ -1,5 +1,9 @@
 <script setup>
-import {reactive, computed } from 'vue'
+import {onMounted,reactive, computed } from 'vue'
+import TaskManagement from './utils/TaskManager';
+import { addItem } from './utils/fetchUtils';
+const taskManager = TaskManagement
+
 defineEmits(['saveAddDetail', 'closeAddPopUp'])
 const taskDetailForm = reactive({
   taskTitle: '',
@@ -14,10 +18,20 @@ const propTasks = defineProps({
 
 })
 const previousTask = computed(() => propTasks.detailTask)
-onMounted(async () => {
-  taskManager.setTasks(await addItem(import.meta.env.VITE_BASE_URL ))
-})
+// onMounted(async () => {
+//   taskManager.setTasks(await addItem(import.meta.env.VITE_BASE_URL , taskDetailForm))
+// })
 
+const saveTask = async (newDetail) => {
+  //ADD Mode
+  if (newDetail.id === undefined) {
+    const addedTask = await addItem(import.meta.env.VITE_BASE_URL,taskDetailForm) 
+    taskManager.addTask(addedTask)
+  }
+  showAddAlert.value = true
+  taskDetail.value.status == '201'
+  console.log(taskDetail.value.status)
+}
 </script>
 
 <template>
@@ -34,7 +48,7 @@ onMounted(async () => {
           <div class="pl-4 mt-4">Title</div> 
       <div class="w-full h-[20px] mb-8">
             <input
-              v-model.trim="taskDetailForm.taskTitle"
+              v-model.trim="taskDetailForm.title"
               class="itbkk-description w-[900px] h-[35px] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
               placeholder="Enter your text here..."
             ></input>
@@ -55,7 +69,7 @@ onMounted(async () => {
               <div class="pl-4 mt-4">Assignees</div>
               <div class="h-[150px]">
                 <textarea
-                  v-model.trim="taskDetailForm.taskAssignees"
+                  v-model.trim="taskDetailForm.assignees"
                   class="itbkk-assignees w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bbg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                   placeholder="Enter your text here..."
                 ></textarea>
@@ -67,12 +81,14 @@ onMounted(async () => {
                   <span class="label-text ml-4">Status</span>
                 </div>
                 <select
+                  v-model="taskDetailForm.status"
                   class="itbkk-status mt-1 ml-4 select select-bordered w-[95%] h-[40px] px-4 py-2 bg-inherit border-2 border-gray-200 text-gray-400 rounded-md"
                 >
-                  <option disabled selected>No Status</option>
-                  <option>To do</option>
-                  <option>Doing</option>
-                  <option>Done</option>
+                  <option disabled selected>Status</option>
+                  <option value="TO_DO">To Do</option>
+                  <option value="DOING">Doing</option>
+                  <option value="DONE">Done</option>
+                  <option value="NO_STATUS">No Status</option>
                 </select>
               </label>
             </div>
@@ -86,11 +102,9 @@ onMounted(async () => {
                 !taskDetailForm.taskTitle 
                     ? '#cbd5e1' :  '#4ade80'
               }"
-            :disabled=" 
-              !taskDetailForm.taskTitle 
-            "
+         
            @click="
-              ;[$emit('saveAddDetail', previousTask ), $router.replace({ name: 'Task' })]
+              saveTask
             "
           >
             <div class="btn text-center">Ok</div>

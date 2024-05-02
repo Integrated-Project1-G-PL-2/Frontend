@@ -15,7 +15,7 @@ import DeletePopUp from '@/DeletePopUp.vue'
 const router = useRouter()
 const route = useRoute()
 const showTaskDetailModal = ref(false)
-const taskManager = new TaskManager()
+const taskManager = TaskManager
 const taskDetail = reactive({})
 const path = reactive({})
 
@@ -55,7 +55,7 @@ if (route.params.id) {
 const showAddPopUpTaskDetail = async function () {
   router.push({ name: 'AddTaskDetail' })
   showAddTaskDetail.value = true
-  if (taskDetail.value.status == '404') {
+  if (taskDetail.status == '404') {
     alert('The requested task does not exist')
     router.replace({ name: 'Task' })
     return
@@ -130,36 +130,30 @@ const clearDeletePopUp = async function () {
 
 //ฝาก บรรทัด 156
 //@click="showTaskDetail(task.id)"
-const saveTask = async (newTodo) => {
-  //ADD Mode
-  if (newTodo.id === undefined) {
-    const addedTask = await addItem(import.meta.env.VITE_BASE_URL, {
-      category: newTodo.category,
-      description: newTodo.description
-    })
+// const saveTask = async (newTodo) => {
+//   //ADD Mode
+//   if (newTodo.id === undefined) {
+//     const addedTask = await addItem(import.meta.env.VITE_BASE_URL, {
+//       category: newTodo.category,
+//       description: newTodo.description
+//     })
 
-    taskManager.addTask(
-      addedTask.id,
-      addedTask.title,
-      addedTask.assignees,
-      addedTask.status,
-      addedTask.description
-    )
-  }
+//     taskManager.addTask(addedTask)
+//   }
 
-  showModal.value = false
-  taskStorage.value = {
-    id: undefined,
-    title: '',
-    description: '',
-    assignees: '',
-    status: ''
-  }
-  showAddTaskDetail.value = true
-  showAddAlert.value = true
-  taskDetail.value.status == '201'
-  console.log(taskDetail.value.status)
-}
+//   showModal.value = false
+//   taskStorage.value = {
+//     id: undefined,
+//     title: '',
+//     description: '',
+//     assignees: '',
+//     status: ''
+//   }
+//   showAddTaskDetail.value = true
+//   showAddAlert.value = true
+//   taskDetail.value.status == '201'
+//   console.log(taskDetail.value.status)
+// }
 </script>
 
 <template>
