@@ -18,6 +18,7 @@ const showTaskDetailModal = ref(false)
 const taskManager = TaskManager
 const taskDetail = reactive({})
 const path = reactive({})
+const Id = ref('a')
 
 const showAddTaskDetail = ref(false)
 const showDeleteTaskDetail = ref(false)
@@ -61,15 +62,10 @@ const showAddPopUpTaskDetail = async function () {
     return
   }
 }
-const showDeletePopUpTaskDetail = async function (id) {
+const showDeletePopUpTaskDetail = function (id) {
   router.push({ name: 'DeleteTaskDetail', params: { id: id } })
-  taskDetail.value = await getItemById(import.meta.env.VITE_BASE_URL, id)
+  Id.value = id
   showDeleteTaskDetail.value = true
-  if (taskDetail.value.status == '404') {
-    alert('The requested task does not exist')
-    router.replace({ name: 'Task' })
-    return
-  }
 }
 const clearAddPopUp = async function () {
   router.push({ name: 'Task' })
@@ -211,7 +207,8 @@ const clearDeletePopUp = async function () {
     </AddTaskDetail>
   </teleport>
   <teleport to="body" v-if="showDeleteTaskDetail">
-    <DeletePopUp @cancelDetail="clearDeletePopUp"> </DeletePopUp>
+    <DeletePopUp @cancelDetail="clearDeletePopUp" :taskId='Id' >
+    </DeletePopUp>
   </teleport>
 </template>
 <style scoped></style>

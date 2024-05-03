@@ -1,6 +1,17 @@
 <script setup>
 import { ref, reactive } from 'vue'
+import {deleteItemById} from './utils/fetchUtils'
+import taskManager from './utils/TaskManager';
 defineEmits(['confirmDetail', 'cancelDetail'])
+const props = defineProps(['taskId'])
+console.log(props.taskId)
+
+const deleteTask = async (deleteId) => {
+    const deletedTask = await deleteItemById(import.meta.env.VITE_BASE_URL,deleteId) 
+    taskManager.deleteTask(deletedTask)
+  // showAddAlert.value = true
+
+}
 </script>
 
 <template>
@@ -21,7 +32,7 @@ defineEmits(['confirmDetail', 'cancelDetail'])
         <button
           class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
           @click="
-            ;[$emit('cancelDetail', true), $router.replace({ name: 'Task' })]
+           deleteTask(props.taskId)
           "
         >
           <div class="btn text-center">Confirm</div>

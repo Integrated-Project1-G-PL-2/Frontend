@@ -1,3 +1,4 @@
+import { findIndex } from 'cypress/types/lodash'
 import { reactive } from 'vue'
 class TaskManagement {
   constructor() {
@@ -22,6 +23,11 @@ class TaskManagement {
 
   addTask(newTask) {
     this.tasks.push(newTask)
+  }
+
+  deleteTask(id){
+    const index =  this.tasks.findIndex(el=>{el.id == id})
+    this.tasks.splice(index,1)
   }
 }
 export default new TaskManagement()
