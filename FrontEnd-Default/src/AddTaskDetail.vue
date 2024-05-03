@@ -23,8 +23,9 @@ const saveTask = async (newDetail) => {
   }
   showAddAlert.value = true
   emits("saveAddPopUp" , true)
+  alertTaskDetail()
 }
-// export const alertTaskDetail();
+
 </script>
 
 <template>

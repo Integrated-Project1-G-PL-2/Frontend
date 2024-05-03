@@ -12,7 +12,6 @@ import TaskDetail from '@/TaskDetail.vue'
 import { useRoute, useRouter } from 'vue-router'
 import AddTaskDetail from '@/AddTaskDetail.vue'
 import DeletePopUp from '@/DeletePopUp.vue'
-import { alertTaskDetail } from '@/AddTaskDetail.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -25,6 +24,7 @@ const showDeleteTaskDetail = ref(false)
 const showAddAlert = ref(false) // open = true
 const showRedAlert = ref(false) // open = true
 const showGreenAlert = ref(false) // open = true
+const addTitle = reactive({})
 
 onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
@@ -80,11 +80,16 @@ const saveTaskDetailAlert = async function () {
   router.push({ name: 'Task' })
   showAddTaskDetail.value = false
   showAddAlert.value = true
+  const title = title.value
 }
 
 const clearDeletePopUp = async function () {
   router.push({ name: 'Task' })
   showDeleteTaskDetail.value = false
+}
+
+const taskDetailForm = (detail) => {
+  detail.addTitle
 }
 </script>
 
@@ -95,11 +100,12 @@ const clearDeletePopUp = async function () {
       class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
       role="alert"
       v-show="showAddAlert"
+      @alertAddPopUp="taskDetailForm, value"
     >
       <strong class="font-bold">Success!!</strong>
       <p>
         <span class="itbkk-message block sm:inline">
-          The task "{{ alertTaskDetail.title }}" is added successfully</span
+          The task "{{ addTitle }}" is added successfully</span
         >
       </p>
       <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
