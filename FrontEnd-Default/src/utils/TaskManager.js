@@ -17,9 +17,7 @@ class TaskManagement {
       this.tasks.push(task)
     })
   }
-
   //actions
-
   addTask(newTask) {
     this.tasks.push(newTask)
   }
