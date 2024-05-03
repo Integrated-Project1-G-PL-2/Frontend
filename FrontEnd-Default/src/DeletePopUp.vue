@@ -2,15 +2,13 @@
 import { ref, reactive } from 'vue'
 import {deleteItemById} from './utils/fetchUtils'
 import taskManager from './utils/TaskManager';
-defineEmits(['confirmDetail', 'cancelDetail'])
+const deClareemit = defineEmits(['confirmDetail', 'cancelDetail'])
 const props = defineProps(['taskId'])
-console.log(props.taskId)
 
 const deleteTask = async (deleteId) => {
     const deletedTask = await deleteItemById(import.meta.env.VITE_BASE_URL,deleteId) 
-    taskManager.deleteTask(deletedTask)
-  // showAddAlert.value = true
-
+    taskManager.deleteTask(deleteId)
+    deClareemit('confirmDetail', true)
 }
 </script>
 

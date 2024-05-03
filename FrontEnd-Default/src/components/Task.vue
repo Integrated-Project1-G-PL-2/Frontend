@@ -1,13 +1,14 @@
 <script setup>
 import { onMounted, reactive, ref, watch } from 'vue'
+import TaskManager from '@/utils/TaskManager.js'
 import {
   getItems,
   getItemById,
   deleteItemById,
   addItem,
   editItem
-} from '../utils/fetchUtils.js'
-import TaskManager from '../utils/TaskManager.js'
+} from '@/utils/fetchUtils.js'
+
 import TaskDetail from '@/TaskDetail.vue'
 import { useRoute, useRouter } from 'vue-router'
 import AddTaskDetail from '@/AddTaskDetail.vue'
@@ -76,6 +77,12 @@ const clearDeletePopUp = async function () {
   router.push({ name: 'Task' })
   showDeleteTaskDetail.value = false
 }
+
+const showDelComplete = async function () {
+  router.push({ name: 'Task' })
+  showDeleteTaskDetail.value = false
+  showGreenAlert.value = true
+}
 </script>
 
 <template>
@@ -114,7 +121,7 @@ const clearDeletePopUp = async function () {
       <strong class="font-bold">Success!!</strong>
       <p>
         <span class="itbkk-message block sm:inline">
-          The task "" has been deleted</span
+          task '' has been deleted</span
         >
       </p>
       <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
@@ -207,7 +214,7 @@ const clearDeletePopUp = async function () {
     </AddTaskDetail>
   </teleport>
   <teleport to="body" v-if="showDeleteTaskDetail">
-    <DeletePopUp @cancelDetail="clearDeletePopUp" :taskId='Id' >
+    <DeletePopUp @cancelDetail="clearDeletePopUp" @confirmDetail="showDelComplete" :taskId='Id' >
     </DeletePopUp>
   </teleport>
 </template>
