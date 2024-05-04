@@ -104,6 +104,7 @@ const taskDetailForm = (detail) => {
       message="Success!!"
       styleType="green"
     />
+
     <AlertPopUp
       titles=" The task '' has been deleted"
       :action="(showGreenAlert = false)"
