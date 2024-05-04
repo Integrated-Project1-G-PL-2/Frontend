@@ -2,7 +2,7 @@
 import { computed, reactive } from 'vue'
 import { useRouter } from 'vue-router';
 import TaskManagement from './utils/TaskManager';
-import { addItem } from './utils/fetchUtils';
+import { addItem ,editItem } from './utils/fetchUtils';
 const emits = defineEmits(['showTaskDetailModal','saveAddPopUp'])
 const router = useRouter();
 const prop = defineProps({
@@ -12,7 +12,7 @@ const prop = defineProps({
 const task = reactive(prop.taskDetail.value != null ? prop.taskDetail.value : {})
 const formatedTask = computed(() => {
   if(prop.operate == 'add'){
-    return {createdOn: "" ,id: "",taskAssignees: "",taskDescription: "",taskStatus: "",taskTitle: "",updatedOn: ""}
+    return {createdOn: null ,id:  null,taskAssignees:  null,taskDescription:  null,taskStatus:  null,taskTitle:  null,updatedOn:  null}
   }
   return {
     createdOn: new Date(task.createdOn)
@@ -31,20 +31,30 @@ const handleClick = async() =>{
   if(prop.operate == 'show'){
     emits('showTaskDetailModal', false)
     router.replace({ name: 'Task' })
-  }else if (prop.operate == 'add'){
-    const addTaskDetail = {
-    title: formatedTask.value.taskTitle,
-    assignees: formatedTask.value.taskAssignees,
-    description: formatedTask.value.taskDescription,
-    status: formatedTask.value.taskStatus.length > 0 ? formatedTask.value.taskStatus : "NO_STATUS"
-    }
+    return
+  }
+  const addTaskDetail = {
+    title: formatedTask.value.taskTitle.length > 0 ? formatedTask.value.taskTitle : null,
+    assignees: formatedTask.value.taskAssignees.length > 0 ? formatedTask.value.taskAssignees : null,
+    description: formatedTask.value.taskDescription.length > 0 ? formatedTask.value.taskDescription : null,
+    status: formatedTask.value.taskStatus != null ? formatedTask.value.taskStatus : "NO_STATUS"
+  }
+  if (prop.operate == 'add'){
     const newTask = await addItem(import.meta.env.VITE_BASE_URL,addTaskDetail) 
-    console.log(newTask);
-    TaskManagement.addTask(newTask)
     router.replace({ name: 'Task' })
-    emits('saveAddPopUp' , newTask.title)
+    if(newTask.status != "500"){
+      TaskManagement.addTask(newTask) 
+      emits('saveAddPopUp' , newTask.title)
+      return
+    }
+    emits('showTaskDetailModal', false)
   }else if (prop.operate == 'edit'){
-
+    const editTask = await editItem(import.meta.env.VITE_BASE_URL,formatedTask.value.id,addTaskDetail)
+    router.replace({ name: 'Task' })
+    if(editTask.status != "500"){
+      TaskManagement.editTask(editTask.id , editTask) 
+    }
+    emits('showTaskDetailModal', false)
   }
 }
 
@@ -136,6 +146,8 @@ const handleClick = async() =>{
             @click="
               handleClick
             "
+            :disabled="!formatedTask.taskStatus"
+            :class="!formatedTask.taskStatus ? 'bg-gray-400' : ''"
           >
             <div class="btn">Ok</div>
           </button>

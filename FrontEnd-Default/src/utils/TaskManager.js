@@ -17,9 +17,15 @@ class TaskManagement {
       this.tasks.push(task)
     })
   }
-  //actions
   addTask(newTask) {
     this.tasks.push(newTask)
+  }
+  _findIndexById(id){
+    return this.tasks.findIndex(el => el.id === id)
+  }
+  editTask(id , newTask){
+    const index = this._findIndexById(id)
+    this.tasks[index] = newTask
   }
 }
 export default new TaskManagement()

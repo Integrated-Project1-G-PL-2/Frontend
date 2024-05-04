@@ -193,7 +193,7 @@ const taskDetailForm = (detail) => {
         >
           <td class="px-4 py-3">
             {{ task.id }}
-            <div class="inline-flex" @click="showTaskDetail(task.id , 'show')">⚙️</div>
+            <div class="inline-flex" @click="showTaskDetail(task.id , 'edit')">⚙️</div>
             <div
               class="inline-flex"
               @click="showDeletePopUpTaskDetail(task.id)"
