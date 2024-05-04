@@ -17,8 +17,8 @@ const formatedTask = computed(() => {
     return {
       createdOn: null,
       id: null,
-      taskAssignees: null,
-      taskDescription: null,
+      taskAssignees: '',
+      taskDescription: '',
       taskStatus: null,
       taskTitle: null,
       updatedOn: null
@@ -175,7 +175,7 @@ const handleClick = async () => {
           <button
             class="itbkk-button bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
             @click="handleClick"
-            :disabled="formatedTask.taskTitle === null"
+            :disabled="!formatedTask.taskTitle === null"
             :class="!formatedTask.taskTitle ? 'bg-gray-400' : ''"
           >
             <div class="btn">Ok</div>

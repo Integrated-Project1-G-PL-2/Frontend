@@ -52,12 +52,12 @@ const showEditTaskDetail = async function (id) {
   showTaskDetailModal.value = true
 }
 if (route.params.id) {
-  showTaskDetail(route.params.id , "show")
+  showTaskDetail(route.params.id, 'show')
 }
-const showAddPopUpTaskDetail =  function (operate) {
+const showAddPopUpTaskDetail = function (operate) {
   router.push({ name: 'AddTaskDetail' })
   operation.value = operate
-  showTaskDetailModal.value =  true
+  showTaskDetailModal.value = true
 }
 const showDeletePopUpTaskDetail = async function (id) {
   router.push({ name: 'DeleteTaskDetail', params: { id: id } })
@@ -84,10 +84,6 @@ const clearDeletePopUp = async function () {
   router.push({ name: 'Task' })
   showDeleteTaskDetail.value = false
 }
-
-const taskDetailForm = (detail) => {
-  detail.addTitle
-}
 </script>
 
 <template>
@@ -97,7 +93,6 @@ const taskDetailForm = (detail) => {
       class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
       role="alert"
       v-show="showAddAlert"
-      @alertAddPopUp="taskDetailForm, value"
     >
       <strong class="font-bold">Success!!</strong>
       <p>
@@ -193,7 +188,9 @@ const taskDetailForm = (detail) => {
         >
           <td class="px-4 py-3">
             {{ task.id }}
-            <div class="inline-flex" @click="showTaskDetail(task.id , 'edit')">⚙️</div>
+            <div class="inline-flex" @click="showTaskDetail(task.id, 'edit')">
+              ⚙️
+            </div>
             <div
               class="inline-flex"
               @click="showDeletePopUpTaskDetail(task.id)"
@@ -202,7 +199,10 @@ const taskDetailForm = (detail) => {
             </div>
           </td>
           <td class="itbkk-title px-4 py-3">
-            <div class="hover:text-sky-500" @click="showTaskDetail(task.id,'show')">
+            <div
+              class="hover:text-sky-500"
+              @click="showTaskDetail(task.id, 'show')"
+            >
               {{ task.title }}
             </div>
           </td>
