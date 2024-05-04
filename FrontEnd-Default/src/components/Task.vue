@@ -41,8 +41,9 @@ const showTaskDetail = async function (id, operate) {
   showTaskDetailModal.value = true
 }
 
-const showEditTaskDetail = async function (id) {
+const showEditTaskDetail = async function (id ,operate) {
   router.push({ name: 'EditTaskDetail', params: { id: id } })
+  operation.value = operate
   taskDetail.value = await getItemById(import.meta.env.VITE_BASE_URL, id)
   if (taskDetail.value.status == '404') {
     alert('The requested task does not exist')
@@ -193,7 +194,7 @@ const taskDetailForm = (detail) => {
         >
           <td class="px-4 py-3">
             {{ task.id }}
-            <div class="inline-flex" @click="showTaskDetail(task.id , 'edit')">⚙️</div>
+            <div class="inline-flex" @click="showEditTaskDetail(task.id , 'edit')">⚙️</div>
             <div
               class="inline-flex"
               @click="showDeletePopUpTaskDetail(task.id)"

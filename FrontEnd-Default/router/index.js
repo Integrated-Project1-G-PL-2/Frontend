@@ -26,7 +26,7 @@ const routes = [
       },
       {
         path: ':id/edit',
-        component: EditTaskDetail,
+        component: TaskDetail,
         name: 'EditTaskDetail'
       },
       {
