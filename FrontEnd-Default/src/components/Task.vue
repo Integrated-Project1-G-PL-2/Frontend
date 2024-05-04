@@ -24,8 +24,7 @@ const showDeleteTaskDetail = ref(false)
 const showAddAlert = ref(false) // open = true
 const showRedAlert = ref(false) // open = true
 const showGreenAlert = ref(false) // open = true
-const addTitle = reactive({})
-
+const addTaskTitle = ref('')
 onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
 })
@@ -81,15 +80,12 @@ const saveTaskDetailAlert = async function () {
   showAddTaskDetail.value = false
   showAddAlert.value = true
   const title = title.value
+  addTaskTitle.value = title
 }
 
 const clearDeletePopUp = async function () {
   router.push({ name: 'Task' })
   showDeleteTaskDetail.value = false
-}
-
-const taskDetailForm = (detail) => {
-  detail.addTitle
 }
 </script>
 
@@ -100,12 +96,12 @@ const taskDetailForm = (detail) => {
       class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
       role="alert"
       v-show="showAddAlert"
-      @alertAddPopUp="taskDetailForm, value"
+      @alertAddPopUp="saveTaskDetailAlert"
     >
       <strong class="font-bold">Success!!</strong>
       <p>
         <span class="itbkk-message block sm:inline">
-          The task "{{ addTitle }}" is added successfully</span
+          The task "{{ title }}" is added successfully</span
         >
       </p>
       <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
