@@ -12,10 +12,12 @@ import {
 import TaskDetail from '@/TaskDetail.vue'
 import { useRoute, useRouter } from 'vue-router'
 import AddTaskDetail from '@/AddTaskDetail.vue'
+import EditTaskDetail from './EditTaskDetail.vue'
 import DeletePopUp from '@/DeletePopUp.vue'
 const router = useRouter()
 const route = useRoute()
 const showTaskDetailModal = ref(false)
+const showEditDetailModal = ref(false)
 const taskManager = TaskManager
 const taskDetail = reactive({})
 const path = reactive({})
@@ -43,13 +45,8 @@ const showTaskDetail = async function (id) {
 
 const showEditTaskDetail = async function (id) {
   router.push({ name: 'EditTaskDetail', params: { id: id } })
-  taskDetail.value = await getItemById(import.meta.env.VITE_BASE_URL, id)
-  if (taskDetail.value.status == '404') {
-    alert('The requested task does not exist')
-    router.replace({ name: 'Task' })
-    return
-  }
-  showTaskDetailModal.value = true
+  Id.value = id
+  showEditDetailModal.value = true
 }
 if (route.params.id) {
   showTaskDetail(route.params.id)
@@ -163,7 +160,7 @@ const showDelComplete = async function () {
         >
           <td class="px-4 py-3">
             {{ task.id }}
-            <div class="inline-flex" @click="showTaskDetail(task.id)">⚙️</div>
+            <div class="inline-flex" @click="showEditTaskDetail(task.id)">⚙️</div>
             <div
               class="inline-flex"
               @click="showDeletePopUpTaskDetail(task.id)"
@@ -209,6 +206,17 @@ const showDelComplete = async function () {
       @showTaskDetailModal="showTaskDetailModal = false"
     ></TaskDetail>
   </teleport>
+
+
+  <teleport to="body" v-if="showEditDetailModal">
+    <EditTaskDetail
+      :taskDetail="taskDetail"
+      :taskId='Id'
+      @showEditDetailModal ="showEditDetailModal  = false"
+    ></EditTaskDetail>
+  </teleport>
+
+  
   <teleport to="body" v-if="showAddTaskDetail">
     <AddTaskDetail @closeAddPopUp="clearAddPopUp" @saveAddDetail="saveTask">
     </AddTaskDetail>

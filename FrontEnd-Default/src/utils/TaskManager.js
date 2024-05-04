@@ -30,8 +30,16 @@ class TaskManagement {
      return el.id == id
       
     })
-    console.log(index)
     this.tasks.splice(index,1)
+  }
+
+  edit(id,newTask){
+    const index = this.tasks.findIndex(el=>{ 
+      return el.id == id
+       
+     })
+     this.tasks.splice(index,1)
+     this.tasks.push(newTask)
   }
 }
 export default new TaskManagement()

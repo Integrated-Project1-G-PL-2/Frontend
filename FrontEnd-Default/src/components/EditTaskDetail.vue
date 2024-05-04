@@ -1,10 +1,11 @@
 <script setup>
-import { computed, reactive } from 'vue'
+import { computed, reactive , ref} from 'vue'
 defineEmits(['showTaskDetailModal'])
-const prop = defineProps({
-  taskDetail: Object
-})
+const prop = defineProps(
+  ['taskDetail','taskId']
+)
 const task = reactive(prop.taskDetail.value)
+console.log(prop.taskId)
 
 const formatedTask = computed(() => {
   return {
@@ -23,6 +24,15 @@ const formatedTask = computed(() => {
     updatedOn: new Date(task.updatedOn).toLocaleString('en-GB').replace(',', '')
   }
 })
+
+const editedInfo = ref(
+  formatedTask
+);
+const editTask = async (deleteId,editedInfo) => {
+    const editedTask = await editItem(import.meta.env.VITE_BASE_URL,deleteId,editedInfo) 
+    taskManager.deleteTask(deleteId,editedInfo)
+    deClareemit('confirmDetail', true)
+}
 </script>
 
 <template>
@@ -105,10 +115,8 @@ const formatedTask = computed(() => {
           <button
             class="itbkk-button bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
             @click="
-              ;[
-                $emit('showTaskDetailModal', false),
-                $router.replace({ name: 'Task' })
-              ]
+              editTask(prop.taskId,editedInfo)
+              // console.log(editedInfo)
             "
           >
             <div class="btn">Ok</div>
