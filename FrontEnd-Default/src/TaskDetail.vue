@@ -1,25 +1,35 @@
 <script setup>
-import { onMounted, reactive} from 'vue'
-import { useRouter } from 'vue-router';
-import TaskManagement from './utils/TaskManager';
-import { addItem ,editItem } from './utils/fetchUtils';
-const emits = defineEmits(['showTaskDetailModal','saveAddPopUp'])
-const router = useRouter();
+import { onMounted, reactive } from 'vue'
+import { useRouter } from 'vue-router'
+import TaskManagement from './utils/TaskManager'
+import { addItem, editItem } from './utils/fetchUtils'
+const emits = defineEmits(['showTaskDetailModal', 'saveAddPopUp'])
+const router = useRouter()
 const prop = defineProps({
   taskDetail: Object,
   operate: String
 })
 
-let task 
+let task
 if (prop.taskDetail.value) {
   task = reactive({
-    createdOn: new Date(prop.taskDetail.value.createdOn).toLocaleString('en-GB').replace(',', ''),
+    createdOn: new Date(prop.taskDetail.value.createdOn)
+      .toLocaleString('en-GB')
+      .replace(',', ''),
     id: prop.taskDetail.value.id,
-    taskAssignees: prop.taskDetail.value.assignees != null ? prop.taskDetail.value.assignees : '',
-    taskDescription: prop.taskDetail.value.description != null ? prop.taskDetail.value.description : '',
+    taskAssignees:
+      prop.taskDetail.value.assignees != null
+        ? prop.taskDetail.value.assignees
+        : '',
+    taskDescription:
+      prop.taskDetail.value.description != null
+        ? prop.taskDetail.value.description
+        : '',
     taskStatus: prop.taskDetail.value.status,
     taskTitle: prop.taskDetail.value.title,
-    updatedOn: new Date(prop.taskDetail.value.updatedOn).toLocaleString('en-GB').replace(',', '')
+    updatedOn: new Date(prop.taskDetail.value.updatedOn)
+      .toLocaleString('en-GB')
+      .replace(',', '')
   })
 } else {
   task = reactive({
@@ -32,8 +42,8 @@ if (prop.taskDetail.value) {
     updatedOn: null
   })
 }
-const handleClick = async() =>{
-  if(prop.operate == 'show'){
+const handleClick = async () => {
+  if (prop.operate == 'show') {
     emits('showTaskDetailModal', false)
     router.replace({ name: 'Task' })
     return
@@ -42,22 +52,29 @@ const handleClick = async() =>{
     title: task.taskTitle?.length > 0 ? task.taskTitle : null,
     assignees: task.taskAssignees?.length > 0 ? task.taskAssignees : null,
     description: task.taskDescription?.length > 0 ? task.taskDescription : null,
-    status: task.taskStatus != null ? task.taskStatus : "NO_STATUS"
+    status: task.taskStatus != null ? task.taskStatus : 'NO_STATUS'
   }
-  if (prop.operate == 'add'){
-    const newTask = await addItem(import.meta.env.VITE_BASE_URL,addOrUpdateTaskDetail) 
+  if (prop.operate == 'add') {
+    const newTask = await addItem(
+      import.meta.env.VITE_BASE_URL,
+      addOrUpdateTaskDetail
+    )
     router.replace({ name: 'Task' })
-    if(newTask.status != "500"){
-      TaskManagement.addTask(newTask) 
-      emits('saveAddPopUp' , newTask.title)
+    if (newTask.status != '500') {
+      TaskManagement.addTask(newTask)
+      emits('saveAddPopUp', newTask.title)
       return
     }
     emits('showTaskDetailModal', false)
-  }else if (prop.operate == 'edit'){
-    const editTask = await editItem(import.meta.env.VITE_BASE_URL,task.id,addOrUpdateTaskDetail)
+  } else if (prop.operate == 'edit') {
+    const editTask = await editItem(
+      import.meta.env.VITE_BASE_URL,
+      task.id,
+      addOrUpdateTaskDetail
+    )
     router.replace({ name: 'Task' })
-    if(editTask.status != "500"){
-      TaskManagement.editTask(editTask.id , editTask) 
+    if (editTask.status != '500') {
+      TaskManagement.editTask(editTask.id, editTask)
     }
     emits('showTaskDetailModal', false)
   }
@@ -71,7 +88,12 @@ const handleClick = async() =>{
     <div class="w-[90%] m-[auto]">
       <div class="flex flex-col justify-between bg-white p-4">
         <div class="itbkk-title w-full h-[10%] mt-2">
-          <textarea class="text-xl font-bold text-justify w-full breal-all border border-gray-300 rounded-md" :disabled="operate=='show'" v-model.trim="task.taskTitle">
+          <div class="pl-4 mt-4">Title</div>
+          <textarea
+            class="text-xl font-bold text-justify w-full breal-all border border-gray-300 rounded-md"
+            :disabled="operate == 'show'"
+            v-model.trim="task.taskTitle"
+          >
           </textarea>
         </div>
         <div class="border-b w-full mt-4"></div>
@@ -80,15 +102,14 @@ const handleClick = async() =>{
             <div class="pl-4 mt-4">Description</div>
             <div class="w-full h-[420px]">
               <textarea
-                :disabled="operate=='show'"
+                :disabled="operate == 'show'"
                 v-model="task.taskDescription"
                 :class="
                   task.taskDescription == null ? 'italic text-gray-500 ' : ''
                 "
                 class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                 placeholder="No Description Provided"
-                ></textarea
-              >
+              ></textarea>
             </div>
           </div>
           <div class="w-[30%] h-[50%] flex-col">
@@ -96,13 +117,13 @@ const handleClick = async() =>{
               <div class="pl-4 mt-4">Assignees</div>
               <div class="h-[150px]">
                 <textarea
-                :disabled="operate=='show'"
+                  :disabled="operate == 'show'"
                   v-model="task.taskAssignees"
                   class="itbkk-assignees w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bbg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                   :class="
                     task.taskAssignees == null ? 'italic text-gray-500 ' : ''
                   "
-                   placeholder="Unassigned"
+                  placeholder="Unassigned"
                 ></textarea>
               </div>
             </div>
@@ -112,7 +133,7 @@ const handleClick = async() =>{
                   <span class="label-text ml-4">Status</span>
                 </div>
                 <select
-                :disabled="operate=='show'"
+                  :disabled="operate == 'show'"
                   v-model="task.taskStatus"
                   class="itbkk-status mt-1 ml-4 select select-bordered w-[95%] h-[40px] px-4 py-2 bg-inherit border-2 border-gray-200 text-gray-400 rounded-md"
                 >
@@ -153,7 +174,7 @@ const handleClick = async() =>{
           </button>
           <button
             @click="
-             [
+              ;[
                 $emit('showTaskDetailModal', false),
                 $router.replace({ name: 'Task' })
               ]

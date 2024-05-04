@@ -96,13 +96,42 @@ const taskDetailForm = (detail) => {
   <div class="bg-white relative border rounded-lg overflow-auto">
     <h1 class="font-bold text-center">IT-Bangmod Kradan Kanban</h1>
     <AlertPopUp
-      titles=" The task {{ showTitle }} is added successfully"
-      :action="showAddAlert.value"
+      titles=" The task {{ showTitle }} has been successfully added"
+      action="showAddAlert = false"
       :show="showAddAlert"
       message="Success!!"
       styleType="green"
     />
-    <div
+    <AlertPopUp
+      titles=" The task '' has been deleted"
+      :action="(showGreenAlert = false)"
+      :show="showGreenAlert"
+      message="Success!!"
+      styleType="green"
+    />
+    <AlertPopUp
+      titles=" An error has occurred,the task '' does not exist"
+      :action="(showRedAlert = false)"
+      :show="showRedAlert"
+      message="Error!!"
+      styleType="red"
+    />
+    <AlertPopUp
+      titles=" The task {{ showTitle }} has been updated"
+      :action="(showGreenAlert = false)"
+      :show="showGreenAlert"
+      message="Success!!"
+      styleType="green"
+    />
+    <AlertPopUp
+      titles=" The update task '' was unsuccessful"
+      :action="(showRedAlert = false)"
+      :show="showRedAlert"
+      message="Error!!"
+      styleType="red"
+    />
+
+    <!-- <div
       class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
       role="alert"
       v-show="showRedAlert"
@@ -125,7 +154,7 @@ const taskDetailForm = (detail) => {
           />
         </svg>
       </span>
-    </div>
+    </div> -->
     <div
       class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
       role="alert"
