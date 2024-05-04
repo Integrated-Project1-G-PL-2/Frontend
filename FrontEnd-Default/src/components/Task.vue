@@ -59,6 +59,7 @@ const showAddPopUpTaskDetail =  function (operate) {
   router.push({ name: 'AddTaskDetail' })
   operation.value = operate
   showTaskDetailModal.value =  true
+  taskDetail.value = null
 }
 const showDeletePopUpTaskDetail = async function (id) {
   router.push({ name: 'DeleteTaskDetail', params: { id: id } })

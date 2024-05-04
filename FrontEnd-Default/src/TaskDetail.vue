@@ -1,5 +1,5 @@
 <script setup>
-import { reactive} from 'vue'
+import { onMounted, reactive} from 'vue'
 import { useRouter } from 'vue-router';
 import TaskManagement from './utils/TaskManager';
 import { addItem ,editItem } from './utils/fetchUtils';
@@ -9,13 +9,14 @@ const prop = defineProps({
   taskDetail: Object,
   operate: String
 })
+
 let task 
 if (prop.taskDetail.value) {
   task = reactive({
     createdOn: new Date(prop.taskDetail.value.createdOn).toLocaleString('en-GB').replace(',', ''),
     id: prop.taskDetail.value.id,
-    taskAssignees: prop.taskDetail.value.assignees != null ? prop.taskDetail.value.assignees : 'Unassigned',
-    taskDescription: prop.taskDetail.value.description != null ? prop.taskDetail.value.description : 'No Description Provided',
+    taskAssignees: prop.taskDetail.value.assignees != null ? prop.taskDetail.value.assignees : '',
+    taskDescription: prop.taskDetail.value.description != null ? prop.taskDetail.value.description : '',
     taskStatus: prop.taskDetail.value.status,
     taskTitle: prop.taskDetail.value.title,
     updatedOn: new Date(prop.taskDetail.value.updatedOn).toLocaleString('en-GB').replace(',', '')
@@ -31,7 +32,6 @@ if (prop.taskDetail.value) {
     updatedOn: null
   })
 }
-
 const handleClick = async() =>{
   if(prop.operate == 'show'){
     emits('showTaskDetailModal', false)
