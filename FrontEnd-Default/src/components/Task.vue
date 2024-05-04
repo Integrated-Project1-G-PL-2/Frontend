@@ -26,6 +26,7 @@ const showGreenAlert = ref(false) // open = true
 const operation = ref('')
 const showTitle = ref('')
 const showGreenEditAlert = ref(false)
+const closeAlert = ref(false)
 
 onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
@@ -89,8 +90,8 @@ const clearDeletePopUp = async function () {
   showDeleteTaskDetail.value = false
 }
 
-const taskDetailForm = (detail) => {
-  detail.addTitle
+const closeAlerts = () => {
+  closeAlert.value = true
 }
 </script>
 
@@ -99,7 +100,7 @@ const taskDetailForm = (detail) => {
     <h1 class="font-bold text-center">IT-Bangmod Kradan Kanban</h1>
     <AlertPopUp
       titles=" The task {{ showTitle }} has been successfully added"
-      action="showAddAlert = false"
+      :action="closeAlerts"
       :show="showGreenAddAlert"
       message="Success!!"
       styleType="green"

@@ -1,7 +1,7 @@
 <script setup>
 const props = defineProps({
   titles: String,
-  action: String,
+  action: Function,
   show: Boolean,
   message: String,
   styleType: {
