@@ -2,17 +2,28 @@
 import { ref, reactive } from 'vue'
 import {deleteItemById} from './utils/fetchUtils'
 import taskManager from './utils/TaskManager';
+import { useRoute, useRouter } from 'vue-router'
 const deClareemit = defineEmits(['confirmDetail', 'cancelDetail'])
 const props = defineProps(['taskId'])
+const router = useRouter()
+const deletedTask = reactive({})
 
 const deleteTask = async (deleteId) => {
-    const deletedTask = await deleteItemById(import.meta.env.VITE_BASE_URL,deleteId) 
+    deletedTask.value = await deleteItemById(import.meta.env.VITE_BASE_URL,deleteId) 
+    if (deletedTask.value == '404') {
+    console.log('Cant Delete')
+    router.replace({ name: 'Task' })
+    return
+  }
+  console.log(deletedTask.value)
     taskManager.deleteTask(deleteId)
     deClareemit('confirmDetail', true)
 }
 </script>
 
 <template>
+
+
   <div
     class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[10px]"
   >
@@ -30,7 +41,7 @@ const deleteTask = async (deleteId) => {
         <button
           class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
           @click="
-           deleteTask(props.taskId)
+           deleteTask(99)
           "
         >
           <div class="btn text-center">Confirm</div>
