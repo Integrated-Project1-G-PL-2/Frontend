@@ -42,7 +42,7 @@ const deleteTask = async (deleteId) => {
         <button
           class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
           @click="
-           deleteTask(99)
+           deleteTask(props.taskId)
           "
         >
           <div class="btn text-center">Confirm</div>
