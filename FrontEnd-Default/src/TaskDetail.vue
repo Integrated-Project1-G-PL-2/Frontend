@@ -1,9 +1,11 @@
 <script setup>
-import { reactive} from 'vue'
+import { reactive,ref} from 'vue'
 import { useRouter } from 'vue-router';
 import TaskManagement from './utils/TaskManager';
 import { addItem ,editItem } from './utils/fetchUtils';
-const emits = defineEmits(['showTaskDetailModal','saveAddPopUp'])
+const emits = defineEmits(['showTaskDetailModal','saveAddPopUp','redEditAlert'])
+const editTaskError = reactive({})
+const editTask = ref({})
 const router = useRouter();
 const prop = defineProps({
   taskDetail: Object,
@@ -54,10 +56,14 @@ const handleClick = async() =>{
     }
     emits('showTaskDetailModal', false)
   }else if (prop.operate == 'edit'){
-    const editTask = await editItem(import.meta.env.VITE_BASE_URL,task.id,addOrUpdateTaskDetail)
+    editTaskError.value = await editItem(import.meta.env.VITE_BASE_URL,task.id,addOrUpdateTaskDetail)
     router.replace({ name: 'Task' })
-    if(editTask.status != "500"){
+    if(editTaskError.value != "500"){
+      console.log(editTaskError.value)
       TaskManagement.editTask(editTask.id , editTask) 
+    } else {
+      emits('redEditAlert', true )
+      emits('showTaskDetailModal', false)
     }
     emits('showTaskDetailModal', false)
   }
