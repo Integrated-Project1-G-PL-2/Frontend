@@ -11,8 +11,7 @@ import TaskManager from '../utils/TaskManager.js'
 import TaskDetail from '@/TaskDetail.vue'
 import { useRoute, useRouter } from 'vue-router'
 import DeletePopUp from '@/DeletePopUp.vue'
-import AlertPopUp from ''
-
+import AlertPopUp from '@AlertPopUp.vue'
 const router = useRouter()
 const route = useRoute()
 const showTaskDetailModal = ref(false)
