@@ -11,6 +11,7 @@ import TaskManager from '../utils/TaskManager.js'
 import TaskDetail from '@/TaskDetail.vue'
 import { useRoute, useRouter } from 'vue-router'
 import DeletePopUp from '@/DeletePopUp.vue'
+import AlertPopUp from ''
 
 const router = useRouter()
 const route = useRoute()
@@ -41,7 +42,7 @@ const showTaskDetail = async function (id, operate) {
   showTaskDetailModal.value = true
 }
 
-const showEditTaskDetail = async function (id ,operate) {
+const showEditTaskDetail = async function (id, operate) {
   router.push({ name: 'EditTaskDetail', params: { id: id } })
   operation.value = operate
   taskDetail.value = await getItemById(import.meta.env.VITE_BASE_URL, id)
@@ -53,12 +54,12 @@ const showEditTaskDetail = async function (id ,operate) {
   showTaskDetailModal.value = true
 }
 if (route.params.id) {
-  showTaskDetail(route.params.id , "show")
+  showTaskDetail(route.params.id, 'show')
 }
-const showAddPopUpTaskDetail =  function (operate) {
+const showAddPopUpTaskDetail = function (operate) {
   router.push({ name: 'AddTaskDetail' })
   operation.value = operate
-  showTaskDetailModal.value =  true
+  showTaskDetailModal.value = true
   taskDetail.value = null
 }
 const showDeletePopUpTaskDetail = async function (id) {
@@ -195,7 +196,12 @@ const taskDetailForm = (detail) => {
         >
           <td class="px-4 py-3">
             {{ task.id }}
-            <div class="inline-flex" @click="showEditTaskDetail(task.id , 'edit')">⚙️</div>
+            <div
+              class="inline-flex"
+              @click="showEditTaskDetail(task.id, 'edit')"
+            >
+              ⚙️
+            </div>
             <div
               class="inline-flex"
               @click="showDeletePopUpTaskDetail(task.id)"
@@ -204,7 +210,10 @@ const taskDetailForm = (detail) => {
             </div>
           </td>
           <td class="itbkk-title px-4 py-3">
-            <div class="hover:text-sky-500" @click="showTaskDetail(task.id,'show')">
+            <div
+              class="hover:text-sky-500"
+              @click="showTaskDetail(task.id, 'show')"
+            >
               {{ task.title }}
             </div>
           </td>
