@@ -79,7 +79,7 @@ const saveTask = async (newDetail) => {
                   v-model="taskDetailForm.status"
                   class="itbkk-status mt-1 ml-4 select select-bordered w-[95%] h-[40px] px-4 py-2 bg-inherit border-2 border-gray-200 text-gray-400 rounded-md"
                 >
-                  <option disabled selected>Status</option>
+                  <option disabled value="NO_STATUS">Status</option>
                   <option value="TO_DO">To Do</option>
                   <option value="DOING">Doing</option>
                   <option value="DONE">Done</option>
