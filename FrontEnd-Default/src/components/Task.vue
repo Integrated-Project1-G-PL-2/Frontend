@@ -20,11 +20,12 @@ const taskDetail = reactive({})
 const path = reactive({})
 const showAddTaskDetail = ref(false)
 const showDeleteTaskDetail = ref(false)
-const showAddAlert = ref(false) // open = true
+const showGreenAddAlert = ref(false) // open = true
 const showRedAlert = ref(false) // open = true
 const showGreenAlert = ref(false) // open = true
 const operation = ref('')
 const showTitle = ref('')
+const showGreenEditAlert = ref(false)
 
 onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
@@ -51,6 +52,7 @@ const showEditTaskDetail = async function (id, operate) {
     return
   }
   showTaskDetailModal.value = true
+  showGreenEditAlert.value = true
 }
 if (route.params.id) {
   showTaskDetail(route.params.id, 'show')
@@ -78,7 +80,7 @@ const clearAddPopUp = async function () {
 const saveTaskDetailAlert = async function (title) {
   router.push({ name: 'Task' })
   showTaskDetailModal.value = false
-  showAddAlert.value = true
+  showGreenAddAlert.value = true
   showTitle.value = title
 }
 
@@ -98,7 +100,7 @@ const taskDetailForm = (detail) => {
     <AlertPopUp
       titles=" The task {{ showTitle }} has been successfully added"
       action="showAddAlert = false"
-      :show="showAddAlert"
+      :show="showGreenAddAlert"
       message="Success!!"
       styleType="green"
     />
@@ -119,7 +121,7 @@ const taskDetailForm = (detail) => {
     <AlertPopUp
       titles=" The task {{ showTitle }} has been updated"
       :action="(showGreenAlert = false)"
-      :show="showGreenAlert"
+      :show="showGreenEditAlert"
       message="Success!!"
       styleType="green"
     />
