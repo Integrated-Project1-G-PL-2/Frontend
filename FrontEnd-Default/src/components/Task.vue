@@ -80,13 +80,15 @@ const showDelComplete = async function () {
   showDeleteTaskDetail.value = false
   showGreenAlert.value = true
 }
+const showRedAlertPop = function () {
+  showRedAlert.value = true }
 </script>
 
 <template>
   <div class="bg-white relative border rounded-lg overflow-auto">
     <h1 class="font-bold text-center">IT-Bangmod Kradan Kanban</h1>
 
-    <div
+  <div
       class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
       role="alert"
       v-show="showRedAlert"
@@ -110,6 +112,7 @@ const showDelComplete = async function () {
         </svg>
       </span>
     </div>
+    
     <div
       class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
       role="alert"
@@ -222,7 +225,7 @@ const showDelComplete = async function () {
     </AddTaskDetail>
   </teleport>
   <teleport to="body" v-if="showDeleteTaskDetail">
-    <DeletePopUp @cancelDetail="clearDeletePopUp" @confirmDetail="showDelComplete" :taskId='Id' >
+    <DeletePopUp @cancelDetail="clearDeletePopUp" @confirmDetail="showDelComplete" @redAlert="showRedAlertPop" :taskId='Id' >
     </DeletePopUp>
   </teleport>
 </template>

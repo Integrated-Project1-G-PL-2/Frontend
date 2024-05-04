@@ -3,26 +3,27 @@ import { ref, reactive } from 'vue'
 import {deleteItemById} from './utils/fetchUtils'
 import taskManager from './utils/TaskManager';
 import { useRoute, useRouter } from 'vue-router'
-const deClareemit = defineEmits(['confirmDetail', 'cancelDetail'])
+const deClareemit = defineEmits(['confirmDetail', 'cancelDetail','redAlert'])
 const props = defineProps(['taskId'])
 const router = useRouter()
 const deletedTask = reactive({})
+const showRedAlert = ref(true)
 
 const deleteTask = async (deleteId) => {
     deletedTask.value = await deleteItemById(import.meta.env.VITE_BASE_URL,deleteId) 
     if (deletedTask.value == '404') {
-    console.log('Cant Delete')
+      deClareemit('redAlert', true )
+      deClareemit('cancelDetail' , true)
     router.replace({ name: 'Task' })
     return
   }
-  console.log(deletedTask.value)
     taskManager.deleteTask(deleteId)
     deClareemit('confirmDetail', true)
 }
 </script>
 
 <template>
-
+  
 
   <div
     class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[10px]"
