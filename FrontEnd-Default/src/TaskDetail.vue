@@ -1,12 +1,19 @@
 <script setup>
 import { computed, reactive } from 'vue'
-defineEmits(['showTaskDetailModal'])
+import { useRouter } from 'vue-router';
+import TaskManagement from './utils/TaskManager';
+import { addItem } from './utils/fetchUtils';
+const emits = defineEmits(['showTaskDetailModal','saveAddPopUp'])
+const router = useRouter();
 const prop = defineProps({
-  taskDetail: Object
+  taskDetail: Object,
+  operate: String
 })
-const task = reactive(prop.taskDetail.value)
-
+const task = reactive(prop.taskDetail.value != null ? prop.taskDetail.value : {})
 const formatedTask = computed(() => {
+  if(prop.operate == 'add'){
+    return {createdOn: "" ,id: "",taskAssignees: "",taskDescription: "",taskStatus: "",taskTitle: "",updatedOn: ""}
+  }
   return {
     createdOn: new Date(task.createdOn)
       .toLocaleString('en-GB')
@@ -15,14 +22,33 @@ const formatedTask = computed(() => {
     taskAssignees: task.assignees != null ? task.assignees : 'Unassigned',
     taskDescription:
       task.description != null ? task.description : 'No Description Provided',
-    taskStatus: task.status
-      .toLowerCase()
-      .replace('_', ' ')
-      .replace(/\b\w/g, (c) => c.toUpperCase()),
+    taskStatus: task.status,
     taskTitle: task.title,
     updatedOn: new Date(task.updatedOn).toLocaleString('en-GB').replace(',', '')
   }
 })
+const handleClick = async() =>{
+  if(prop.operate == 'show'){
+    emits('showTaskDetailModal', false)
+    router.replace({ name: 'Task' })
+  }else if (prop.operate == 'add'){
+    const addTaskDetail = {
+    title: formatedTask.value.taskTitle,
+    assignees: formatedTask.value.taskAssignees,
+    description: formatedTask.value.taskDescription,
+    status: formatedTask.value.taskStatus.length > 0 ? formatedTask.value.taskStatus : "NO_STATUS"
+    }
+    const newTask = await addItem(import.meta.env.VITE_BASE_URL,addTaskDetail) 
+    console.log(newTask);
+    TaskManagement.addTask(newTask)
+    router.replace({ name: 'Task' })
+    emits('saveAddPopUp' , newTask.title)
+  }else if (prop.operate == 'edit'){
+
+  }
+}
+
+
 </script>
 
 <template>
@@ -32,9 +58,8 @@ const formatedTask = computed(() => {
     <div class="w-[90%] m-[auto]">
       <div class="flex flex-col justify-between bg-white p-4">
         <div class="itbkk-title w-full h-[10%] mt-2">
-          <h1 class="text-xl font-bold text-justify">
-            {{ formatedTask.taskTitle }}
-          </h1>
+          <textarea class="text-xl font-bold text-justify w-full breal-all border border-gray-300 rounded-md" :disabled="operate=='show'" v-model=" formatedTask.taskTitle">
+          </textarea>
         </div>
         <div class="border-b w-full mt-4"></div>
         <div class="flex flex-row">
@@ -42,13 +67,14 @@ const formatedTask = computed(() => {
             <div class="pl-4 mt-4">Description</div>
             <div class="w-full h-[420px]">
               <textarea
+                :disabled="operate=='show'"
                 v-model="formatedTask.taskDescription"
                 :class="
-                  task.taskAssignees == null ? 'italic text-gray-500 ' : ''
+                  formatedTask.taskDescription == null ? 'italic text-gray-500 ' : ''
                 "
                 class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                 placeholder="No Description Provided"
-                >{{ formatedTask.taskDescription }}</textarea
+                ></textarea
               >
             </div>
           </div>
@@ -57,11 +83,13 @@ const formatedTask = computed(() => {
               <div class="pl-4 mt-4">Assignees</div>
               <div class="h-[150px]">
                 <textarea
+                :disabled="operate=='show'"
                   v-model="formatedTask.taskAssignees"
                   class="itbkk-assignees w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bbg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                   :class="
-                    task.taskAssignees == null ? 'italic text-gray-500 ' : ''
+                    formatedTask.taskAssignees == null ? 'italic text-gray-500 ' : ''
                   "
+                   placeholder="Unassigned"
                 ></textarea>
               </div>
             </div>
@@ -71,14 +99,15 @@ const formatedTask = computed(() => {
                   <span class="label-text ml-4">Status</span>
                 </div>
                 <select
+                :disabled="operate=='show'"
                   v-model="formatedTask.taskStatus"
                   class="itbkk-status mt-1 ml-4 select select-bordered w-[95%] h-[40px] px-4 py-2 bg-inherit border-2 border-gray-200 text-gray-400 rounded-md"
                 >
                   <option disabled selected>Status</option>
-                  <option value="To Do">To Do</option>
-                  <option value="Doing">Doing</option>
-                  <option value="Done">Done</option>
-                  <option value="No Status">No Status</option>
+                  <option value="TO_DO">To Do</option>
+                  <option value="DOING">Doing</option>
+                  <option value="DONE">Done</option>
+                  <option value="NO_STATUS">No Status</option>
                 </select>
               </label>
             </div>
@@ -105,17 +134,14 @@ const formatedTask = computed(() => {
           <button
             class="itbkk-button bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
             @click="
-              ;[
-                $emit('showTaskDetailModal', false),
-                $router.replace({ name: 'Task' })
-              ]
+              handleClick
             "
           >
             <div class="btn">Ok</div>
           </button>
           <button
             @click="
-              ;[
+             [
                 $emit('showTaskDetailModal', false),
                 $router.replace({ name: 'Task' })
               ]

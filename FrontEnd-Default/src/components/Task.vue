@@ -10,7 +10,6 @@ import {
 import TaskManager from '../utils/TaskManager.js'
 import TaskDetail from '@/TaskDetail.vue'
 import { useRoute, useRouter } from 'vue-router'
-import AddTaskDetail from '@/AddTaskDetail.vue'
 import DeletePopUp from '@/DeletePopUp.vue'
 
 const router = useRouter()
@@ -24,13 +23,15 @@ const showDeleteTaskDetail = ref(false)
 const showAddAlert = ref(false) // open = true
 const showRedAlert = ref(false) // open = true
 const showGreenAlert = ref(false) // open = true
-const addTitle = reactive({})
+const operation = ref('')
+const showTitle = ref('')
 
 onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
 })
-const showTaskDetail = async function (id) {
+const showTaskDetail = async function (id, operate) {
   router.push({ name: 'TaskDetail', params: { id: id } })
+  operation.value = operate
   taskDetail.value = await getItemById(import.meta.env.VITE_BASE_URL, id)
   if (taskDetail.value.status == '404') {
     alert('The requested task does not exist')
@@ -51,16 +52,12 @@ const showEditTaskDetail = async function (id) {
   showTaskDetailModal.value = true
 }
 if (route.params.id) {
-  showTaskDetail(route.params.id)
+  showTaskDetail(route.params.id , "show")
 }
-const showAddPopUpTaskDetail = async function () {
+const showAddPopUpTaskDetail =  function (operate) {
   router.push({ name: 'AddTaskDetail' })
-  showAddTaskDetail.value = true
-  if (taskDetail.status == '404') {
-    alert('The requested task does not exist')
-    router.replace({ name: 'Task' })
-    return
-  }
+  operation.value = operate
+  showTaskDetailModal.value =  true
 }
 const showDeletePopUpTaskDetail = async function (id) {
   router.push({ name: 'DeleteTaskDetail', params: { id: id } })
@@ -76,11 +73,11 @@ const clearAddPopUp = async function () {
   router.push({ name: 'Task' })
   showAddTaskDetail.value = false
 }
-const saveTaskDetailAlert = async function () {
+const saveTaskDetailAlert = async function (title) {
   router.push({ name: 'Task' })
-  showAddTaskDetail.value = false
+  showTaskDetailModal.value = false
   showAddAlert.value = true
-  const title = title.value
+  showTitle.value = title
 }
 
 const clearDeletePopUp = async function () {
@@ -105,7 +102,7 @@ const taskDetailForm = (detail) => {
       <strong class="font-bold">Success!!</strong>
       <p>
         <span class="itbkk-message block sm:inline">
-          The task "{{ addTitle }}" is added successfully</span
+          The task "{{ showTitle }}" is added successfully</span
         >
       </p>
       <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
@@ -173,7 +170,7 @@ const taskDetailForm = (detail) => {
     </div>
     <div class="flex justify-end">
       <button
-        @click="showAddPopUpTaskDetail"
+        @click="showAddPopUpTaskDetail('add')"
         class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2"
       >
         ✚ Add New Task
@@ -196,7 +193,7 @@ const taskDetailForm = (detail) => {
         >
           <td class="px-4 py-3">
             {{ task.id }}
-            <div class="inline-flex" @click="showTaskDetail(task.id)">⚙️</div>
+            <div class="inline-flex" @click="showTaskDetail(task.id , 'show')">⚙️</div>
             <div
               class="inline-flex"
               @click="showDeletePopUpTaskDetail(task.id)"
@@ -205,7 +202,7 @@ const taskDetailForm = (detail) => {
             </div>
           </td>
           <td class="itbkk-title px-4 py-3">
-            <div class="hover:text-sky-500" @click="showTaskDetail(task.id)">
+            <div class="hover:text-sky-500" @click="showTaskDetail(task.id,'show')">
               {{ task.title }}
             </div>
           </td>
@@ -240,14 +237,9 @@ const taskDetailForm = (detail) => {
     <TaskDetail
       :taskDetail="taskDetail"
       @showTaskDetailModal="showTaskDetailModal = false"
-    ></TaskDetail>
-  </teleport>
-  <teleport to="body" v-if="showAddTaskDetail">
-    <AddTaskDetail
-      @closeAddPopUp="clearAddPopUp"
+      :operate="operation"
       @saveAddPopUp="saveTaskDetailAlert"
-    >
-    </AddTaskDetail>
+    ></TaskDetail>
   </teleport>
   <teleport to="body" v-if="showDeleteTaskDetail">
     <DeletePopUp @cancelDetail="clearDeletePopUp"> </DeletePopUp>
