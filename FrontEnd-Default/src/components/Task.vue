@@ -147,7 +147,7 @@ const closeRedEDAlert = async function () {
     />
     <AlertPopUp
       v-if="showGreenAlert"
-      titles="The task has been deleted."
+      titles="The task  has been deleted."
       @closePopUp="closeGreDeleteAlert"
       message="Success!!"
       styleType="green"
