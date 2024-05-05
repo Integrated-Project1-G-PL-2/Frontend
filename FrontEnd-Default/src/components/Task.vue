@@ -96,7 +96,7 @@ const showRedAlertPop = function () {
       <strong class="font-bold">Error!!</strong>
       <p>
         <span class="itbkk-message block sm:inline">
-          An error occurred deleting the task""</span
+          An error has occurred, the task does not exist.</span
         >
       </p>
       <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
@@ -121,7 +121,7 @@ const showRedAlertPop = function () {
       <strong class="font-bold">Success!!</strong>
       <p>
         <span class="itbkk-message block sm:inline">
-          task '' has been deleted</span
+          The task has been deleted</span
         >
       </p>
       <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
