@@ -27,5 +27,13 @@ class TaskManagement {
     const index = this._findIndexById(id)
     this.tasks[index] = newTask
   }
+
+  deleteTask(id){
+    const index =  this.tasks.findIndex(el=>{ 
+     return el.id == id
+      
+    })
+    this.tasks.splice(index,1)
+  }
 }
 export default new TaskManagement()

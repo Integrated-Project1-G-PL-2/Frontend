@@ -1,9 +1,30 @@
 <script setup>
 import { ref, reactive } from 'vue'
-defineEmits(['confirmDetail', 'cancelDetail'])
+import {deleteItemById} from './utils/fetchUtils'
+import taskManager from './utils/TaskManager';
+import { useRoute, useRouter } from 'vue-router'
+const deClareemit = defineEmits(['confirmDetail', 'cancelDetail','redAlert'])
+const props = defineProps(['taskId'])
+const router = useRouter()
+const deletedTask = reactive({})
+const showRedAlert = ref(true)
+
+const deleteTask = async (deleteId) => {
+    deletedTask.value = await deleteItemById(import.meta.env.VITE_BASE_URL,999) 
+    if (deletedTask.value == '404') {
+      deClareemit('redAlert', true )
+      deClareemit('cancelDetail' , true)
+    router.replace({ name: 'Task' })
+    return
+  }
+    taskManager.deleteTask(deleteId)
+    deClareemit('confirmDetail', true)
+}
 </script>
 
 <template>
+  
+
   <div
     class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[10px]"
   >
@@ -21,7 +42,7 @@ defineEmits(['confirmDetail', 'cancelDetail'])
         <button
           class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
           @click="
-            ;[$emit('cancelDetail', true), $router.replace({ name: 'Task' })]
+           deleteTask(props.taskId)
           "
         >
           <div class="btn text-center">Confirm</div>

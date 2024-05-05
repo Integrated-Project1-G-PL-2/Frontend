@@ -27,6 +27,7 @@ const showGreenEditAlertPop = ref(false)
 const showGreenAlert = ref(false) // open = true
 const operation = ref('')
 const showTitle = ref('')
+const Id = ref('')
 
 onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
@@ -62,15 +63,10 @@ const showAddPopUpTaskDetail =  function (operate) {
   operation.value = operate
   showTaskDetailModal.value =  true
 }
-const showDeletePopUpTaskDetail = async function (id) {
+const showDeletePopUpTaskDetail = function (id) {
   router.push({ name: 'DeleteTaskDetail', params: { id: id } })
-  taskDetail.value = await getItemById(import.meta.env.VITE_BASE_URL, id)
+  Id.value = id
   showDeleteTaskDetail.value = true
-  if (taskDetail.value.status == '404') {
-    alert('The requested task does not exist')
-    router.replace({ name: 'Task' })
-    return
-  }
 }
 const clearAddPopUp = async function () {
   router.push({ name: 'Task' })
@@ -99,6 +95,15 @@ const showRedEditAlert = function () {
 const showGreenEditAlert = function () {
   showGreenEditAlertPop.value = true
 }
+
+const showDelComplete = async function () {
+  router.push({ name: 'Task' })
+  showDeleteTaskDetail.value = false
+  showGreenAlert.value = true
+}
+
+const showRedAlertPop = function () {
+  showRedAlert.value = true }
 </script>
 
 <template>
@@ -309,7 +314,7 @@ const showGreenEditAlert = function () {
     ></TaskDetail>
   </teleport>
   <teleport to="body" v-if="showDeleteTaskDetail">
-    <DeletePopUp @cancelDetail="clearDeletePopUp"> </DeletePopUp>
+    <DeletePopUp @cancelDetail="clearDeletePopUp"  @confirmDetail="showDelComplete" @redAlert="showRedAlertPop" :taskId='Id'> </DeletePopUp>
   </teleport>
 </template>
 <style scoped></style>
