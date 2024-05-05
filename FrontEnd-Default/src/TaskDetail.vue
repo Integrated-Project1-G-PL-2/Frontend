@@ -84,8 +84,10 @@ const handleClick = async () => {
       console.log(editTaskError.value)
       TaskManagement.editTask(editTask.id, editTask)
       emits('greenEditAlert', true)
+      emits('greenEditAlert', newTask.title)
     } else {
       emits('redEditAlert', true)
+      emits('redEditTitleAlert', newTask.title)
       emits('showTaskDetailModal', false)
     }
 
