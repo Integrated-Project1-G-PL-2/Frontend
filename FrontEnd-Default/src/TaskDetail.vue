@@ -3,7 +3,7 @@ import { reactive,ref} from 'vue'
 import { useRouter } from 'vue-router';
 import TaskManagement from './utils/TaskManager';
 import { addItem ,editItem } from './utils/fetchUtils';
-const emits = defineEmits(['showTaskDetailModal','saveAddPopUp','redEditAlert'])
+const emits = defineEmits(['showTaskDetailModal','saveAddPopUp','redEditAlert','greenEditAlert'])
 const editTaskError = reactive({})
 const editTask = ref({})
 const router = useRouter();
@@ -61,10 +61,12 @@ const handleClick = async() =>{
     if(editTaskError.value != "500" && editTaskError.value != "404"){
       console.log(editTaskError.value)
       TaskManagement.editTask(editTask.id , editTask) 
+      emits('greenEditAlert', true )
     } else {
       emits('redEditAlert', true )
       emits('showTaskDetailModal', false)
     }
+    
     emits('showTaskDetailModal', false)
   }
 }

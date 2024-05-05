@@ -23,6 +23,7 @@ const showDeleteTaskDetail = ref(false)
 const showAddAlert = ref(false) // open = true
 const showRedAlert = ref(false) // open = true
 const showRedEditAlertPop = ref(false)
+const showGreenEditAlertPop = ref(false)
 const showGreenAlert = ref(false) // open = true
 const operation = ref('')
 const showTitle = ref('')
@@ -94,6 +95,10 @@ const taskDetailForm = (detail) => {
 const showRedEditAlert = function () {
   showRedEditAlertPop.value = true
 }
+
+const showGreenEditAlert = function () {
+  showGreenEditAlertPop.value = true
+}
 </script>
 
 <template>
@@ -155,12 +160,12 @@ const showRedEditAlert = function () {
     <div
       class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
       role="alert"
-      v-show="showGreenAlert"
+      v-show="showGreenEditAlertPop"
     >
       <strong class="font-bold">Success!!</strong>
       <p>
         <span class="itbkk-message block sm:inline">
-          The task "" has been deleted</span
+          The task "" has been edited</span
         >
       </p>
       <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
@@ -169,7 +174,7 @@ const showRedEditAlert = function () {
           role="button"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
-          @click="showGreenAlert = false"
+          @click="showGreenEditAlertPop = false"
         >
           <path
             d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"
@@ -195,6 +200,32 @@ const showRedEditAlert = function () {
           role="button"
           viewBox="0 0 20 20"
           @click="showRedEditAlertPop = false"
+        >
+          <path
+            d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"
+          />
+        </svg>
+      </span>
+    </div>
+
+    <div
+      class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
+      role="alert"
+      v-show="showGreenAlert"
+    >
+      <strong class="font-bold">Success!!</strong>
+      <p>
+        <span class="itbkk-message block sm:inline">
+          The task "" has been deleted</span
+        >
+      </p>
+      <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+        <svg
+          class="fill-current h-6 w-6 text-green-500"
+          role="button"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          @click="showGreenAlert = false"
         >
           <path
             d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"
@@ -274,6 +305,7 @@ const showRedEditAlert = function () {
       :operate="operation"
       @saveAddPopUp="saveTaskDetailAlert"
       @redEditAlert="showRedEditAlert"
+      @greenEditAlert="showGreenEditAlert"
     ></TaskDetail>
   </teleport>
   <teleport to="body" v-if="showDeleteTaskDetail">
