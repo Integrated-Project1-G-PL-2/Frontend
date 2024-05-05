@@ -90,8 +90,10 @@ const clearDeletePopUp = async function () {
   showDeleteTaskDetail.value = false
 }
 
-const closeAlerts = () => {
-  closeAlert.value = true
+const closeAlerts = async function () {
+  router.push({ name: 'Task' })
+  showGreenAddAlert.value = false
+  console.log('a')
 }
 </script>
 
@@ -99,13 +101,13 @@ const closeAlerts = () => {
   <div class="bg-white relative border rounded-lg overflow-auto">
     <h1 class="font-bold text-center">IT-Bangmod Kradan Kanban</h1>
     <AlertPopUp
-      titles=" The task {{ showTitle }} has been successfully added"
-      :action="closeAlerts"
-      :show="showGreenAddAlert"
+      v-if="showGreenAddAlert"
+      :titles="'The task ' + showTitle + ' has been successfully added'"
+      @closePopUp="closeAlerts"
       message="Success!!"
       styleType="green"
     />
-
+    <!-- 
     <AlertPopUp
       titles=" The task '' has been deleted"
       :action="(showGreenAlert = false)"
@@ -133,7 +135,7 @@ const closeAlerts = () => {
       :show="showRedAlert"
       message="Error!!"
       styleType="red"
-    />
+    /> -->
 
     <!-- <div
       class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
