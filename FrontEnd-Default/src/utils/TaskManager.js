@@ -18,6 +18,10 @@ class TaskManagement {
     })
   }
   addTask(newTask) {
+    newTask.status = newTask.status
+    .toLowerCase()
+    .replace('_', ' ')
+    .replace(/\b\w/g, (c) => c.toUpperCase())
     this.tasks.push(newTask)
   }
   _findIndexById(id){
