@@ -21,7 +21,7 @@ const deleteTask = async (deleteId) => {
     return
   }
   taskManager.deleteTask(deleteId)
-  deClareemit('confirmDetail', true, deleteId)
+  deClareemit('confirmDetail', true)
 }
 </script>
 
