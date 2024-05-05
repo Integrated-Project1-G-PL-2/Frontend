@@ -171,7 +171,7 @@ const closeRedEDAlert = async function () {
     />
     <AlertPopUp
       v-if="showRedEdAlert"
-      :titles="'An error occurred editting the task.' + showEDRTitle"
+      :titles="'An error occurred editting the task ' + showEDRTitle + '.'"
       @closePopUp="closeRedEDAlert"
       message="Error!!"
       styleType="red"
