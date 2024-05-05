@@ -255,7 +255,7 @@ const showRedEditAlert = function () {
                     ? '#FFC0CB'
                     : task.status === 'Doing'
                     ? '#ffff99'
-                    : task.status === 'No Status'
+                    : task.status === 'No Status' || 'NO_STATUS'
                     ? 'lightgray'
                     : '#90EE90'
               }"
