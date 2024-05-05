@@ -58,7 +58,7 @@ const handleClick = async() =>{
   }else if (prop.operate == 'edit'){
     editTaskError.value = await editItem(import.meta.env.VITE_BASE_URL,task.id,addOrUpdateTaskDetail)
     router.replace({ name: 'Task' })
-    if(editTaskError.value != "500"){
+    if(editTaskError.value != "500" && editTaskError.value != "404"){
       console.log(editTaskError.value)
       TaskManagement.editTask(editTask.id , editTask) 
     } else {
