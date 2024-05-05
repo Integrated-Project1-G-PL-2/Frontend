@@ -11,6 +11,7 @@ import TaskManager from '../utils/TaskManager.js'
 import TaskDetail from '@/TaskDetail.vue'
 import { useRoute, useRouter } from 'vue-router'
 import DeletePopUp from '@/DeletePopUp.vue'
+import AlertPopUp from './../components/AlertPopUp.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -20,15 +21,14 @@ const taskDetail = reactive({})
 const path = reactive({})
 const showAddTaskDetail = ref(false)
 const showDeleteTaskDetail = ref(false)
-const showAddAlert = ref(false) // open = true
 const showRedAlert = ref(false) // open = true
-const showRedEditAlertPop = ref(false)
-const showGreenEditAlertPop = ref(false)
 const showGreenAlert = ref(false) // open = true
 const operation = ref('')
 const showTitle = ref('')
 const Id = ref('')
-
+const showGreenAddAlert = ref(false)
+const showGreenEdAlert = ref(false)
+const showRedEdAlert = ref(false)
 onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
 })
@@ -44,7 +44,7 @@ const showTaskDetail = async function (id, operate) {
   showTaskDetailModal.value = true
 }
 
-const showEditTaskDetail = async function (id ,operate) {
+const showEditTaskDetail = async function (id, operate) {
   router.push({ name: 'EditTaskDetail', params: { id: id } })
   operation.value = operate
   taskDetail.value = await getItemById(import.meta.env.VITE_BASE_URL, id)
@@ -56,12 +56,12 @@ const showEditTaskDetail = async function (id ,operate) {
   showTaskDetailModal.value = true
 }
 if (route.params.id) {
-  showTaskDetail(route.params.id , "show")
+  showTaskDetail(route.params.id, 'show')
 }
-const showAddPopUpTaskDetail =  function (operate) {
+const showAddPopUpTaskDetail = function (operate) {
   router.push({ name: 'AddTaskDetail' })
   operation.value = operate
-  showTaskDetailModal.value =  true
+  showTaskDetailModal.value = true
 }
 const showDeletePopUpTaskDetail = function (id) {
   router.push({ name: 'DeleteTaskDetail', params: { id: id } })
@@ -75,7 +75,7 @@ const clearAddPopUp = async function () {
 const saveTaskDetailAlert = async function (title) {
   router.push({ name: 'Task' })
   showTaskDetailModal.value = false
-  showAddAlert.value = true
+  showGreenAddAlert.value = true
   showTitle.value = title
 }
 
@@ -89,11 +89,11 @@ const taskDetailForm = (detail) => {
 }
 
 const showRedEditAlert = function () {
-  showRedEditAlertPop.value = true
+  showRedEdAlert.value = true
 }
 
 const showGreenEditAlert = function () {
-  showGreenEditAlertPop.value = true
+  showGreenEdAlert.value = true
 }
 
 const showDelComplete = async function () {
@@ -103,39 +103,71 @@ const showDelComplete = async function () {
 }
 
 const showRedAlertPop = function () {
-  showRedAlert.value = true }
+  showRedAlert.value = true
+}
+const closeAlerts = async function () {
+  router.push({ name: 'Task' })
+  showGreenAddAlert.value = false
+  console.log('a')
+}
+const closeRedDeleteAlert = async function () {
+  router.push({ name: 'Task' })
+  showRedAlert.value = false
+}
+const closeGreDeleteAlert = async function () {
+  router.push({ name: 'Task' })
+  showGreenAlert.value = false
+}
+const closeGreEDAlert = async function () {
+  router.push({ name: 'Task' })
+  showGreenEdAlert.value = false
+}
+const closeRedEDAlert = async function () {
+  router.push({ name: 'Task' })
+  showRedEdAlert.value = false
+}
 </script>
 
 <template>
   <div class="bg-white relative border rounded-lg overflow-auto">
     <h1 class="font-bold text-center">IT-Bangmod Kradan Kanban</h1>
-    <div
-      class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
-      role="alert"
-      v-show="showAddAlert"
-      @alertAddPopUp="taskDetailForm, value"
-    >
-      <strong class="font-bold">Success!!</strong>
-      <p>
-        <span class="itbkk-message block sm:inline">
-          The task "{{ showTitle }}" is added successfully</span
-        >
-      </p>
-      <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
-        <svg
-          class="fill-current h-6 w-6 text-green-500"
-          role="button"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          @click="showAddAlert = false"
-        >
-          <path
-            d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"
-          />
-        </svg>
-      </span>
-    </div>
-    <div
+    <AlertPopUp
+      v-if="showGreenAddAlert"
+      :titles="'The task ' + showTitle + ' has been successfully added.'"
+      @closePopUp="closeAlerts"
+      message="Success!!"
+      styleType="green"
+    />
+    <AlertPopUp
+      v-if="showRedAlert"
+      titles="An error has occurred, the task does not exist."
+      @closePopUp="closeRedDeleteAlert"
+      message="Error!!"
+      styleType="red"
+    />
+    <AlertPopUp
+      v-if="showGreenAlert"
+      titles="The task has been deleted."
+      @closePopUp="closeGreDeleteAlert"
+      message="Success!!"
+      styleType="green"
+    />
+    <AlertPopUp
+      v-if="showGreenEdAlert"
+      titles="The task has been updated."
+      @closePopUp="closeGreEDAlert"
+      message="Success!!"
+      styleType="green"
+    />
+    <AlertPopUp
+      v-if="showRedEdAlert"
+      titles="An error occurred editting the task."
+      @closePopUp="closeRedEDAlert"
+      message="Error!!"
+      styleType="red"
+    />
+
+    <!-- <div
       class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
       role="alert"
       v-show="showRedAlert"
@@ -158,11 +190,9 @@ const showRedAlertPop = function () {
           />
         </svg>
       </span>
-    </div>
-    
+    </div> -->
 
-    
-    <div
+    <!-- <div
       class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
       role="alert"
       v-show="showGreenEditAlertPop"
@@ -186,9 +216,9 @@ const showRedAlertPop = function () {
           />
         </svg>
       </span>
-    </div>
+    </div> -->
 
-    <div
+    <!-- <div
       class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
       role="alert"
       v-show="showRedEditAlertPop"
@@ -211,9 +241,9 @@ const showRedAlertPop = function () {
           />
         </svg>
       </span>
-    </div>
+    </div> -->
 
-    <div
+    <!-- <div
       class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
       role="alert"
       v-show="showGreenAlert"
@@ -237,7 +267,7 @@ const showRedAlertPop = function () {
           />
         </svg>
       </span>
-    </div>
+    </div> -->
     <div class="flex justify-end">
       <button
         @click="showAddPopUpTaskDetail('add')"
@@ -263,7 +293,12 @@ const showRedAlertPop = function () {
         >
           <td class="px-4 py-3">
             {{ task.id }}
-            <div class="inline-flex" @click="showEditTaskDetail(task.id , 'edit')">⚙️</div>
+            <div
+              class="inline-flex"
+              @click="showEditTaskDetail(task.id, 'edit')"
+            >
+              ⚙️
+            </div>
             <div
               class="inline-flex"
               @click="showDeletePopUpTaskDetail(task.id)"
@@ -272,7 +307,10 @@ const showRedAlertPop = function () {
             </div>
           </td>
           <td class="itbkk-title px-4 py-3">
-            <div class="hover:text-sky-500" @click="showTaskDetail(task.id,'show')">
+            <div
+              class="hover:text-sky-500"
+              @click="showTaskDetail(task.id, 'show')"
+            >
               {{ task.title }}
             </div>
           </td>
@@ -314,7 +352,13 @@ const showRedAlertPop = function () {
     ></TaskDetail>
   </teleport>
   <teleport to="body" v-if="showDeleteTaskDetail">
-    <DeletePopUp @cancelDetail="clearDeletePopUp"  @confirmDetail="showDelComplete" @redAlert="showRedAlertPop" :taskId='Id'> </DeletePopUp>
+    <DeletePopUp
+      @cancelDetail="clearDeletePopUp"
+      @confirmDetail="showDelComplete"
+      @redAlert="showRedAlertPop"
+      :taskId="Id"
+    >
+    </DeletePopUp>
   </teleport>
 </template>
 <style scoped></style>
