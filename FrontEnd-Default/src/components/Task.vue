@@ -29,6 +29,10 @@ const Id = ref('')
 const showGreenAddAlert = ref(false)
 const showGreenEdAlert = ref(false)
 const showRedEdAlert = ref(false)
+const showDEGTitle = ref('')
+const showDERTitle = ref('')
+const showEDRTitle = ref('')
+const showEDGTitle = ref('')
 onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
 })
@@ -140,28 +144,30 @@ const closeRedEDAlert = async function () {
     />
     <AlertPopUp
       v-if="showRedAlert"
-      titles="An error has occurred, the task does not exist."
+      :titles="
+        'An error has occurred, the task' + showDERTitle + 'does not exist.'
+      "
       @closePopUp="closeRedDeleteAlert"
       message="Error!!"
       styleType="red"
     />
     <AlertPopUp
       v-if="showGreenAlert"
-      titles="The task  has been deleted."
+      :titles="'The task' + showDEGTitle + 'has been deleted.'"
       @closePopUp="closeGreDeleteAlert"
       message="Success!!"
       styleType="green"
     />
     <AlertPopUp
       v-if="showGreenEdAlert"
-      titles="The task has been updated."
+      :titles="'The task' + showEDGTitle + 'has been updated.'"
       @closePopUp="closeGreEDAlert"
       message="Success!!"
       styleType="green"
     />
     <AlertPopUp
       v-if="showRedEdAlert"
-      titles="An error occurred editting the task."
+      :titles="'An error occurred editting the task.' + showEDRTitle"
       @closePopUp="closeRedEDAlert"
       message="Error!!"
       styleType="red"
