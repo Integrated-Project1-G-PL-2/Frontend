@@ -9,7 +9,6 @@ const emits = defineEmits([
   'redEditAlert',
   'greenEditAlert'
 ])
-const editTaskError = reactive({})
 const editTask = ref({})
 const router = useRouter()
 const prop = defineProps({
@@ -74,21 +73,15 @@ const handleClick = async () => {
     }
     emits('showTaskDetailModal', false)
   } else if (prop.operate == 'edit') {
-    editTaskError.value = await editItem(
-      import.meta.env.VITE_BASE_URL,
-      999,
-      addOrUpdateTaskDetail
-    )
+    const editTask = await editItem(
+      import.meta.env.VITE_BASE_URL,task.id,addOrUpdateTaskDetail )
     router.replace({ name: 'Task' })
-    if (editTaskError.value != '500' && editTaskError.value != '404') {
-      console.log(editTaskError.value)
+    if (editTask != '500' && editTask != '404') {
       TaskManagement.editTask(editTask.id, editTask)
       emits('greenEditAlert', true)
     } else {
       emits('redEditAlert', true)
-      emits('showTaskDetailModal', false)
     }
-
     emits('showTaskDetailModal', false)
   }
 }

@@ -18,21 +18,25 @@ const route = useRoute()
 const showTaskDetailModal = ref(false)
 const taskManager = TaskManager
 const taskDetail = reactive({})
-const path = reactive({})
-const showAddTaskDetail = ref(false)
 const showDeleteTaskDetail = ref(false)
-const showRedAlert = ref(false) // open = true
-const showGreenAlert = ref(false) // open = true
 const operation = ref('')
 const showTitle = ref('')
 const Id = ref('')
-const showGreenAddAlert = ref(false)
-const showGreenEdAlert = ref(false)
-const showRedEdAlert = ref(false)
 const showDEGTitle = ref('')
 const showDERTitle = ref('')
 const showEDRTitle = ref('')
 const showEDGTitle = ref('')
+
+const greenPopup = reactive({
+  add : false,
+  edit : false,
+  delete : false,
+})
+const redPopup = reactive({
+  edit : false,
+  delete : false,
+})
+
 onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
 })
@@ -72,14 +76,10 @@ const showDeletePopUpTaskDetail = function (id) {
   Id.value = id
   showDeleteTaskDetail.value = true
 }
-const clearAddPopUp = async function () {
-  router.push({ name: 'Task' })
-  showAddTaskDetail.value = false
-}
 const saveTaskDetailAlert = async function (title) {
   router.push({ name: 'Task' })
   showTaskDetailModal.value = false
-  showGreenAddAlert.value = true
+  greenPopup.add = true
   showTitle.value = title
 }
 
@@ -93,42 +93,42 @@ const taskDetailForm = (detail) => {
 }
 
 const showRedEditAlert = function () {
-  showRedEdAlert.value = true
+  redPopup.edit = true
 }
 
 const showGreenEditAlert = function () {
-  showGreenEdAlert.value = true
+  greenPopup.edit = true
 }
 
 const showDelComplete = async function () {
   router.push({ name: 'Task' })
   showDeleteTaskDetail.value = false
-  showGreenAlert.value = true
+  greenPopup.delete = true
 }
 
 const showRedAlertPop = function () {
-  showRedAlert.value = true
+  redPopup.delete = true
 }
 const closeAlerts = async function () {
   router.push({ name: 'Task' })
-  showGreenAddAlert.value = false
+  greenPopup.add = false
   console.log('a')
 }
 const closeRedDeleteAlert = async function () {
   router.push({ name: 'Task' })
-  showRedAlert.value = false
+  redPopup.delete = false
 }
 const closeGreDeleteAlert = async function () {
   router.push({ name: 'Task' })
-  showGreenAlert.value = false
+  greenPopup.delete= false
 }
 const closeGreEDAlert = async function () {
   router.push({ name: 'Task' })
-  showGreenEdAlert.value = false
+  greenPopup.edit = false
 }
 const closeRedEDAlert = async function () {
   router.push({ name: 'Task' })
-  showRedEdAlert.value = false
+  redPopup.edit = false
 }
 </script>
 
@@ -136,37 +136,37 @@ const closeRedEDAlert = async function () {
   <div class="bg-white relative border rounded-lg overflow-auto">
     <h1 class="font-bold text-center">IT-Bangmod Kradan Kanban</h1>
     <AlertPopUp
-      v-if="showGreenAddAlert"
+      v-if="greenPopup.add"
       :titles="'The task ' + showTitle + ' has been successfully added.'"
       @closePopUp="closeAlerts"
       message="Success!!"
       styleType="green"
     />
     <AlertPopUp
-      v-if="showRedAlert"
+      v-if="redPopup.delete"
       :titles="
-        'An error has occurred, the task' + showDERTitle + 'does not exist.'
+        'An error has occurred, the task ' + showDERTitle + ' does not exist.'
       "
       @closePopUp="closeRedDeleteAlert"
       message="Error!!"
       styleType="red"
     />
     <AlertPopUp
-      v-if="showGreenAlert"
-      :titles="'The task' + showDEGTitle + 'has been deleted.'"
+      v-if="greenPopup.delete"
+      :titles="'The task ' + showDEGTitle + ' has been deleted.'"
       @closePopUp="closeGreDeleteAlert"
       message="Success!!"
       styleType="green"
     />
     <AlertPopUp
-      v-if="showGreenEdAlert"
-      :titles="'The task' + showEDGTitle + 'has been updated.'"
+      v-if="greenPopup.edit"
+      :titles="'The task ' + showEDGTitle + ' has been updated.'"
       @closePopUp="closeGreEDAlert"
       message="Success!!"
       styleType="green"
     />
     <AlertPopUp
-      v-if="showRedEdAlert"
+      v-if="redPopup.edit"
       :titles="'An error occurred editting the task.' + showEDRTitle"
       @closePopUp="closeRedEDAlert"
       message="Error!!"

@@ -7,7 +7,6 @@ const deClareemit = defineEmits(['confirmDetail', 'cancelDetail', 'redAlert'])
 const props = defineProps(['taskId'])
 const router = useRouter()
 const deletedTask = reactive({})
-const showRedAlert = ref(true)
 
 const deleteTask = async (deleteId) => {
   deletedTask.value = await deleteItemById(

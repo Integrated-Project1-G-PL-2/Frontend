@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Task from '@/components/Task.vue'
 import TaskDetail from '@/TaskDetail.vue'
-import EditTaskDetail from '@/components/EditTaskDetail.vue'
 import DeleteTaskDetail from '@/DeletePopUp.vue'
 const history = createWebHistory()
 const routes = [
