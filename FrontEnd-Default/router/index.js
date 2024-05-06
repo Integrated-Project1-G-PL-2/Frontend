@@ -8,6 +8,10 @@ const routes = [
     path: '/',
     redirect: '/task'
   },
+  // {
+  //   path: '/add',
+  //   redirect:"/task/add"
+  // },
   {
     path: '/task',
     name: 'Task',
@@ -19,7 +23,7 @@ const routes = [
         name: 'TaskDetail'
       },
       {
-        path: 'add',
+        path: '/add',
         component: TaskDetail,
         name: 'AddTaskDetail'
       },

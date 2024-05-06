@@ -15,7 +15,7 @@ const prop = defineProps({
   operate: String
 })
 let task
-if (prop.taskDetail.value) {
+if (prop.taskDetail?.value) {
   task = reactive({
     createdOn: new Date(prop.taskDetail.value.createdOn)
       .toLocaleString('en-GB')
@@ -94,7 +94,7 @@ const handleClick = async () => {
         <div class="itbkk-title w-full h-[10%] mt-2">
           <div class="pl-4 mt-4">Title</div>
           <textarea
-            class="text-xl font-bold text-justify w-full breal-all border border-gray-300 rounded-md"
+            class="itbkk-title font-bold text-justify w-full breal-all border border-gray-300 rounded-md"
             :disabled="operate == 'show'"
             v-model.trim="task.taskTitle"
           >
@@ -170,11 +170,11 @@ const handleClick = async () => {
         </div>
         <div class="flex flex-row w-full justify-end border-t">
           <button
-            class="itbkk-button bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
+            class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
             @click="handleClick"
             :disabled="task.taskTitle == null"
           >
-            <div class="btn">Ok</div>
+            save
           </button>
           <button
             @click="

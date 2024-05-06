@@ -62,7 +62,7 @@ if (route.params.id) {
   showTaskDetail(route.params.id, 'show')
 }
 const showAddPopUpTaskDetail = function (operate) {
-  router.push({ name: 'AddTaskDetail' })
+  router.replace({ name: 'AddTaskDetail' })
   operation.value = operate
   showTaskDetailModal.value = true
 }
@@ -70,12 +70,6 @@ const showDeletePopUpTaskDetail = function (id) {
   router.push({ name: 'DeleteTaskDetail', params: { id: id } })
   Id.value = id
   showDeleteTaskDetail.value = true
-}
-const saveTaskDetailAlert = async function (title) {
-  router.push({ name: 'Task' })
-  showTaskDetailModal.value = false
-  greenPopup.add.state = true
-  showTitle.value = title
 }
 
 const clearDeletePopUp = async function () {
