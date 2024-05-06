@@ -2,7 +2,6 @@ import { reactive } from 'vue'
 class TaskManagement {
   constructor() {
     this.tasks = reactive([])
-    // this.detailTask = previousTask
   }
   getTasks() {
     return this.tasks

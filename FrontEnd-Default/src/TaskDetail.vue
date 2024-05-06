@@ -5,11 +5,10 @@ import TaskManagement from './utils/TaskManager'
 import { addItem, editItem } from './utils/fetchUtils'
 const emits = defineEmits([
   'showTaskDetailModal',
-  'saveAddPopUp',
-  'redEditAlert',
-  'greenEditAlert'
+  'showRedPopup',
+  'showGreenPopup'
 ])
-const editTask = ref({})
+
 const router = useRouter()
 const prop = defineProps({
   taskDetail: Object,
@@ -68,19 +67,18 @@ const handleClick = async () => {
     router.replace({ name: 'Task' })
     if (newTask.status != '500') {
       TaskManagement.addTask(newTask)
-      emits('saveAddPopUp', newTask.title)
-      return
+      emits('showGreenPopup', {taskTitle : newTask.title , operate : prop.operate})
     }
     emits('showTaskDetailModal', false)
   } else if (prop.operate == 'edit') {
     const editTask = await editItem(
       import.meta.env.VITE_BASE_URL,task.id,addOrUpdateTaskDetail )
-    router.replace({ name: 'Task' })
-    if (editTask != '500' && editTask != '404') {
+      router.replace({ name: 'Task' })
+    if (editTask.status != '500' && editTask.status != '404') {
       TaskManagement.editTask(editTask.id, editTask)
-      emits('greenEditAlert', true)
+      emits('showGreenPopup', {taskTitle : editTask.title , operate : prop.operate})
     } else {
-      emits('redEditAlert', true)
+      emits('showRedPopup', {taskTitle : !editTask.title ? task.taskTitle : editTask.title  , operate : prop.operate })
     }
     emits('showTaskDetailModal', false)
   }

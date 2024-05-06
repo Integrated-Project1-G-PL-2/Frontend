@@ -22,19 +22,14 @@ const showDeleteTaskDetail = ref(false)
 const operation = ref('')
 const showTitle = ref('')
 const Id = ref('')
-const showDEGTitle = ref('')
-const showDERTitle = ref('')
-const showEDRTitle = ref('')
-const showEDGTitle = ref('')
-
 const greenPopup = reactive({
-  add : false,
-  edit : false,
-  delete : false,
+  add : {state : false , taskTitle : ''},
+  edit : {state : false , taskTitle : ''},
+  delete : {state : false , taskTitle : ''},
 })
 const redPopup = reactive({
-  edit : false,
-  delete : false,
+  edit : {state : false , taskTitle : ''},
+  delete : {state : false , taskTitle : ''},
 })
 
 onMounted(async () => {
@@ -79,7 +74,7 @@ const showDeletePopUpTaskDetail = function (id) {
 const saveTaskDetailAlert = async function (title) {
   router.push({ name: 'Task' })
   showTaskDetailModal.value = false
-  greenPopup.add = true
+  greenPopup.add.state = true
   showTitle.value = title
 }
 
@@ -88,47 +83,32 @@ const clearDeletePopUp = async function () {
   showDeleteTaskDetail.value = false
 }
 
-const taskDetailForm = (detail) => {
-  detail.addTitle
-}
-
-const showRedEditAlert = function () {
-  redPopup.edit = true
-}
-
-const showGreenEditAlert = function () {
-  greenPopup.edit = true
-}
 
 const showDelComplete = async function () {
   router.push({ name: 'Task' })
   showDeleteTaskDetail.value = false
-  greenPopup.delete = true
+  greenPopup.delete.state = true
 }
 
-const showRedAlertPop = function () {
-  redPopup.delete = true
+const openRedPopup = async function (obj) {
+  redPopup[obj.operate].state = true
+  redPopup[obj.operate].taskTitle = obj.taskTitle
 }
-const closeAlerts = async function () {
-  router.push({ name: 'Task' })
-  greenPopup.add = false
-  console.log('a')
+
+const openGreenPopup = async function (obj) {
+  greenPopup[obj.operate].state = true
+  greenPopup[obj.operate].taskTitle = obj.taskTitle
 }
-const closeRedDeleteAlert = async function () {
+
+const closeRedPopup = async function (operate) {
   router.push({ name: 'Task' })
-  redPopup.delete = false
+  redPopup[operate].state = false;
 }
-const closeGreDeleteAlert = async function () {
+
+const closeGreenPopup = async function (operate) {
   router.push({ name: 'Task' })
-  greenPopup.delete= false
-}
-const closeGreEDAlert = async function () {
-  router.push({ name: 'Task' })
-  greenPopup.edit = false
-}
-const closeRedEDAlert = async function () {
-  router.push({ name: 'Task' })
-  redPopup.edit = false
+  greenPopup[operate].state = false
+
 }
 </script>
 
@@ -136,41 +116,46 @@ const closeRedEDAlert = async function () {
   <div class="bg-white relative border rounded-lg overflow-auto">
     <h1 class="font-bold text-center">IT-Bangmod Kradan Kanban</h1>
     <AlertPopUp
-      v-if="greenPopup.add"
-      :titles="'The task ' + showTitle + ' has been successfully added.'"
-      @closePopUp="closeAlerts"
+      v-if="greenPopup.add.state"
+      :titles="'The task ' + greenPopup.add.taskTitle + ' has been successfully added.'"
+      @closePopUp="closeGreenPopup"
       message="Success!!"
       styleType="green"
+      :operate="'add'"
     />
     <AlertPopUp
-      v-if="redPopup.delete"
+      v-if="redPopup.delete.state"
       :titles="
-        'An error has occurred, the task ' + showDERTitle + ' does not exist.'
+        'An error has occurred, the task ' + redPopup.delete.taskTitle + ' does not exist.'
       "
-      @closePopUp="closeRedDeleteAlert"
+      @closePopUp="closeRedPopup"
       message="Error!!"
       styleType="red"
+      :operate="'delete'"
     />
     <AlertPopUp
-      v-if="greenPopup.delete"
-      :titles="'The task ' + showDEGTitle + ' has been deleted.'"
-      @closePopUp="closeGreDeleteAlert"
+      v-if="greenPopup.delete.state"
+      :titles="'The task ' + greenPopup.delete.taskTitle + ' has been deleted.'"
+      @closePopUp="closeGreenPopup"
       message="Success!!"
       styleType="green"
+      :operate="'delete'"
     />
     <AlertPopUp
-      v-if="greenPopup.edit"
-      :titles="'The task ' + showEDGTitle + ' has been updated.'"
-      @closePopUp="closeGreEDAlert"
+      v-if="greenPopup.edit.state"
+      :titles="'The task ' + greenPopup.edit.taskTitle + ' has been updated.'"
+      @closePopUp="closeGreenPopup"
       message="Success!!"
       styleType="green"
+      :operate="'edit'"
     />
     <AlertPopUp
-      v-if="redPopup.edit"
-      :titles="'An error occurred editting the task.' + showEDRTitle"
-      @closePopUp="closeRedEDAlert"
+      v-if="redPopup.edit.state"
+      :titles="'An error occurred editting the task.' + redPopup.edit.taskTitle"
+      @closePopUp="closeRedPopup"
       message="Error!!"
       styleType="red"
+      :operate="'edit'"
     />
     <div class="flex justify-end">
       <button
@@ -250,16 +235,15 @@ const closeRedEDAlert = async function () {
       :taskDetail="taskDetail"
       @showTaskDetailModal="showTaskDetailModal = false"
       :operate="operation"
-      @saveAddPopUp="saveTaskDetailAlert"
-      @redEditAlert="showRedEditAlert"
-      @greenEditAlert="showGreenEditAlert"
+      @showRedPopup="openRedPopup"
+      @showGreenPopup="openGreenPopup"
     ></TaskDetail>
   </teleport>
   <teleport to="body" v-if="showDeleteTaskDetail">
     <DeletePopUp
       @cancelDetail="clearDeletePopUp"
       @confirmDetail="showDelComplete"
-      @redAlert="showRedAlertPop"
+      @redAlert="openRedPopup"
       :taskId="Id"
     >
     </DeletePopUp>
