@@ -91,7 +91,7 @@ const handleClick = async () => {
   >
     <div class="w-[90%] m-[auto]">
       <div class="flex flex-col justify-between bg-white p-4">
-        <div class="itbkk-title w-full h-[10%] mt-2">
+        <div class="w-full h-[10%] mt-2">
           <div class="pl-4 mt-4">Title</div>
           <textarea
             class="itbkk-title font-bold text-justify w-full breal-all border border-gray-300 rounded-md"
@@ -170,9 +170,10 @@ const handleClick = async () => {
         </div>
         <div class="flex flex-row w-full justify-end border-t">
           <button
-            class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
-            @click="handleClick"
-            :disabled="task.taskTitle == null"
+          class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
+          :class="{ 'disabled': !task.taskTitle }"
+          @click="handleClick"
+          :disabled="task.taskTitle == null"
           >
             save
           </button>
@@ -185,7 +186,7 @@ const handleClick = async () => {
             "
             class="itbkk-button-cancel bg-gray-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
           >
-            <div class="btn">Close</div>
+            <div class="btn">cancel</div>
           </button>
         </div>
       </div>
