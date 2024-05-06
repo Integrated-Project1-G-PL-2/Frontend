@@ -8,10 +8,6 @@ const routes = [
     path: '/',
     redirect: '/task'
   },
-  // {
-  //   path: '/add',
-  //   redirect:"/task/add"
-  // },
   {
     path: '/task',
     name: 'Task',
