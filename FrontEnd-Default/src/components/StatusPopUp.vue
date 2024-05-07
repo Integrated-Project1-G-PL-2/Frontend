@@ -15,7 +15,7 @@ defineEmits(['closeStatusPopUP'])
         <div class="itbkk-modal-status w-full h-[10%] mt-2">
           <div class="pl-4 mt-4">Name</div>
           <textarea
-            class="itbkk-status-name w-[1090px] h-[40%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+            class="itbkk-status-name w-[1090px] h-[40%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
           >
           </textarea>
         </div>
