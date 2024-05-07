@@ -4,6 +4,7 @@ import TaskDetail from '@/TaskDetail.vue'
 import DeleteTaskDetail from '@/DeletePopUp.vue'
 import StatusesList from '@/components/StatusesList.vue'
 import StatusPopUp from '@/components/StatusPopUp.vue'
+import DeleteStatus from '@/component/DeleteStatus.vue'
 const history = createWebHistory()
 const routes = [
   {
@@ -45,6 +46,11 @@ const routes = [
       {
         path: '/add',
         component: StatusPopUp,
+        name: 'StatusAdd'
+      },
+      {
+        path: '/delete',
+        component: DeleteStatus,
         name: 'StatusAdd'
       }
     ]

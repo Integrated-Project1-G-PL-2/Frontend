@@ -2,9 +2,9 @@
 
 <template>
   <div
-    class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[100px] overflow-auto"
+    class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[100px] overflow-auto "
   >
-    <div class="w-[90%] m-[auto]">
+    <div class="w-[90%] m-[auto] border-gray-600 border">
       <div class="flex flex-col justify-between bg-white p-4">
         <div class="w-full h-[10%] mt-2">
           <div class="pl-4 mt-4">Add Status</div>
