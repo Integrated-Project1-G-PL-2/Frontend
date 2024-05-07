@@ -22,6 +22,7 @@ const taskDetail = reactive({})
 const showDeleteTaskDetail = ref(false)
 const operation = ref('')
 const showAddStatusModal = ref(false)
+
 const greenPopup = reactive({
   add: { state: false, taskTitle: '' },
   edit: { state: false, taskTitle: '' },
@@ -70,6 +71,7 @@ const showDeletePopUpTaskDetail = function (obj) {
   taskDetail.value = { id: obj.id, taskTitle: obj.taskTitle }
   showDeleteTaskDetail.value = true
 }
+
 const showStatusesModal = function () {
   router.replace({ name: 'StatusAdd' })
   showAddStatusModal.value = true
