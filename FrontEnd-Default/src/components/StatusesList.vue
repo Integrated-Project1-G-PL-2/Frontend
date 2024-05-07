@@ -245,5 +245,14 @@ const closeGreenPopup = async function (operate) {
   <teleport to="body" v-if="showAddStatusModal">
     <StatusPopUp @closeStatusPopUP="clearAddStatusPopUp"></StatusPopUp>
   </teleport>
+  <teleport to="body" v-if="showDeleteTaskDetail">
+    <DeletePopUp
+      @cancelDetail="clearDeletePopUp"
+      @confirmDetail="showDelComplete"
+      @redAlert="openRedPopup"
+      :taskId="taskDetail"
+    >
+    </DeletePopUp>
+  </teleport>
 </template>
 <style scoped></style>
