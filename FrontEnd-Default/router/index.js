@@ -43,7 +43,7 @@ const routes = [
     component: StatusesList,
     children: [
       {
-        path: '/add',
+        path: '/status/add',
         component: StatusPopUp,
         name: 'StatusAdd'
       }
