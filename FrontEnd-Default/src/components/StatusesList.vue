@@ -20,7 +20,7 @@ const showTaskDetailModal = ref(false)
 const taskManager = TaskManager
 const taskDetail = reactive({})
 const showDeleteTaskDetail = ref(false)
-const showStatusDetailModal = ref(false)
+const closeAddStatusDetail = ref(false)
 const operation = ref('')
 const showAddStatusModal = ref(false)
 const greenPopup = reactive({
@@ -75,13 +75,13 @@ const showAddStatusesModal = function () {
   router.replace({ name: 'StatusAdd' })
   showAddStatusModal.value = true
 }
-const clearDeletePopUp = async function () {
-  router.push({ name: 'Task' })
-  showDeleteTaskDetail.value = false
+const clearAddStatusPopUp = async function () {
+  router.push({ name: 'StatusList' })
+  closeAddStatusDetail.value = false
 }
 
 const showDelComplete = async function () {
-  router.push({ name: 'Task' })
+  router.push({ name: 'StatusList' })
   showDeleteTaskDetail.value = false
   greenPopup.delete.state = true
 }
@@ -251,7 +251,7 @@ const closeGreenPopup = async function (operate) {
     <TaskDetail :taskDetail="taskDetail"></TaskDetail>
   </teleport>
   <teleport to="body" v-if="showAddStatusModal">
-    <StatusPopUp></StatusPopUp>
+    <StatusPopUp @closeStatusPopUP="clearAddStatusPopUp"></StatusPopUp>
   </teleport>
 </template>
 <style scoped></style>

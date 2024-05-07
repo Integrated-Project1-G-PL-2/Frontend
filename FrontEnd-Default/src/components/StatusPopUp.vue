@@ -1,4 +1,6 @@
-<script setup></script>
+<script setup>
+const emits = defineEmits(['closeStatusPopUP'])
+</script>
 
 <template>
   <div
@@ -36,6 +38,12 @@
           </button>
           <button
             class="itbkk-button-cancel bg-gray-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
+            @click="
+              ;[
+                $emit('closeStatusPopUP', true),
+                $router.replace({ name: 'StatusList' })
+              ]
+            "
           >
             <div class="btn">cancel</div>
           </button>
