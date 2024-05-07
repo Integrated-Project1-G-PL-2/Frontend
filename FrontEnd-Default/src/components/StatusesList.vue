@@ -180,9 +180,9 @@ const closeGreenPopup = async function (operate) {
       <thead class="text-xs text-gray-700 uppercase bg-gray-50">
         <tr>
           <th class="px-4 py-3"></th>
-          <th class="px-4 py-3">Title</th>
-          <th class="px-4 py-3">Assignees</th>
-          <th class="px-4 py-3">Status</th>
+          <th class="px-4 py-3">Name</th>
+          <th class="px-4 py-3">Description</th>
+          <th class="px-4 py-3">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -211,20 +211,6 @@ const closeGreenPopup = async function (operate) {
               🗑️
             </div>
           </td>
-          <td class="itbkk-title px-4 py-3">
-            <div
-              class="hover:text-sky-500"
-              @click="showTaskDetail(task.id, 'show')"
-            >
-              {{ task.title }}
-            </div>
-          </td>
-          <td
-            class="itbkk-assignees px-4 py-3"
-            :class="task.assignees == null ? 'italic' : ''"
-          >
-            {{ task.assignees == null ? 'Unassigned' : task.assignees }}
-          </td>
           <td class="itbkk-status px-4 py-3">
             <div
               class="w-full bg-emerald-500 flex justify-center rounded-md"
@@ -241,6 +227,20 @@ const closeGreenPopup = async function (operate) {
             >
               <p>{{ task.status }}</p>
             </div>
+          </td>
+          <td class="itbkk-assignees px-4 py-3">
+            <div
+              class="hover:text-sky-500"
+              @click="showTaskDetail(task.id, 'show')"
+            >
+              {{ task.title }}
+            </div>
+          </td>
+          <td
+            class="itbkk-assignees px-4 py-3"
+            :class="task.assignees == null ? 'italic' : ''"
+          >
+            {{ task.assignees == null ? 'Unassigned' : task.assignees }}
           </td>
         </tr>
       </tbody>

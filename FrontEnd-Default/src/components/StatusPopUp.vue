@@ -66,18 +66,16 @@ if (prop.taskDetail?.value) {
             ></textarea>
           </div>
         </div>
-        <div class="mt-10 ml-4">
-          <div class="itbkk-timezone">
-            <div>
+        <div class="mt-10 ml-4" style="display: flex">
+          <div class="itbkk-timezone" style="display: flex">
+            <div style="margin-right: 20px">
               TimeZone : {{ Intl.DateTimeFormat().resolvedOptions().timeZone }}
             </div>
-            <div class="itbkk-created-on">
+            <div class="itbkk-created-on" style="margin-right: 20px">
               <div>Created On : {{ task.createdOn }}</div>
-              <div></div>
             </div>
             <div class="itbkk-updated-on">
               <div>Updated On : {{ task.updatedOn }}</div>
-              <div></div>
             </div>
           </div>
         </div>
