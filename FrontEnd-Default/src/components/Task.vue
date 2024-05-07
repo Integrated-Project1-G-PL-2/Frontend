@@ -12,6 +12,7 @@ import TaskDetail from '@/TaskDetail.vue'
 import { useRoute, useRouter } from 'vue-router'
 import DeletePopUp from '@/DeletePopUp.vue'
 import AlertPopUp from './../components/AlertPopUp.vue'
+import StatusesList from './StatusesList.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -19,16 +20,17 @@ const showTaskDetailModal = ref(false)
 const taskManager = TaskManager
 const taskDetail = reactive({})
 const showDeleteTaskDetail = ref(false)
+const showStatusDetailModal = ref(false)
 const operation = ref('')
 const showTitle = ref('')
 const greenPopup = reactive({
-  add : {state : false , taskTitle : ''},
-  edit : {state : false , taskTitle : ''},
-  delete : {state : false , taskTitle : ''},
+  add: { state: false, taskTitle: '' },
+  edit: { state: false, taskTitle: '' },
+  delete: { state: false, taskTitle: '' }
 })
 const redPopup = reactive({
-  edit : {state : false , taskTitle : ''},
-  delete : {state : false , taskTitle : ''},
+  edit: { state: false, taskTitle: '' },
+  delete: { state: false, taskTitle: '' }
 })
 
 onMounted(async () => {
@@ -67,7 +69,7 @@ const showAddPopUpTaskDetail = function (operate) {
 }
 const showDeletePopUpTaskDetail = function (obj) {
   router.push({ name: 'DeleteTaskDetail', params: { id: obj.id } })
-  taskDetail.value = {id: obj.id, taskTitle : obj.taskTitle}
+  taskDetail.value = { id: obj.id, taskTitle: obj.taskTitle }
   showDeleteTaskDetail.value = true
 }
 
@@ -75,7 +77,6 @@ const clearDeletePopUp = async function () {
   router.push({ name: 'Task' })
   showDeleteTaskDetail.value = false
 }
-
 
 const showDelComplete = async function () {
   router.push({ name: 'Task' })
@@ -95,13 +96,12 @@ const openGreenPopup = async function (obj) {
 
 const closeRedPopup = async function (operate) {
   router.push({ name: 'Task' })
-  redPopup[operate].state = false;
+  redPopup[operate].state = false
 }
 
 const closeGreenPopup = async function (operate) {
   router.push({ name: 'Task' })
   greenPopup[operate].state = false
-
 }
 </script>
 
@@ -110,7 +110,9 @@ const closeGreenPopup = async function (operate) {
     <h1 class="font-bold text-center">IT-Bangmod Kradan Kanban</h1>
     <AlertPopUp
       v-if="greenPopup.add.state"
-      :titles="'The task ' + greenPopup.add.taskTitle + ' has been successfully added.'"
+      :titles="
+        'The task ' + greenPopup.add.taskTitle + ' has been successfully added.'
+      "
       @closePopUp="closeGreenPopup"
       message="Success!!"
       styleType="green"
@@ -119,7 +121,9 @@ const closeGreenPopup = async function (operate) {
     <AlertPopUp
       v-if="redPopup.delete.state"
       :titles="
-        'An error has occurred, the task ' + redPopup.delete.taskTitle + ' does not exist.'
+        'An error has occurred, the task ' +
+        redPopup.delete.taskTitle +
+        ' does not exist.'
       "
       @closePopUp="closeRedPopup"
       message="Error!!"
@@ -157,6 +161,12 @@ const closeGreenPopup = async function (operate) {
       >
         ✚ Add New Task
       </button>
+      <button
+        @click="showAddPopUpTaskDetail('add')"
+        class="itbkk-manage-status bg-gray-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2"
+      >
+        Manage Status
+      </button>
     </div>
     <table class="w-full text-sm text-left text-gray-500">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50">
@@ -169,7 +179,7 @@ const closeGreenPopup = async function (operate) {
       </thead>
       <tbody>
         <tr
-          v-for="(task,index) in taskManager.getTasks()"
+          v-for="(task, index) in taskManager.getTasks()"
           :key="task.id"
           class="itbkk-item border-b cursor-pointer"
         >
@@ -183,7 +193,12 @@ const closeGreenPopup = async function (operate) {
             </div>
             <div
               class="inline-flex"
-              @click="showDeletePopUpTaskDetail({id : index + 1, taskTitle : task.title})"
+              @click="
+                showDeletePopUpTaskDetail({
+                  id: index + 1,
+                  taskTitle: task.title
+                })
+              "
             >
               🗑️
             </div>
@@ -241,5 +256,8 @@ const closeGreenPopup = async function (operate) {
     >
     </DeletePopUp>
   </teleport>
+  <Teleport to="body" v-if="showStatusDetailModal">
+    <StatusesList :taskDetail="taskDetail"> </StatusesList>
+  </Teleport>
 </template>
 <style scoped></style>
