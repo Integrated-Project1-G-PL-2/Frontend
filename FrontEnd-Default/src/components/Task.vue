@@ -72,10 +72,9 @@ const showDeletePopUpTaskDetail = function (obj) {
   taskDetail.value = { id: obj.id, taskTitle: obj.taskTitle }
   showDeleteTaskDetail.value = true
 }
-const showStatusesList = function (operate) {
+const showStatusesList = function () {
   router.replace({ name: 'StatusList' })
-  operation.value = operate
-  showTaskDetailModal.value = true
+  showStatusDetailModal.value = true
 }
 const clearDeletePopUp = async function () {
   router.push({ name: 'Task' })
@@ -166,10 +165,10 @@ const closeGreenPopup = async function (operate) {
         ✚ Add New Task
       </button>
       <button
-        @click="showAddPopUpTaskDetail('add')"
-        class="itbkk-manage-status bg-gray-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2"
+        @click="showStatusesList"
+        class="itbkk-manage-status bg-gray-500 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2"
       >
-        Manage Status
+        ⚙️ Manage Status
       </button>
     </div>
     <table class="w-full text-sm text-left text-gray-500">

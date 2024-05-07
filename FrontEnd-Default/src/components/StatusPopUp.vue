@@ -1,101 +1,4 @@
-<script setup>
-import { reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import TaskManagement from './utils/TaskManager'
-import { addItem, editItem } from './utils/fetchUtils'
-const emits = defineEmits([
-  'showTaskDetailModal',
-  'showRedPopup',
-  'showGreenPopup'
-])
-
-const router = useRouter()
-const prop = defineProps({
-  taskDetail: Object,
-  operate: String
-})
-let task
-if (prop.taskDetail?.value) {
-  task = reactive({
-    createdOn: new Date(prop.taskDetail.value.createdOn)
-      .toLocaleString('en-GB')
-      .replace(',', ''),
-    id: prop.taskDetail.value.id,
-    taskAssignees:
-      prop.taskDetail.value.assignees != null
-        ? prop.taskDetail.value.assignees
-        : 'Unassigned',
-    taskDescription:
-      prop.taskDetail.value.description != null
-        ? prop.taskDetail.value.description
-        : 'No Description Provided',
-    taskStatus: prop.taskDetail.value.status,
-    taskTitle: prop.taskDetail.value.title,
-    updatedOn: new Date(prop.taskDetail.value.updatedOn)
-      .toLocaleString('en-GB')
-      .replace(',', '')
-  })
-} else {
-  task = reactive({
-    createdOn: null,
-    id: null,
-    taskAssignees: null,
-    taskDescription: null,
-    taskStatus: null,
-    taskTitle: null,
-    updatedOn: null
-  })
-}
-
-const handleClick = async () => {
-  if (prop.operate == 'show') {
-    emits('showTaskDetailModal', false)
-    router.replace({ name: 'Task' })
-    return
-  }
-  const addOrUpdateTaskDetail = {
-    title: task.taskTitle?.length > 0 ? task.taskTitle : null,
-    assignees: task.taskAssignees?.length > 0 ? task.taskAssignees : null,
-    description: task.taskDescription?.length > 0 ? task.taskDescription : null,
-    status: task.taskStatus != null ? task.taskStatus : 'NO_STATUS'
-  }
-  if (prop.operate == 'add') {
-    const newTask = await addItem(
-      import.meta.env.VITE_BASE_URL,
-      addOrUpdateTaskDetail
-    )
-    router.replace({ name: 'Task' })
-    if (newTask.status != '500') {
-      TaskManagement.addTask(newTask)
-      emits('showGreenPopup', {
-        taskTitle: newTask.title,
-        operate: prop.operate
-      })
-    }
-    emits('showTaskDetailModal', false)
-  } else if (prop.operate == 'edit') {
-    const editTask = await editItem(
-      import.meta.env.VITE_BASE_URL,
-      task.id,
-      addOrUpdateTaskDetail
-    )
-    router.replace({ name: 'Task' })
-    if (editTask.status != '500' && editTask.status != '404') {
-      TaskManagement.editTask(editTask.id, editTask)
-      emits('showGreenPopup', {
-        taskTitle: editTask.title,
-        operate: prop.operate
-      })
-    } else {
-      emits('showRedPopup', {
-        taskTitle: !editTask.title ? task.taskTitle : editTask.title,
-        operate: prop.operate
-      })
-    }
-    emits('showTaskDetailModal', false)
-  }
-}
-</script>
+<script setup></script>
 
 <template>
   <div
@@ -104,47 +7,34 @@ const handleClick = async () => {
     <div class="w-[90%] m-[auto]">
       <div class="flex flex-col justify-between bg-white p-4">
         <div class="w-full h-[10%] mt-2">
-          <div class="pl-4 mt-4">Title</div>
+          <div class="pl-4 mt-4">Add Status</div>
+        </div>
+        <div class="border-b w-full mt-4"></div>
+        <div class="w-full h-[10%] mt-2">
+          <div class="pl-4 mt-4">Name</div>
           <textarea
-            class="itbkk-title font-bold text-justify w-full breal-all border border-gray-300 rounded-md"
-            :disabled="operate == 'show'"
-            v-model.trim="task.taskTitle"
+            class="itbkk-title w-[1090px] h-[40%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
           >
           </textarea>
         </div>
-        <div class="border-b w-full mt-4"></div>
-        <div class="flex flex-row">
-          <div class="w-[70%] h-[50%]">
-            <div class="pl-4 mt-4">Description</div>
-            <div class="w-full h-[420px]">
-              <textarea
-                :disabled="operate == 'show'"
-                v-model="task.taskDescription"
-                :class="
-                  task.taskDescription == null ? 'italic text-gray-500 ' : ''
-                "
-                class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-                placeholder="No Description Provided"
-              ></textarea>
-            </div>
+
+        <div class="w-[70%] h-[50%]">
+          <div class="pl-4 mt-4">Description</div>
+          <div class="w-full h-[320px]">
+            <textarea
+              class="itbkk-description w-[1090px] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+              placeholder="No Description Provided"
+            ></textarea>
           </div>
-         
+        </div>
+
         <div class="flex flex-row w-full justify-end border-t">
           <button
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
-            :class="{ disabled: !task.taskTitle }"
-            @click="handleClick"
-            :disabled="task.taskTitle == null"
           >
             save
           </button>
           <button
-            @click="
-              ;[
-                $emit('showTaskDetailModal', false),
-                $router.replace({ name: 'Task' })
-              ]
-            "
             class="itbkk-button-cancel bg-gray-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
           >
             <div class="btn">cancel</div>

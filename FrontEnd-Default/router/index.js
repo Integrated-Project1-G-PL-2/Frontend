@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Task from '@/components/Task.vue'
 import TaskDetail from '@/TaskDetail.vue'
 import DeleteTaskDetail from '@/DeletePopUp.vue'
+import StatusesList from '@/components/StatusesList.vue'
+import StatusPopUp from '@/components/StatusPopUp.vue'
 const history = createWebHistory()
 const routes = [
   {
@@ -32,6 +34,18 @@ const routes = [
         path: ':id/delete',
         component: DeleteTaskDetail,
         name: 'DeleteTaskDetail'
+      }
+    ]
+  },
+  {
+    path: '/status',
+    name: 'StatusList',
+    component: StatusesList,
+    children: [
+      {
+        path: '/add',
+        component: StatusPopUp,
+        name: 'StatusAdd'
       }
     ]
   }

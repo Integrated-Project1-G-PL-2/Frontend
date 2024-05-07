@@ -1,4 +1,111 @@
-<script setup></script>
+<script setup>
+import { onMounted, reactive, ref, watch } from 'vue'
+import {
+  getItems,
+  getItemById,
+  deleteItemById,
+  addItem,
+  editItem
+} from '../utils/fetchUtils.js'
+import TaskManager from '../utils/TaskManager.js'
+import TaskDetail from '@/TaskDetail.vue'
+import { useRoute, useRouter } from 'vue-router'
+import DeletePopUp from '@/DeletePopUp.vue'
+import AlertPopUp from './../components/AlertPopUp.vue'
+import StatusPopUp from './StatusPopUp.vue'
+
+const router = useRouter()
+const route = useRoute()
+const showTaskDetailModal = ref(false)
+const taskManager = TaskManager
+const taskDetail = reactive({})
+const showDeleteTaskDetail = ref(false)
+const showStatusDetailModal = ref(false)
+const operation = ref('')
+const showAddStatusModal = ref(false)
+const greenPopup = reactive({
+  add: { state: false, taskTitle: '' },
+  edit: { state: false, taskTitle: '' },
+  delete: { state: false, taskTitle: '' }
+})
+const redPopup = reactive({
+  edit: { state: false, taskTitle: '' },
+  delete: { state: false, taskTitle: '' }
+})
+
+onMounted(async () => {
+  taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
+})
+const showTaskDetail = async function (id, operate) {
+  router.push({ name: 'TaskDetail', params: { id: id } })
+  operation.value = operate
+  taskDetail.value = await getItemById(import.meta.env.VITE_BASE_URL, id)
+  if (taskDetail.value.status == '404') {
+    alert('The requested task does not exist')
+    router.replace({ name: 'Task' })
+    return
+  }
+  showTaskDetailModal.value = true
+}
+
+const showEditTaskDetail = async function (id, operate) {
+  router.push({ name: 'EditTaskDetail', params: { id: id } })
+  operation.value = operate
+  taskDetail.value = await getItemById(import.meta.env.VITE_BASE_URL, id)
+  if (taskDetail.value.status == '404') {
+    alert('The requested task does not exist')
+    router.replace({ name: 'Task' })
+    return
+  }
+  showTaskDetailModal.value = true
+}
+if (route.params.id) {
+  showTaskDetail(route.params.id, 'show')
+}
+const goBackToHomePage = function () {
+  router.replace({ name: 'Task' })
+  showTaskDetailModal.value = true
+}
+const showDeletePopUpTaskDetail = function (obj) {
+  router.push({ name: 'DeleteTaskDetail', params: { id: obj.id } })
+  taskDetail.value = { id: obj.id, taskTitle: obj.taskTitle }
+  showDeleteTaskDetail.value = true
+}
+const showAddStatusesModal = function () {
+  router.replace({ name: 'StatusAdd' })
+  showAddStatusModal.value = true
+}
+const clearDeletePopUp = async function () {
+  router.push({ name: 'Task' })
+  showDeleteTaskDetail.value = false
+}
+
+const showDelComplete = async function () {
+  router.push({ name: 'Task' })
+  showDeleteTaskDetail.value = false
+  greenPopup.delete.state = true
+}
+
+const openRedPopup = async function (obj) {
+  redPopup[obj.operate].state = true
+  redPopup[obj.operate].taskTitle = obj.taskTitle
+}
+
+const openGreenPopup = async function (obj) {
+  greenPopup[obj.operate].state = true
+  greenPopup[obj.operate].taskTitle = obj.taskTitle
+}
+
+const closeRedPopup = async function (operate) {
+  router.push({ name: 'Task' })
+  redPopup[operate].state = false
+}
+
+const closeGreenPopup = async function (operate) {
+  router.push({ name: 'Task' })
+  greenPopup[operate].state = false
+}
+</script>
 
 <template>
   <div class="bg-white relative border rounded-lg overflow-auto">
@@ -51,18 +158,23 @@
     />
     <div class="flex justify-end">
       <button
-        @click="showAddPopUpTaskDetail('add')"
+        @click="showAddStatusesModal"
         class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2"
       >
         ✚ Add Status
       </button>
-      <div class="flex justify-start">
-        <button
-          @click="showAddPopUpTaskDetail('add')"
-          class="itbkk-manage-status scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2"
-        >
-          Home
-        </button>
+    </div>
+    <div class="flex justify-start">
+      <button
+        @click="goBackToHomePage('add')"
+        class="itbkk-button-home scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 hover:text-blue-500 mr-3 mt-2"
+      >
+        🏠 Home
+      </button>
+      <div
+        class="scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 mr-3 mt-2"
+      >
+        > Task Status
       </div>
     </div>
     <table class="w-full text-sm text-left text-gray-500">
@@ -137,6 +249,9 @@
   </div>
   <teleport to="body" v-if="showTaskDetailModal">
     <TaskDetail :taskDetail="taskDetail"></TaskDetail>
+  </teleport>
+  <teleport to="body" v-if="showAddStatusModal">
+    <StatusPopUp></StatusPopUp>
   </teleport>
 </template>
 <style scoped></style>
