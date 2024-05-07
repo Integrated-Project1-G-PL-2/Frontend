@@ -1,5 +1,42 @@
 <script setup>
+import { reactive, ref } from 'vue'
 defineEmits(['closeStatusPopUP'])
+const prop = defineProps({
+  taskDetail: Object,
+  operate: String
+})
+let task
+if (prop.taskDetail?.value) {
+  task = reactive({
+    createdOn: new Date(prop.taskDetail.value.createdOn)
+      .toLocaleString('en-GB')
+      .replace(',', ''),
+    id: prop.taskDetail.value.id,
+    taskAssignees:
+      prop.taskDetail.value.assignees != null
+        ? prop.taskDetail.value.assignees
+        : 'Unassigned',
+    taskDescription:
+      prop.taskDetail.value.description != null
+        ? prop.taskDetail.value.description
+        : 'No Description Provided',
+    taskStatus: prop.taskDetail.value.status,
+    taskTitle: prop.taskDetail.value.title,
+    updatedOn: new Date(prop.taskDetail.value.updatedOn)
+      .toLocaleString('en-GB')
+      .replace(',', '')
+  })
+} else {
+  task = reactive({
+    createdOn: null,
+    id: null,
+    taskAssignees: null,
+    taskDescription: null,
+    taskStatus: null,
+    taskTitle: null,
+    updatedOn: null
+  })
+}
 </script>
 
 <template>
