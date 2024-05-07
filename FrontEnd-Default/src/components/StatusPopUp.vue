@@ -1,5 +1,5 @@
 <script setup>
-const emits = defineEmits(['closeStatusPopUP'])
+defineEmits(['closeStatusPopUP'])
 </script>
 
 <template>
