@@ -70,7 +70,7 @@ const showDeletePopUpTaskDetail = function (obj) {
   taskDetail.value = { id: obj.id, taskTitle: obj.taskTitle }
   showDeleteTaskDetail.value = true
 }
-const showAddStatusesModal = function () {
+const showStatusesModal = function () {
   router.replace({ name: 'StatusAdd' })
   showAddStatusModal.value = true
 }
@@ -157,7 +157,7 @@ const closeGreenPopup = async function (operate) {
     />
     <div class="flex justify-end">
       <button
-        @click="showAddStatusesModal"
+        @click="showStatusesModal"
         class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2"
       >
         ✚ Add Status
@@ -195,7 +195,7 @@ const closeGreenPopup = async function (operate) {
             {{ index + 1 }}
             <div
               class="inline-flex"
-              @click="showEditTaskDetail(task.id, 'edit')"
+              @click="showStatusesModal(task.id, 'edit')"
             >
               ⚙️
             </div>

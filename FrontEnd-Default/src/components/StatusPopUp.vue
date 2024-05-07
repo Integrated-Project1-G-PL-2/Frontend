@@ -29,6 +29,21 @@ defineEmits(['closeStatusPopUP'])
             ></textarea>
           </div>
         </div>
+        <div class="mt-10 ml-4">
+          <div class="itbkk-timezone">
+            <div>
+              TimeZone : {{ Intl.DateTimeFormat().resolvedOptions().timeZone }}
+            </div>
+            <div class="itbkk-created-on">
+              <div>Created On : {{ task.createdOn }}</div>
+              <div></div>
+            </div>
+            <div class="itbkk-updated-on">
+              <div>Updated On : {{ task.updatedOn }}</div>
+              <div></div>
+            </div>
+          </div>
+        </div>
 
         <div class="flex flex-row w-full justify-end border-t">
           <button
