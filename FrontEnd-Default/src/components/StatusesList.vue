@@ -13,6 +13,7 @@ import { useRoute, useRouter } from 'vue-router'
 import DeletePopUp from '@/DeletePopUp.vue'
 import AlertPopUp from './../components/AlertPopUp.vue'
 import StatusPopUp from './StatusPopUp.vue'
+import DeleteStatus from './DeleteStatus.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -32,6 +33,7 @@ const redPopup = reactive({
   edit: { state: false, taskTitle: '' },
   delete: { state: false, taskTitle: '' }
 })
+const showDeleteStatusDetail = ref(false)
 
 onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
@@ -66,15 +68,20 @@ const goBackToHomePage = function () {
   router.replace({ name: 'Task' })
   showTaskDetailModal.value = true
 }
-const showDeletePopUpTaskDetail = function (obj) {
-  router.push({ name: 'DeleteTaskDetail', params: { id: obj.id } })
-  taskDetail.value = { id: obj.id, taskTitle: obj.taskTitle }
-  showDeleteTaskDetail.value = true
+const showDeletePopUpTaskDetail = function () {
+  router.push({ name: 'DeleteStatus' })
+  // taskDetail.value = { id: obj.id, taskTitle: obj.taskTitle }
+  showDeleteStatusDetail.value = true
 }
 const showAddStatusesModal = function () {
   router.replace({ name: 'StatusAdd' })
   showAddStatusModal.value = true
 }
+
+const closeDeleteStatusPopup = function () {
+  showDeleteStatusDetail.value = false
+}
+
 
 </script>
 
@@ -145,7 +152,7 @@ const showAddStatusesModal = function () {
                 Edit
               </button>
               <button class="itbkk-button-delete bg-red-400  rounded-[8px] font-sans text-center gap-5 text-gray-100 hover:text-gray-200 w-14 "
-              @click="console.log('Delete Button')">
+              @click="showDeletePopUpTaskDetail">
                 Delete
               </button>
             </div>
@@ -159,6 +166,10 @@ const showAddStatusesModal = function () {
   </teleport>
   <teleport to="body" v-if="showAddStatusModal">
     <StatusPopUp></StatusPopUp>
+  </teleport>
+  <teleport to="body" v-if="showDeleteStatusDetail">
+    <DeleteStatus
+    @cancelStatusDetail="closeDeleteStatusPopup"></DeleteStatus>
   </teleport>
 </template>
 <style scoped></style>

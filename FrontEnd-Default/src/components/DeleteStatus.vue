@@ -1,9 +1,9 @@
 <script setup>
 import { ref, reactive } from 'vue'
-import { deleteItemById } from './utils/fetchUtils'
-import taskManager from './utils/TaskManager'
+// import { deleteItemById } from './utils/fetchUtils'
+// import taskManager from './utils/TaskManager'
 import { useRoute, useRouter } from 'vue-router'
-const deClareemit = defineEmits(['confirmDetail', 'cancelDetail', 'redAlert'])
+const deClareemit = defineEmits([ 'cancelStatusDetail'])
 const props = defineProps(['taskId'])
 const router = useRouter()
 const deletedTask = reactive({})
@@ -35,7 +35,7 @@ const deletedTask = reactive({})
         <button
           class="itbkk-button-cancel bg-red-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
           @click="
-            ;[$emit('cancelDetail', true), $router.replace({ name: 'Task' })]
+            ;[$emit('cancelStatusDetail', true), $router.replace({ name: 'StatusList' })]
           "
         >
           <div class="btn text-center">Cancel</div>
