@@ -37,6 +37,55 @@ if (prop.taskDetail?.value) {
     updatedOn: null
   })
 }
+
+const handleClick = async () => {
+  if (prop.operate == 'show') {
+    emits('showTaskDetailModal', false)
+    router.replace({ name: 'Task' })
+    return
+  }
+  const addOrUpdateTaskDetail = {
+    title: task.taskTitle?.length > 0 ? task.taskTitle : null,
+    assignees: task.taskAssignees?.length > 0 ? task.taskAssignees : null,
+    description: task.taskDescription?.length > 0 ? task.taskDescription : null,
+    status: task.taskStatus != null ? task.taskStatus : 'NO_STATUS'
+  }
+  if (prop.operate == 'add') {
+    const newTask = await addItem(
+      import.meta.env.VITE_BASE_URL,
+      addOrUpdateTaskDetail
+    )
+    router.replace({ name: 'Task' })
+    if (newTask.status != '500') {
+      TaskManagement.addTask(newTask)
+      emits('showGreenPopup', {
+        taskTitle: newTask.title,
+        operate: prop.operate
+      })
+    }
+    emits('showTaskDetailModal', false)
+  } else if (prop.operate == 'edit') {
+    const editTask = await editItem(
+      import.meta.env.VITE_BASE_URL,
+      task.id,
+      addOrUpdateTaskDetail
+    )
+    router.replace({ name: 'Task' })
+    if (editTask.status != '500' && editTask.status != '404') {
+      TaskManagement.editTask(editTask.id, editTask)
+      emits('showGreenPopup', {
+        taskTitle: editTask.title,
+        operate: prop.operate
+      })
+    } else {
+      emits('showRedPopup', {
+        taskTitle: !editTask.title ? task.taskTitle : editTask.title,
+        operate: prop.operate
+      })
+    }
+    emits('showTaskDetailModal', false)
+  }
+}
 </script>
 
 <template>
@@ -52,6 +101,7 @@ if (prop.taskDetail?.value) {
         <div class="itbkk-modal-status w-full h-[10%] mt-2">
           <div class="pl-4 mt-4">Name</div>
           <textarea
+            v-model="task.taskStatus"
             class="itbkk-status-name w-[1090px] h-[40%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
           >
           </textarea>
@@ -61,6 +111,7 @@ if (prop.taskDetail?.value) {
           <div class="pl-4 mt-4">Description</div>
           <div class="w-full h-[320px]">
             <textarea
+              v-model="task.taskDescription"
               class="itbkk-status-description w-[1090px] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
               placeholder="No Description Provided"
             ></textarea>
@@ -83,6 +134,9 @@ if (prop.taskDetail?.value) {
         <div class="flex flex-row w-full justify-end border-t">
           <button
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
+            :class="{ disabled: !task.taskStatus }"
+            @click="handleClick"
+            :disabled="task.taskStatus == null"
           >
             save
           </button>

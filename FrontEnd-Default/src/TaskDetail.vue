@@ -67,18 +67,30 @@ const handleClick = async () => {
     router.replace({ name: 'Task' })
     if (newTask.status != '500') {
       TaskManagement.addTask(newTask)
-      emits('showGreenPopup', {taskTitle : newTask.title , operate : prop.operate})
+      emits('showGreenPopup', {
+        taskTitle: newTask.title,
+        operate: prop.operate
+      })
     }
     emits('showTaskDetailModal', false)
   } else if (prop.operate == 'edit') {
     const editTask = await editItem(
-      import.meta.env.VITE_BASE_URL,task.id,addOrUpdateTaskDetail )
-      router.replace({ name: 'Task' })
+      import.meta.env.VITE_BASE_URL,
+      task.id,
+      addOrUpdateTaskDetail
+    )
+    router.replace({ name: 'Task' })
     if (editTask.status != '500' && editTask.status != '404') {
       TaskManagement.editTask(editTask.id, editTask)
-      emits('showGreenPopup', {taskTitle : editTask.title , operate : prop.operate})
+      emits('showGreenPopup', {
+        taskTitle: editTask.title,
+        operate: prop.operate
+      })
     } else {
-      emits('showRedPopup', {taskTitle : !editTask.title ? task.taskTitle : editTask.title  , operate : prop.operate })
+      emits('showRedPopup', {
+        taskTitle: !editTask.title ? task.taskTitle : editTask.title,
+        operate: prop.operate
+      })
     }
     emits('showTaskDetailModal', false)
   }
@@ -170,10 +182,10 @@ const handleClick = async () => {
         </div>
         <div class="flex flex-row w-full justify-end border-t">
           <button
-          class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
-          :class="{ 'disabled': !task.taskTitle }"
-          @click="handleClick"
-          :disabled="task.taskTitle == null"
+            class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
+            :class="{ disabled: !task.taskTitle }"
+            @click="handleClick"
+            :disabled="task.taskTitle == null"
           >
             save
           </button>

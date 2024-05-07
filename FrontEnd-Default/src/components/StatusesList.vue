@@ -229,19 +229,12 @@ const closeGreenPopup = async function (operate) {
             </div>
           </td>
           <td class="itbkk-assignees px-4 py-3">
-            <div
-              class="hover:text-sky-500"
-              @click="showTaskDetail(task.id, 'show')"
-            >
-              {{ task.title }}
-            </div>
+            <div class="hover:text-sky-500"></div>
           </td>
           <td
             class="itbkk-assignees px-4 py-3"
             :class="task.assignees == null ? 'italic' : ''"
-          >
-            {{ task.assignees == null ? 'Unassigned' : task.assignees }}
-          </td>
+          ></td>
         </tr>
       </tbody>
     </table>
