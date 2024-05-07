@@ -72,7 +72,11 @@ const showDeletePopUpTaskDetail = function (obj) {
   taskDetail.value = { id: obj.id, taskTitle: obj.taskTitle }
   showDeleteTaskDetail.value = true
 }
-
+const showStatusesList = function (operate) {
+  router.replace({ name: 'StatusList' })
+  operation.value = operate
+  showTaskDetailModal.value = true
+}
 const clearDeletePopUp = async function () {
   router.push({ name: 'Task' })
   showDeleteTaskDetail.value = false
