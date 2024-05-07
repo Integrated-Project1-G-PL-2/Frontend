@@ -20,7 +20,6 @@ const showTaskDetailModal = ref(false)
 const taskManager = TaskManager
 const taskDetail = reactive({})
 const showDeleteTaskDetail = ref(false)
-const closeAddStatusDetail = ref(false)
 const operation = ref('')
 const showAddStatusModal = ref(false)
 const greenPopup = reactive({
@@ -77,7 +76,7 @@ const showAddStatusesModal = function () {
 }
 const clearAddStatusPopUp = async function () {
   router.push({ name: 'StatusList' })
-  closeAddStatusDetail.value = false
+  showAddStatusModal.value = false
 }
 
 const showDelComplete = async function () {
@@ -166,7 +165,7 @@ const closeGreenPopup = async function (operate) {
     </div>
     <div class="flex justify-start">
       <button
-        @click="goBackToHomePage('add')"
+        @click="goBackToHomePage"
         class="itbkk-button-home scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 hover:text-blue-500 mr-3 mt-2"
       >
         🏠 Home
