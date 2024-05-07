@@ -21,7 +21,6 @@ const taskDetail = reactive({})
 const showDeleteTaskDetail = ref(false)
 const operation = ref('')
 const showTitle = ref('')
-const Id = ref('')
 const greenPopup = reactive({
   add : {state : false , taskTitle : ''},
   edit : {state : false , taskTitle : ''},
@@ -66,9 +65,9 @@ const showAddPopUpTaskDetail = function (operate) {
   operation.value = operate
   showTaskDetailModal.value = true
 }
-const showDeletePopUpTaskDetail = function (id) {
-  router.push({ name: 'DeleteTaskDetail', params: { id: id } })
-  Id.value = id
+const showDeletePopUpTaskDetail = function (obj) {
+  router.push({ name: 'DeleteTaskDetail', params: { id: obj.id } })
+  taskDetail.value = {id: obj.id, taskTitle : obj.taskTitle}
   showDeleteTaskDetail.value = true
 }
 
@@ -170,12 +169,12 @@ const closeGreenPopup = async function (operate) {
       </thead>
       <tbody>
         <tr
-          v-for="task in taskManager.getTasks()"
+          v-for="(task,index) in taskManager.getTasks()"
           :key="task.id"
           class="itbkk-item border-b cursor-pointer"
         >
           <td class="px-4 py-3">
-            {{ task.id }}
+            {{ index + 1 }}
             <div
               class="inline-flex"
               @click="showEditTaskDetail(task.id, 'edit')"
@@ -184,7 +183,7 @@ const closeGreenPopup = async function (operate) {
             </div>
             <div
               class="inline-flex"
-              @click="showDeletePopUpTaskDetail(task.id)"
+              @click="showDeletePopUpTaskDetail({id : index + 1, taskTitle : task.title})"
             >
               🗑️
             </div>
@@ -238,7 +237,7 @@ const closeGreenPopup = async function (operate) {
       @cancelDetail="clearDeletePopUp"
       @confirmDetail="showDelComplete"
       @redAlert="openRedPopup"
-      :taskId="Id"
+      :taskId="taskDetail"
     >
     </DeletePopUp>
   </teleport>
