@@ -1,15 +1,18 @@
 <script setup>
 import { reactive, ref } from 'vue'
-defineEmits(['closeStatusPopUP', 'openEditDetail'])
-const prop = defineProps({
-  editStatus: Boolean
-})
 const emits = defineEmits([
+  'closeStatusPopUP',
+  'openEditDetail',
   'showTaskDetailModal',
   'showRedPopup',
   'showGreenPopup'
 ])
-const showEditStatusesModal = ref(false)
+const prop = defineProps({
+  taskDetail: Object,
+  operate: String,
+  editStatus: Boolean
+})
+
 let task
 if (prop.taskDetail?.value) {
   task = reactive({
@@ -43,10 +46,10 @@ if (prop.taskDetail?.value) {
   })
 }
 
-const handleClick = async () => {
+const saveClick = async () => {
   if (prop.operate == 'show') {
     emits('showTaskDetailModal', false)
-    router.replace({ name: 'Task' })
+    router.replace({ name: 'StatusList' })
     return
   }
   const addOrUpdateTaskDetail = {
@@ -141,7 +144,7 @@ const handleClick = async () => {
           <button
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
             :class="{ disabled: !task.taskStatus }"
-            @click="handleClick"
+            @click="saveClick"
             :disabled="task.taskStatus == null"
           >
             save
