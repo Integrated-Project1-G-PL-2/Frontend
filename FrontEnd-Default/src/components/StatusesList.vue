@@ -75,6 +75,7 @@ const showDeletePopUpTaskDetail = function (obj) {
 const showStatusesModal = function () {
   router.replace({ name: 'StatusAdd' })
   showAddStatusModal.value = true
+  showStatusesModal.value = true
 }
 const clearAddStatusPopUp = async function () {
   router.push({ name: 'StatusList' })
