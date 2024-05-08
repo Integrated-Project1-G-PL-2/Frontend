@@ -62,7 +62,7 @@ const saveClick = async () => {
         action: prop.action
       })
     }
-    emits('showStatusDetailModal', false)
+    emits('showAddStatusModal', false)
   } else if (prop.action == 'edit') {
     const editTask = await editItem(
       import.meta.env.VITE_BASE_URL_V2,
@@ -82,7 +82,7 @@ const saveClick = async () => {
         action: prop.action
       })
     }
-    emits('showStatusDetailModal', false)
+    emits('showEditStatusModal', false)
   }
 }
 </script>
