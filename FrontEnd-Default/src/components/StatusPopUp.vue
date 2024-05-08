@@ -3,9 +3,9 @@ import { reactive, ref } from 'vue'
 const emits = defineEmits([
   'closeStatusPopUP',
   'openEditDetail',
-  'showTaskDetailModal',
-  'showRedPopup',
-  'showGreenPopup'
+  'showStatusDetailModal',
+  'showStatusRedPopup',
+  'showStatusGreenPopup'
 ])
 const prop = defineProps({
   statusDetail: Object,
@@ -20,17 +20,12 @@ if (prop.statusDetail?.value) {
       .toLocaleString('en-GB')
       .replace(',', ''),
     id: prop.statusDetail.value.id,
-    taskAssignees:
-      prop.taskDetail.value.assignees != null
-        ? prop.taskDetail.value.assignees
-        : 'Unassigned',
     taskDescription:
-      prop.taskDetail.value.description != null
-        ? prop.taskDetail.value.description
+      prop.statusDetail.value.description != null
+        ? prop.statusDetail.value.description
         : 'No Description Provided',
-    taskStatus: prop.taskDetail.value.status,
-    taskTitle: prop.taskDetail.value.title,
-    updatedOn: new Date(prop.taskDetail.value.updatedOn)
+    taskStatus: prop.statusDetail.value.status,
+    updatedOn: new Date(prop.statusDetail.value.updatedOn)
       .toLocaleString('en-GB')
       .replace(',', '')
   })
@@ -38,60 +33,56 @@ if (prop.statusDetail?.value) {
   task = reactive({
     createdOn: null,
     id: null,
-    taskAssignees: null,
     taskDescription: null,
     taskStatus: null,
-    taskTitle: null,
     updatedOn: null
   })
 }
 
 const saveClick = async () => {
   if (prop.action == 'show') {
-    emits('showTaskDetailModal', false)
+    emits('showStatusDetailModal', false)
     router.replace({ name: 'StatusList' })
     return
   }
   const addOrUpdateTaskDetail = {
-    title: task.taskTitle?.length > 0 ? task.taskTitle : null,
-    assignees: task.taskAssignees?.length > 0 ? task.taskAssignees : null,
     description: task.taskDescription?.length > 0 ? task.taskDescription : null,
     status: task.taskStatus != null ? task.taskStatus : 'NO_STATUS'
   }
   if (prop.action == 'add') {
     const newTask = await addItem(
-      import.meta.env.VITE_BASE_URL,
+      import.meta.env.VITE_BASE_URL_V2,
       addOrUpdateTaskDetail
     )
-    router.replace({ name: 'Task' })
+    router.replace({ name: 'StatusList' })
     if (newTask.status != '500') {
       TaskManagement.addTask(newTask)
-      emits('showGreenPopup', {
-        taskTitle: newTask.title,
-        operate: prop.operate
+      emits('showStatusGreenPopup', {
+        taskStatus: newTask.status,
+        action: prop.action
       })
     }
-    emits('showTaskDetailModal', false)
-  } else if (prop.operate == 'edit') {
+    emits('showStatusDetailModal', false)
+  } else if (prop.action == 'edit') {
     const editTask = await editItem(
-      import.meta.env.VITE_BASE_URL,
+      import.meta.env.VITE_BASE_URL_V2,
       task.id,
       addOrUpdateTaskDetail
     )
     router.replace({ name: 'StatusList' })
     if (editTask.status != '500' && editTask.status != '404') {
       TaskManagement.editTask(editTask.id, editTask)
-      emits('showGreenPopup', {
+      emits('showStatusGreenPopup', {
         taskTitle: editTask.title,
-        action: prop.operate
+        action: prop.action
       })
     } else {
       emits('showRedPopup', {
         taskTitle: !editTask.title ? task.taskTitle : editTask.title,
-        action: prop.operate
+        action: prop.action
       })
     }
-    emits('showTaskDetailModal', false)
+    emits('showStatusDetailModal', false)
   }
 }
 </script>

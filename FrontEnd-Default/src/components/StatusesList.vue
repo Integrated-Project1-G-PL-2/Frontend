@@ -28,13 +28,13 @@ const showAddStatusModal = ref(false)
 const showEditStatusModal = ref(false)
 const isDelete = ref(false)
 const greenPopup = reactive({
-  add: { state: false, taskTitle: '' },
-  edit: { state: false, taskTitle: '' },
-  delete: { state: false, taskTitle: '' }
+  add: { state: false, taskStatus: '' },
+  edit: { state: false, taskStatus: '' },
+  delete: { state: false, taskStatus: '' }
 })
 const redPopup = reactive({
-  edit: { state: false, taskTitle: '' },
-  delete: { state: false, taskTitle: '' }
+  edit: { state: false, taskStatus: '' },
+  delete: { state: false, taskStatus: '' }
 })
 const showDeleteStatusDetail = ref(false)
 
@@ -95,14 +95,14 @@ const closeAddStatusPopup = function () {
   showEditStatusModal.value = false
 }
 
-const closeRedPopup = async function (operate) {
+const closeRedPopup = async function (action) {
   router.push({ name: 'StatusList' })
-  redPopup[operate].state = false
+  redPopup[action].state = false
 }
 
-const closeGreenPopup = async function (operate) {
+const closeGreenPopup = async function (action) {
   router.push({ name: 'StatusList' })
-  greenPopup[operate].state = false
+  greenPopup[action].state = false
 }
 </script>
 
@@ -113,7 +113,7 @@ const closeGreenPopup = async function (operate) {
       v-if="greenPopup.add.state"
       :titles="
         'The status ' +
-        greenPopup.add.taskTitle +
+        greenPopup.add.taskStatus +
         ' has been successfully added.'
       "
       @closePopUp="closeGreenPopup"
@@ -125,7 +125,7 @@ const closeGreenPopup = async function (operate) {
       v-if="redPopup.delete.state"
       :titles="
         'An error has occurred, the task ' +
-        redPopup.delete.taskTitle +
+        redPopup.delete.taskStatus +
         ' could not be added.'
       "
       @closePopUp="closeRedPopup"
