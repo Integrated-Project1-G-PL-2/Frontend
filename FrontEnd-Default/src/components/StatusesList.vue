@@ -27,6 +27,7 @@ const showStatusDetailModal = ref(false)
 const operation = ref('')
 const showAddStatusModal = ref(false)
 const showEditStatusModal = ref(false)
+const isDelete = ref(false)
 const greenPopup = reactive({
   add: { state: false, taskTitle: '' },
   edit: { state: false, taskTitle: '' },
@@ -192,7 +193,8 @@ const closeAddStatusPopup = function () {
   
   <teleport to="body" v-if="showDeleteStatusDetail">
     <DeleteStatus
-    :isDelete = true
+    :isDelete = isDelete
+    :isTransfer = !isDelete
     @cancelStatusDetail="closeDeleteStatusPopup"></DeleteStatus>
   </teleport>
 </template>
