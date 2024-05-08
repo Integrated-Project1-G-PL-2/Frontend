@@ -109,7 +109,7 @@ const handleClick = async () => {
                 :disabled="operate == 'show'"
                 v-model="task.taskDescription"
                 :class="
-                  task.taskDescription == null ? 'italic text-gray-500 ' : ''
+                   prop.taskDetail?.value.description == null ? 'italic text-gray-500 ' : ''
                 "
                 class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                 placeholder="No Description Provided"
@@ -125,7 +125,7 @@ const handleClick = async () => {
                   v-model="task.taskAssignees"
                   class="itbkk-assignees w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bbg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                   :class="
-                    task.taskAssignees == null ? 'italic text-gray-500 ' : ''
+                    prop.taskDetail?.value.assignees == null ? 'italic text-gray-500 ' : ''
                   "
                   placeholder="Unassigned"
                 ></textarea>
