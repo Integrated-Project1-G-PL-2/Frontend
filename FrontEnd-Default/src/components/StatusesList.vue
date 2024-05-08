@@ -124,7 +124,7 @@ const closeGreenPopup = async function (action) {
     <AlertPopUp
       v-if="redPopup.delete.state"
       :status="
-        'An error has occurred, the task ' +
+        'An error has occurred, the status ' +
         redPopup.delete.taskStatus +
         ' could not be added.'
       "
@@ -135,39 +135,73 @@ const closeGreenPopup = async function (action) {
     />
     <AlertPopUp
       v-if="redPopup.delete.state"
-      :titles="
-        'An error has occurred, the task ' +
-        redPopup.delete.taskTitle +
+      :status="
+        'An error has occurred, the status ' +
+        redPopup.delete.taskStatus +
         ' does not exist.'
       "
       @closePopUp="closeRedPopup"
       message="Error!!"
       styleType="red"
-      :operate="'delete'"
+      :action="'delete'"
     />
     <AlertPopUp
       v-if="greenPopup.delete.state"
-      :titles="'The task ' + greenPopup.delete.taskTitle + ' has been deleted.'"
+      :status="
+        'The status ' + greenPopup.delete.taskStatus + ' has been deleted.'
+      "
       @closePopUp="closeGreenPopup"
       message="Success!!"
       styleType="green"
-      :operate="'delete'"
+      :action="'delete'"
     />
     <AlertPopUp
       v-if="greenPopup.edit.state"
-      :titles="'The task ' + greenPopup.edit.taskTitle + ' has been updated.'"
+      :status="
+        'The status ' + greenPopup.edit.taskStatus + ' has been updated.'
+      "
       @closePopUp="closeGreenPopup"
       message="Success!!"
       styleType="green"
-      :operate="'edit'"
+      :action="'edit'"
     />
     <AlertPopUp
       v-if="redPopup.edit.state"
-      :titles="'An error occurred editting the task.' + redPopup.edit.taskTitle"
+      :status="
+        'An error has occurred, the status ' +
+        redPopup.edit.taskStatus +
+        ' does not exist.'
+      "
       @closePopUp="closeRedPopup"
       message="Error!!"
       styleType="red"
-      :operate="'edit'"
+      :action="'edit'"
+    />
+    <AlertPopUp
+      v-if="redPopup.transfer.state"
+      :status="
+        'An error has occurred, the status ' +
+        redPopup.transfer.taskStatus +
+        ' does not exist.'
+      "
+      @closePopUp="closeRedPopup"
+      message="Error!!"
+      styleType="red"
+      :action="'delete'"
+    />
+    <AlertPopUp
+      v-if="greenPopup.transfer.state"
+      :status="
+        'The tasks' +
+        greenPopup.transfer.taskStatus +
+        'have been transferred and the status ' +
+        greenPopup.delete.taskStatus +
+        ' has been deleted.'
+      "
+      @closePopUp="closeGreenPopup"
+      message="Success!!"
+      styleType="green"
+      :action="'delete'"
     />
     <div class="flex justify-end">
       <button
