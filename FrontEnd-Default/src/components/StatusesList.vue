@@ -15,6 +15,8 @@ import AlertPopUp from './../components/AlertPopUp.vue'
 import StatusPopUp from './StatusPopUp.vue'
 import DeleteStatus from './DeleteStatus.vue'
 
+
+const deClareemit = defineEmits(['editStatus'])
 const router = useRouter()
 const route = useRoute()
 const showTaskDetailModal = ref(false)
@@ -24,6 +26,7 @@ const showDeleteTaskDetail = ref(false)
 const showStatusDetailModal = ref(false)
 const operation = ref('')
 const showAddStatusModal = ref(false)
+const showEditStatusModal = ref(false)
 const greenPopup = reactive({
   add: { state: false, taskTitle: '' },
   edit: { state: false, taskTitle: '' },
@@ -78,10 +81,20 @@ const showAddStatusesModal = function () {
   showAddStatusModal.value = true
 }
 
+const showEditStatusesModal = function () {
+  router.replace({ name: 'StatusEdit' })
+  deClareemit('editStatus')
+  showEditStatusModal.value = true
+}
+
 const closeDeleteStatusPopup = function () {
   showDeleteStatusDetail.value = false
 }
 
+const closeAddStatusPopup = function () {
+  showAddStatusModal.value = false
+  showEditStatusModal.value = false
+}
 
 </script>
 
@@ -148,7 +161,7 @@ const closeDeleteStatusPopup = function () {
              
             >
               <button class="itbkk-button-edit bg-green-400   font-sans   text-center gap-5 text-gray-100 hover:text-gray-200 mr-5 w-14 rounded-[8px]"
-              @click="console.log('Edit Button')">
+              @click="showEditStatusesModal">
                 Edit
               </button>
               <button class="itbkk-button-delete bg-red-400  rounded-[8px] font-sans text-center gap-5 text-gray-100 hover:text-gray-200 w-14 "
@@ -164,9 +177,20 @@ const closeDeleteStatusPopup = function () {
   <teleport to="body" v-if="showTaskDetailModal">
     <TaskDetail :taskDetail="taskDetail"></TaskDetail>
   </teleport>
+
   <teleport to="body" v-if="showAddStatusModal">
-    <StatusPopUp></StatusPopUp>
+    <StatusPopUp
+    @closeStatusPopUP="closeAddStatusPopup">
+  </StatusPopUp>
   </teleport>
+
+  <teleport to="body" v-if="showEditStatusModal">
+    <StatusPopUp
+    :editStatus = "true"
+    @closeStatusPopUP="closeAddStatusPopup">
+  </StatusPopUp>
+  </teleport>
+  
   <teleport to="body" v-if="showDeleteStatusDetail">
     <DeleteStatus
     @cancelStatusDetail="closeDeleteStatusPopup"></DeleteStatus>
