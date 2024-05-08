@@ -1,11 +1,11 @@
 <script setup>
 import { reactive, ref } from 'vue'
-defineEmits(['closeStatusPopUP'])
+defineEmits(['closeStatusPopUP', 'openEditDetail'])
 const prop = defineProps({
   taskDetail: Object,
   operate: String
 })
-const showEditStatusesModal = ref(true)
+const showEditStatusesModal = ref(false)
 let task
 if (prop.taskDetail?.value) {
   task = reactive({

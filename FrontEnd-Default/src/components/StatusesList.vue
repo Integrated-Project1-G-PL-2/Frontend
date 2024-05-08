@@ -32,6 +32,7 @@ const redPopup = reactive({
   edit: { state: false, taskTitle: '' },
   delete: { state: false, taskTitle: '' }
 })
+defineEmits(['openEditDetail'])
 
 onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
@@ -76,6 +77,7 @@ const showStatusesModal = function () {
   router.replace({ name: 'StatusAdd' })
   showAddStatusModal.value = true
   showEditStatusesModal.value = true
+  $emit('openEditDetail', true)
 }
 const clearAddStatusPopUp = async function () {
   router.push({ name: 'StatusList' })
