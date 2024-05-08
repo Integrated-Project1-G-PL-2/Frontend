@@ -5,7 +5,7 @@ const prop = defineProps({
   taskDetail: Object,
   operate: String
 })
-const showEditStatusesModal = ref(false)
+const showEditStatusesModal = ref(true)
 let task
 if (prop.taskDetail?.value) {
   task = reactive({
@@ -104,17 +104,17 @@ const handleClick = async () => {
           <div class="pl-4 mt-4">Name</div>
           <textarea
             v-model="task.taskStatus"
-            class="itbkk-status-name w-[1090px] h-[40%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
+            class="itbkk-status-name w-[90%] h-[40%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
           >
           </textarea>
         </div>
 
-        <div class="w-[70%] h-[50%]">
+        <div class="w-full h-[50%]">
           <div class="pl-4 mt-4">Description</div>
           <div class="w-full h-[320px]">
             <textarea
               v-model="task.taskDescription"
-              class="itbkk-status-description w-[1090px] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+              class="itbkk-status-description w-[90%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
               placeholder="No Description Provided"
             ></textarea>
           </div>
