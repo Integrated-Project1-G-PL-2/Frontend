@@ -45,14 +45,14 @@ const saveClick = async () => {
     router.replace({ name: 'StatusList' })
     return
   }
-  const addOrUpdateTaskDetail = {
+  const addOrUpdateStatusDetail = {
     description: task.taskDescription?.length > 0 ? task.taskDescription : null,
     status: task.taskStatus != null ? task.taskStatus : 'NO_STATUS'
   }
   if (prop.action == 'add') {
     const newTask = await addItem(
       import.meta.env.VITE_BASE_URL_V2,
-      addOrUpdateTaskDetail
+      addOrUpdateStatusDetail
     )
     router.replace({ name: 'StatusList' })
     if (newTask.status != '500') {
@@ -67,7 +67,7 @@ const saveClick = async () => {
     const editTask = await editItem(
       import.meta.env.VITE_BASE_URL_V2,
       task.id,
-      addOrUpdateTaskDetail
+      addOrUpdateStatusDetail
     )
     router.replace({ name: 'StatusList' })
     if (editTask.status != '500' && editTask.status != '404') {
