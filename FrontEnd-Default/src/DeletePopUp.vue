@@ -1,26 +1,37 @@
 <script setup>
-import { ref, reactive } from 'vue'
-import { deleteItemById } from './utils/fetchUtils'
-import taskManager from './utils/TaskManager'
-import { useRoute, useRouter } from 'vue-router'
-const deClareemit = defineEmits(['confirmDetail', 'cancelDetail', 'redAlert'])
-const props = defineProps(['taskId'])
-const router = useRouter()
-const deletedTask = reactive({})
+import { ref, reactive } from "vue";
+import { deleteItemById } from "./utils/fetchUtils";
+import taskManager from "./utils/TaskManager";
+import { useRoute, useRouter } from "vue-router";
+const emits1 = defineEmits([
+  "showDeleteTaskDetail",
+  "showRedPopupDel",
+  "showGreenPopupDel",
+]);
+const props = defineProps(["taskId", "operate"]);
+const router = useRouter();
 const deleteTask = async (deleteId) => {
-  deletedTask.value = await deleteItemById(
+  emits1("showDeleteTaskDetail", false);
+  router.replace({ name: "Task" });
+  const deletedTask = await deleteItemById(
     import.meta.env.VITE_BASE_URL,
-    props.taskId.value.id
-  )
-  if (deletedTask.value == '404') {
-    deClareemit('redAlert', true)
-    deClareemit('cancelDetail', true)
-    router.replace({ name: 'Task' })
-    return
+    deleteId
+  );
+  router.replace({ name: "Task" });
+  if (deletedTask.status == "404") {
+    emits1("showRedPopupDel", {
+      operate: props.operate,
+      taskTitle: props.taskId.value.taskTitle,
+    });
+
+    return;
   }
-  taskManager.deleteTask(deleteId)
-  deClareemit('confirmDetail', true)
-}
+  taskManager.deleteTask(deleteId);
+  emits1("showGreenPopupDel", {
+    operate: props.operate,
+    taskTitle: props.taskId.value.taskTitle,
+  });
+};
 </script>
 
 <template>
@@ -34,20 +45,26 @@ const deleteTask = async (deleteId) => {
         </div>
 
         <div class="w-[70%] h-[100%]">
-          <div class="pl-4 mt-4">Do you want to delete the task "{{ props.taskId.value.index  }}. {{ props.taskId.value.taskTitle }}" ?</div>
+          <div class="pl-4 mt-4">
+            Do you want to delete the task "{{ props.taskId.value.index }}.
+            {{ props.taskId.value.taskTitle }}" ?
+          </div>
         </div>
       </div>
       <div class="flex flex-row w-full justify-end border-t h-[60%]">
         <button
           class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
-          @click="deleteTask(props.taskId)"
+          @click="deleteTask(props.taskId.value.id)"
         >
           <div class="btn text-center">Confirm</div>
         </button>
         <button
           class="itbkk-button-cancel bg-red-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
           @click="
-            ;[$emit('cancelDetail', true), $router.replace({ name: 'Task' })]
+            [
+              $emit('showDeleteTaskDetail', false),
+              $router.replace({ name: 'Task' }),
+            ]
           "
         >
           <div class="btn text-center">Cancel</div>

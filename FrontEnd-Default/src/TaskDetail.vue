@@ -15,7 +15,7 @@ const prop = defineProps({
   operate: String
 })
 let task
-if (prop.taskDetail?.value) {
+if (prop.taskDetail.value) {
   task = reactive({
     createdOn: new Date(prop.taskDetail.value.createdOn)
       .toLocaleString('en-GB')
@@ -24,11 +24,11 @@ if (prop.taskDetail?.value) {
     taskAssignees:
       prop.taskDetail.value.assignees != null
         ? prop.taskDetail.value.assignees
-        : 'Unassigned',
+        : '',
     taskDescription:
       prop.taskDetail.value.description != null
         ? prop.taskDetail.value.description
-        : 'No Description Provided',
+        : '',
     taskStatus: prop.taskDetail.value.status,
     taskTitle: prop.taskDetail.value.title,
     updatedOn: new Date(prop.taskDetail.value.updatedOn)
@@ -109,7 +109,7 @@ const handleClick = async () => {
                 :disabled="operate == 'show'"
                 v-model="task.taskDescription"
                 :class="
-                   prop.taskDetail?.value.description == null ? 'italic text-gray-500 ' : ''
+                   task.taskAssignees == null ? 'italic text-gray-500 ' : ''
                 "
                 class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                 placeholder="No Description Provided"
@@ -125,7 +125,7 @@ const handleClick = async () => {
                   v-model="task.taskAssignees"
                   class="itbkk-assignees w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bbg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                   :class="
-                    prop.taskDetail?.value.assignees == null ? 'italic text-gray-500 ' : ''
+                    task.taskAssigneess == null ? 'italic text-gray-500 ' : ''
                   "
                   placeholder="Unassigned"
                 ></textarea>

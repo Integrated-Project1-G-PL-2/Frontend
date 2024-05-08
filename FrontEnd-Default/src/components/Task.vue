@@ -60,7 +60,8 @@ if (route.params.id) {
   showTaskDetail(route.params.id, 'show')
 }
 const showAddPopUpTaskDetail = function (operate) {
-  router.replace({ name: 'AddTaskDetail' })
+  router.push({ name: 'AddTaskDetail' })
+  taskDetail.value = null
   operation.value = operate
   showTaskDetailModal.value = true
 }
@@ -70,17 +71,6 @@ const showDeletePopUpTaskDetail = function (obj) {
   showDeleteTaskDetail.value = true
 }
 
-const clearDeletePopUp = async function () {
-  router.push({ name: 'Task' })
-  showDeleteTaskDetail.value = false
-}
-
-
-const showDelComplete = async function () {
-  router.push({ name: 'Task' })
-  showDeleteTaskDetail.value = false
-  greenPopup.delete.state = true
-}
 
 const openRedPopup = async function (obj) {
   redPopup[obj.operate].state = true
@@ -88,6 +78,7 @@ const openRedPopup = async function (obj) {
 }
 
 const openGreenPopup = async function (obj) {
+  console.log("was called");
   greenPopup[obj.operate].state = true
   greenPopup[obj.operate].taskTitle = obj.taskTitle
 }
@@ -233,10 +224,11 @@ const closeGreenPopup = async function (operate) {
   </teleport>
   <teleport to="body" v-if="showDeleteTaskDetail">
     <DeletePopUp
-      @cancelDetail="clearDeletePopUp"
-      @confirmDetail="showDelComplete"
-      @redAlert="openRedPopup"
+      @showDeleteTaskDetail="showDeleteTaskDetail = false"
       :taskId="taskDetail"
+      @showRedPopupDel="openRedPopup"
+      @showGreenPopupDel="openGreenPopup"
+      :operate="'delete'"
     >
     </DeletePopUp>
   </teleport>
