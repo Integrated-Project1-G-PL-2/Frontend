@@ -94,6 +94,16 @@ const closeAddStatusPopup = function () {
   showAddStatusModal.value = false
   showEditStatusModal.value = false
 }
+
+const closeRedPopup = async function (operate) {
+  router.push({ name: 'StatusList' })
+  redPopup[operate].state = false
+}
+
+const closeGreenPopup = async function (operate) {
+  router.push({ name: 'StatusList' })
+  greenPopup[operate].state = false
+}
 </script>
 
 <template>
