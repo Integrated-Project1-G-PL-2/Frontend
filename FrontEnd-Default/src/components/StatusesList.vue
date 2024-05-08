@@ -111,7 +111,7 @@ const closeGreenPopup = async function (action) {
     <h1 class="font-bold text-center">IT-Bangmod Kradan Kanban</h1>
     <AlertPopUp
       v-if="greenPopup.add.state"
-      :titles="
+      :status="
         'The status ' +
         greenPopup.add.taskStatus +
         ' has been successfully added.'
@@ -123,7 +123,7 @@ const closeGreenPopup = async function (action) {
     />
     <AlertPopUp
       v-if="redPopup.delete.state"
-      :titles="
+      :status="
         'An error has occurred, the task ' +
         redPopup.delete.taskStatus +
         ' could not be added.'
@@ -131,7 +131,43 @@ const closeGreenPopup = async function (action) {
       @closePopUp="closeRedPopup"
       message="Error!!"
       styleType="red"
-      :action="'delete'"
+      :action="'add'"
+    />
+    <AlertPopUp
+      v-if="redPopup.delete.state"
+      :titles="
+        'An error has occurred, the task ' +
+        redPopup.delete.taskTitle +
+        ' does not exist.'
+      "
+      @closePopUp="closeRedPopup"
+      message="Error!!"
+      styleType="red"
+      :operate="'delete'"
+    />
+    <AlertPopUp
+      v-if="greenPopup.delete.state"
+      :titles="'The task ' + greenPopup.delete.taskTitle + ' has been deleted.'"
+      @closePopUp="closeGreenPopup"
+      message="Success!!"
+      styleType="green"
+      :operate="'delete'"
+    />
+    <AlertPopUp
+      v-if="greenPopup.edit.state"
+      :titles="'The task ' + greenPopup.edit.taskTitle + ' has been updated.'"
+      @closePopUp="closeGreenPopup"
+      message="Success!!"
+      styleType="green"
+      :operate="'edit'"
+    />
+    <AlertPopUp
+      v-if="redPopup.edit.state"
+      :titles="'An error occurred editting the task.' + redPopup.edit.taskTitle"
+      @closePopUp="closeRedPopup"
+      message="Error!!"
+      styleType="red"
+      :operate="'edit'"
     />
     <div class="flex justify-end">
       <button
