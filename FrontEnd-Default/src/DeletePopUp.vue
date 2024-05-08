@@ -7,11 +7,10 @@ const deClareemit = defineEmits(['confirmDetail', 'cancelDetail', 'redAlert'])
 const props = defineProps(['taskId'])
 const router = useRouter()
 const deletedTask = reactive({})
-console.log(props.taskId);
 const deleteTask = async (deleteId) => {
   deletedTask.value = await deleteItemById(
     import.meta.env.VITE_BASE_URL,
-    deleteId
+    props.taskId.value.id
   )
   if (deletedTask.value == '404') {
     deClareemit('redAlert', true)
@@ -35,7 +34,7 @@ const deleteTask = async (deleteId) => {
         </div>
 
         <div class="w-[70%] h-[100%]">
-          <div class="pl-4 mt-4">Do you want to delete the task "{{ props.taskId.value.id  }}. {{ props.taskId.value.taskTitle }}" ?</div>
+          <div class="pl-4 mt-4">Do you want to delete the task "{{ props.taskId.value.index  }}. {{ props.taskId.value.taskTitle }}" ?</div>
         </div>
       </div>
       <div class="flex flex-row w-full justify-end border-t h-[60%]">

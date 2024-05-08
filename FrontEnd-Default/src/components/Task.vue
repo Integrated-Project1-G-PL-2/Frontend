@@ -20,7 +20,6 @@ const taskManager = TaskManager
 const taskDetail = reactive({})
 const showDeleteTaskDetail = ref(false)
 const operation = ref('')
-const showTitle = ref('')
 const greenPopup = reactive({
   add : {state : false , taskTitle : ''},
   edit : {state : false , taskTitle : ''},
@@ -67,7 +66,7 @@ const showAddPopUpTaskDetail = function (operate) {
 }
 const showDeletePopUpTaskDetail = function (obj) {
   router.push({ name: 'DeleteTaskDetail', params: { id: obj.id } })
-  taskDetail.value = {id: obj.id, taskTitle : obj.taskTitle}
+  taskDetail.value = {id: obj.id, taskTitle : obj.taskTitle , index : obj.index}
   showDeleteTaskDetail.value = true
 }
 
@@ -183,7 +182,7 @@ const closeGreenPopup = async function (operate) {
             </div>
             <div
               class="inline-flex"
-              @click="showDeletePopUpTaskDetail({id : index + 1, taskTitle : task.title})"
+              @click="showDeletePopUpTaskDetail({id : task.id, taskTitle : task.title , index : index + 1})"
             >
               🗑️
             </div>
