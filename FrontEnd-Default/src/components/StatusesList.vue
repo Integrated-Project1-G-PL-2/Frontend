@@ -15,7 +15,6 @@ import AlertPopUp from './../components/AlertPopUp.vue'
 import StatusPopUp from './StatusPopUp.vue'
 import DeleteStatus from './DeleteStatus.vue'
 
-
 const deClareemit = defineEmits(['editStatus'])
 const router = useRouter()
 const route = useRoute()
@@ -95,13 +94,35 @@ const closeAddStatusPopup = function () {
   showAddStatusModal.value = false
   showEditStatusModal.value = false
 }
-
 </script>
 
 <template>
   <div class="bg-white relative border rounded-lg overflow-auto">
     <h1 class="font-bold text-center">IT-Bangmod Kradan Kanban</h1>
-    
+    <AlertPopUp
+      v-if="greenPopup.add.state"
+      :titles="
+        'The status ' +
+        greenPopup.add.taskTitle +
+        ' has been successfully added.'
+      "
+      @closePopUp="closeGreenPopup"
+      message="Success!!"
+      styleType="green"
+      :operate="'add'"
+    />
+    <AlertPopUp
+      v-if="redPopup.delete.state"
+      :titles="
+        'An error has occurred, the task ' +
+        redPopup.delete.taskTitle +
+        ' could not be added.'
+      "
+      @closePopUp="closeRedPopup"
+      message="Error!!"
+      styleType="red"
+      :operate="'delete'"
+    />
     <div class="flex justify-end">
       <button
         @click="showAddStatusesModal"
@@ -140,7 +161,6 @@ const closeAddStatusPopup = function () {
         >
           <td class="px-4 py-3">
             {{ index + 1 }}
-            
           </td>
           <td class="itbkk-status-name px-4 py-3">
             <div
@@ -157,15 +177,17 @@ const closeAddStatusPopup = function () {
             {{ task.assignees == null ? 'Unassigned' : task.assignees }}
           </td>
           <td class="itbkk-status px-4 py-3">
-            <div
-             
-            >
-              <button class="itbkk-button-edit bg-green-400   font-sans   text-center gap-5 text-gray-100 hover:text-gray-200 mr-5 w-14 rounded-[8px]"
-              @click="showEditStatusesModal">
+            <div>
+              <button
+                class="itbkk-button-edit bg-green-400 font-sans text-center gap-5 text-gray-100 hover:text-gray-200 mr-5 w-14 rounded-[8px]"
+                @click="showEditStatusesModal"
+              >
                 Edit
               </button>
-              <button class="itbkk-button-delete bg-red-400  rounded-[8px] font-sans text-center gap-5 text-gray-100 hover:text-gray-200 w-14 "
-              @click="showDeletePopUpTaskDetail">
+              <button
+                class="itbkk-button-delete bg-red-400 rounded-[8px] font-sans text-center gap-5 text-gray-100 hover:text-gray-200 w-14"
+                @click="showDeletePopUpTaskDetail"
+              >
                 Delete
               </button>
             </div>
@@ -179,23 +201,20 @@ const closeAddStatusPopup = function () {
   </teleport>
 
   <teleport to="body" v-if="showAddStatusModal">
-    <StatusPopUp
-    @closeStatusPopUP="closeAddStatusPopup">
-  </StatusPopUp>
+    <StatusPopUp @closeStatusPopUP="closeAddStatusPopup"> </StatusPopUp>
   </teleport>
 
   <teleport to="body" v-if="showEditStatusModal">
-    <StatusPopUp
-    :editStatus = "true"
-    @closeStatusPopUP="closeAddStatusPopup">
-  </StatusPopUp>
+    <StatusPopUp :editStatus="true" @closeStatusPopUP="closeAddStatusPopup">
+    </StatusPopUp>
   </teleport>
-  
+
   <teleport to="body" v-if="showDeleteStatusDetail">
     <DeleteStatus
-    :isDelete = isDelete
-    :isTransfer = !isDelete
-    @cancelStatusDetail="closeDeleteStatusPopup"></DeleteStatus>
+      :isDelete="isDelete"
+      :isTransfer="!isDelete"
+      @cancelStatusDetail="closeDeleteStatusPopup"
+    ></DeleteStatus>
   </teleport>
 </template>
 <style scoped></style>
