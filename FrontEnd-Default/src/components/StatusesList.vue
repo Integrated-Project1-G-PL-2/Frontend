@@ -22,7 +22,7 @@ const taskDetail = reactive({})
 const showDeleteTaskDetail = ref(false)
 const operation = ref('')
 const showAddStatusModal = ref(false)
-
+const showEditStatusesModal = ref(false)
 const greenPopup = reactive({
   add: { state: false, taskTitle: '' },
   edit: { state: false, taskTitle: '' },
@@ -75,7 +75,7 @@ const showDeletePopUpTaskDetail = function (obj) {
 const showStatusesModal = function () {
   router.replace({ name: 'StatusAdd' })
   showAddStatusModal.value = true
-  showStatusesModal.value = true
+  showEditStatusesModal.value = true
 }
 const clearAddStatusPopUp = async function () {
   router.push({ name: 'StatusList' })

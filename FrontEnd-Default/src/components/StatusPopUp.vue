@@ -5,7 +5,7 @@ const prop = defineProps({
   taskDetail: Object,
   operate: String
 })
-const showStatusesModal = ref(false)
+const showEditStatusesModal = ref(true)
 let task
 if (prop.taskDetail?.value) {
   task = reactive({
@@ -96,7 +96,7 @@ const handleClick = async () => {
     <div class="w-[90%] m-[auto]">
       <div class="flex flex-col justify-between bg-white p-4">
         <div class="w-full h-[10%] mt-2">
-          <div v-if="showStatusesModal" class="pl-4 mt-4">Edit Status</div>
+          <div v-if="showEditStatusesModal" class="pl-4 mt-4">Edit Status</div>
           <div class="pl-4 mt-4">Add Status</div>
         </div>
         <div class="border-b w-full mt-4"></div>
@@ -119,7 +119,11 @@ const handleClick = async () => {
             ></textarea>
           </div>
         </div>
-        <div v-if="showStatusesModal" class="mt-10 ml-4" style="display: flex">
+        <div
+          v-if="showEditStatusesModal"
+          class="mt-10 ml-4"
+          style="display: flex"
+        >
           <div style="display: flex">
             <div class="itbkk-timezone" style="margin-right: 20px">
               TimeZone : {{ Intl.DateTimeFormat().resolvedOptions().timeZone }}
