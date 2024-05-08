@@ -2,9 +2,13 @@
 import { reactive, ref } from 'vue'
 defineEmits(['closeStatusPopUP', 'openEditDetail'])
 const prop = defineProps({
-  editStatus:Boolean
+  editStatus: Boolean
 })
-
+const emits = defineEmits([
+  'showTaskDetailModal',
+  'showRedPopup',
+  'showGreenPopup'
+])
 const showEditStatusesModal = ref(false)
 let task
 if (prop.taskDetail?.value) {
@@ -97,7 +101,7 @@ const handleClick = async () => {
       <div class="flex flex-col justify-between bg-white p-4">
         <div class="w-full h-[10%] mt-2">
           <div v-if="prop.editStatus" class="pl-4 mt-4">Edit Status</div>
-          <div class="pl-4 mt-4"  v-if="!prop.editStatus">Add Status</div>
+          <div class="pl-4 mt-4" v-if="!prop.editStatus">Add Status</div>
         </div>
         <div class="border-b w-full mt-4"></div>
         <div class="itbkk-modal-status w-full h-[10%] mt-2">
@@ -111,7 +115,7 @@ const handleClick = async () => {
 
         <div class="w-[full] h-[50%]">
           <div class="pl-4 mt-4">Description</div>
-          <div class="w-full h-[320px] ">
+          <div class="w-full h-[320px]">
             <textarea
               v-model="task.taskDescription"
               class="itbkk-status-description w-[90%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
@@ -119,11 +123,7 @@ const handleClick = async () => {
             ></textarea>
           </div>
         </div>
-        <div
-          v-if="prop.editStatus"
-          class="mt-10 ml-4"
-          style="display: flex"
-        >
+        <div v-if="prop.editStatus" class="mt-10 ml-4" style="display: flex">
           <div style="display: flex">
             <div class="itbkk-timezone" style="margin-right: 20px">
               TimeZone : {{ Intl.DateTimeFormat().resolvedOptions().timeZone }}
