@@ -69,7 +69,7 @@ const statusSelect = ref() //ชั่วคราว
             There is some task associated with the "" status. Transfer to
             <select
               v-model="statusSelect"
-              class="itbkk-status mt-1 ml-4 select select-bordered w-[150px] h-[30px] px-4 py-2 bg-inherit border-2 border-gray-200 text-gray-400 rounded-md"
+              class="itbkk-status mt-1 ml-4 select select-bordered w-[150px] h-[30px] px-2 py-1 bg-inherit border-2 border-gray-200 text-gray-400 rounded-md text-sm text-justify"
             >
               <option value="NO_STATUS">No Status</option>
               <option value="TO_DO">To Do</option>
