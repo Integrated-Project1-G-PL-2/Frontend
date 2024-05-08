@@ -83,7 +83,6 @@ const showAddStatusesModal = function () {
 
 const showEditStatusesModal = function () {
   router.replace({ name: 'StatusEdit' })
-  deClareemit('editStatus')
   showEditStatusModal.value = true
 }
 
@@ -193,6 +192,7 @@ const closeAddStatusPopup = function () {
   
   <teleport to="body" v-if="showDeleteStatusDetail">
     <DeleteStatus
+    :isDelete = true
     @cancelStatusDetail="closeDeleteStatusPopup"></DeleteStatus>
   </teleport>
 </template>

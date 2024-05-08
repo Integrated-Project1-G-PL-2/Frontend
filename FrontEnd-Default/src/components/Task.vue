@@ -260,7 +260,7 @@ const closeGreenPopup = async function (operate) {
     </DeletePopUp>
   </teleport>
   <Teleport to="body" v-if="showStatusDetailModal">
-    <StatusesList :taskDetail="taskDetail"> </StatusesList>
+    <StatusesList> </StatusesList>
   </Teleport>
 </template>
 <style scoped></style>

@@ -4,10 +4,10 @@ import { ref, reactive } from 'vue'
 // import taskManager from './utils/TaskManager'
 import { useRoute, useRouter } from 'vue-router'
 const deClareemit = defineEmits([ 'cancelStatusDetail'])
-const props = defineProps(['taskId'])
+const props = defineProps(['taskId','isDelete'])
+
 const router = useRouter()
 const deletedTask = reactive({})
-
 
 </script>
 
@@ -17,13 +17,14 @@ const deletedTask = reactive({})
   >
     <div class="w-[30%] m-[auto] border border-green-700 mt-[20%]">
       <div class="flex flex-col justify-between bg-white p-4 h-[100px]">
+<div v-if="props.isDelete">     
         <div class="itbkk-title w-full h-[70px] mt-1 border-b">
           <h1 class="text-xl font-bold text-justify">Delete a Task</h1>
         </div>
 
         <div class="w-[70%] h-[100%]">
-          <div class="pl-4 mt-4">Do you want to delete the task "" ?</div>
-        </div>
+          <div class="itbkk-message pl-4 mt-4">Do you want to delete the task "" ?</div>
+        
       </div>
       <div class="flex flex-row w-full justify-end border-t h-[60%]">
         <button
@@ -32,6 +33,7 @@ const deletedTask = reactive({})
         >
           <div class="btn text-center">Confirm</div>
         </button>
+    
         <button
           class="itbkk-button-cancel bg-red-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
           @click="
@@ -41,6 +43,8 @@ const deletedTask = reactive({})
           <div class="btn text-center">Cancel</div>
         </button>
       </div>
+    </div>
+    </div>
     </div>
   </div>
 </template>

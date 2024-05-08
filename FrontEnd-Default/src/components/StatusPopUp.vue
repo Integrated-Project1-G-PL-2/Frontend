@@ -4,7 +4,6 @@ defineEmits(['closeStatusPopUP', 'openEditDetail'])
 const prop = defineProps({
   editStatus:Boolean
 })
-console.log(prop.editStatus)
 
 const showEditStatusesModal = ref(false)
 let task
@@ -94,7 +93,7 @@ const handleClick = async () => {
   <div
     class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[100px] overflow-auto"
   >
-    <div class="w-[90%] m-[auto]">
+    <div class="w-[90%] m-[auto] border border-gray-500">
       <div class="flex flex-col justify-between bg-white p-4">
         <div class="w-full h-[10%] mt-2">
           <div v-if="prop.editStatus" class="pl-4 mt-4">Edit Status</div>
@@ -105,17 +104,17 @@ const handleClick = async () => {
           <div class="pl-4 mt-4">Name</div>
           <textarea
             v-model="task.taskStatus"
-            class="itbkk-status-name w-[1090px] h-[40%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
+            class="itbkk-status-name w-[90%] h-[40%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
           >
           </textarea>
         </div>
 
-        <div class="w-[70%] h-[50%]">
+        <div class="w-[full] h-[50%]">
           <div class="pl-4 mt-4">Description</div>
-          <div class="w-full h-[320px]">
+          <div class="w-full h-[320px] ">
             <textarea
               v-model="task.taskDescription"
-              class="itbkk-status-description w-[1090px] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+              class="itbkk-status-description w-[90%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
               placeholder="No Description Provided"
             ></textarea>
           </div>
