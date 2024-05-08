@@ -119,7 +119,7 @@ const closeGreenPopup = async function (operate) {
       @closePopUp="closeGreenPopup"
       message="Success!!"
       styleType="green"
-      :operate="'add'"
+      :action="'add'"
     />
     <AlertPopUp
       v-if="redPopup.delete.state"
@@ -131,7 +131,7 @@ const closeGreenPopup = async function (operate) {
       @closePopUp="closeRedPopup"
       message="Error!!"
       styleType="red"
-      :operate="'delete'"
+      :action="'delete'"
     />
     <div class="flex justify-end">
       <button
