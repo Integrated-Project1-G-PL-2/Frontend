@@ -30,6 +30,7 @@ const status = reactive({ name: '', description: '' })
 console.log(status)
 
 const saveClick = async () => {
+  //add status
   if (prop.operate === 'add') {
     const addedStatus = await addItem(import.meta.env.VITE_BASE_URL_V2, status)
     statusManager.addStatuses(addedStatus)

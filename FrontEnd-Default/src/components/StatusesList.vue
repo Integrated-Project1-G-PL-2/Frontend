@@ -179,10 +179,7 @@ const closeGreenPopup = async function (operate) {
             {{ index + 1 }}
           </td>
           <td class="itbkk-status-name px-4 py-3">
-            <div
-              class="hover:text-sky-500"
-              @click="showTaskDetail(statuses.id, 'show')"
-            >
+            <div class="hover:text-sky-500">
               {{ statuses.name }}
             </div>
           </td>
