@@ -37,9 +37,14 @@ const saveClick = async (title) => {
       taskStatus: addedStatus.name,
       operate: prop.operate
     })
-    router.replace({ name: 'StatusList' })
-    emits('showStatusDetailModal', false)
+  } else {
+    emits('showStatusRedPopup', {
+      taskStatus: addedStatus.name,
+      operate: prop.operate
+    })
   }
+  router.replace({ name: 'StatusList' })
+  emits('showStatusDetailModal', false)
 }
 </script>
 
@@ -91,9 +96,9 @@ const saveClick = async (title) => {
         <div class="flex flex-row w-full justify-end border-t">
           <button
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
-            :class="{ disabled: !status.statusName }"
+            :class="{ disabled: !status.name }"
             @click="saveClick(title)"
-            :disabled="status.statusName == ''"
+            :disabled="status.name === ''"
           >
             save
           </button>

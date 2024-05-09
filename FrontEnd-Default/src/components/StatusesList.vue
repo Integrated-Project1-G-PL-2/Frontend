@@ -135,7 +135,7 @@ const closeGreenPopup = async function (operate) {
         ' could not be added.'
       "
       @closePopUp="closeRedPopup"
-      message="Success!!"
+      message="Error!!"
       styleType="red"
       :operate="'add'"
     />
