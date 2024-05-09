@@ -9,10 +9,10 @@ const emits = defineEmits([
 ])
 const prop = defineProps({
   statusDetail: Object,
-  action: String,
+  operate: String,
   editStatus: Boolean
 })
-
+const title = ref(prop.operate)
 let task
 if (prop.statusDetail?.value) {
   task = reactive({
@@ -94,8 +94,9 @@ const saveClick = async () => {
     <div class="w-[90%] m-[auto] border border-gray-500">
       <div class="flex flex-col justify-between bg-white p-4">
         <div class="w-full h-[10%] mt-2">
-          <div v-if="prop.editStatus" class="pl-4 mt-4">Edit Status</div>
-          <div class="pl-4 mt-4" v-if="!prop.editStatus">Add Status</div>
+          <div class="pl-4 mt-4">
+            {{ title.charAt(0).toUpperCase() + title.slice(1) }} Status
+          </div>
         </div>
         <div class="border-b w-full mt-4"></div>
         <div class="itbkk-modal-status w-full h-[10%] mt-2">
@@ -117,8 +118,8 @@ const saveClick = async () => {
             ></textarea>
           </div>
         </div>
-        <div v-if="prop.editStatus" class="mt-10 ml-4" style="display: flex">
-          <div style="display: flex">
+        <div class="mt-10 ml-4" style="display: flex">
+          <!-- <div style="display: flex">
             <div class="itbkk-timezone" style="margin-right: 20px">
               TimeZone : {{ Intl.DateTimeFormat().resolvedOptions().timeZone }}
             </div>
@@ -128,7 +129,7 @@ const saveClick = async () => {
             <div class="itbkk-updated-on">
               <div>Updated On : {{ task.updatedOn }}</div>
             </div>
-          </div>
+          </div> -->
         </div>
 
         <div class="flex flex-row w-full justify-end border-t">

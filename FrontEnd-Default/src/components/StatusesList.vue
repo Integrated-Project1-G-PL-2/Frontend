@@ -21,11 +21,8 @@ const route = useRoute()
 const showTaskDetailModal = ref(false)
 const taskManager = useTaskManager()
 const taskDetail = reactive({})
-const showDeleteTaskDetail = ref(false)
-const showStatusDetailModal = ref(false)
 const operation = ref('')
-const showAddStatusModal = ref(false)
-const showEditStatusModal = ref(false)
+const showStatusModal = ref(false)
 const isDelete = ref(false)
 const greenPopup = reactive({
   add: { state: false, taskStatus: '' },
@@ -76,23 +73,24 @@ const showDeletePopUpTaskDetail = function () {
   // taskDetail.value = { id: obj.id, taskTitle: obj.taskTitle }
   showDeleteStatusDetail.value = true
 }
-const showAddStatusesModal = function () {
+const showAddStatusesModal = function (operate) {
   router.replace({ name: 'StatusAdd' })
-  showAddStatusModal.value = true
+  operation.value = operate
+  showStatusModal.value = true
 }
 
-const showEditStatusesModal = function () {
+const showEditStatusesModal = function (operate) {
   router.replace({ name: 'StatusEdit' })
-  showEditStatusModal.value = true
+  operation.value = operate
+  showStatusModal.value = true
 }
 
 const closeDeleteStatusPopup = function () {
   showDeleteStatusDetail.value = false
 }
 
-const closeAddStatusPopup = function () {
-  showAddStatusModal.value = false
-  showEditStatusModal.value = false
+const closeStatusPopup = function () {
+  showStatusModal.value = false
 }
 
 const closeRedPopup = async function (action) {
@@ -205,7 +203,7 @@ const closeGreenPopup = async function (action) {
     /> -->
     <div class="flex justify-end">
       <button
-        @click="showAddStatusesModal"
+        @click="showAddStatusesModal('add')"
         class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2"
       >
         ✚ Add Status
@@ -213,7 +211,7 @@ const closeGreenPopup = async function (action) {
     </div>
     <div class="flex justify-start">
       <button
-        @click="goBackToHomePage('add')"
+        @click="goBackToHomePage"
         class="itbkk-button-home scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 hover:text-blue-500 mr-3 mt-2 text-blue-400"
       >
         🏠 Home
@@ -260,7 +258,7 @@ const closeGreenPopup = async function (action) {
             <div>
               <button
                 class="itbkk-button-edit bg-green-400 font-sans text-center gap-5 text-gray-100 hover:text-gray-200 mr-5 w-14 rounded-[8px]"
-                @click="showEditStatusesModal"
+                @click="showEditStatusesModal('edit')"
               >
                 Edit
               </button>
@@ -280,12 +278,8 @@ const closeGreenPopup = async function (action) {
     <TaskDetail :taskDetail="taskDetail"></TaskDetail>
   </teleport>
 
-  <teleport to="body" v-if="showAddStatusModal">
-    <StatusPopUp @closeStatusPopUP="closeAddStatusPopup"> </StatusPopUp>
-  </teleport>
-
-  <teleport to="body" v-if="showEditStatusModal">
-    <StatusPopUp :editStatus="true" @closeStatusPopUP="closeAddStatusPopup">
+  <teleport to="body" v-if="showStatusModal">
+    <StatusPopUp :operate="operation" @closeStatusPopUP="closeStatusPopup">
     </StatusPopUp>
   </teleport>
 
