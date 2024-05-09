@@ -2,28 +2,28 @@
 import { deleteItemById } from "./utils/fetchUtils";
 import taskManager from "./utils/TaskManager";
 import { useRoute, useRouter } from "vue-router";
-const emits1 = defineEmits([
+const emits = defineEmits([
   "showDeleteTaskDetail",
-  "showRedPopupDel",
-  "showGreenPopupDel",
+  "showRedPopup",
+  "showGreenPopup",
 ]);
 const props = defineProps(["taskId", "operate"]);
 const router = useRouter();
 const deleteTask = async (deleteId) => {
-  emits1("showDeleteTaskDetail", false);
+  emits("showDeleteTaskDetail", false);
   router.replace({ name: "Task" });
   const deletedTask = await deleteItemById(
     import.meta.env.VITE_BASE_URL,
     deleteId
   );
   if (deletedTask.status == "404") {
-    emits1("showRedPopupDel", {
+    emits("showRedPopup", {
       operate: props.operate,
       taskTitle: props.taskId.value.taskTitle,
     });
     return;
   }
-  emits1("showGreenPopupDel", {
+  emits("showGreenPopup", {
     operate: props.operate,
     taskTitle: props.taskId.value.taskTitle,
   });
