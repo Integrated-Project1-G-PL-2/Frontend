@@ -51,9 +51,8 @@ if (prop.statusDetail?.value) {
 
 const saveClick = async (newStatus) => {
   if (newStatus.id === undefined) {
-    console.log('sadsadas')
     const addedStatus = await addItem(import.meta.env.VITE_BASE_URL_V2, status)
-    useTaskManager.addTask(addedStatus)
+    useTaskManager.addStatus(addedStatus)
   }
   emits('saveAddStatusPopUp', true)
   console.log(status)
