@@ -21,13 +21,13 @@ const taskDetail = reactive({})
 const showDeleteTaskDetail = ref(false)
 const operation = ref('')
 const greenPopup = reactive({
-  add : {state : false , taskTitle : ''},
-  edit : {state : false , taskTitle : ''},
-  delete : {state : false , taskTitle : ''},
+  add: { state: false, taskTitle: '' },
+  edit: { state: false, taskTitle: '' },
+  delete: { state: false, taskTitle: '' }
 })
 const redPopup = reactive({
-  edit : {state : false , taskTitle : ''},
-  delete : {state : false , taskTitle : ''},
+  edit: { state: false, taskTitle: '' },
+  delete: { state: false, taskTitle: '' }
 })
 
 onMounted(async () => {
@@ -67,32 +67,40 @@ const showAddPopUpTaskDetail = function (operate) {
 }
 const showDeletePopUpTaskDetail = function (obj) {
   router.push({ name: 'DeleteTaskDetail', params: { id: obj.id } })
-  taskDetail.value = {id: obj.id, taskTitle : obj.taskTitle , index : obj.index}
+  taskDetail.value = { id: obj.id, taskTitle: obj.taskTitle, index: obj.index }
   showDeleteTaskDetail.value = true
 }
 
-
 const openRedPopup = function (obj) {
-  console.log("close");
+  console.log('close')
   redPopup[obj.operate].state = true
   redPopup[obj.operate].taskTitle = obj.taskTitle
 }
 
-const openGreenPopup =  function (obj) {
-  console.log("was called");
+const openGreenPopup = function (obj) {
+  console.log('was called')
   greenPopup[obj.operate].state = true
   greenPopup[obj.operate].taskTitle = obj.taskTitle
 }
 
 const closeRedPopup = async function (operate) {
   router.push({ name: 'Task' })
-  redPopup[operate].state = false;
+  redPopup[operate].state = false
 }
 
 const closeGreenPopup = async function (operate) {
   router.push({ name: 'Task' })
   greenPopup[operate].state = false
+}
+const clearDeletePopUp = async function () {
+  router.push({ name: 'Task' })
+  showDeleteTaskDetail.value = false
+}
 
+const showDelComplete = async function () {
+  router.push({ name: 'Task' })
+  showDeleteTaskDetail.value = false
+  greenPopup.delete.state = true
 }
 </script>
 
@@ -101,7 +109,9 @@ const closeGreenPopup = async function (operate) {
     <h1 class="font-bold text-center">IT-Bangmod Kradan Kanban</h1>
     <AlertPopUp
       v-if="greenPopup.add.state"
-      :titles="'The task ' + greenPopup.add.taskTitle + ' has been successfully added.'"
+      :titles="
+        'The task ' + greenPopup.add.taskTitle + ' has been successfully added.'
+      "
       @closePopUp="closeGreenPopup"
       message="Success!!"
       styleType="green"
@@ -110,7 +120,9 @@ const closeGreenPopup = async function (operate) {
     <AlertPopUp
       v-if="redPopup.delete.state"
       :titles="
-        'An error has occurred, the task ' + redPopup.delete.taskTitle + ' does not exist.'
+        'An error has occurred, the task ' +
+        redPopup.delete.taskTitle +
+        ' does not exist.'
       "
       @closePopUp="closeRedPopup"
       message="Error!!"
@@ -160,7 +172,7 @@ const closeGreenPopup = async function (operate) {
       </thead>
       <tbody>
         <tr
-          v-for="(task,index) in taskManager.getTasks()"
+          v-for="(task, index) in taskManager.getTasks()"
           :key="task.id"
           class="itbkk-item border-b cursor-pointer"
         >
@@ -174,7 +186,13 @@ const closeGreenPopup = async function (operate) {
             </div>
             <div
               class="inline-flex"
-              @click="showDeletePopUpTaskDetail({id : task.id, taskTitle : task.title , index : index + 1})"
+              @click="
+                showDeletePopUpTaskDetail({
+                  id: task.id,
+                  taskTitle: task.title,
+                  index: index + 1
+                })
+              "
             >
               🗑️
             </div>
@@ -225,11 +243,10 @@ const closeGreenPopup = async function (operate) {
   </teleport>
   <teleport to="body" v-if="showDeleteTaskDetail">
     <DeletePopUp
-      @showDeleteTaskDetail="showDeleteTaskDetail = false"
+      @cancelDetail="clearDeletePopUp"
+      @confirmDetail="showDelComplete"
+      @redAlert="openRedPopup"
       :taskId="taskDetail"
-      @showRedPopup="openRedPopup"
-      @showGreenPopup="openGreenPopup"
-      :operate="'delete'"
     >
     </DeletePopUp>
   </teleport>

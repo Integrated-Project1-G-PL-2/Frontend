@@ -1,35 +1,27 @@
 <script setup>
-import { deleteItemById } from "./utils/fetchUtils";
-import taskManager from "./utils/TaskManager";
-import { useRoute, useRouter } from "vue-router";
-const emits = defineEmits([
-  "showDeleteTaskDetail",
-  "showRedPopup",
-  "showGreenPopup",
-]);
-const props = defineProps(["taskId", "operate"]);
-const router = useRouter();
+import { ref, reactive } from 'vue'
+import { deleteItemById } from './utils/fetchUtils'
+import taskManager from './utils/TaskManager'
+import { useRoute, useRouter } from 'vue-router'
+const deClareemit = defineEmits(['confirmDetail', 'cancelDetail', 'redAlert'])
+const props = defineProps(['taskId'])
+const router = useRouter()
+const deletedTask = reactive({})
+console.log(props.taskId)
 const deleteTask = async (deleteId) => {
-  emits("showDeleteTaskDetail", false);
-  router.replace({ name: "Task" });
-  const deletedTask = await deleteItemById(
+  deletedTask.value = await deleteItemById(
     import.meta.env.VITE_BASE_URL,
     deleteId
-  );
-  if (deletedTask.status == "404") {
-    emits("showRedPopup", {
-      operate: props.operate,
-      taskTitle: props.taskId.value.taskTitle,
-    });
-    return;
+  )
+  if (deletedTask.value == '404') {
+    deClareemit('redAlert', true)
+    deClareemit('cancelDetail', true)
+    router.replace({ name: 'Task' })
+    return
   }
-  emits("showGreenPopup", {
-    operate: props.operate,
-    taskTitle: props.taskId.value.taskTitle,
-  });
-  taskManager.deleteTask(deleteId);
-
-};
+  taskManager.deleteTask(deleteId)
+  deClareemit('confirmDetail', true)
+}
 </script>
 
 <template>
@@ -59,10 +51,7 @@ const deleteTask = async (deleteId) => {
         <button
           class="itbkk-button-cancel bg-red-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
           @click="
-            [
-              $emit('showDeleteTaskDetail', false),
-              $router.replace({ name: 'Task' }),
-            ]
+            ;[$emit('cancelDetail', true), $router.replace({ name: 'Task' })]
           "
         >
           <div class="btn text-center">Cancel</div>
