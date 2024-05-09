@@ -50,15 +50,15 @@ const saveClick = async () => {
     status: task.taskStatus != null ? task.taskStatus : 'NO_STATUS'
   }
   if (prop.operate == 'add') {
-    const newTask = await addItem(
+    const newStatus = await addItem(
       import.meta.env.VITE_BASE_URL_V2,
       addOrUpdateStatusDetail
     )
     router.replace({ name: 'StatusList' })
-    if (newTask.status != '500') {
-      TaskManagement.addTask(newTask)
+    if (newStatus.status != '500') {
+      TaskManagement.addTask(newStatus)
       emits('showStatusGreenPopup', {
-        taskStatus: newTask.status,
+        taskStatus: newStatus.status,
         operate: prop.operate
       })
     }
