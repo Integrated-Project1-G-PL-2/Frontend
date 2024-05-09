@@ -224,8 +224,9 @@ const closeGreenPopup = async function (operate) {
     <StatusPopUp
       :operate="operation"
       @closeStatusPopUP="closeStatusPopup"
-      @showRedPopup="openRedPopup"
-      @showGreenPopup="openGreenPopup"
+      @showStatusRedPopup="openRedPopup"
+      @showStatusGreenPopup="openGreenPopup"
+      @showStatusDetailModal="showStatusModal = false"
     >
     </StatusPopUp>
   </teleport>

@@ -2,6 +2,7 @@
 import { reactive, ref } from 'vue'
 import { useTaskManager } from '@/stores/TaskManager'
 import { useStatusManager } from '@/stores/StatusManager'
+import { useRouter } from 'vue-router'
 import {
   getItems,
   getItemById,
@@ -9,7 +10,7 @@ import {
   addItem,
   editItem
 } from '../utils/fetchUtils.js'
-
+const router = useRouter()
 const statusManager = useStatusManager()
 const emits = defineEmits([
   'closeStatusPopUP',
@@ -29,21 +30,16 @@ const status = reactive({ name: '', description: '' })
 console.log(status)
 
 const saveClick = async (title) => {
-  console.log(status)
   if (title === 'add') {
     const addedStatus = await addItem(import.meta.env.VITE_BASE_URL_V2, status)
     statusManager.addStatuses(addedStatus)
-    emits('showGreenPopup', {
+    emits('showStatusGreenPopup', {
       taskStatus: addedStatus.name,
       operate: prop.operate
     })
+    router.replace({ name: 'StatusList' })
+    emits('showStatusDetailModal', false)
   }
-  // emits('saveAddStatusPopUp', true)
-  // emits('showGreenPopup', {
-  //   statusTitle: status.statusName,
-  //   operate: prop.operate
-  // })
-  // console.log(status)
 }
 </script>
 
