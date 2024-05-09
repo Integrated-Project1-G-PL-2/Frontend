@@ -29,8 +29,8 @@ const status = reactive({ name: '', description: '' })
 
 console.log(status)
 
-const saveClick = async (title) => {
-  if (title === 'add') {
+const saveClick = async () => {
+  if (prop.operate === 'add') {
     const addedStatus = await addItem(import.meta.env.VITE_BASE_URL_V2, status)
     statusManager.addStatuses(addedStatus)
     emits('showStatusGreenPopup', {
@@ -97,7 +97,7 @@ const saveClick = async (title) => {
           <button
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
             :class="{ disabled: !status.name }"
-            @click="saveClick(title)"
+            @click="saveClick"
             :disabled="status.name === ''"
           >
             save
