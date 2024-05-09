@@ -220,7 +220,7 @@ const showDelComplete = async function () {
                     ? '#FFC0CB'
                     : task.status === 'Doing'
                     ? '#ffff99'
-                    : task.status === 'No Status' || 'NO_STATUS'
+                    : task.status === 'No Status'
                     ? 'lightgray'
                     : '#90EE90'
               }"
