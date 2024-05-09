@@ -8,7 +8,7 @@ const emits = defineEmits([
   'showRedPopup',
   'showGreenPopup'
 ])
-const taskManager = useTaskManage()
+const taskManager = useTaskManager()
 const formatStatus = function (status) {
   if (status == null) {
     return 'No status'
@@ -90,7 +90,7 @@ const handleClick = async () => {
     )
     if (editTask.status != '500' && editTask.status != '404') {
       editTask.status = formatStatus(editTask.status)
-      TaskManagement.editTask(editTask.id, editTask)
+      taskManager.editTask(editTask.id, editTask)
       emits('showGreenPopup', {
         taskTitle: editTask.title,
         operate: prop.operate

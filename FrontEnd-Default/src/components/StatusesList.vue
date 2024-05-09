@@ -7,7 +7,7 @@ import {
   addItem,
   editItem
 } from '../utils/fetchUtils.js'
-import TaskManager from '../utils/TaskManager.js'
+import { useTaskManager } from '@/stores/TaskManager'
 import TaskDetail from '@/TaskDetail.vue'
 import { useRoute, useRouter } from 'vue-router'
 import DeletePopUp from '@/DeletePopUp.vue'
@@ -19,7 +19,7 @@ const deClareemit = defineEmits(['editStatus'])
 const router = useRouter()
 const route = useRoute()
 const showTaskDetailModal = ref(false)
-const taskManager = TaskManager
+const taskManager = useTaskManager()
 const taskDetail = reactive({})
 const showDeleteTaskDetail = ref(false)
 const showStatusDetailModal = ref(false)
