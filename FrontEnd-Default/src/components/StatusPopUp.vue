@@ -1,5 +1,14 @@
 <script setup>
 import { reactive, ref } from 'vue'
+import { useTaskManager } from '@/stores/TaskManager'
+import {
+  getItems,
+  getItemById,
+  deleteItemById,
+  addItem,
+  editItem
+} from '../utils/fetchUtils.js'
+
 const emits = defineEmits([
   'closeStatusPopUP',
   'openEditDetail',
@@ -13,6 +22,7 @@ const prop = defineProps({
   editStatus: Boolean
 })
 const title = ref(prop.operate)
+const status = reactive({ statusName: '', statusDescription: '' })
 let task
 if (prop.statusDetail?.value) {
   task = reactive({
@@ -21,10 +31,10 @@ if (prop.statusDetail?.value) {
       .replace(',', ''),
     id: prop.statusDetail.value.id,
     taskDescription:
-      prop.statusDetail.value.description != null
-        ? prop.statusDetail.value.description
+      prop.statusDetail.value.statusDescription != null
+        ? prop.statusDetail.value.statusDescription
         : 'No Description Provided',
-    taskStatus: prop.statusDetail.value.status,
+    taskStatus: prop.statusDetail.value.statusName,
     updatedOn: new Date(prop.statusDetail.value.updatedOn)
       .toLocaleString('en-GB')
       .replace(',', '')
@@ -39,51 +49,14 @@ if (prop.statusDetail?.value) {
   })
 }
 
-const saveClick = async () => {
-  if (prop.operate == 'show') {
-    emits('showStatusDetailModal', false)
-    router.replace({ name: 'StatusList' })
-    return
+const saveClick = async (newStatus) => {
+  if (newStatus.id === undefined) {
+    console.log('sadsadas')
+    const addedStatus = await addItem(import.meta.env.VITE_BASE_URL_V2, status)
+    useTaskManager.addTask(addedStatus)
   }
-  const addOrUpdateStatusDetail = {
-    description: task.taskDescription?.length > 0 ? task.taskDescription : null,
-    status: task.taskStatus != null ? task.taskStatus : 'NO_STATUS'
-  }
-  if (prop.operate == 'add') {
-    const newStatus = await addItem(
-      import.meta.env.VITE_BASE_URL_V2,
-      addOrUpdateStatusDetail
-    )
-    router.replace({ name: 'StatusList' })
-    if (newStatus.status != '500') {
-      TaskManagement.addTask(newStatus)
-      emits('showStatusGreenPopup', {
-        taskStatus: newStatus.status,
-        operate: prop.operate
-      })
-    }
-    emits('showAddStatusModal', false)
-  } else if (prop.operate == 'edit') {
-    const editTask = await editItem(
-      import.meta.env.VITE_BASE_URL_V2,
-      task.id,
-      addOrUpdateStatusDetail
-    )
-    router.replace({ name: 'StatusList' })
-    if (editTask.status != '500' && editTask.status != '404') {
-      TaskManagement.editTask(editTask.id, editTask)
-      emits('showStatusGreenPopup', {
-        taskTitle: editTask.title,
-        operate: prop.operate
-      })
-    } else {
-      emits('showRedPopup', {
-        taskTitle: !editTask.title ? task.taskTitle : editTask.title,
-        operate: prop.operate
-      })
-    }
-    emits('showEditStatusModal', false)
-  }
+  emits('saveAddStatusPopUp', true)
+  console.log(status)
 }
 </script>
 
@@ -102,7 +75,7 @@ const saveClick = async () => {
         <div class="itbkk-modal-status w-full h-[10%] mt-2">
           <div class="pl-4 mt-4">Name</div>
           <textarea
-            v-model="task.taskStatus"
+            v-model="status.statusName"
             class="itbkk-status-name w-[90%] h-[40%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
           >
           </textarea>
@@ -112,7 +85,7 @@ const saveClick = async () => {
           <div class="pl-4 mt-4">Description</div>
           <div class="w-full h-[320px]">
             <textarea
-              v-model="task.taskDescription"
+              v-model="status.statusDescription"
               class="itbkk-status-description w-[90%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
               placeholder="No Description Provided"
             ></textarea>
@@ -135,9 +108,9 @@ const saveClick = async () => {
         <div class="flex flex-row w-full justify-end border-t">
           <button
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
-            :class="{ disabled: !task.taskStatus }"
+            :class="{ disabled: !status.statusName }"
             @click="saveClick"
-            :disabled="task.taskStatus == null"
+            :disabled="status.statusName == null"
           >
             save
           </button>
