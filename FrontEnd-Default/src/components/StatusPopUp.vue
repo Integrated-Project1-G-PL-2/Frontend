@@ -40,7 +40,7 @@ if (prop.statusDetail?.value) {
 }
 
 const saveClick = async () => {
-  if (prop.action == 'show') {
+  if (prop.operate == 'show') {
     emits('showStatusDetailModal', false)
     router.replace({ name: 'StatusList' })
     return
@@ -49,7 +49,7 @@ const saveClick = async () => {
     description: task.taskDescription?.length > 0 ? task.taskDescription : null,
     status: task.taskStatus != null ? task.taskStatus : 'NO_STATUS'
   }
-  if (prop.action == 'add') {
+  if (prop.operate == 'add') {
     const newTask = await addItem(
       import.meta.env.VITE_BASE_URL_V2,
       addOrUpdateStatusDetail
@@ -59,11 +59,11 @@ const saveClick = async () => {
       TaskManagement.addTask(newTask)
       emits('showStatusGreenPopup', {
         taskStatus: newTask.status,
-        action: prop.action
+        operate: prop.operate
       })
     }
     emits('showAddStatusModal', false)
-  } else if (prop.action == 'edit') {
+  } else if (prop.operate == 'edit') {
     const editTask = await editItem(
       import.meta.env.VITE_BASE_URL_V2,
       task.id,
@@ -74,12 +74,12 @@ const saveClick = async () => {
       TaskManagement.editTask(editTask.id, editTask)
       emits('showStatusGreenPopup', {
         taskTitle: editTask.title,
-        action: prop.action
+        operate: prop.operate
       })
     } else {
       emits('showRedPopup', {
         taskTitle: !editTask.title ? task.taskTitle : editTask.title,
-        action: prop.action
+        operate: prop.operate
       })
     }
     emits('showEditStatusModal', false)
