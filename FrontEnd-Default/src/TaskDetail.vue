@@ -1,40 +1,46 @@
 <script setup>
-import { reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import TaskManagement from './utils/TaskManager'
-import { addItem, editItem } from './utils/fetchUtils'
+import { reactive, ref } from "vue";
+import { useRouter } from "vue-router";
+import TaskManagement from "./utils/TaskManager";
+import { addItem, editItem } from "./utils/fetchUtils";
 const emits = defineEmits([
-  'showTaskDetailModal',
-  'showRedPopup',
-  'showGreenPopup'
-])
+  "showTaskDetailModal",
+  "showRedPopup",
+  "showGreenPopup",
+]);
 
-const router = useRouter()
+const formatStatus = function (status) {
+  if (status == null) {
+    return "No status";
+  }
+  return status.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
+};
+const router = useRouter();
 const prop = defineProps({
   taskDetail: Object,
-  operate: String
-})
-let task
+  operate: String,
+});
+let task;
 if (prop.taskDetail.value) {
   task = reactive({
     createdOn: new Date(prop.taskDetail.value.createdOn)
-      .toLocaleString('en-GB')
-      .replace(',', ''),
+      .toLocaleString("en-GB")
+      .replace(",", ""),
     id: prop.taskDetail.value.id,
     taskAssignees:
       prop.taskDetail.value.assignees != null
         ? prop.taskDetail.value.assignees
-        : '',
+        : "",
     taskDescription:
       prop.taskDetail.value.description != null
         ? prop.taskDetail.value.description
-        : '',
-    taskStatus: prop.taskDetail.value.status,
+        : "",
+    taskStatus: formatStatus(prop.taskDetail.value.status),
     taskTitle: prop.taskDetail.value.title,
     updatedOn: new Date(prop.taskDetail.value.updatedOn)
-      .toLocaleString('en-GB')
-      .replace(',', '')
-  })
+      .toLocaleString("en-GB")
+      .replace(",", ""),
+  });
 } else {
   task = reactive({
     createdOn: null,
@@ -43,46 +49,60 @@ if (prop.taskDetail.value) {
     taskDescription: null,
     taskStatus: null,
     taskTitle: null,
-    updatedOn: null
-  })
+    updatedOn: null,
+  });
 }
 
 const handleClick = async () => {
-  if (prop.operate == 'show') {
-    emits('showTaskDetailModal', false)
-    router.replace({ name: 'Task' })
-    return
+  if (prop.operate == "show") {
+    emits("showTaskDetailModal", false);
+    router.replace({ name: "Task" });
+    return;
   }
   const addOrUpdateTaskDetail = {
     title: task.taskTitle?.length > 0 ? task.taskTitle : null,
     assignees: task.taskAssignees?.length > 0 ? task.taskAssignees : null,
     description: task.taskDescription?.length > 0 ? task.taskDescription : null,
-    status: task.taskStatus != null ? task.taskStatus : 'NO_STATUS'
-  }
-  if (prop.operate == 'add') {
+    status: task.taskStatus.toUpperCase().replace(/\s+/g, '_'),
+  };
+  console.log(addOrUpdateTaskDetail.status);
+  if (prop.operate == "add") {
     const newTask = await addItem(
       import.meta.env.VITE_BASE_URL,
       addOrUpdateTaskDetail
-    )
-    router.replace({ name: 'Task' })
-    if (newTask.status != '500') {
-      TaskManagement.addTask(newTask)
-      emits('showGreenPopup', {taskTitle : newTask.title , operate : prop.operate})
+    );
+    router.replace({ name: "Task" });
+    if (newTask.status != "500") {
+      TaskManagement.addTask(newTask);
+      emits("showGreenPopup", {
+        taskTitle: newTask.title,
+        operate: prop.operate,
+      });
     }
-    emits('showTaskDetailModal', false)
-  } else if (prop.operate == 'edit') {
+    emits("showTaskDetailModal", false);
+  } else if (prop.operate == "edit") {
     const editTask = await editItem(
-      import.meta.env.VITE_BASE_URL,task.id,addOrUpdateTaskDetail )
-      router.replace({ name: 'Task' })
-    if (editTask.status != '500' && editTask.status != '404') {
-      TaskManagement.editTask(editTask.id, editTask)
-      emits('showGreenPopup', {taskTitle : editTask.title , operate : prop.operate})
+      import.meta.env.VITE_BASE_URL,
+      task.id,
+      addOrUpdateTaskDetail
+    );
+    if (editTask.status != "500" && editTask.status != "404") {
+      editTask.status = formatStatus(editTask.status)
+      TaskManagement.editTask(editTask.id, editTask);
+      emits("showGreenPopup", {
+        taskTitle: editTask.title,
+        operate: prop.operate,
+      });
     } else {
-      emits('showRedPopup', {taskTitle : !editTask.title ? task.taskTitle : editTask.title  , operate : prop.operate })
+      emits("showRedPopup", {
+        taskTitle: !editTask.title ? task.taskTitle : editTask.title,
+        operate: prop.operate,
+      });
     }
-    emits('showTaskDetailModal', false)
+    router.replace({ name: "Task" });
+    emits("showTaskDetailModal", false);
   }
-}
+};
 </script>
 
 <template>
@@ -109,7 +129,7 @@ const handleClick = async () => {
                 :disabled="operate == 'show'"
                 v-model="task.taskDescription"
                 :class="
-                   task.taskAssignees == null ? 'italic text-gray-500 ' : ''
+                  task.taskAssignees == null ? 'italic text-gray-500 ' : ''
                 "
                 class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                 placeholder="No Description Provided"
@@ -142,10 +162,10 @@ const handleClick = async () => {
                   class="itbkk-status mt-1 ml-4 select select-bordered w-[95%] h-[40px] px-4 py-2 bg-inherit border-2 border-gray-200 text-gray-400 rounded-md"
                 >
                   <option disabled selected>Status</option>
-                  <option value="TO_DO">To Do</option>
-                  <option value="DOING">Doing</option>
-                  <option value="DONE">Done</option>
-                  <option value="NO_STATUS">No Status</option>
+                  <option value="To Do">To Do</option>
+                  <option value="Doing">Doing</option>
+                  <option value="Done">Done</option>
+                  <option value="No Status">No Status</option>
                 </select>
               </label>
             </div>
@@ -170,19 +190,19 @@ const handleClick = async () => {
         </div>
         <div class="flex flex-row w-full justify-end border-t">
           <button
-          class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
-          :class="{ 'disabled': !task.taskTitle }"
-          @click="handleClick"
-          :disabled="task.taskTitle == null"
+            class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
+            :class="{ disabled: !task.taskTitle }"
+            @click="handleClick"
+            :disabled="task.taskTitle == null"
           >
             save
           </button>
           <button
             @click="
-              ;[
+              [
                 $emit('showTaskDetailModal', false),
-                $router.replace({ name: 'Task' })
-              ]
+                $router.replace({ name: 'Task' }),
+              ];
             "
             class="itbkk-button-cancel bg-gray-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
           >
