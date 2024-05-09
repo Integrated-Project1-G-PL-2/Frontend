@@ -33,6 +33,10 @@ const saveClick = async (title) => {
   if (title === 'add') {
     const addedStatus = await addItem(import.meta.env.VITE_BASE_URL_V2, status)
     statusManager.addStatuses(addedStatus)
+    emits('showGreenPopup', {
+      taskStatus: addedStatus.name,
+      operate: prop.operate
+    })
   }
   // emits('saveAddStatusPopUp', true)
   // emits('showGreenPopup', {
@@ -92,13 +96,7 @@ const saveClick = async (title) => {
           <button
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
             :class="{ disabled: !status.statusName }"
-            @click="
-              ;[
-                emits('closeStatusPopUP'),
-                saveClick(title),
-                $router.replace({ name: 'StatusList' })
-              ]
-            "
+            @click="saveClick(title)"
             :disabled="status.statusName == ''"
           >
             save

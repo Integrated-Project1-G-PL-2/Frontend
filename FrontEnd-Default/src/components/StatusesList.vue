@@ -30,6 +30,7 @@ const greenPopup = reactive({
   delete: { state: false, taskStatus: '' }
 })
 const redPopup = reactive({
+  add: { state: false, taskStatus: '' },
   edit: { state: false, taskStatus: '' },
   delete: { state: false, taskStatus: '' }
 })
@@ -94,14 +95,24 @@ const closeStatusPopup = function () {
   showStatusModal.value = false
 }
 
-const closeRedPopup = async function (action) {
-  router.push({ name: 'StatusList' })
-  redPopup[action].state = false
+const openRedPopup = function (obj) {
+  redPopup[obj.operate].state = true
+  redPopup[obj.operate].taskStatus = obj.taskStatus
 }
 
-const closeGreenPopup = async function (action) {
+const openGreenPopup = function (obj) {
+  greenPopup[obj.operate].state = true
+  greenPopup[obj.operate].taskStatus = obj.taskStatus
+}
+
+const closeRedPopup = async function (operate) {
   router.push({ name: 'StatusList' })
-  greenPopup[action].state = false
+  redPopup[operate].state = false
+}
+
+const closeGreenPopup = async function (operate) {
+  router.push({ name: 'StatusList' })
+  greenPopup[operate].state = false
 }
 </script>
 
@@ -110,98 +121,24 @@ const closeGreenPopup = async function (action) {
     <h1 class="font-bold text-center">IT-Bangmod Kradan Kanban</h1>
     <AlertPopUp
       v-if="greenPopup.add.state"
-      :status="
-        'The status ' +
-        greenPopup.add.taskStatus +
-        ' has been successfully added.'
-      "
+      :titles="'The status  ' + greenPopup.add.taskStatus + ' has been added.'"
       @closePopUp="closeGreenPopup"
       message="Success!!"
       styleType="green"
-      :action="'add'"
+      :operate="'add'"
     />
     <AlertPopUp
-      v-if="redPopup.delete.state"
-      :status="
+      v-if="redPopup.add.state"
+      :titles="
         'An error has occurred, the status ' +
-        redPopup.delete.taskStatus +
+        redPopup.add.taskStatus +
         ' could not be added.'
       "
       @closePopUp="closeRedPopup"
-      message="Error!!"
-      styleType="red"
-      :action="'add'"
-    />
-    <AlertPopUp
-      v-if="redPopup.delete.state"
-      :status="
-        'An error has occurred, the status ' +
-        redPopup.delete.taskStatus +
-        ' does not exist.'
-      "
-      @closePopUp="closeRedPopup"
-      message="Error!!"
-      styleType="red"
-      :action="'delete'"
-    />
-    <AlertPopUp
-      v-if="greenPopup.delete.state"
-      :status="
-        'The status ' + greenPopup.delete.taskStatus + ' has been deleted.'
-      "
-      @closePopUp="closeGreenPopup"
       message="Success!!"
-      styleType="green"
-      :action="'delete'"
-    />
-    <AlertPopUp
-      v-if="greenPopup.edit.state"
-      :status="
-        'The status ' + greenPopup.edit.taskStatus + ' has been updated.'
-      "
-      @closePopUp="closeGreenPopup"
-      message="Success!!"
-      styleType="green"
-      :action="'edit'"
-    />
-    <AlertPopUp
-      v-if="redPopup.edit.state"
-      :status="
-        'An error has occurred, the status ' +
-        redPopup.edit.taskStatus +
-        ' does not exist.'
-      "
-      @closePopUp="closeRedPopup"
-      message="Error!!"
       styleType="red"
-      :action="'edit'"
+      :operate="'add'"
     />
-    <!-- <AlertPopUp
-      v-if="redPopup.transfer.state"
-      :status="
-        'An error has occurred, the status ' +
-        redPopup.transfer.taskStatus +
-        ' does not exist.'
-      "
-      @closePopUp="closeRedPopup"
-      message="Error!!"
-      styleType="red"
-      :action="'delete'"
-    />
-    <AlertPopUp
-      v-if="greenPopup.transfer.state"
-      :status="
-        'The tasks' +
-        greenPopup.transfer.taskStatus +
-        'have been transferred and the status ' +
-        greenPopup.delete.taskStatus +
-        ' has been deleted.'
-      "
-      @closePopUp="closeGreenPopup"
-      message="Success!!"
-      styleType="green"
-      :action="'delete'"
-    /> -->
     <div class="flex justify-end">
       <button
         @click="showAddStatusesModal('add')"
@@ -284,7 +221,12 @@ const closeGreenPopup = async function (action) {
   </teleport>
 
   <teleport to="body" v-if="showStatusModal">
-    <StatusPopUp :operate="operation" @closeStatusPopUP="closeStatusPopup">
+    <StatusPopUp
+      :operate="operation"
+      @closeStatusPopUP="closeStatusPopup"
+      @showRedPopup="openRedPopup"
+      @showGreenPopup="openGreenPopup"
+    >
     </StatusPopUp>
   </teleport>
 
