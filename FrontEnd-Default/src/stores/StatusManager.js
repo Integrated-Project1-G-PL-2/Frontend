@@ -8,7 +8,7 @@ export const useStatusManager = defineStore("statusManager", () => {
   const setStatuses = function(statusesList = []) {
     statuses.length = 0
     statusesList.forEach((status) => {
-      status.status = status.status
+      status.name = status.name
         .toLowerCase()
         .replace('_', ' ')
         .replace(/\b\w/g, (c) => c.toUpperCase())
