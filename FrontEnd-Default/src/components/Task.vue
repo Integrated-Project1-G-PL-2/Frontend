@@ -72,12 +72,13 @@ const showDeletePopUpTaskDetail = function (obj) {
 }
 
 
-const openRedPopup = async function (obj) {
+const openRedPopup = function (obj) {
+  console.log("close");
   redPopup[obj.operate].state = true
   redPopup[obj.operate].taskTitle = obj.taskTitle
 }
 
-const openGreenPopup = async function (obj) {
+const openGreenPopup =  function (obj) {
   console.log("was called");
   greenPopup[obj.operate].state = true
   greenPopup[obj.operate].taskTitle = obj.taskTitle
@@ -226,8 +227,8 @@ const closeGreenPopup = async function (operate) {
     <DeletePopUp
       @showDeleteTaskDetail="showDeleteTaskDetail = false"
       :taskId="taskDetail"
-      @showRedPopupDel="openRedPopup"
-      @showGreenPopupDel="openGreenPopup"
+      @showRedPopup="openRedPopup"
+      @showGreenPopup="openGreenPopup"
       :operate="'delete'"
     >
     </DeletePopUp>

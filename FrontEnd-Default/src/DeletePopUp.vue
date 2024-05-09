@@ -1,5 +1,4 @@
 <script setup>
-import { ref, reactive } from "vue";
 import { deleteItemById } from "./utils/fetchUtils";
 import taskManager from "./utils/TaskManager";
 import { useRoute, useRouter } from "vue-router";
@@ -17,20 +16,19 @@ const deleteTask = async (deleteId) => {
     import.meta.env.VITE_BASE_URL,
     deleteId
   );
-  router.replace({ name: "Task" });
   if (deletedTask.status == "404") {
     emits1("showRedPopupDel", {
       operate: props.operate,
       taskTitle: props.taskId.value.taskTitle,
     });
-
     return;
   }
-  taskManager.deleteTask(deleteId);
   emits1("showGreenPopupDel", {
     operate: props.operate,
     taskTitle: props.taskId.value.taskTitle,
   });
+  taskManager.deleteTask(deleteId);
+
 };
 </script>
 
