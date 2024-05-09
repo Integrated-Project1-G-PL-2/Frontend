@@ -7,7 +7,7 @@ import {
   addItem,
   editItem
 } from '../utils/fetchUtils.js'
-import { useTaskManager } from '@/stores/TaskManager'
+import { useStatusManager } from '@/stores/StatusManager'
 import TaskDetail from '@/TaskDetail.vue'
 import { useRoute, useRouter } from 'vue-router'
 import DeletePopUp from '@/DeletePopUp.vue'
@@ -19,7 +19,7 @@ const deClareemit = defineEmits(['editStatus'])
 const router = useRouter()
 const route = useRoute()
 const showTaskDetailModal = ref(false)
-const taskManager = useTaskManager()
+const statusManager = useStatusManager()
 const taskDetail = reactive({})
 const operation = ref('')
 const showStatusModal = ref(false)
@@ -36,7 +36,7 @@ const redPopup = reactive({
 const showDeleteStatusDetail = ref(false)
 
 onMounted(async () => {
-  taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
+  statusManager.setStatuses(await getItems(import.meta.env.VITE_BASE_URL_V2))
 })
 const showTaskDetail = async function (id, operate) {
   router.push({ name: 'TaskDetail', params: { id: id } })
@@ -234,8 +234,8 @@ const closeGreenPopup = async function (action) {
       </thead>
       <tbody>
         <tr
-          v-for="(task, index) in taskManager.getTasks()"
-          :key="task.id"
+          v-for="(statuses, index) in statusManager.getStatuses()"
+          :key="statuses.id"
           class="itbkk-item border-b cursor-pointer"
         >
           <td class="px-4 py-3">
@@ -244,16 +244,20 @@ const closeGreenPopup = async function (action) {
           <td class="itbkk-status-name px-4 py-3">
             <div
               class="hover:text-sky-500"
-              @click="showTaskDetail(task.id, 'show')"
+              @click="showTaskDetail(statuses.id, 'show')"
             >
-              {{ task.title }}
+              {{ statuses.name }}
             </div>
           </td>
           <td
             class="itbkk-status-description px-4 py-3"
-            :class="task.assignees == null ? 'italic' : ''"
+            :class="statuses.description == null ? 'italic' : ''"
           >
-            {{ task.assignees == null ? 'Unassigned' : task.assignees }}
+            {{
+              statuses.description == null
+                ? 'Undescription'
+                : statuses.description
+            }}
           </td>
           <td class="itbkk-status px-4 py-3">
             <div>
