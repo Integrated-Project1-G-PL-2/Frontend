@@ -1,6 +1,7 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { useTaskManager } from '@/stores/TaskManager'
+import { useStatusManager } from '@/stores/StatusManager'
 import {
   getItems,
   getItemById,
@@ -9,6 +10,7 @@ import {
   editItem
 } from '../utils/fetchUtils.js'
 
+const statusManager = useStatusManager
 const emits = defineEmits([
   'closeStatusPopUP',
   'openEditDetail',
@@ -24,18 +26,18 @@ const prop = defineProps({
 const title = ref(prop.operate)
 const status = reactive({ statusName: '', statusDescription: '' })
 
-const saveClick = async (newStatus) => {
-  if (newStatus.id === undefined) {
+const saveClick = async (title) => {
+  if (title.value === 'add') {
     const addedStatus = await addItem(import.meta.env.VITE_BASE_URL_V2, status)
-    useTaskManager.addStatuses(addedStatus)
+    statusManager.addStatuses(addedStatus)
   }
-  router.replace({ name: 'StatusList' })
-  emits('saveAddStatusPopUp', true)
-  emits('showGreenPopup', {
-    statusTitle: status.statusName,
-    operate: prop.operate
-  })
-  console.log(status)
+  // router.replace({ name: 'StatusList' })
+  // emits('saveAddStatusPopUp', true)
+  // emits('showGreenPopup', {
+  //   statusTitle: status.statusName,
+  //   operate: prop.operate
+  // })
+  // console.log(status)
 }
 </script>
 
@@ -88,8 +90,8 @@ const saveClick = async (newStatus) => {
           <button
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
             :class="{ disabled: !status.statusName }"
-            @click="saveClick"
-            :disabled="status.statusName == null"
+            @click="saveClick()"
+            :disabled="status.statusName == ''"
           >
             save
           </button>

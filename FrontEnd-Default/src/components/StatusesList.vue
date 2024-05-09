@@ -90,6 +90,7 @@ const closeDeleteStatusPopup = function () {
 }
 
 const closeStatusPopup = function () {
+  router.replace({ name: 'StatusList' })
   showStatusModal.value = false
 }
 
