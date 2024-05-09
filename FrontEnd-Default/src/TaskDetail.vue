@@ -1,14 +1,14 @@
 <script setup>
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
-import TaskManagement from "./utils/TaskManager";
+import { useTaskManager} from  '@/stores/TaskManager'
 import { addItem, editItem } from "./utils/fetchUtils";
 const emits = defineEmits([
   "showTaskDetailModal",
   "showRedPopup",
   "showGreenPopup",
 ]);
-
+const taskManager = useTaskManager()
 const formatStatus = function (status) {
   if (status == null) {
     return "No status";
@@ -65,7 +65,6 @@ const handleClick = async () => {
     description: task.taskDescription?.length > 0 ? task.taskDescription : null,
     status: task.taskStatus.toUpperCase().replace(/\s+/g, '_'),
   };
-  console.log(addOrUpdateTaskDetail.status);
   if (prop.operate == "add") {
     const newTask = await addItem(
       import.meta.env.VITE_BASE_URL,
@@ -73,7 +72,7 @@ const handleClick = async () => {
     );
     router.replace({ name: "Task" });
     if (newTask.status != "500") {
-      TaskManagement.addTask(newTask);
+      taskManager.addTask(newTask);
       emits("showGreenPopup", {
         taskTitle: newTask.title,
         operate: prop.operate,
@@ -88,7 +87,7 @@ const handleClick = async () => {
     );
     if (editTask.status != "500" && editTask.status != "404") {
       editTask.status = formatStatus(editTask.status)
-      TaskManagement.editTask(editTask.id, editTask);
+      taskManager.editTask(editTask.id, editTask);
       emits("showGreenPopup", {
         taskTitle: editTask.title,
         operate: prop.operate,
