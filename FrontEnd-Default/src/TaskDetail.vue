@@ -1,14 +1,14 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import TaskManagement from './utils/TaskManager'
+import { useTaskManager } from '@/stores/TaskManager'
 import { addItem, editItem } from './utils/fetchUtils'
 const emits = defineEmits([
   'showTaskDetailModal',
   'showRedPopup',
   'showGreenPopup'
 ])
-
+const taskManager = useTaskManage()
 const formatStatus = function (status) {
   if (status == null) {
     return 'No status'
@@ -68,7 +68,6 @@ const handleClick = async () => {
     description: task.taskDescription?.length > 0 ? task.taskDescription : null,
     status: task.taskStatus.toUpperCase().replace(/\s+/g, '_')
   }
-  console.log(addOrUpdateTaskDetail.status)
   if (prop.operate == 'add') {
     const newTask = await addItem(
       import.meta.env.VITE_BASE_URL,
@@ -76,7 +75,7 @@ const handleClick = async () => {
     )
     router.replace({ name: 'Task' })
     if (newTask.status != '500') {
-      TaskManagement.addTask(newTask)
+      taskManager.addTask(newTask)
       emits('showGreenPopup', {
         taskTitle: newTask.title,
         operate: prop.operate

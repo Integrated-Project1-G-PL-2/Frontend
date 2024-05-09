@@ -7,7 +7,7 @@ import {
   addItem,
   editItem
 } from '../utils/fetchUtils.js'
-import TaskManager from '../utils/TaskManager.js'
+import { useTaskManager } from '@/stores/TaskManager'
 import TaskDetail from '@/TaskDetail.vue'
 import { useRoute, useRouter } from 'vue-router'
 import DeletePopUp from '@/DeletePopUp.vue'
@@ -17,7 +17,7 @@ const showStatusDetailModal = ref(false)
 const router = useRouter()
 const route = useRoute()
 const showTaskDetailModal = ref(false)
-const taskManager = TaskManager
+const taskManager = useTaskManager()
 const taskDetail = reactive({})
 const showDeleteTaskDetail = ref(false)
 const operation = ref('')
@@ -73,13 +73,11 @@ const showDeletePopUpTaskDetail = function (obj) {
 }
 
 const openRedPopup = function (obj) {
-  console.log('close')
   redPopup[obj.operate].state = true
   redPopup[obj.operate].taskTitle = obj.taskTitle
 }
 
 const openGreenPopup = function (obj) {
-  console.log('was called')
   greenPopup[obj.operate].state = true
   greenPopup[obj.operate].taskTitle = obj.taskTitle
 }

@@ -1,12 +1,13 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import { deleteItemById } from './utils/fetchUtils'
-import taskManager from './utils/TaskManager'
+import { useTaskManager } from '@/stores/TaskManager'
 import { useRoute, useRouter } from 'vue-router'
 const deClareemit = defineEmits(['confirmDetail', 'cancelDetail', 'redAlert'])
 const props = defineProps(['taskId'])
 const router = useRouter()
 const deletedTask = reactive({})
+const taskManager = useTaskManager()
 console.log(props.taskId)
 const deleteTask = async (deleteId) => {
   deletedTask.value = await deleteItemById(
