@@ -27,7 +27,7 @@ const status = reactive({ statusName: '', statusDescription: '' })
 const saveClick = async (newStatus) => {
   if (newStatus.id === undefined) {
     const addedStatus = await addItem(import.meta.env.VITE_BASE_URL_V2, status)
-    useTaskManager.addStatus(addedStatus)
+    useTaskManager.addStatuses(addedStatus)
   }
   router.replace({ name: 'StatusList' })
   emits('saveAddStatusPopUp', true)
