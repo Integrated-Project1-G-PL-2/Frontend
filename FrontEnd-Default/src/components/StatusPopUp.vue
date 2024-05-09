@@ -10,7 +10,7 @@ import {
   editItem
 } from '../utils/fetchUtils.js'
 
-const statusManager = useStatusManager
+const statusManager = useStatusManager()
 const emits = defineEmits([
   'closeStatusPopUP',
   'openEditDetail',
@@ -24,13 +24,17 @@ const prop = defineProps({
   editStatus: Boolean
 })
 const title = ref(prop.operate)
-const status = reactive({ statusName: '', statusDescription: '' })
+const status = reactive({ name: '', description: '' })
+
+console.log(status)
 
 const saveClick = async (title) => {
-  if (title.value === 'add') {
+  console.log(status)
+  if (title === 'add') {
     const addedStatus = await addItem(import.meta.env.VITE_BASE_URL_V2, status)
     statusManager.addStatuses(addedStatus)
   }
+  console.log(prop.operate)
   // router.replace({ name: 'StatusList' })
   // emits('saveAddStatusPopUp', true)
   // emits('showGreenPopup', {
@@ -56,7 +60,7 @@ const saveClick = async (title) => {
         <div class="itbkk-modal-status w-full h-[10%] mt-2">
           <div class="pl-4 mt-4">Name</div>
           <textarea
-            v-model="status.statusName"
+            v-model="status.name"
             class="itbkk-status-name w-[90%] h-[40%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
           >
           </textarea>
@@ -66,7 +70,7 @@ const saveClick = async (title) => {
           <div class="pl-4 mt-4">Description</div>
           <div class="w-full h-[320px]">
             <textarea
-              v-model="status.statusDescription"
+              v-model="status.description"
               class="itbkk-status-description w-[90%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
               placeholder="No Description Provided"
             ></textarea>
@@ -90,7 +94,7 @@ const saveClick = async (title) => {
           <button
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
             :class="{ disabled: !status.statusName }"
-            @click="saveClick()"
+            @click="saveClick(title)"
             :disabled="status.statusName == ''"
           >
             save
