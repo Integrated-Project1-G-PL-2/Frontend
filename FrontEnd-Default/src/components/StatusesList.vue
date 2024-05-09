@@ -177,7 +177,7 @@ const closeGreenPopup = async function (action) {
       styleType="red"
       :action="'edit'"
     />
-    <AlertPopUp
+    <!-- <AlertPopUp
       v-if="redPopup.transfer.state"
       :status="
         'An error has occurred, the status ' +
@@ -202,7 +202,7 @@ const closeGreenPopup = async function (action) {
       message="Success!!"
       styleType="green"
       :action="'delete'"
-    />
+    /> -->
     <div class="flex justify-end">
       <button
         @click="showAddStatusesModal"
