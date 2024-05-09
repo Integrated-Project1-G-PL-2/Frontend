@@ -17,44 +17,24 @@ const emits = defineEmits([
   'showStatusGreenPopup'
 ])
 const prop = defineProps({
-  statusDetail: Object,
+  statusTitle: Object,
   operate: String,
   editStatus: Boolean
 })
 const title = ref(prop.operate)
 const status = reactive({ statusName: '', statusDescription: '' })
-let task
-if (prop.statusDetail?.value) {
-  task = reactive({
-    createdOn: new Date(prop.statusDetail.value.createdOn)
-      .toLocaleString('en-GB')
-      .replace(',', ''),
-    id: prop.statusDetail.value.id,
-    taskDescription:
-      prop.statusDetail.value.statusDescription != null
-        ? prop.statusDetail.value.statusDescription
-        : 'No Description Provided',
-    taskStatus: prop.statusDetail.value.statusName,
-    updatedOn: new Date(prop.statusDetail.value.updatedOn)
-      .toLocaleString('en-GB')
-      .replace(',', '')
-  })
-} else {
-  task = reactive({
-    createdOn: null,
-    id: null,
-    taskDescription: null,
-    taskStatus: null,
-    updatedOn: null
-  })
-}
 
 const saveClick = async (newStatus) => {
   if (newStatus.id === undefined) {
     const addedStatus = await addItem(import.meta.env.VITE_BASE_URL_V2, status)
     useTaskManager.addStatus(addedStatus)
   }
+  router.replace({ name: 'StatusList' })
   emits('saveAddStatusPopUp', true)
+  emits('showGreenPopup', {
+    statusTitle: status.statusName,
+    operate: prop.operate
+  })
   console.log(status)
 }
 </script>
