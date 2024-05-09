@@ -13,16 +13,14 @@ import { useRoute, useRouter } from 'vue-router'
 import DeletePopUp from '@/DeletePopUp.vue'
 import AlertPopUp from './../components/AlertPopUp.vue'
 import StatusesList from './StatusesList.vue'
-
+const showStatusDetailModal = ref(false)
 const router = useRouter()
 const route = useRoute()
 const showTaskDetailModal = ref(false)
 const taskManager = TaskManager
 const taskDetail = reactive({})
 const showDeleteTaskDetail = ref(false)
-const showStatusDetailModal = ref(false)
 const operation = ref('')
-const showTitle = ref('')
 const greenPopup = reactive({
   add: { state: false, taskTitle: '' },
   edit: { state: false, taskTitle: '' },
@@ -63,36 +61,25 @@ if (route.params.id) {
   showTaskDetail(route.params.id, 'show')
 }
 const showAddPopUpTaskDetail = function (operate) {
-  router.replace({ name: 'AddTaskDetail' })
+  router.push({ name: 'AddTaskDetail' })
+  taskDetail.value = null
   operation.value = operate
   showTaskDetailModal.value = true
 }
 const showDeletePopUpTaskDetail = function (obj) {
   router.push({ name: 'DeleteTaskDetail', params: { id: obj.id } })
-  taskDetail.value = { id: obj.id, taskTitle: obj.taskTitle }
+  taskDetail.value = { id: obj.id, taskTitle: obj.taskTitle, index: obj.index }
   showDeleteTaskDetail.value = true
 }
-const showStatusesList = function () {
-  router.replace({ name: 'StatusList' })
-  showStatusDetailModal.value = true
-}
-const clearDeletePopUp = async function () {
-  router.push({ name: 'Task' })
-  showDeleteTaskDetail.value = false
-}
 
-const showDelComplete = async function () {
-  router.push({ name: 'Task' })
-  showDeleteTaskDetail.value = false
-  greenPopup.delete.state = true
-}
-
-const openRedPopup = async function (obj) {
+const openRedPopup = function (obj) {
+  console.log('close')
   redPopup[obj.operate].state = true
   redPopup[obj.operate].taskTitle = obj.taskTitle
 }
 
-const openGreenPopup = async function (obj) {
+const openGreenPopup = function (obj) {
+  console.log('was called')
   greenPopup[obj.operate].state = true
   greenPopup[obj.operate].taskTitle = obj.taskTitle
 }
@@ -105,6 +92,21 @@ const closeRedPopup = async function (operate) {
 const closeGreenPopup = async function (operate) {
   router.push({ name: 'Task' })
   greenPopup[operate].state = false
+}
+const clearDeletePopUp = async function () {
+  router.push({ name: 'Task' })
+  showDeleteTaskDetail.value = false
+}
+
+const showDelComplete = async function () {
+  router.push({ name: 'Task' })
+  showDeleteTaskDetail.value = false
+  greenPopup.delete.state = true
+}
+
+const showStatusesList = function () {
+  router.replace({ name: 'StatusList' })
+  showStatusDetailModal.value = true
 }
 </script>
 
@@ -198,8 +200,9 @@ const closeGreenPopup = async function (operate) {
               class="inline-flex"
               @click="
                 showDeletePopUpTaskDetail({
-                  id: index + 1,
-                  taskTitle: task.title
+                  id: task.id,
+                  taskTitle: task.title,
+                  index: index + 1
                 })
               "
             >
@@ -229,7 +232,7 @@ const closeGreenPopup = async function (operate) {
                     ? '#FFC0CB'
                     : task.status === 'Doing'
                     ? '#ffff99'
-                    : task.status === 'No Status' || 'NO_STATUS'
+                    : task.status === 'No Status'
                     ? 'lightgray'
                     : '#90EE90'
               }"

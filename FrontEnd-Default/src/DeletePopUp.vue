@@ -7,7 +7,7 @@ const deClareemit = defineEmits(['confirmDetail', 'cancelDetail', 'redAlert'])
 const props = defineProps(['taskId'])
 const router = useRouter()
 const deletedTask = reactive({})
-console.log(props.taskId);
+console.log(props.taskId)
 const deleteTask = async (deleteId) => {
   deletedTask.value = await deleteItemById(
     import.meta.env.VITE_BASE_URL,
@@ -35,13 +35,16 @@ const deleteTask = async (deleteId) => {
         </div>
 
         <div class="w-[70%] h-[100%]">
-          <div class="pl-4 mt-4">Do you want to delete the task "{{ props.taskId.value.id  }}. {{ props.taskId.value.taskTitle }}" ?</div>
+          <div class="pl-4 mt-4">
+            Do you want to delete the task "{{ props.taskId.value.index }}.
+            {{ props.taskId.value.taskTitle }}" ?
+          </div>
         </div>
       </div>
       <div class="flex flex-row w-full justify-end border-t h-[60%]">
         <button
           class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-2"
-          @click="deleteTask(props.taskId)"
+          @click="deleteTask(props.taskId.value.id)"
         >
           <div class="btn text-center">Confirm</div>
         </button>
