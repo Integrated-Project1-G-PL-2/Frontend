@@ -33,7 +33,7 @@ const saveClick = async () => {
   //add status
   if (prop.operate === 'add') {
     if (isDuplicateName) {
-      emits('showStatusRedPopup', {
+      emits('RedPopup', {
         taskStatus: status.name,
         operate: prop.operate
       })

@@ -67,7 +67,6 @@ if (route.params.id) {
 }
 const goBackToHomePage = function () {
   router.replace({ name: 'Task' })
-  showTaskDetailModal.value = true
 }
 const showDeletePopUpTaskDetail = function () {
   router.push({ name: 'DeleteStatus' })
@@ -214,7 +213,7 @@ const closeGreenPopup = async function (operate) {
     </table>
   </div>
   <teleport to="body" v-if="showTaskDetailModal">
-    <TaskDetail :taskDetail="taskDetail"></TaskDetail>
+    <TaskDetail></TaskDetail>
   </teleport>
 
   <teleport to="body" v-if="showStatusModal">
