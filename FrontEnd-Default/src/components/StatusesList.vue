@@ -23,7 +23,7 @@ const statusManager = useStatusManager()
 const statusDetail = reactive({})
 const operation = ref('')
 const showStatusModal = ref(false)
-const isDelete = ref(true)
+const isDelete = ref()
 const greenPopup = reactive({
   add: { state: false, taskStatus: '' },
   edit: { state: false, taskStatus: '' },
@@ -35,6 +35,7 @@ const redPopup = reactive({
   delete: { state: false, taskStatus: '' }
 })
 const showDeleteStatusDetail = ref(false)
+const transferDelList = ref({})
 
 onMounted(async () => {
   statusManager.setStatuses(await getItems(import.meta.env.VITE_BASE_URL_V2))
@@ -55,11 +56,14 @@ const goBackToHomePage = function () {
   router.replace({ name: 'Task' })
   
 }
-const showDeletePopUpTaskDetail = function (obj) {
+const showDeletePopUpTaskDetail = async function (obj) {
+  transferDelList.value = await  getItems(import.meta.env.VITE_BASE_URL_V2)
+  isDelete.value = !(transferDelList.value.length > 1)  
   router.push({ name: 'DeleteStatus', params: { id: obj.id } })
   statusDetail.value = { id: obj.id, statusName: obj.statusName, index: obj.index }
   showDeleteStatusDetail.value = true
 }
+
 
 const setDeleteOperate = function(operate){
   operation.value = operate
@@ -253,6 +257,7 @@ const closeGreenPopup = async function (operate) {
       :isTransfer="!isDelete"
       :statusId="statusDetail"
       :operate="operation"
+      :transferList ="transferDelList"
       @redAlert="openRedPopup"
       @greenAlert="openGreenPopup"
       @confirmStatusDetail="closeDeleteStatusPopup"

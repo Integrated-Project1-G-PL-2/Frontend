@@ -4,18 +4,19 @@ import { deleteItemById } from '@/utils/fetchUtils'
 import { useStatusManager } from '@/stores/StatusManager'
 import { useRoute, useRouter } from 'vue-router'
 const deClareemit = defineEmits(['cancelStatusDetail','confirmStatusDetail','redAlert','greenAlert'])
-const props = defineProps(['statusId', 'isDelete', 'isTransfer','operate'])
+const props = defineProps(['statusId', 'isDelete', 'isTransfer','operate','transferList'])
 const router = useRouter()
 const deletedStatuses = reactive({})
 const statusSelect = ref() //ชั่วคราว
 const statusManager = useStatusManager()
 
 const deleteStatus = async (deleteId) => {
+  console.log(deleteId)
   deletedStatuses.value = await deleteItemById(
     import.meta.env.VITE_BASE_URL_V2,
     deleteId
   )
-  if (deletedStatuses.value == '404') {
+  if (deletedStatuses.value == '404' || '500') {
     deClareemit('redAlert', {
       taskStatus: props.statusId.value.statusName,
       operate: props.operate
@@ -92,19 +93,19 @@ const deleteStatus = async (deleteId) => {
             There is some task associated with the "{{ props.statusId.value.statusName }}" status. Transfer to
             <select
               v-model="statusSelect"
+              
               class="itbkk-status mt-1 ml-4 select select-bordered w-[150px] h-[30px] px-2 py-1 bg-inherit border-2 border-gray-200 text-gray-400 rounded-md text-sm text-justify"
             >
-              <option value="NO_STATUS">No Status</option>
-              <option value="TO_DO">To Do</option>
-              <option value="DOING">Doing</option>
-              <option value="DONE">Done</option>
+              <option v-for="del in props.transferList" >{{ del.statusName }}</option>
+              
             </select>
           </div>
         </div>
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
           <button
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
-            @click="deleteStatus( props.statusId.value.id)"
+            @click="deleteStatus( props.statusId.value.id) ,console.log(props.statusId.value.id)"
+
           >
             <div class="btn text-center">Confirm</div>
           </button>
