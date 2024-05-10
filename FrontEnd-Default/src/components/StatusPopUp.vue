@@ -26,11 +26,11 @@ const prop = defineProps({
 })
 const title = ref(prop.operate)
 const status = reactive({ name: '', description: null })
-const isDuplicateName = statusManager
-  .getStatuses()
-  .some((s) => s.name === status.name)
 const saveClick = async () => {
   //add status
+  const isDuplicateName = statusManager
+    .getStatuses()
+    .some((s) => s.name === status.name)
   if (prop.operate === 'add') {
     if (isDuplicateName) {
       emits('RedPopup', {
