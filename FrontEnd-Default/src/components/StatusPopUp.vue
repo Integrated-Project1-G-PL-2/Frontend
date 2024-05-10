@@ -25,28 +25,38 @@ const prop = defineProps({
   editStatus: Boolean
 })
 const title = ref(prop.operate)
-const status = reactive({ name: '', description: '' })
-
-console.log(status)
-
+const status = reactive({ name: '', description: null })
 const saveClick = async () => {
   //add status
   if (prop.operate === 'add') {
     const addedStatus = await addItem(import.meta.env.VITE_BASE_URL_V2, status)
-    statusManager.addStatuses(addedStatus)
-    emits('showStatusGreenPopup', {
-      taskStatus: addedStatus.name,
-      operate: prop.operate
-    })
-  } else {
-    emits('showStatusRedPopup', {
-      taskStatus: addedStatus.name,
-      operate: prop.operate
-    })
+    console.log(addedStatus)
+    if (addedStatus.status != '400' && addedStatus.status != '500') {
+      statusManager.addStatuses(addedStatus)
+      emits('showStatusGreenPopup', {
+        taskStatus: addedStatus.name,
+        operate: prop.operate
+      })
+    } else {
+      emits('showStatusRedPopup', {
+        taskStatus: status.name,
+        operate: prop.operate
+      })
+    }
+    router.replace({ name: 'StatusList' })
+    emits('showStatusDetailModal', false)
   }
-  router.replace({ name: 'StatusList' })
-  emits('showStatusDetailModal', false)
 }
+
+// if (existingStatusNames.includes(status.name)) {
+//       emits('RedPopup', {
+//         taskStatus: status.name,
+//         operate: prop.operate
+//       })
+//       router.replace({ name: 'StatusList' })
+//       emits('showStatusDetailModal', false)
+//       return
+//     } else {
 </script>
 
 <template>
