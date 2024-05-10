@@ -173,7 +173,7 @@ const closeGreenPopup = async function (operate) {
         <tr
           v-for="(statuses, index) in statusManager.getStatuses()"
           :key="statuses.id"
-          class="itbkk-item border-b cursor-pointer"
+          class="itbkk-item border-b cursor-default"
         >
           <td class="px-4 py-3">
             {{ index + 1 }}
