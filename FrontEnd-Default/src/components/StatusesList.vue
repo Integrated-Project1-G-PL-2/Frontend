@@ -158,14 +158,6 @@ const closeGreenPopup = async function (operate) {
       styleType="green"
       :operate="'delete'"
     />
-    <div class="flex justify-end">
-      <button
-        @click="showAddStatusesModal('add')"
-        class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2"
-      >
-        ✚ Add Status
-      </button>
-    </div>
     <div class="flex justify-start">
       <button
         @click="goBackToHomePage"
@@ -178,6 +170,14 @@ const closeGreenPopup = async function (operate) {
       >
         > Task Status
       </div>
+      <div class="flex ml-auto">
+        <button
+          @click="showAddStatusesModal('add')"
+          class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2"
+        >
+          ✚ Add Status
+        </button>
+      </div>
     </div>
     <table class="w-full text-sm text-left text-gray-500">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50 cursor-default">
@@ -185,7 +185,7 @@ const closeGreenPopup = async function (operate) {
           <th class="text-md px-3 py-3"></th>
           <th class="text-md px-8 py-3">Name</th>
           <th class="text-md px-8 py-3">Description</th>
-          <th class="text-md px-8 py-3 text-center">Action</th>
+          <th class="text-md px-8 py-3 text-end">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -212,7 +212,7 @@ const closeGreenPopup = async function (operate) {
                 : statuses.description
             }}
           </td>
-          <td class="itbkk-status px-8 py-3 text-center">
+          <td class="itbkk-status px-8 py-3 text-end">
             <div>
               <button
                 class="itbkk-button-edit bg-green-400 font-sans text-center gap-5 text-gray-100 hover:text-gray-200 mr-5 w-14 rounded-[8px]"
