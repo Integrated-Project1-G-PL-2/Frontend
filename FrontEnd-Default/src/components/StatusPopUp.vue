@@ -26,7 +26,7 @@ const prop = defineProps({
 })
 const title = ref(prop.operate)
 const status = reactive({ name: '', description: null })
-const existingStatus = statusManager.getStatuses(status.name)
+const existingStatus = statusManager.getStatuses(status)
 
 const saveClick = async () => {
   //add status
