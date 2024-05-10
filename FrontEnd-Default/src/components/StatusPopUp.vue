@@ -31,15 +31,15 @@ const existingStatus = statusManager.getStatuses(status.name)
 const saveClick = async () => {
   //add status
   if (prop.operate === 'add') {
-    if (existingStatus.id === status.id) {
-      emits('showStatusRedPopup', {
-        taskStatus: status.name,
-        operate: prop.operate
-      })
-      router.replace({ name: 'StatusList' })
-      emits('showStatusDetailModal', false)
-      return
-    }
+    // if (existingStatus.id === status.id) {
+    //   emits('showStatusRedPopup', {
+    //     taskStatus: status.name,
+    //     operate: prop.operate
+    //   })
+    //   router.replace({ name: 'StatusList' })
+    //   emits('showStatusDetailModal', false)
+    //   return
+    // }
     const addedStatus = await addItem(import.meta.env.VITE_BASE_URL_V2, status)
     statusManager.addStatuses(addedStatus)
     emits('showStatusGreenPopup', {
