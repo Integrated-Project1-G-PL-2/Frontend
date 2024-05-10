@@ -29,23 +29,17 @@ const status = reactive({ name: '', description: null })
 const saveClick = async () => {
   //add status
   if (prop.operate === 'add') {
-    const existingStatusNames = statusManager.getStatuses().map((s) => s.name)
-    if (existingStatusNames.includes(status.name)) {
-      emits('RedPopup', {
-        taskStatus: status.name,
-        operate: prop.operate
-      })
-      router.replace({ name: 'StatusList' })
-      emits('showStatusDetailModal', false)
-      return
-    } else {
-      const addedStatus = await addItem(
-        import.meta.env.VITE_BASE_URL_V2,
-        status
-      )
+    const addedStatus = await addItem(import.meta.env.VITE_BASE_URL_V2, status)
+    console.log(addedStatus)
+    if (addedStatus.status != '400' && addedStatus.status != '500') {
       statusManager.addStatuses(addedStatus)
       emits('showStatusGreenPopup', {
         taskStatus: addedStatus.name,
+        operate: prop.operate
+      })
+    } else {
+      emits('showStatusRedPopup', {
+        taskStatus: status.name,
         operate: prop.operate
       })
     }
@@ -53,6 +47,16 @@ const saveClick = async () => {
     emits('showStatusDetailModal', false)
   }
 }
+
+// if (existingStatusNames.includes(status.name)) {
+//       emits('RedPopup', {
+//         taskStatus: status.name,
+//         operate: prop.operate
+//       })
+//       router.replace({ name: 'StatusList' })
+//       emits('showStatusDetailModal', false)
+//       return
+//     } else {
 </script>
 
 <template>
