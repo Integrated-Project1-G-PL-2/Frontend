@@ -20,10 +20,10 @@ const router = useRouter()
 const route = useRoute()
 const showTaskDetailModal = ref(false)
 const statusManager = useStatusManager()
-const taskDetail = reactive({})
+const statusDetail = reactive({})
 const operation = ref('')
 const showStatusModal = ref(false)
-const isDelete = ref(false)
+const isDelete = ref(true)
 const greenPopup = reactive({
   add: { state: false, taskStatus: '' },
   edit: { state: false, taskStatus: '' },
@@ -51,29 +51,21 @@ const showTaskDetail = async function (id, operate) {
   showTaskDetailModal.value = true
 }
 
-const showEditTaskDetail = async function (id, operate) {
-  router.push({ name: 'EditTaskDetail', params: { id: id } })
-  operation.value = operate
-  taskDetail.value = await getItemById(import.meta.env.VITE_BASE_URL, id)
-  if (taskDetail.value.status == '404') {
-    alert('The requested task does not exist')
-    router.replace({ name: 'Task' })
-    return
-  }
-  showTaskDetailModal.value = true
-}
-if (route.params.id) {
-  showTaskDetail(route.params.id, 'show')
-}
 const goBackToHomePage = function () {
   router.replace({ name: 'Task' })
-  showTaskDetailModal.value = true
+  
 }
-const showDeletePopUpTaskDetail = function () {
-  router.push({ name: 'DeleteStatus' })
-  // taskDetail.value = { id: obj.id, taskTitle: obj.taskTitle }
+const showDeletePopUpTaskDetail = function (obj) {
+  router.push({ name: 'DeleteStatus', params: { id: obj.id } })
+  statusDetail.value = { id: obj.id, statusName: obj.statusName, index: obj.index }
   showDeleteStatusDetail.value = true
 }
+
+const setDeleteOperate = function(operate){
+  operation.value = operate
+
+}
+
 const showAddStatusesModal = function (operate) {
   router.replace({ name: 'StatusAdd' })
   operation.value = operate
@@ -114,6 +106,7 @@ const closeGreenPopup = async function (operate) {
   router.push({ name: 'StatusList' })
   greenPopup[operate].state = false
 }
+
 </script>
 
 <template>
@@ -138,6 +131,28 @@ const closeGreenPopup = async function (operate) {
       message="Error!!"
       styleType="red"
       :operate="'add'"
+    />
+    <AlertPopUp
+      v-if="redPopup.delete.state"
+      :titles="
+        'An error has occurred, the status ' +
+        redPopup.delete.taskStatus +
+        ' does not exist.'
+      "
+      @closePopUp="closeRedPopup"
+      message="Error!!"
+      styleType="red"
+      :operate="'delete'"
+    />
+    <AlertPopUp
+      v-if="greenPopup.delete.state"
+      :titles="
+        'The task ' + greenPopup.delete.taskStatus + ' has been deleted.'
+      "
+      @closePopUp="closeGreenPopup"
+      message="Success!!"
+      styleType="green"
+      :operate="'delete'"
     />
     <div class="flex justify-end">
       <button
@@ -203,7 +218,11 @@ const closeGreenPopup = async function (operate) {
               </button>
               <button
                 class="itbkk-button-delete bg-red-400 rounded-[8px] font-sans text-center gap-5 text-gray-100 hover:text-gray-200 w-14"
-                @click="showDeletePopUpTaskDetail"
+                @click="showDeletePopUpTaskDetail({
+                  id: statuses.id,
+                  statusName: statuses.name,
+                  index: index + 1
+                }),setDeleteOperate('delete')"
               >
                 Delete
               </button>
@@ -213,9 +232,9 @@ const closeGreenPopup = async function (operate) {
       </tbody>
     </table>
   </div>
-  <teleport to="body" v-if="showTaskDetailModal">
-    <TaskDetail :taskDetail="taskDetail"></TaskDetail>
-  </teleport>
+  <!-- <teleport to="body" v-if="showTaskDetailModal">
+    <TaskDetail></TaskDetail>
+  </teleport> ใช้ไหม-->
 
   <teleport to="body" v-if="showStatusModal">
     <StatusPopUp
@@ -232,6 +251,11 @@ const closeGreenPopup = async function (operate) {
     <DeleteStatus
       :isDelete="isDelete"
       :isTransfer="!isDelete"
+      :statusId="statusDetail"
+      :operate="operation"
+      @redAlert="openRedPopup"
+      @greenAlert="openGreenPopup"
+      @confirmStatusDetail="closeDeleteStatusPopup"
       @cancelStatusDetail="closeDeleteStatusPopup"
     ></DeleteStatus>
   </teleport>
