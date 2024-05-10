@@ -185,7 +185,7 @@ const closeGreenPopup = async function (operate) {
           <th class="text-md px-3 py-3"></th>
           <th class="text-md px-8 py-3">Name</th>
           <th class="text-md px-8 py-3">Description</th>
-          <th class="text-md px-8 py-3 text-end">Action</th>
+          <th class="text-md px-8 py-3 text-right">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -212,7 +212,7 @@ const closeGreenPopup = async function (operate) {
                 : statuses.description
             }}
           </td>
-          <td class="itbkk-status px-8 py-3 text-end">
+          <td class="itbkk-status px-8 py-3 text-right">
             <div>
               <button
                 class="itbkk-button-edit bg-green-400 font-sans text-center gap-5 text-gray-100 hover:text-gray-200 mr-5 w-14 rounded-[8px]"
