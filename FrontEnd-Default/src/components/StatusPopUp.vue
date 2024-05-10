@@ -38,7 +38,10 @@ const saveClick = async () => {
       taskStatus: addedStatus.name,
       operate: prop.operate
     })
-  } else {
+    router.replace({ name: 'StatusList' })
+    emits('showStatusDetailModal', false)
+  }
+  if (status.name === addedStatus.name) {
     emits('showStatusRedPopup', {
       taskStatus: addedStatus.name,
       operate: prop.operate
