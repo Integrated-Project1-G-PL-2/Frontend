@@ -54,20 +54,21 @@ const showTaskDetail = async function (id, operate) {
 
 const goBackToHomePage = function () {
   router.replace({ name: 'Task' })
-  
 }
 const showDeletePopUpTaskDetail = async function (obj) {
-  transferDelList.value = await  getItems(import.meta.env.VITE_BASE_URL_V2)
-  isDelete.value = !(transferDelList.value.length > 1)  
+  transferDelList.value = await getItems(import.meta.env.VITE_BASE_URL_V2)
+  isDelete.value = !(transferDelList.value.length > 1)
   router.push({ name: 'DeleteStatus', params: { id: obj.id } })
-  statusDetail.value = { id: obj.id, statusName: obj.statusName, index: obj.index }
+  statusDetail.value = {
+    id: obj.id,
+    statusName: obj.statusName,
+    index: obj.index
+  }
   showDeleteStatusDetail.value = true
 }
 
-
-const setDeleteOperate = function(operate){
+const setDeleteOperate = function (operate) {
   operation.value = operate
-
 }
 
 const showAddStatusesModal = function (operate) {
@@ -110,7 +111,6 @@ const closeGreenPopup = async function (operate) {
   router.push({ name: 'StatusList' })
   greenPopup[operate].state = false
 }
-
 </script>
 
 <template>
@@ -174,36 +174,36 @@ const closeGreenPopup = async function (operate) {
         🏠 Home
       </button>
       <div
-        class="scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 mr-3 mt-2 font-bold"
+        class="scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 mr-3 mt-2 font-bold cursor-default"
       >
         > Task Status
       </div>
     </div>
     <table class="w-full text-sm text-left text-gray-500">
-      <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50 cursor-default">
         <tr>
-          <th class="px-4 py-3"></th>
-          <th class="px-4 py-3">Name</th>
-          <th class="px-4 py-3">Description</th>
-          <th class="px-4 py-3">Action</th>
+          <th class="text-md px-4 py-3"></th>
+          <th class="text-md px-17 py-3">Name</th>
+          <th class="text-md px-80 py-3">Description</th>
+          <th class="text-md px-90 py-3 text-center">Action</th>
         </tr>
       </thead>
       <tbody>
         <tr
           v-for="(statuses, index) in statusManager.getStatuses()"
           :key="statuses.id"
-          class="itbkk-item border-b cursor-pointer"
+          class="itbkk-item border-b px-5 py-3"
         >
-          <td class="px-4 py-3">
+          <td class="px-4 py-3 text-center">
             {{ index + 1 }}
           </td>
-          <td class="itbkk-status-name px-4 py-3">
-            <div class="hover:text-sky-500">
+          <td class="itbkk-status-name px-17 py-3">
+            <div class="cursor-default">
               {{ statuses.name }}
             </div>
           </td>
           <td
-            class="itbkk-status-description px-4 py-3"
+            class="itbkk-status-description px-80 py-3"
             :class="statuses.description == null ? 'italic' : ''"
           >
             {{
@@ -212,7 +212,7 @@ const closeGreenPopup = async function (operate) {
                 : statuses.description
             }}
           </td>
-          <td class="itbkk-status px-4 py-3">
+          <td class="itbkk-status px-90 py-3 text-center">
             <div>
               <button
                 class="itbkk-button-edit bg-green-400 font-sans text-center gap-5 text-gray-100 hover:text-gray-200 mr-5 w-14 rounded-[8px]"
@@ -222,11 +222,14 @@ const closeGreenPopup = async function (operate) {
               </button>
               <button
                 class="itbkk-button-delete bg-red-400 rounded-[8px] font-sans text-center gap-5 text-gray-100 hover:text-gray-200 w-14"
-                @click="showDeletePopUpTaskDetail({
-                  id: statuses.id,
-                  statusName: statuses.name,
-                  index: index + 1
-                }),setDeleteOperate('delete')"
+                @click="
+                  showDeletePopUpTaskDetail({
+                    id: statuses.id,
+                    statusName: statuses.name,
+                    index: index + 1
+                  }),
+                    setDeleteOperate('delete')
+                "
               >
                 Delete
               </button>
@@ -257,7 +260,7 @@ const closeGreenPopup = async function (operate) {
       :isTransfer="!isDelete"
       :statusId="statusDetail"
       :operate="operation"
-      :transferList ="transferDelList"
+      :transferList="transferDelList"
       @redAlert="openRedPopup"
       @greenAlert="openGreenPopup"
       @confirmStatusDetail="closeDeleteStatusPopup"
