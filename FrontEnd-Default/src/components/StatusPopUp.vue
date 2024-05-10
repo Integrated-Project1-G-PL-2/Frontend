@@ -26,12 +26,20 @@ const prop = defineProps({
 })
 const title = ref(prop.operate)
 const status = reactive({ name: '', description: null })
-
-console.log(status)
+const existingStatus = statusManager.getStatuses(status.name)
 
 const saveClick = async () => {
   //add status
   if (prop.operate === 'add') {
+    if (existingStatus.id === status.id) {
+      emits('showStatusRedPopup', {
+        taskStatus: status.name,
+        operate: prop.operate
+      })
+      router.replace({ name: 'StatusList' })
+      emits('showStatusDetailModal', false)
+      return
+    }
     const addedStatus = await addItem(import.meta.env.VITE_BASE_URL_V2, status)
     statusManager.addStatuses(addedStatus)
     emits('showStatusGreenPopup', {
@@ -41,12 +49,12 @@ const saveClick = async () => {
     router.replace({ name: 'StatusList' })
     emits('showStatusDetailModal', false)
   }
-  if (status.name === addedStatus.name) {
-    emits('showStatusRedPopup', {
-      taskStatus: addedStatus.name,
-      operate: prop.operate
-    })
-  }
+  // if (status.name === addedStatus.name) {
+  //   emits('showStatusRedPopup', {
+  //     taskStatus: addedStatus.name,
+  //     operate: prop.operate
+  //   })
+  // }
   router.replace({ name: 'StatusList' })
   emits('showStatusDetailModal', false)
 }
