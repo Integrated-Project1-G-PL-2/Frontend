@@ -182,10 +182,10 @@ const closeGreenPopup = async function (operate) {
     <table class="w-full text-sm text-left text-gray-500">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50 cursor-default">
         <tr>
-          <th class="text-md px-4 py-3"></th>
-          <th class="text-md px-17 py-3">Name</th>
-          <th class="text-md px-80 py-3">Description</th>
-          <th class="text-md px-90 py-3 text-center">Action</th>
+          <th class="text-md px-3 py-3"></th>
+          <th class="text-md px-8 py-3">Name</th>
+          <th class="text-md px-8 py-3">Description</th>
+          <th class="text-md px-8 py-3 text-center">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -194,16 +194,16 @@ const closeGreenPopup = async function (operate) {
           :key="statuses.id"
           class="itbkk-item border-b px-5 py-3"
         >
-          <td class="px-4 py-3 text-center">
+          <td class="px-3 py-3 text-center">
             {{ index + 1 }}
           </td>
-          <td class="itbkk-status-name px-17 py-3">
+          <td class="itbkk-status-name px-8 py-3">
             <div class="cursor-default">
               {{ statuses.name }}
             </div>
           </td>
           <td
-            class="itbkk-status-description px-80 py-3"
+            class="itbkk-status-description px-8 py-3"
             :class="statuses.description == null ? 'italic' : ''"
           >
             {{
@@ -212,7 +212,7 @@ const closeGreenPopup = async function (operate) {
                 : statuses.description
             }}
           </td>
-          <td class="itbkk-status px-90 py-3 text-center">
+          <td class="itbkk-status px-8 py-3 text-center">
             <div>
               <button
                 class="itbkk-button-edit bg-green-400 font-sans text-center gap-5 text-gray-100 hover:text-gray-200 mr-5 w-14 rounded-[8px]"
