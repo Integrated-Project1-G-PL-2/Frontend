@@ -28,8 +28,8 @@ const title = ref(prop.operate)
 const status = reactive({ name: '', description: null })
 const saveClick = async () => {
   //add status
-  const existingStatusNames = statusManager.getStatuses().map((s) => s.name)
   if (prop.operate === 'add') {
+    const existingStatusNames = statusManager.getStatuses().map((s) => s.name)
     if (existingStatusNames.includes(status.name)) {
       emits('RedPopup', {
         taskStatus: status.name,
