@@ -31,7 +31,7 @@ const deleteTask = async (deleteId) => {
   >
     <div class="w-[59%] m-[auto] border border-green-700 mt-[20%]">
       <div class="flex flex-col justify-between bg-white p-4 h-[10%]">
-        <div class="itbkk-title w-full h-[70px] mt-1 border-b-2">
+        <div class="itbkk-title w-full border-b h-[40px] mt-1">
           <h1 class="text-xl font-bold text-justify">Delete a Task</h1>
         </div>
 
