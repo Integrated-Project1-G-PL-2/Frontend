@@ -155,7 +155,7 @@ const closeGreenPopup = async function (operate) {
         🏠 Home
       </button>
       <div
-        class="scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 mr-3 mt-2 font-bold"
+        class="scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 mr-3 mt-2 font-bold cursor-default"
       >
         > Task Status
       </div>
