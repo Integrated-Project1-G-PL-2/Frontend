@@ -25,7 +25,7 @@ const prop = defineProps({
   editStatus: Boolean
 })
 const title = ref(prop.operate)
-const status = reactive({ name: '', description: '' })
+const status = reactive({ name: '', description: null })
 
 console.log(status)
 
