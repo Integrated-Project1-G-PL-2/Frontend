@@ -161,7 +161,7 @@ const closeGreenPopup = async function (operate) {
       </div>
     </div>
     <table class="w-full text-sm text-left text-gray-500">
-      <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50 cursor-default">
         <tr>
           <th class="px-4 py-3"></th>
           <th class="px-4 py-3">Name</th>
@@ -179,7 +179,7 @@ const closeGreenPopup = async function (operate) {
             {{ index + 1 }}
           </td>
           <td class="itbkk-status-name px-4 py-3">
-            <div class="hover:text-sky-500">
+            <div>
               {{ statuses.name }}
             </div>
           </td>
