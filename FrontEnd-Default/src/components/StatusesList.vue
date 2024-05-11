@@ -167,10 +167,8 @@ const closeGreenPopup = async function (operate) {
     <AlertPopUp
       v-if="greenPopup.transfer.state"
       :titles="
-        'The task' +
+        'The task have been transferred and the status ' +
         greenPopup.transfer.taskStatus +
-        'have been transferred and the status ' +
-        greenPopup.delete.taskStatus +
         ' has been deleted'
       "
       @closePopUp="closeGreenPopup"
