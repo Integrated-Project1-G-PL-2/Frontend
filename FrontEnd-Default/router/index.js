@@ -49,11 +49,10 @@ const routes = [
         name: 'StatusAdd'
       },
       {
-        path: '/status/delete',
+        path: '/status/:id/delete',
         component: DeleteStatus,
         name: 'DeleteStatus'
-      }
-      ,
+      },
       {
         path: '/status/edit',
         component: StatusPopUp,
