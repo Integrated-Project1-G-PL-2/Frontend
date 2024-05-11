@@ -24,6 +24,7 @@ const statusDetail = reactive({})
 const operation = ref('')
 const showStatusModal = ref(false)
 const isDelete = ref(true)
+const statusTitle = reactive({})
 const greenPopup = reactive({
   add: { state: false, taskStatus: '' },
   edit: { state: false, taskStatus: '' },
@@ -238,7 +239,7 @@ const closeGreenPopup = async function (operate) {
             <div>
               <button
                 class="itbkk-button-edit bg-green-400 font-sans text-center gap-5 text-gray-100 hover:text-gray-200 mr-5 w-14 rounded-[8px]"
-                @click="showEditStatusesModal('edit')"
+                @click="showEditStatusesModal(statuses.id, 'edit')"
               >
                 Edit
               </button>
@@ -267,6 +268,7 @@ const closeGreenPopup = async function (operate) {
 
   <teleport to="body" v-if="showStatusModal">
     <StatusPopUp
+      :statusTitle="statusTitle"
       :operate="operation"
       @closeStatusPopUP="closeStatusPopup"
       @showStatusRedPopup="openRedPopup"
