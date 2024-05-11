@@ -8,18 +8,11 @@ export const useTaskManager = defineStore("taskManager", () => {
   const setTasks = function(taskList = []) {
     tasks.length = 0
     taskList.forEach((task) => {
-      task.status = task.status
-        .toLowerCase()
-        .replace('_', ' ')
-        .replace(/\b\w/g, (c) => c.toUpperCase())
       tasks.push(task)
     })
+    console.log(tasks);
   }
   const addTask = function(newTask) {
-    newTask.status = newTask.status
-    .toLowerCase()
-    .replace('_', ' ')
-    .replace(/\b\w/g, (c) => c.toUpperCase())
     tasks.push(newTask)
   }
   const findIndexById = function(id){

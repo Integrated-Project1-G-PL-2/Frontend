@@ -3,21 +3,14 @@ import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useTaskManager } from '@/stores/TaskManager'
 import { addItem, editItem } from './utils/fetchUtils'
+import { useStatusManager } from '@/stores/StatusManager'
 const emits = defineEmits([
   'showTaskDetailModal',
   'showRedPopup',
   'showGreenPopup'
 ])
 const taskManager = useTaskManager()
-const formatStatus = function (status) {
-  if (status == null) {
-    return 'No status'
-  }
-  return status
-    .replace(/_/g, ' ')
-    .toLowerCase()
-    .replace(/\b\w/g, (char) => char.toUpperCase())
-}
+const statusManager = useStatusManager()
 const router = useRouter()
 const prop = defineProps({
   taskDetail: Object,
@@ -38,7 +31,7 @@ if (prop.taskDetail.value) {
       prop.taskDetail.value.description != null
         ? prop.taskDetail.value.description
         : '',
-    taskStatus: formatStatus(prop.taskDetail.value.status),
+    taskStatus: prop.taskDetail.value.status.name,
     taskTitle: prop.taskDetail.value.title,
     updatedOn: new Date(prop.taskDetail.value.updatedOn)
       .toLocaleString('en-GB')
@@ -50,7 +43,7 @@ if (prop.taskDetail.value) {
     id: null,
     taskAssignees: null,
     taskDescription: null,
-    taskStatus: null,
+    taskStatus: {},
     taskTitle: null,
     updatedOn: null
   })
@@ -66,7 +59,7 @@ const handleClick = async () => {
     title: task.taskTitle?.length > 0 ? task.taskTitle : null,
     assignees: task.taskAssignees?.length > 0 ? task.taskAssignees : null,
     description: task.taskDescription?.length > 0 ? task.taskDescription : null,
-    status: task.taskStatus.toUpperCase().replace(/\s+/g, '_')
+    status : statusManager.findStatusByName(task.taskStatus)
   }
   if (prop.operate == 'add') {
     const newTask = await addItem(
@@ -89,7 +82,6 @@ const handleClick = async () => {
       addOrUpdateTaskDetail
     )
     if (editTask.status != '500' && editTask.status != '404') {
-      editTask.status = formatStatus(editTask.status)
       taskManager.editTask(editTask.id, editTask)
       emits('showGreenPopup', {
         taskTitle: editTask.title,
@@ -163,11 +155,8 @@ const handleClick = async () => {
                   v-model="task.taskStatus"
                   class="itbkk-status mt-1 ml-4 select select-bordered w-[95%] h-[40px] px-4 py-2 bg-inherit border-2 border-gray-200 text-gray-400 rounded-md"
                 >
-                  <option disabled selected>Status</option>
-                  <option value="To Do">To Do</option>
-                  <option value="Doing">Doing</option>
-                  <option value="Done">Done</option>
-                  <option value="No Status">No Status</option>
+                  <option disabled selected >Status</option>
+                  <option v-for="(status) in statusManager.getStatuses()"  :value="status.name">{{ statusManager.transformStatus(status.name) }}</option>
                 </select>
               </label>
             </div>

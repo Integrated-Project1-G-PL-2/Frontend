@@ -13,6 +13,8 @@ import { useRoute, useRouter } from 'vue-router'
 import DeletePopUp from '@/DeletePopUp.vue'
 import AlertPopUp from './../components/AlertPopUp.vue'
 import StatusesList from './StatusesList.vue'
+import {useStatusManager} from '@/stores/StatusManager'
+const statusManager = useStatusManager()
 const showStatusDetailModal = ref(false)
 const router = useRouter()
 const route = useRoute()
@@ -33,6 +35,7 @@ const redPopup = reactive({
 
 onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
+  statusManager.setStatuses(await getItems(import.meta.env.VITE_BASE_URL_V2))
 })
 const showTaskDetail = async function (id, operate) {
   router.push({ name: 'TaskDetail', params: { id: id } })
@@ -226,16 +229,16 @@ const showStatusesList = function () {
               class="w-full bg-emerald-500 flex justify-center rounded-md"
               :style="{
                 backgroundColor:
-                  task.status === 'To Do'
+                  task.status.name === 'TO_DO'
                     ? '#FFC0CB'
-                    : task.status === 'Doing'
+                    : task.status.name === 'DOING'
                     ? '#ffff99'
-                    : task.status === 'No Status'
+                    : task.status.name === 'NO_STATUS'
                     ? 'lightgray'
                     : '#90EE90'
               }"
             >
-              <p>{{ task.status }}</p>
+              <p>{{ statusManager.transformStatus(task.status.name)}}</p>
             </div>
           </td>
         </tr>
