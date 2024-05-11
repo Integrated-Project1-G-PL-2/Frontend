@@ -139,9 +139,8 @@ const closeGreenPopup = async function (operate) {
     <AlertPopUp
       v-if="redPopup.delete.state"
       :titles="
-        'An error has occurred, the status ' +
-        redPopup.delete.taskStatus +
-        ' does not exist.'
+        'An error has occurred, Can not delete the status ' +
+        redPopup.delete.taskStatus 
       "
       @closePopUp="closeRedPopup"
       message="Error!!"
