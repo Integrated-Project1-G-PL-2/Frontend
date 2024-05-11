@@ -3,8 +3,19 @@ import { ref, reactive } from 'vue'
 import { deleteItemById } from '@/utils/fetchUtils'
 import { useStatusManager } from '@/stores/StatusManager'
 import { useRoute, useRouter } from 'vue-router'
-const deClareemit = defineEmits(['cancelStatusDetail','confirmStatusDetail','redAlert','greenAlert'])
-const props = defineProps(['statusId', 'isDelete', 'isTransfer','operate','transferList'])
+const deClareemit = defineEmits([
+  'cancelStatusDetail',
+  'confirmStatusDetail',
+  'redAlert',
+  'greenAlert'
+])
+const props = defineProps([
+  'statusId',
+  'isDelete',
+  'isTransfer',
+  'operate',
+  'transferList'
+])
 const router = useRouter()
 const deletedStatuses = reactive({})
 const statusSelect = ref() //ชั่วคราว
@@ -27,10 +38,10 @@ const deleteStatus = async (deleteId) => {
   }
   statusManager.deleteStatuses(deleteId)
   router.replace({ name: 'StatusList' })
-  deClareemit('greenAlert',{
-      taskStatus: props.statusId.value.statusName,
-      operate: props.operate
-    })
+  deClareemit('greenAlert', {
+    taskStatus: props.statusId.value.statusName,
+    operate: props.operate
+  })
   deClareemit('confirmStatusDetail', true)
 }
 </script>
@@ -48,7 +59,8 @@ const deleteStatus = async (deleteId) => {
 
         <div class="w-[70%] h-[100%]">
           <div class="itbkk-message pl-4 mt-4">
-            Do you want to delete the task " {{ props.statusId.value.statusName }}" ?
+            Do you want to delete the task "
+            {{ props.statusId.value.statusName }}" ?
           </div>
         </div>
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
@@ -90,22 +102,26 @@ const deleteStatus = async (deleteId) => {
           class="flex flex-row items-center justify-between w-[70%] h-[100%]"
         >
           <div class="itbkk-message pl-4 mt-4">
-            There is some task associated with the "{{ props.statusId.value.statusName }}" status. Transfer to
+            There is some task associated with the "{{
+              props.statusId.value.statusName
+            }}" status. Transfer to
             <select
               v-model="statusSelect"
-              
               class="itbkk-status mt-1 ml-4 select select-bordered w-[150px] h-[30px] px-2 py-1 bg-inherit border-2 border-gray-200 text-gray-400 rounded-md text-sm text-justify"
             >
-              <option v-for="del in props.transferList" >{{ del.statusName }}</option>
-              
+              <option v-for="del in props.transferList">
+                {{ del.statusName }}
+              </option>
             </select>
           </div>
         </div>
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
           <button
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
-            @click="deleteStatus( props.statusId.value.id) ,console.log(props.statusId.value.id)"
-
+            @click="
+              deleteStatus(props.statusId.value.id),
+                console.log(props.statusId.value.id)
+            "
           >
             <div class="btn text-center">Confirm</div>
           </button>
