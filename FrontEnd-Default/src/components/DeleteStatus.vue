@@ -58,7 +58,12 @@ const transferStatus = async (deleteId,newId) => {
   deClareemit('confirmStatusDetail', true)
 }
 
-
+const filterStatus = () => {
+  return props.transferList.filter(element => {
+    
+    return element.id !== props.statusId.value.id;
+  });
+};
 </script>
 
 <template>
@@ -122,8 +127,9 @@ const transferStatus = async (deleteId,newId) => {
               
               class="itbkk-status mt-1 ml-4 select select-bordered w-[150px] h-[30px] px-2 py-1 bg-inherit border-2 border-gray-200 text-gray-400 rounded-md text-sm text-justify"
             >
-            <option v-for="del in props.transferList.filter((del) => del.name !== props.statusId.value.statusName) ":key="del.id" :value="del.id" >{{ del.name}}</option>
-              
+          
+            <option v-for="del in filterStatus()" :key="del.id" :value="del.id" >{{del.name}}</option>
+             
             </select>
           </div>
         </div>

@@ -30,7 +30,6 @@ const saveClick = async () => {
   //add status
   if (prop.operate === 'add') {
     const addedStatus = await addItem(import.meta.env.VITE_BASE_URL_V2, status)
-    console.log(addedStatus)
     if (addedStatus.status != '400' && addedStatus.status != '500') {
       statusManager.addStatuses(addedStatus)
       emits('showStatusGreenPopup', {
