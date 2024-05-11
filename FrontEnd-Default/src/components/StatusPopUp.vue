@@ -22,7 +22,8 @@ const emits = defineEmits([
 const prop = defineProps({
   statusTitle: Object,
   operate: String,
-  editStatus: Boolean
+  editStatus: Boolean,
+  taskDetail: Object
 })
 const formatStatus = function (status) {
   if (status == null) {
@@ -35,12 +36,42 @@ const formatStatus = function (status) {
 }
 const title = ref(prop.operate)
 const status = reactive({ name: '', description: null })
+let task
+if (prop.taskDetail.value) {
+  task = reactive({
+    createdOn: new Date(prop.taskDetail.value.createdOn)
+      .toLocaleString('en-GB')
+      .replace(',', ''),
+    id: prop.taskDetail.value.id,
+    taskAssignees:
+      prop.taskDetail.value.assignees != null
+        ? prop.taskDetail.value.assignees
+        : '',
+    taskDescription:
+      prop.taskDetail.value.description != null
+        ? prop.taskDetail.value.description
+        : '',
+    taskStatus: formatStatus(prop.taskDetail.value.status),
+    taskTitle: prop.taskDetail.value.title,
+    updatedOn: new Date(prop.taskDetail.value.updatedOn)
+      .toLocaleString('en-GB')
+      .replace(',', '')
+  })
+} else {
+  task = reactive({
+    createdOn: null,
+    id: null,
+    taskAssignees: null,
+    taskDescription: null,
+    taskStatus: null,
+    taskTitle: null,
+    updatedOn: null
+  })
+}
 const saveClick = async () => {
   const EditStatusDetail = {
-    title: task.taskTitle?.length > 0 ? task.taskTitle : null,
-    assignees: task.taskAssignees?.length > 0 ? task.taskAssignees : null,
-    description: task.taskDescription?.length > 0 ? task.taskDescription : null,
-    status: task.taskStatus.toUpperCase().replace(/\s+/g, '_')
+    name: status.name?.length > 0 ? status.name : null,
+    description: status.description?.length > 0 ? status.description : null
   }
   //add status
   if (prop.operate === 'add') {
@@ -125,7 +156,11 @@ const saveClick = async () => {
             ></textarea>
           </div>
         </div>
-        <!-- <div class="mt-10 ml-4" style="display: flex">
+        <div
+          class="mt-10 ml-4"
+          style="display: flex"
+          :disabled="operate == 'add'"
+        >
           <div style="display: flex" v-if="(prop.operate = 'edit')">
             <div class="itbkk-timezone" style="margin-right: 20px">
               TimeZone : {{ Intl.DateTimeFormat().resolvedOptions().timeZone }}
@@ -137,7 +172,7 @@ const saveClick = async () => {
               <div>Updated On : {{ task.updatedOn }}</div>
             </div>
           </div>
-        </div> -->
+        </div>
 
         <div class="flex flex-row w-full justify-end border-t">
           <button
