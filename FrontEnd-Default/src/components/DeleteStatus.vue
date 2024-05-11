@@ -3,7 +3,7 @@ import { ref, reactive } from 'vue'
 import { deleteItemById, deleteAndTransferItem } from '@/utils/fetchUtils'
 import { useStatusManager } from '@/stores/StatusManager'
 import { useRoute, useRouter } from 'vue-router'
-const deClareemit = defineEmits(['cancelStatusDetail','confirmStatusDetail','redAlert','greenAlert'])
+const deClareemit = defineEmits(['cancelStatusDetail','confirmStatusDetail','redAlert','greenAlert','redAlertTrans','greenAlertTrans'])
 const props = defineProps(['statusId', 'isDelete', 'isTransfer','operate','transferList'])
 const router = useRouter()
 const deletedStatuses = reactive({})
@@ -16,7 +16,7 @@ const deleteStatus = async (deleteId) => {
     import.meta.env.VITE_BASE_URL_V2,
     deleteId
   )
-  if (deletedStatuses.value == '404' || '500') {
+  if (deletedStatuses.value == '404' && '500' && '400') {
     deClareemit('redAlert', {
       taskStatus: props.statusId.value.statusName,
       operate: props.operate
@@ -40,8 +40,8 @@ const transferStatus = async (deleteId,newId) => {
     import.meta.env.VITE_BASE_URL_V2,
     deleteId,newId
   )
-  if (deletedStatuses.value == '404' || '500' || '400') {
-    deClareemit('redAlert', {
+  if (deletedStatuses.value == '404' && '500' && '400') {
+    deClareemit('redAlertTrans', {
       taskStatus: props.statusId.value.statusName,
       operate: props.operate
     })
@@ -51,7 +51,7 @@ const transferStatus = async (deleteId,newId) => {
   } else {
   statusManager.deleteStatuses(deleteId)
   router.replace({ name: 'StatusList' })
-  deClareemit('greenAlert',{
+  deClareemit('greenAlertTrans',{
       taskStatus: props.statusId.value.statusName,
       operate: props.operate
     })}
@@ -122,7 +122,7 @@ const transferStatus = async (deleteId,newId) => {
               
               class="itbkk-status mt-1 ml-4 select select-bordered w-[150px] h-[30px] px-2 py-1 bg-inherit border-2 border-gray-200 text-gray-400 rounded-md text-sm text-justify"
             >
-            <option v-for="del in props.transferList ":key="del.id" :value="del.id" >{{ del.name}}</option>
+            <option v-for="del in props.transferList.filter((del) => del.name !== props.statusId.value.statusName) ":key="del.id" :value="del.id" >{{ del.name}}</option>
               
             </select>
           </div>
@@ -131,7 +131,7 @@ const transferStatus = async (deleteId,newId) => {
           <button
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
             @click="transferStatus( props.statusId.value.id,statusSelect)"
-
+            :disabled="statusSelect === undefined"
           >
             <div class="btn text-center">Confirm</div>
           </button>

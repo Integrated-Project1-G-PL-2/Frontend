@@ -27,12 +27,14 @@ const isDelete = ref()
 const greenPopup = reactive({
   add: { state: false, taskStatus: '' },
   edit: { state: false, taskStatus: '' },
-  delete: { state: false, taskStatus: '' }
+  delete: { state: false, taskStatus: '' },
+  transfer: { state: false, taskStatus: '' }
 })
 const redPopup = reactive({
   add: { state: false, taskStatus: '' },
   edit: { state: false, taskStatus: '' },
-  delete: { state: false, taskStatus: '' }
+  delete: { state: false, taskStatus: '' },
+  transfer: { state: false, taskStatus: '' }
 })
 const showDeleteStatusDetail = ref(false)
 const transferDelList = ref({})
@@ -57,6 +59,9 @@ const goBackToHomePage = function () {
   
 }
 const showDeletePopUpTaskDetail = async function (obj) {
+  if(transferDelList.value.length > 1){ 
+    setDeleteOperate('transfer')} else {
+  setDeleteOperate('delete')}
   transferDelList.value = await  getItems(import.meta.env.VITE_BASE_URL_V2)
   isDelete.value = !(transferDelList.value.length > 1)  
   router.push({ name: 'DeleteStatus', params: { id: obj.id } })
@@ -157,14 +162,27 @@ const closeGreenPopup = async function (operate) {
       styleType="green"
       :operate="'delete'"
     />
-    <div class="flex justify-end">
-      <button
-        @click="showAddStatusesModal('add')"
-        class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2"
-      >
-        ✚ Add Status
-      </button>
-    </div>
+    <AlertPopUp
+      v-if="greenPopup.transfer.state"
+      :titles="
+        'The task have been transferred and the status has been deleted'
+      "
+      @closePopUp="closeGreenPopup"
+      message="Success!!"
+      styleType="green"
+      :operate="'transfer'"
+    />
+    <AlertPopUp
+      v-if="redPopup.transfer.state"
+      :titles="
+        'An error has occurred, the status does not exist.'
+      "
+      @closePopUp="closeRedPopup"
+      message="Error!!"
+      styleType="red"
+      :operate="'transfer'"
+    />
+   
     <div class="flex justify-start">
       <button
         @click="goBackToHomePage"
@@ -177,32 +195,40 @@ const closeGreenPopup = async function (operate) {
       >
         > Task Status
       </div>
+      <div class="flex ml-auto">
+        <button
+          @click="showAddStatusesModal('add')"
+          class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2"
+        >
+          ✚ Add Status
+        </button>
+      </div>
     </div>
     <table class="w-full text-sm text-left text-gray-500">
-      <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50 cursor-default">
         <tr>
-          <th class="px-4 py-3"></th>
-          <th class="px-4 py-3">Name</th>
-          <th class="px-4 py-3">Description</th>
-          <th class="px-4 py-3">Action</th>
+          <th class="text-md px-3 py-3"></th>
+          <th class="text-md px-8 py-3">Name</th>
+          <th class="text-md px-20 py-3">Description</th>
+          <th class="text-md px-30 py-3 text-center">Action</th>
         </tr>
       </thead>
       <tbody>
         <tr
           v-for="(statuses, index) in statusManager.getStatuses()"
           :key="statuses.id"
-          class="itbkk-item border-b cursor-pointer"
+          class="itbkk-item border-b px-5 py-3"
         >
-          <td class="px-4 py-3">
+          <td class="px-3 py-3 text-center">
             {{ index + 1 }}
           </td>
-          <td class="itbkk-status-name px-4 py-3">
-            <div class="hover:text-sky-500">
+          <td class="itbkk-status-name px-8 py-3">
+            <div class="cursor-default">
               {{ statuses.name }}
             </div>
           </td>
           <td
-            class="itbkk-status-description px-4 py-3"
+            class="itbkk-status-description px-20 py-3"
             :class="statuses.description == null ? 'italic' : ''"
           >
             {{
@@ -211,7 +237,7 @@ const closeGreenPopup = async function (operate) {
                 : statuses.description
             }}
           </td>
-          <td class="itbkk-status px-4 py-3">
+          <td class="itbkk-status px-30 py-3 text-center">
             <div>
               <button
                 class="itbkk-button-edit bg-green-400 font-sans text-center gap-5 text-gray-100 hover:text-gray-200 mr-5 w-14 rounded-[8px]"
@@ -221,11 +247,13 @@ const closeGreenPopup = async function (operate) {
               </button>
               <button
                 class="itbkk-button-delete bg-red-400 rounded-[8px] font-sans text-center gap-5 text-gray-100 hover:text-gray-200 w-14"
-                @click="showDeletePopUpTaskDetail({
-                  id: statuses.id,
-                  statusName: statuses.name,
-                  index: index + 1
-                }),setDeleteOperate('delete')"
+                @click="
+                  showDeletePopUpTaskDetail({
+                    id: statuses.id,
+                    statusName: statuses.name,
+                    index: index + 1
+                  })
+                "
               >
                 Delete
               </button>
@@ -259,6 +287,8 @@ const closeGreenPopup = async function (operate) {
       :transferList ="transferDelList"
       @redAlert="openRedPopup"
       @greenAlert="openGreenPopup"
+      @redAlertTrans="openRedPopup"
+      @greenAlertTrans="openGreenPopup"
       @confirmStatusDetail="closeDeleteStatusPopup"
       @cancelStatusDetail="closeDeleteStatusPopup"
     ></DeleteStatus>
