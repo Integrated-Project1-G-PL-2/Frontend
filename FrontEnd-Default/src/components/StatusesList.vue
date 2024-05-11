@@ -158,6 +158,28 @@ const closeGreenPopup = async function (operate) {
       styleType="green"
       :operate="'delete'"
     />
+    <AlertPopUp
+      v-if="greenPopup.edit.state"
+      :titles="
+        'The status  ' + greenPopup.edit.taskStatus + ' has been updates.'
+      "
+      @closePopUp="closeGreenPopup"
+      message="Success!!"
+      styleType="green"
+      :operate="'edit'"
+    />
+    <AlertPopUp
+      v-if="redPopup.edit.state"
+      :titles="
+        'An error has occurred, the status ' +
+        redPopup.edit.taskStatus +
+        ' does not exist.'
+      "
+      @closePopUp="closeRedPopup"
+      message="Error!!"
+      styleType="red"
+      :operate="'edit'"
+    />
     <div class="flex justify-start">
       <button
         @click="goBackToHomePage"

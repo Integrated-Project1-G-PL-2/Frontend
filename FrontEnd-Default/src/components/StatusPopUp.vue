@@ -24,9 +24,24 @@ const prop = defineProps({
   operate: String,
   editStatus: Boolean
 })
+const formatStatus = function (status) {
+  if (status == null) {
+    return 'No status'
+  }
+  return status
+    .replace(/_/g, ' ')
+    .toLowerCase()
+    .replace(/\b\w/g, (char) => char.toUpperCase())
+}
 const title = ref(prop.operate)
 const status = reactive({ name: '', description: null })
 const saveClick = async () => {
+  const EditStatusDetail = {
+    title: task.taskTitle?.length > 0 ? task.taskTitle : null,
+    assignees: task.taskAssignees?.length > 0 ? task.taskAssignees : null,
+    description: task.taskDescription?.length > 0 ? task.taskDescription : null,
+    status: task.taskStatus.toUpperCase().replace(/\s+/g, '_')
+  }
   //add status
   if (prop.operate === 'add') {
     const addedStatus = await addItem(import.meta.env.VITE_BASE_URL_V2, status)
@@ -43,8 +58,28 @@ const saveClick = async () => {
         operate: prop.operate
       })
     }
-    router.replace({ name: 'StatusList' })
-    emits('showStatusDetailModal', false)
+    if (prop.operate == 'edit') {
+      const editStatus = await editItem(
+        import.meta.env.VITE_BASE_URL_V2,
+        task.id,
+        EditStatusDetail
+      )
+      if (editStatus.status != '404') {
+        editStatus.status = formatStatus(editStatus.status)
+        statusManager.editStatues(editStatus.id, editStatus)
+        emits('showGreenPopup', {
+          taskStatus: editStatus.name,
+          operate: prop.operate
+        })
+      } else {
+        emits('showRedPopup', {
+          taskStatus: !editStatus.name ? status.name : editStatus.name,
+          operate: prop.operate
+        })
+      }
+      router.replace({ name: 'StatusList' })
+      emits('showStatusDetailModal', false)
+    }
   }
 }
 
