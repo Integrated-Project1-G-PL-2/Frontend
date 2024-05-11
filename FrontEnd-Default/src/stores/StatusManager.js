@@ -8,10 +8,6 @@ export const useStatusManager = defineStore('statusManager', () => {
   const setStatuses = function (statusesList = []) {
     statuses.length = 0
     statusesList.forEach((status) => {
-      status.name = status.name
-        .toLowerCase()
-        .replace('_', ' ')
-        .replace(/\b\w/g, (c) => c.toUpperCase())
       statuses.push(status)
     })
   }
@@ -26,19 +22,28 @@ export const useStatusManager = defineStore('statusManager', () => {
     const index = findIndexById(id)
     statuses[index] = newStatus
   }
-
+  const findStatusByName = function(name){
+    return statuses.find(el => el.name === name)
+  }
   const deleteStatuses = function (id) {
     const index = statuses.findIndex((el) => {
       return el.id == id
     })
     statuses.splice(index, 1)
   }
+  const transformStatus = function (statusName){
+    return statusName.toLowerCase()
+    .replace('_', ' ')
+    .replace(/\b\w/g, (c) => c.toUpperCase())
+  }
   return {
     getStatuses,
     setStatuses,
     addStatuses,
     editStatues,
-    deleteStatuses
+    deleteStatuses,
+    findStatusByName,
+    transformStatus
   }
 })
 

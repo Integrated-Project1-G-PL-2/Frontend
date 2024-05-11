@@ -31,15 +31,14 @@ const deleteTask = async (deleteId) => {
   >
     <div class="w-[59%] m-[auto] border border-green-700 mt-[20%]">
       <div class="flex flex-col justify-between bg-white p-4 h-[10%]">
-        <div class="itbkk-title w-full border-b h-[40px] mt-1">
+        <div class="itbkk-title w-full h-[40px] mt-1 border-b">
           <h1 class="text-xl font-bold text-justify">Delete a Task</h1>
         </div>
 
         <div class="w-[70%] h-[100%]">
           <div class="flex pl-4 mt-5">
-            Do you want to delete the task "{{ props.taskId.value.index }}.{{
-              props.taskId.value.taskTitle
-            }}" ?
+            Do you want to delete the task "{{ props.taskId.value.index }}.
+            {{ props.taskId.value.taskTitle }}" ?
           </div>
         </div>
       </div>
