@@ -56,23 +56,26 @@ const showTaskDetail = async function (id, operate) {
 
 const goBackToHomePage = function () {
   router.replace({ name: 'Task' })
-  
 }
 const showDeletePopUpTaskDetail = async function (obj) {
-  if(transferDelList.value.length > 1){ 
-    setDeleteOperate('transfer')} else {
-  setDeleteOperate('delete')}
-  transferDelList.value = await  getItems(import.meta.env.VITE_BASE_URL_V2)
-  isDelete.value = !(transferDelList.value.length > 1)  
+  if (transferDelList.value.length > 1) {
+    setDeleteOperate('transfer')
+  } else {
+    setDeleteOperate('delete')
+  }
+  transferDelList.value = await getItems(import.meta.env.VITE_BASE_URL_V2)
+  isDelete.value = !(transferDelList.value.length > 1)
   router.push({ name: 'DeleteStatus', params: { id: obj.id } })
-  statusDetail.value = { id: obj.id, statusName: obj.statusName, index: obj.index }
+  statusDetail.value = {
+    id: obj.id,
+    statusName: obj.statusName,
+    index: obj.index
+  }
   showDeleteStatusDetail.value = true
 }
 
-
-const setDeleteOperate = function(operate){
+const setDeleteOperate = function (operate) {
   operation.value = operate
-
 }
 
 const showAddStatusesModal = function (operate) {
@@ -115,7 +118,6 @@ const closeGreenPopup = async function (operate) {
   router.push({ name: 'StatusList' })
   greenPopup[operate].state = false
 }
-
 </script>
 
 <template>
@@ -145,7 +147,7 @@ const closeGreenPopup = async function (operate) {
       v-if="redPopup.delete.state"
       :titles="
         'An error has occurred, Can not delete the status ' +
-        redPopup.delete.taskStatus 
+        redPopup.delete.taskStatus
       "
       @closePopUp="closeRedPopup"
       message="Error!!"
@@ -165,7 +167,11 @@ const closeGreenPopup = async function (operate) {
     <AlertPopUp
       v-if="greenPopup.transfer.state"
       :titles="
-        'The task have been transferred and the status has been deleted'
+        'The task' +
+        greenPopup.transfer.taskStatus +
+        'have been transferred and the status ' +
+        greenPopup.delete.taskStatus +
+        ' has been deleted'
       "
       @closePopUp="closeGreenPopup"
       message="Success!!"
@@ -175,14 +181,16 @@ const closeGreenPopup = async function (operate) {
     <AlertPopUp
       v-if="redPopup.transfer.state"
       :titles="
-        'An error has occurred, the status does not exist.'
+        'An error has occurred, the status ' +
+        redPopup.transfer.taskStatus +
+        ' does not exist.'
       "
       @closePopUp="closeRedPopup"
       message="Error!!"
       styleType="red"
       :operate="'transfer'"
     />
-   
+
     <div class="flex justify-start">
       <button
         @click="goBackToHomePage"
@@ -284,7 +292,7 @@ const closeGreenPopup = async function (operate) {
       :isTransfer="!isDelete"
       :statusId="statusDetail"
       :operate="operation"
-      :transferList ="transferDelList"
+      :transferList="transferDelList"
       @redAlert="openRedPopup"
       @greenAlert="openGreenPopup"
       @redAlertTrans="openRedPopup"
