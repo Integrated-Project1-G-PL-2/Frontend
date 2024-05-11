@@ -125,7 +125,7 @@ const saveClick = async () => {
             ></textarea>
           </div>
         </div>
-        <div class="mt-10 ml-4" style="display: flex">
+        <!-- <div class="mt-10 ml-4" style="display: flex">
           <div style="display: flex" v-if="(prop.operate = 'edit')">
             <div class="itbkk-timezone" style="margin-right: 20px">
               TimeZone : {{ Intl.DateTimeFormat().resolvedOptions().timeZone }}
@@ -137,7 +137,7 @@ const saveClick = async () => {
               <div>Updated On : {{ task.updatedOn }}</div>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <div class="flex flex-row w-full justify-end border-t">
           <button
