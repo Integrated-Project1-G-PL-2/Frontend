@@ -38,21 +38,10 @@ const redPopup = reactive({
 })
 const showDeleteStatusDetail = ref(false)
 const transferDelList = ref({})
-
 onMounted(async () => {
   statusManager.setStatuses(await getItems(import.meta.env.VITE_BASE_URL_V2))
 })
-const showTaskDetail = async function (id, operate) {
-  router.push({ name: 'TaskDetail', params: { id: id } })
-  operation.value = operate
-  taskDetail.value = await getItemById(import.meta.env.VITE_BASE_URL, id)
-  if (taskDetail.value.status == '404') {
-    alert('The requested task does not exist')
-    router.replace({ name: 'Task' })
-    return
-  }
-  showTaskDetailModal.value = true
-}
+
 
 const goBackToHomePage = function () {
   router.replace({ name: 'Task' })
@@ -81,12 +70,16 @@ const setDeleteOperate = function (operate) {
 const showAddStatusesModal = function (operate) {
   router.replace({ name: 'StatusAdd' })
   operation.value = operate
+  statusDetail = null
   showStatusModal.value = true
 }
 
-const showEditStatusesModal = function (operate) {
-  router.replace({ name: 'StatusEdit' })
-  operation.value = operate
+const showEditStatusesModal = function (obj) {
+  const status = statusManager.findStatusByName(obj.name)
+  console.log(status);
+  router.replace({ name: 'StatusEdit' , params: { id: status.id } })
+  statusDetail.value = status
+  operation.value = obj.operate
   showStatusModal.value = true
 }
 
@@ -188,7 +181,26 @@ const closeGreenPopup = async function (operate) {
       styleType="red"
       :operate="'transfer'"
     />
-
+    <AlertPopUp
+      v-if="greenPopup.edit.state"
+      :titles="
+        'The status has been updated.'
+      "
+      @closePopUp="closeGreenPopup"
+      message="Success!!"
+      styleType="green"
+      :operate="'edit'"
+    /> 
+    <AlertPopUp
+      v-if="redPopup.edit.state"
+      :titles="
+        'An error has occurred, the status does not exist.' 
+      "
+      @closePopUp="closeRedPopup"
+      message="Success!!"
+      styleType="red"
+      :operate="'edit'"
+    />
     <div class="flex justify-start">
       <button
         @click="goBackToHomePage"
@@ -230,7 +242,7 @@ const closeGreenPopup = async function (operate) {
           </td>
           <td class="itbkk-status-name px-8 py-3">
             <div class="cursor-default">
-              {{ statuses.name }}
+              {{ statusManager.transformStatus(statuses.name) }}
             </div>
           </td>
           <td
@@ -247,7 +259,7 @@ const closeGreenPopup = async function (operate) {
             <div v-if="statuses.name !== 'NO_STATUS'">
               <button
                 class="itbkk-button-edit bg-green-400 font-sans text-center gap-5 text-gray-100 hover:text-gray-200 mr-5 w-14 rounded-[8px]"
-                @click="showEditStatusesModal('edit')"
+                @click="showEditStatusesModal({operate : 'edit' , name : statuses.name})"
               >
                 Edit
               </button>
@@ -280,6 +292,7 @@ const closeGreenPopup = async function (operate) {
       @showStatusRedPopup="openRedPopup"
       @showStatusGreenPopup="openGreenPopup"
       @showStatusDetailModal="showStatusModal = false"
+      :statusDetail= "statusDetail"
     >
     </StatusPopUp>
   </teleport>

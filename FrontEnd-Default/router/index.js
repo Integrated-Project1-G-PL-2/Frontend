@@ -55,7 +55,7 @@ const routes = [
       }
       ,
       {
-        path: '/status/edit',
+        path: '/status/:id/edit',
         component: StatusPopUp,
         name: 'StatusEdit'
       }
