@@ -42,7 +42,6 @@ onMounted(async () => {
   statusManager.setStatuses(await getItems(import.meta.env.VITE_BASE_URL_V2))
 })
 
-
 const goBackToHomePage = function () {
   router.replace({ name: 'Task' })
 }
@@ -70,14 +69,14 @@ const setDeleteOperate = function (operate) {
 const showAddStatusesModal = function (operate) {
   router.replace({ name: 'StatusAdd' })
   operation.value = operate
-  statusDetail = null
+  statusDetail.value = null
   showStatusModal.value = true
 }
 
 const showEditStatusesModal = function (obj) {
   const status = statusManager.findStatusByName(obj.name)
-  console.log(status);
-  router.replace({ name: 'StatusEdit' , params: { id: status.id } })
+  console.log(status)
+  router.replace({ name: 'StatusEdit', params: { id: status.id } })
   statusDetail.value = status
   operation.value = obj.operate
   showStatusModal.value = true
@@ -184,17 +183,19 @@ const closeGreenPopup = async function (operate) {
     <AlertPopUp
       v-if="greenPopup.edit.state"
       :titles="
-        'The status has been updated.'
+        'The status ' + greenPopup.edit.taskStatus + ' has been updated.'
       "
       @closePopUp="closeGreenPopup"
       message="Success!!"
       styleType="green"
       :operate="'edit'"
-    /> 
+    />
     <AlertPopUp
       v-if="redPopup.edit.state"
       :titles="
-        'An error has occurred, the status does not exist.' 
+        'An error has occurred, the status ' +
+        redPopup.edit.taskStatus +
+        ' does not exist.'
       "
       @closePopUp="closeRedPopup"
       message="Success!!"
@@ -259,7 +260,12 @@ const closeGreenPopup = async function (operate) {
             <div v-if="statuses.name !== 'NO_STATUS'">
               <button
                 class="itbkk-button-edit bg-green-400 font-sans text-center gap-5 text-gray-100 hover:text-gray-200 mr-5 w-14 rounded-[8px]"
-                @click="showEditStatusesModal({operate : 'edit' , name : statuses.name})"
+                @click="
+                  showEditStatusesModal({
+                    operate: 'edit',
+                    name: statuses.name
+                  })
+                "
               >
                 Edit
               </button>
@@ -292,7 +298,7 @@ const closeGreenPopup = async function (operate) {
       @showStatusRedPopup="openRedPopup"
       @showStatusGreenPopup="openGreenPopup"
       @showStatusDetailModal="showStatusModal = false"
-      :statusDetail= "statusDetail"
+      :statusDetail="statusDetail"
     >
     </StatusPopUp>
   </teleport>
