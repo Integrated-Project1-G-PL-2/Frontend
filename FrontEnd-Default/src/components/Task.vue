@@ -35,7 +35,7 @@ const redPopup = reactive({
 
 onMounted(async () => {
   taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
-  statusManager.setStatuses(await getItems(import.meta.env.VITE_BASE_URL_V2))
+  statusManager.setStatuses(await getItems(import.meta.env.VITE_BASE_URL_V2));
 })
 const showTaskDetail = async function (id, operate) {
   router.push({ name: 'TaskDetail', params: { id: id } })

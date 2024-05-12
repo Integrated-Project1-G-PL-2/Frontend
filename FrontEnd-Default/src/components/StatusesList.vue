@@ -17,8 +17,6 @@ import DeleteStatus from './DeleteStatus.vue'
 
 const deClareemit = defineEmits(['editStatus'])
 const router = useRouter()
-const route = useRoute()
-const showTaskDetailModal = ref(false)
 const statusManager = useStatusManager()
 const statusDetail = reactive({})
 const operation = ref('')
@@ -70,7 +68,7 @@ const setDeleteOperate = function (operate) {
 const showAddStatusesModal = function (operate) {
   router.replace({ name: 'StatusAdd' })
   operation.value = operate
-  statusDetail = null
+  statusDetail.value = null
   showStatusModal.value = true
 }
 
@@ -87,10 +85,6 @@ const closeDeleteStatusPopup = function () {
   showDeleteStatusDetail.value = false
 }
 
-const closeStatusPopup = function () {
-  router.replace({ name: 'StatusList' })
-  showStatusModal.value = false
-}
 
 const openRedPopup = function (obj) {
   redPopup[obj.operate].state = true
@@ -281,14 +275,9 @@ const closeGreenPopup = async function (operate) {
       </tbody>
     </table>
   </div>
-  <!-- <teleport to="body" v-if="showTaskDetailModal">
-    <TaskDetail></TaskDetail>
-  </teleport> ใช้ไหม-->
-
   <teleport to="body" v-if="showStatusModal">
     <StatusPopUp
       :operate="operation"
-      @closeStatusPopUP="closeStatusPopup"
       @showStatusRedPopup="openRedPopup"
       @showStatusGreenPopup="openGreenPopup"
       @showStatusDetailModal="showStatusModal = false"

@@ -13,7 +13,6 @@ import {
 const router = useRouter();
 const statusManager = useStatusManager();
 const emits = defineEmits([
-  "closeStatusPopUP",
   "openEditDetail",
   "showStatusDetailModal",
   "showStatusRedPopup",
@@ -24,12 +23,21 @@ const prop = defineProps({
   statusDetail: Object,
 });
 const title = ref(prop.operate);
+
 let status 
+
+const init = () => {
 if(!prop.statusDetail.value){
   status = reactive({ name: "", description: null })
 }else{
   status = reactive(prop.statusDetail.value)
 }
+}
+
+const validation = function(){
+  return status.name === ''  || status.name === prop.statusDetail.value.name || status.description === prop.statusDetail.value.description
+}
+
 const saveClick = async () => {
   if (prop.operate === "add") {
     const addedStatus = await addItem(import.meta.env.VITE_BASE_URL_V2, status);
@@ -67,6 +75,8 @@ const saveClick = async () => {
   router.replace({ name: "StatusList" });
   emits("showStatusDetailModal", false);
 };
+
+init()
 </script>
 
 <template>
@@ -106,7 +116,7 @@ const saveClick = async () => {
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
             :class="{ disabled: !status.name }"
             @click="saveClick"
-            :disabled="status.name === ''"
+            :disabled="validation() "
           >
             save
           </button>
@@ -114,7 +124,7 @@ const saveClick = async () => {
             class="itbkk-button-cancel bg-gray-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
             @click="
               [
-                emits('closeStatusPopUP'),
+                emits('showStatusDetailModal'),
                 $router.replace({ name: 'StatusList' }),
               ];
             "
