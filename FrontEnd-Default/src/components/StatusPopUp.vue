@@ -1,17 +1,17 @@
 <script setup>
-import { reactive, ref } from "vue";
-import { useTaskManager } from "@/stores/TaskManager";
-import { useStatusManager } from "@/stores/StatusManager";
-import { useRouter } from "vue-router";
+import { reactive, ref } from 'vue'
+import { useTaskManager } from '@/stores/TaskManager'
+import { useStatusManager } from '@/stores/StatusManager'
+import { useRouter } from 'vue-router'
 import {
   getItems,
   getItemById,
   deleteItemById,
   addItem,
-  editItem,
-} from "../utils/fetchUtils.js";
-const router = useRouter();
-const statusManager = useStatusManager();
+  editItem
+} from '../utils/fetchUtils.js'
+const router = useRouter()
+const statusManager = useStatusManager()
 const emits = defineEmits([
   "openEditDetail",
   "showStatusDetailModal",
@@ -39,37 +39,38 @@ const validation = function(){
 }
 
 const saveClick = async () => {
-  if (prop.operate === "add") {
-    const addedStatus = await addItem(import.meta.env.VITE_BASE_URL_V2, status);
-    if (addedStatus.status != "400" && addedStatus.status != "500") {
-      statusManager.addStatuses(addedStatus);
-      emits("showStatusGreenPopup", {
+  if (prop.operate === 'add') {
+    const addedStatus = await addItem(import.meta.env.VITE_BASE_URL_V2, status)
+    if (addedStatus.status != '400' && addedStatus.status != '500') {
+      statusManager.addStatuses(addedStatus)
+      emits('showStatusGreenPopup', {
         taskStatus: addedStatus.name,
-        operate: prop.operate,
-      });
+        operate: prop.operate
+      })
     } else {
-      emits("showStatusRedPopup", {
+      emits('showStatusRedPopup', {
         taskStatus: status.name,
-        operate: prop.operate,
-      });
+        operate: prop.operate
+      })
     }
-  } else if (prop.operate === "edit") {
+  } else if (prop.operate === 'edit') {
     status.description = status.description.trim()
     const editedStatus = await editItem(
-      import.meta.env.VITE_BASE_URL_V2, prop.statusDetail.value.id , 
+      import.meta.env.VITE_BASE_URL_V2,
+      prop.statusDetail.value.id,
       status
-    );
-    if (editedStatus.status != "400" && editedStatus.status != "500") {
-      statusManager.editStatues(editedStatus.id, editedStatus);
-      emits("showStatusGreenPopup", {
+    )
+    if (editedStatus.status != '400' && editedStatus.status != '500') {
+      statusManager.editStatues(editedStatus.id, editedStatus)
+      emits('showStatusGreenPopup', {
         taskStatus: editedStatus.name,
-        operate: prop.operate,
-      });
+        operate: prop.operate
+      })
     } else {
-      emits("showStatusRedPopup", {
+      emits('showStatusRedPopup', {
         taskStatus: editedStatus.name,
-        operate: prop.operate,
-      });
+        operate: prop.operate
+      })
     }
   }
   router.replace({ name: "StatusList" });
