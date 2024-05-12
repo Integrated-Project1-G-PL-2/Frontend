@@ -1,72 +1,73 @@
 <script setup>
-import { reactive, ref } from "vue";
-import { useTaskManager } from "@/stores/TaskManager";
-import { useStatusManager } from "@/stores/StatusManager";
-import { useRouter } from "vue-router";
+import { reactive, ref } from 'vue'
+import { useTaskManager } from '@/stores/TaskManager'
+import { useStatusManager } from '@/stores/StatusManager'
+import { useRouter } from 'vue-router'
 import {
   getItems,
   getItemById,
   deleteItemById,
   addItem,
-  editItem,
-} from "../utils/fetchUtils.js";
-const router = useRouter();
-const statusManager = useStatusManager();
+  editItem
+} from '../utils/fetchUtils.js'
+const router = useRouter()
+const statusManager = useStatusManager()
 const emits = defineEmits([
-  "closeStatusPopUP",
-  "openEditDetail",
-  "showStatusDetailModal",
-  "showStatusRedPopup",
-  "showStatusGreenPopup",
-]);
+  'closeStatusPopUP',
+  'openEditDetail',
+  'showStatusDetailModal',
+  'showStatusRedPopup',
+  'showStatusGreenPopup'
+])
 const prop = defineProps({
   operate: String,
-  statusDetail: Object,
-});
-const title = ref(prop.operate);
-let status 
-if(!prop.statusDetail.value){
-  status = reactive({ name: "", description: null })
-}else{
+  statusDetail: Object
+})
+const title = ref(prop.operate)
+let status
+if (!prop.statusDetail.value) {
+  status = reactive({ name: '', description: null })
+} else {
   status = reactive(prop.statusDetail.value)
 }
 const saveClick = async () => {
-  if (prop.operate === "add") {
-    const addedStatus = await addItem(import.meta.env.VITE_BASE_URL_V2, status);
-    if (addedStatus.status != "400" && addedStatus.status != "500") {
-      statusManager.addStatuses(addedStatus);
-      emits("showStatusGreenPopup", {
+  if (prop.operate === 'add') {
+    const addedStatus = await addItem(import.meta.env.VITE_BASE_URL_V2, status)
+    if (addedStatus.status != '400' && addedStatus.status != '500') {
+      statusManager.addStatuses(addedStatus)
+      emits('showStatusGreenPopup', {
         taskStatus: addedStatus.name,
-        operate: prop.operate,
-      });
+        operate: prop.operate
+      })
     } else {
-      emits("showStatusRedPopup", {
+      emits('showStatusRedPopup', {
         taskStatus: status.name,
-        operate: prop.operate,
-      });
+        operate: prop.operate
+      })
     }
-  } else if (prop.operate === "edit") {
+  } else if (prop.operate === 'edit') {
     status.description = status.description.trim()
     const editedStatus = await editItem(
-      import.meta.env.VITE_BASE_URL_V2, prop.statusDetail.value.id , 
+      import.meta.env.VITE_BASE_URL_V2,
+      prop.statusDetail.value.id,
       status
-    );
-    if (editedStatus.status != "400" && editedStatus.status != "500") {
-      statusManager.editStatues(editedStatus.id, editedStatus);
-      emits("showStatusGreenPopup", {
+    )
+    if (editedStatus.status != '400' && editedStatus.status != '500') {
+      statusManager.editStatues(editedStatus.id, editedStatus)
+      emits('showStatusGreenPopup', {
         taskStatus: editedStatus.name,
-        operate: prop.operate,
-      });
+        operate: prop.operate
+      })
     } else {
-      emits("showStatusRedPopup", {
+      emits('showStatusRedPopup', {
         taskStatus: editedStatus.name,
-        operate: prop.operate,
-      });
+        operate: prop.operate
+      })
     }
   }
-  router.replace({ name: "StatusList" });
-  emits("showStatusDetailModal", false);
-};
+  router.replace({ name: 'StatusList' })
+  emits('showStatusDetailModal', false)
+}
 </script>
 
 <template>
@@ -113,10 +114,10 @@ const saveClick = async () => {
           <button
             class="itbkk-button-cancel bg-gray-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
             @click="
-              [
+              ;[
                 emits('closeStatusPopUP'),
-                $router.replace({ name: 'StatusList' }),
-              ];
+                $router.replace({ name: 'StatusList' })
+              ]
             "
           >
             <div class="btn">cancel</div>
