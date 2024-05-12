@@ -30,12 +30,14 @@ const init = () => {
 if(!prop.statusDetail.value){
   status = reactive({ name: "", description: null })
 }else{
-  status = reactive(prop.statusDetail.value)
+  status = reactive({...prop.statusDetail.value})
 }
 }
 
 const validation = function(){
-  return status.name === ''  || status.name === prop.statusDetail.value.name || status.description === prop.statusDetail.value.description
+  const test = status.name === ''  || status.name === prop.statusDetail.value?.name || status.description === prop.statusDetail.value?.description
+  console.log(test);
+  return test
 }
 
 const saveClick = async () => {
@@ -60,6 +62,7 @@ const saveClick = async () => {
       prop.statusDetail.value.id,
       status
     )
+    
     if (editedStatus.status != '400' && editedStatus.status != '500') {
       statusManager.editStatues(editedStatus.id, editedStatus)
       emits('showStatusGreenPopup', {
@@ -74,7 +77,7 @@ const saveClick = async () => {
     }
   }
   router.replace({ name: "StatusList" });
-  emits("showStatusDetailModal", false);
+  emits("showStatusDetailModal");
 };
 
 init()
@@ -115,7 +118,6 @@ init()
         <div class="flex flex-row w-full justify-end border-t">
           <button
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
-            :class="{ disabled: !status.name }"
             @click="saveClick"
             :disabled="validation() "
           >
