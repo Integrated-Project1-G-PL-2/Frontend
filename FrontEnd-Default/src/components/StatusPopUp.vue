@@ -35,9 +35,7 @@ if(!prop.statusDetail.value){
 }
 
 const validation = function(){
-  const test = status.name === ''  || status.name === prop.statusDetail.value?.name || status.description === prop.statusDetail.value?.description
-  console.log(test);
-  return test
+  return  status.name === ''  || (status.name === prop.statusDetail.value?.name && status.description === prop.statusDetail.value?.description)
 }
 
 const saveClick = async () => {
