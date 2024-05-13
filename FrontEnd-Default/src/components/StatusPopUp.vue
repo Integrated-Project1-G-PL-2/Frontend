@@ -54,7 +54,7 @@ const saveClick = async () => {
       })
     }
   } else if (prop.operate === 'edit') {
-    status.description = status.description.trim()
+    status.description = status.description == null ? status.description : status.description.trim()
     const editedStatus = await editItem(
       import.meta.env.VITE_BASE_URL_V2,
       prop.statusDetail.value.id,

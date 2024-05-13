@@ -59,9 +59,10 @@ const handleClick = async () => {
     title: task.taskTitle?.length > 0 ? task.taskTitle : null,
     assignees: task.taskAssignees?.length > 0 ? task.taskAssignees : null,
     description: task.taskDescription?.length > 0 ? task.taskDescription : null,
-    status : statusManager.findStatusByName(task.taskStatus).id
+    
   }
   if (prop.operate == 'add') {
+    addOrUpdateTaskDetail.status = statusManager.findStatusByName(task.taskStatus).id
     const newTask = await addItem(
       import.meta.env.VITE_BASE_URL,
       addOrUpdateTaskDetail
@@ -76,6 +77,7 @@ const handleClick = async () => {
     }
     emits('showTaskDetailModal', false)
   } else if (prop.operate == 'edit') {
+    addOrUpdateTaskDetail.status = statusManager.findStatusByName(task.taskStatus)
     const editTask = await editItem(
       import.meta.env.VITE_BASE_URL,
       task.id,
