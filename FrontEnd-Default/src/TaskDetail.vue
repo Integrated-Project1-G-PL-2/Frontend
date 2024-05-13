@@ -59,7 +59,7 @@ const handleClick = async () => {
     title: task.taskTitle?.length > 0 ? task.taskTitle : null,
     assignees: task.taskAssignees?.length > 0 ? task.taskAssignees : null,
     description: task.taskDescription?.length > 0 ? task.taskDescription : null,
-    status : statusManager.findStatusByName(task.taskStatus)
+    status : statusManager.findStatusByName(task.taskStatus).id
   }
   if (prop.operate == 'add') {
     const newTask = await addItem(
