@@ -7,7 +7,7 @@ defineEmits(['clearLimitPopUp'])
     class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[10px]"
   >
     <div
-      class="max-w-[500px] mx-auto mt-[20%] border border-gray-600 h-[200px]"
+      class="itbkk-modal-setting max-w-[500px] mx-auto mt-[20%] border border-gray-600 h-[200px]"
     >
       <div class="flex flex-col justify-between bg-white p-4 h-[100px]">
         <div class="itbkk-title w-full h-[70px] mt-1 border-b">
@@ -21,10 +21,25 @@ defineEmits(['clearLimitPopUp'])
             Users can limit the number of task in a status by setting the
             Maximum tasks in each status(except "No Status" and "Done"
             statuses).
-            <select
-              v-model="statusSelect"
-              class="itbkk-status mt-1 ml-4 select select-bordered w-[150px] h-[30px] px-2 py-1 bg-inherit border-2 border-gray-200 text-gray-400 rounded-md text-sm text-justify"
-            ></select>
+            <label
+              class="itbkk-limit-task inline-flex items-center cursor-pointer"
+            >
+              <input type="checkbox" value="" class="sr-only peer" checked />
+              <div
+                class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+              ></div>
+              <span
+                class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >Limit tasks in this status</span
+              >
+            </label>
+            <p>Maximum tasks</p>
+            <input
+              type="text"
+              class="itbkk-max-task bg-gray-50 border text-gray-400 text-sm rounded-lg w-[210px]"
+              placeholder="Write your Number tasks "
+              required
+            />
           </div>
         </div>
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
