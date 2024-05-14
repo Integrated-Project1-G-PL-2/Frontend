@@ -236,7 +236,7 @@ const closeGreenPopup = async function (operate) {
           </td>
           <td class="itbkk-status-name px-8 py-3">
             <div class="cursor-default">
-              {{ statusManager.transformStatus(statuses.name) }}
+              {{ statuses.name }}
             </div>
           </td>
           <td

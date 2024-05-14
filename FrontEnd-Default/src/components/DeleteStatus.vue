@@ -135,14 +135,14 @@ const filterStatus = () => {
         >
           <div class="itbkk-message pl-4 mt-4">
             There is some task associated with the "{{
-              statusManager.transformStatus(props.statusId.value.statusName)
+             props.statusId.value.statusName
             }}" status. Transfer to
             <select
               v-model="statusSelect"
               class="itbkk-status mt-1 ml-4 select select-bordered w-[150px] h-[30px] px-2 py-1 bg-inherit border-2 border-gray-200 text-gray-400 rounded-md text-sm text-justify"
             >
 
-            <option v-for="del in filterStatus()" :key="del.id" :value="del.id" >{{statusManager.transformStatus(del.name)}}</option>
+            <option v-for="del in filterStatus()" :key="del.id" :value="del.id" >{{del.name}}</option>
              
             </select>
           </div>
