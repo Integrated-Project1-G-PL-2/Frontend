@@ -84,7 +84,6 @@ const closeDeleteStatusPopup = function () {
   showDeleteStatusDetail.value = false
 }
 
-
 const openRedPopup = function (obj) {
   redPopup[obj.operate].state = true
   redPopup[obj.operate].taskStatus = obj.taskStatus
@@ -246,7 +245,7 @@ const closeGreenPopup = async function (operate) {
           >
             {{
               statuses.description == null
-                ? 'Undescription'
+                ? 'No description is provided'
                 : statuses.description
             }}
           </td>
