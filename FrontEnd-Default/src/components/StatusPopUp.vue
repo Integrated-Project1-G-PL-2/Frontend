@@ -13,29 +13,33 @@ import {
 const router = useRouter()
 const statusManager = useStatusManager()
 const emits = defineEmits([
-  "openEditDetail",
-  "showStatusDetailModal",
-  "showStatusRedPopup",
-  "showStatusGreenPopup",
-]);
+  'openEditDetail',
+  'showStatusDetailModal',
+  'showStatusRedPopup',
+  'showStatusGreenPopup'
+])
 const prop = defineProps({
   operate: String,
-  statusDetail: Object,
-});
-const title = ref(prop.operate);
+  statusDetail: Object
+})
+const title = ref(prop.operate)
 
-let status 
+let status
 
 const init = () => {
-if(!prop.statusDetail.value){
-  status = reactive({ name: "", description: null })
-}else{
-  status = reactive({...prop.statusDetail.value})
-}
+  if (!prop.statusDetail.value) {
+    status = reactive({ name: '', description: null })
+  } else {
+    status = reactive({ ...prop.statusDetail.value })
+  }
 }
 
-const validation = function(){
-  return  status.name === ''  || (status.name === prop.statusDetail.value?.name && status.description === prop.statusDetail.value?.description)
+const validation = function () {
+  return (
+    status.name === '' ||
+    (status.name === prop.statusDetail.value?.name &&
+      status.description === prop.statusDetail.value?.description)
+  )
 }
 
 const saveClick = async () => {
@@ -54,13 +58,16 @@ const saveClick = async () => {
       })
     }
   } else if (prop.operate === 'edit') {
-    status.description = status.description == null ? status.description : status.description.trim()
+    status.description =
+      status.description == null
+        ? status.description
+        : status.description.trim()
     const editedStatus = await editItem(
       import.meta.env.VITE_BASE_URL_V2,
       prop.statusDetail.value.id,
       status
     )
-    
+
     if (editedStatus.status != '400' && editedStatus.status != '500') {
       statusManager.editStatues(editedStatus.id, editedStatus)
       emits('showStatusGreenPopup', {
@@ -74,9 +81,9 @@ const saveClick = async () => {
       })
     }
   }
-  router.replace({ name: "StatusList" });
-  emits("showStatusDetailModal");
-};
+  router.replace({ name: 'StatusList' })
+  emits('showStatusDetailModal')
+}
 
 init()
 </script>
@@ -85,7 +92,7 @@ init()
   <div
     class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[100px] overflow-auto"
   >
-    <div class="w-[90%] m-[auto] border border-gray-500">
+    <div class="itbkk-modal-status w-[90%] m-[auto] border border-gray-500">
       <div class="flex flex-col justify-between bg-white p-4">
         <div class="w-full h-[10%] mt-2">
           <div class="pl-4 mt-4">
@@ -117,17 +124,17 @@ init()
           <button
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
             @click="saveClick"
-            :disabled="validation() "
+            :disabled="validation()"
           >
             save
           </button>
           <button
             class="itbkk-button-cancel bg-gray-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
             @click="
-              [
+              ;[
                 emits('showStatusDetailModal'),
-                $router.replace({ name: 'StatusList' }),
-              ];
+                $router.replace({ name: 'StatusList' })
+              ]
             "
           >
             <div class="btn">cancel</div>
