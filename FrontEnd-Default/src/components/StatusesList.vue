@@ -251,7 +251,7 @@ const closeGreenPopup = async function (operate) {
             }}
           </td>
           <td class="itbkk-status px-30 py-3 text-center">
-            <div v-if="statuses.name !== 'NO_STATUS'">
+            <div v-if="statuses.name !== 'No Status'">
               <button
                 class="itbkk-button-edit bg-green-400 font-sans text-center gap-5 text-gray-100 hover:text-gray-200 mr-5 w-14 rounded-[8px]"
                 @click="
