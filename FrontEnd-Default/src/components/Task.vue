@@ -14,8 +14,10 @@ import DeletePopUp from '@/DeletePopUp.vue'
 import AlertPopUp from './../components/AlertPopUp.vue'
 import StatusesList from './StatusesList.vue'
 import { useStatusManager } from '@/stores/StatusManager'
+import StatusLimitSetting from './StatusLimitSetting.vue'
 const statusManager = useStatusManager()
 const showStatusDetailModal = ref(false)
+const showStatusDetailLimit = ref(false)
 const router = useRouter()
 const route = useRoute()
 const showTaskDetailModal = ref(false)
@@ -98,6 +100,10 @@ const clearDeletePopUp = async function () {
   router.push({ name: 'Task' })
   showDeleteTaskDetail.value = false
 }
+const clearLimitStatusPopUp = async function () {
+  router.push({ name: 'Task' })
+  showStatusDetailLimit.value = false
+}
 
 const showDelComplete = async function () {
   router.push({ name: 'Task' })
@@ -108,6 +114,10 @@ const showDelComplete = async function () {
 const showStatusesList = function () {
   router.replace({ name: 'StatusList' })
   showStatusDetailModal.value = true
+}
+
+const showStatusesLimit = function () {
+  showStatusDetailLimit.value = true
 }
 </script>
 
@@ -164,7 +174,7 @@ const showStatusesList = function () {
       <div class="flex justify-start">
         <input
           type="text"
-          class="itbkk-status-filter bg-gray-50 border text-gray-400 text-sm rounded-lg"
+          class="itbkk-status-filter bg-gray-50 border text-gray-400 text-sm rounded-lg w-[210px]"
           placeholder="Filter by status(es)"
           required
         />
@@ -192,6 +202,14 @@ const showStatusesList = function () {
         class="itbkk-manage-status bg-gray-500 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2"
       >
         ⚙️ Manage Status
+      </button>
+      <button
+        @click="showStatusesLimit"
+        class="itbkk-manage-status  bg-gray-500 scr-m:btn-sm scr-l:btn-md w-[50px] scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2"
+      >
+      <svg class="w-6 h-6  text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7.75 4H19M7.75 4a2.25 2.25 0 0 1-4.5 0m4.5 0a2.25 2.25 0 0 0-4.5 0M1 4h2.25m13.5 6H19m-2.25 0a2.25 2.25 0 0 1-4.5 0m4.5 0a2.25 2.25 0 0 0-4.5 0M1 10h11.25m-4.5 6H19M7.75 16a2.25 2.25 0 0 1-4.5 0m4.5 0a2.25 2.25 0 0 0-4.5 0M1 16h2.25"/>
+      </svg>
       </button>
     </div>
     <table class="w-full text-sm text-left text-gray-500">
@@ -285,6 +303,9 @@ const showStatusesList = function () {
   </teleport>
   <Teleport to="body" v-if="showStatusDetailModal">
     <StatusesList> </StatusesList>
+  </Teleport>
+  <Teleport to="body" v-if="showStatusDetailLimit">
+    <StatusLimitSetting @clearLimitPopUp="clearLimitStatusPopUp"></StatusLimitSetting>
   </Teleport>
 </template>
 <style scoped></style>
