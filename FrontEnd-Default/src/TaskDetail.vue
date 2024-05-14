@@ -58,11 +58,12 @@ const handleClick = async () => {
   const addOrUpdateTaskDetail = {
     title: task.taskTitle?.length > 0 ? task.taskTitle : null,
     assignees: task.taskAssignees?.length > 0 ? task.taskAssignees : null,
-    description: task.taskDescription?.length > 0 ? task.taskDescription : null,
-    
+    description: task.taskDescription?.length > 0 ? task.taskDescription : null
   }
   if (prop.operate == 'add') {
-    addOrUpdateTaskDetail.status = statusManager.findStatusByName(task.taskStatus).id
+    addOrUpdateTaskDetail.status = statusManager.findStatusByName(
+      task.taskStatus
+    ).id
     const newTask = await addItem(
       import.meta.env.VITE_BASE_URL,
       addOrUpdateTaskDetail
@@ -77,7 +78,9 @@ const handleClick = async () => {
     }
     emits('showTaskDetailModal', false)
   } else if (prop.operate == 'edit') {
-    addOrUpdateTaskDetail.status = statusManager.findStatusByName(task.taskStatus)
+    addOrUpdateTaskDetail.status = statusManager.findStatusByName(
+      task.taskStatus
+    )
     const editTask = await editItem(
       import.meta.env.VITE_BASE_URL,
       task.id,
@@ -99,11 +102,13 @@ const handleClick = async () => {
     emits('showTaskDetailModal', false)
   }
 }
+
+const taskSet = ref((task.taskStatus = 'No Status'))
 </script>
 
 <template>
   <div
-    class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[100px] overflow-auto"
+    class="itbkk-modal-task bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[100px] overflow-auto"
   >
     <div class="w-[90%] m-[auto]">
       <div class="flex flex-col justify-between bg-white p-4">
@@ -157,8 +162,13 @@ const handleClick = async () => {
                   v-model="task.taskStatus"
                   class="itbkk-status mt-1 ml-4 select select-bordered w-[95%] h-[40px] px-4 py-2 bg-inherit border-2 border-gray-200 text-gray-400 rounded-md"
                 >
-                  <option disabled selected >Status</option>
-                  <option v-for="(status) in statusManager.getStatuses()"  :value="status.name">{{ statusManager.transformStatus(status.name) }}</option>
+                  <option disabled selected>Status</option>
+                  <option
+                    v-for="status in statusManager.getStatuses()"
+                    :value="status.name"
+                  >
+                    {{ statusManager.transformStatus(status.name) }}
+                  </option>
                 </select>
               </label>
             </div>

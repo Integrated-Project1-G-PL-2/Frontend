@@ -16,7 +16,7 @@ import StatusPopUp from './StatusPopUp.vue'
 import DeleteStatus from './DeleteStatus.vue'
 import { useTaskManager } from '@/stores/TaskManager'
 
-const taskManager = useTaskManager();
+const taskManager = useTaskManager()
 const deClareemit = defineEmits(['editStatus'])
 const router = useRouter()
 const statusManager = useStatusManager()
@@ -54,7 +54,7 @@ const showDeletePopUpTaskDetail = async function (obj) {
     setDeleteOperate('delete')
   }
   transferDelList.value = await getItems(import.meta.env.VITE_BASE_URL_V2)
-  isDelete.value = !(taskManager.findStatusById(obj.id))
+  isDelete.value = !taskManager.findStatusById(obj.id)
   router.push({ name: 'DeleteStatus', params: { id: obj.id } })
   statusDetail.value = {
     id: obj.id,
@@ -245,10 +245,14 @@ const closeGreenPopup = async function (operate) {
           </td>
           <td
             class="itbkk-status-description px-20 py-3"
-            :class="statuses.description == null ? 'italic' : ''"
+            :class="
+              statuses.description == null || statuses.description === ''
+                ? 'italic'
+                : ''
+            "
           >
             {{
-              statuses.description == null
+              statuses.description == null || statuses.description === ''
                 ? 'No description is provided'
                 : statuses.description
             }}
