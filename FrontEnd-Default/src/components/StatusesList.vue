@@ -14,7 +14,9 @@ import DeletePopUp from '@/DeletePopUp.vue'
 import AlertPopUp from './../components/AlertPopUp.vue'
 import StatusPopUp from './StatusPopUp.vue'
 import DeleteStatus from './DeleteStatus.vue'
+import { useTaskManager } from '@/stores/TaskManager'
 
+const taskManager = useTaskManager();
 const deClareemit = defineEmits(['editStatus'])
 const router = useRouter()
 const statusManager = useStatusManager()
@@ -37,20 +39,22 @@ const redPopup = reactive({
 const showDeleteStatusDetail = ref(false)
 const transferDelList = ref({})
 onMounted(async () => {
+  taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
   statusManager.setStatuses(await getItems(import.meta.env.VITE_BASE_URL_V2))
 })
 
 const goBackToHomePage = function () {
   router.replace({ name: 'Task' })
 }
+
 const showDeletePopUpTaskDetail = async function (obj) {
-  if (transferDelList.value.length > 1) {
+  if (taskManager.findStatusById(obj.id)) {
     setDeleteOperate('transfer')
   } else {
     setDeleteOperate('delete')
   }
   transferDelList.value = await getItems(import.meta.env.VITE_BASE_URL_V2)
-  isDelete.value = !(transferDelList.value.length > 1)
+  isDelete.value = !(taskManager.findStatusById(obj.id))
   router.push({ name: 'DeleteStatus', params: { id: obj.id } })
   statusDetail.value = {
     id: obj.id,

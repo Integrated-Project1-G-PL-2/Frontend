@@ -28,8 +28,12 @@ export const useTaskManager = defineStore("taskManager", () => {
     })
     tasks.splice(index,1)
   }
+
+  const findStatusById = function(id){
+    return tasks.find(el => el.status.id == id)
+  }
   return{
-    getTasks , setTasks ,addTask,editTask,deleteTask
+    getTasks , setTasks ,addTask,editTask,deleteTask,findStatusById
   }
 })
 
