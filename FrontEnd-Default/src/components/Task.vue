@@ -171,15 +171,17 @@ const showStatusesLimit = function () {
       :operate="'edit'"
     />
     <div class="flex justify-end">
-      <div class="flex items-center space-x-2">
+      <div
+        class="flex items-center space-x-2 mr-auto ml-4 my-3 bg-gray-50 border"
+      >
         <input
           type="text"
-          class="itbkk-status-filter bg-gray-50 border text-gray-400 text-sm rounded-lg w-[210px] p-2"
+          class="itbkk-status-filter text-sm rounded-lg w-[210px] p-2"
           placeholder="Filter by status(es)"
           required
         />
         <svg
-          class="fill-current h-6 w-6 text-gray-500 cursor-pointer"
+          class="itbkk-filter-clear fill-current h-6 w-6 text-gray-500 cursor-pointer"
           role="button"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
@@ -192,19 +194,19 @@ const showStatusesLimit = function () {
       </div>
       <button
         @click="showAddPopUpTaskDetail('add')"
-        class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2"
+        class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2 my-3"
       >
         ✚ Add New Task
       </button>
       <button
         @click="showStatusesList"
-        class="itbkk-manage-status bg-gray-500 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2"
+        class="itbkk-manage-status bg-gray-500 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2 my-3"
       >
         ⚙️ Manage Status
       </button>
       <button
         @click="showStatusesLimit"
-        class="itbkk-manage-status bg-gray-500 w-[80px] flex items-center justify-center text-gray-100 hover:text-gray-200 mr-3 mt-2 rounded-md"
+        class="itbkk-manage-status bg-gray-500 w-[80px] flex items-center justify-center text-gray-100 hover:text-gray-200 mr-3 mt-2 rounded-md my-3"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -230,8 +232,8 @@ const showStatusesLimit = function () {
           <th class="px-4 py-3"></th>
           <th class="px-4 py-3">Title</th>
           <th class="px-4 py-3">Assignees</th>
-          <th class="px-4 py-3">
-            Status
+          <th class="px-4 py-3 flex items-center space-x-2">
+            <span>Status</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="1.2rem"
@@ -310,11 +312,11 @@ const showStatusesLimit = function () {
               class="w-full bg-emerald-500 flex justify-center rounded-md"
               :style="{
                 backgroundColor:
-                  task.status.name === 'TO_DO'
+                  task.status.name === 'To Do'
                     ? '#FFC0CB'
-                    : task.status.name === 'DOING'
+                    : task.status.name === 'Doing'
                     ? '#ffff99'
-                    : task.status.name === 'NO_STATUS'
+                    : task.status.name === 'No Status'
                     ? 'lightgray'
                     : '#90EE90'
               }"
