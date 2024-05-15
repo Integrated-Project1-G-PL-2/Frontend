@@ -263,11 +263,26 @@ const switchBack = function () {
               class="cursor-pointer"
               width="1.2rem"
               height="1.2rem"
+              viewBox="0 0 48 48"
+              v-if="!switchSort"
+              @click="switchDefault"
+            >
+              <path fill="#1e40af" d="M38 33V5h-4v28h-6l8 10l8-10z" />
+              <path
+                fill="#1e40af"
+                d="M16.8 17.2h-5.3l-1.1 3H6.9L12.6 5h2.9l5.7 15.2H18zm-4.6-2.7H16l-1.9-5.7zm.2 26H20V43H8.4v-1.9L16 30.3H8.4v-2.5h11.4v1.7z"
+              />
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="cursor-pointer"
+              width="1.2rem"
+              height="1.2rem"
               viewBox="0 0 16 16"
               v-if="switchSort"
               @click="switchBack"
             >
-              <g fill="#afacac">
+              <g fill="#1e40af">
                 <path
                   fill-rule="evenodd"
                   d="M10.082 5.629L9.664 7H8.598l1.789-5.332h1.234L13.402 7h-1.12l-.419-1.371zm1.57-.785L11 2.687h-.047l-.652 2.157z"
