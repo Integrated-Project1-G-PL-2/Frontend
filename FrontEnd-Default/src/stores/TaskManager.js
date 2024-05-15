@@ -32,17 +32,13 @@ export const useTaskManager = defineStore('taskManager', () => {
   const findStatusById = function (id) {
     return tasks.find((el) => el.status.id == id)
   }
-  const sortByTitle = function () {
-    tasks.sort((a, b) => a.title - b.title)
-  }
   return {
     getTasks,
     setTasks,
     addTask,
     editTask,
     deleteTask,
-    findStatusById,
-    sortByTitle
+    findStatusById
   }
 })
 

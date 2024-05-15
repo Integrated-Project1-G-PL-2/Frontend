@@ -15,6 +15,7 @@ import AlertPopUp from './../components/AlertPopUp.vue'
 import StatusesList from './StatusesList.vue'
 import { useStatusManager } from '@/stores/StatusManager'
 import StatusLimitSetting from './StatusLimitSetting.vue'
+import { sortByTitle, sortByTitleReverse } from '@/stores/SortManager.js'
 
 const statusManager = useStatusManager()
 const showStatusDetailModal = ref(false)
@@ -276,7 +277,7 @@ const taskGroups = ref(taskManager.getTasks())
               height="1.2rem"
               viewBox="0 0 48 48"
               v-if="switchSort"
-              @click="switchSortText"
+              @click=";[(switchSortText, sortByTitleReverse(taskGroups))]"
             >
               <path fill="#1e40af" d="M38 33V5h-4v28h-6l8 10l8-10z" />
               <path
