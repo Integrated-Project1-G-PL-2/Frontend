@@ -4,63 +4,55 @@ defineEmits(['clearLimitPopUp'])
 
 <template>
   <div
-    class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[10px]"
+    class="fixed inset-0 bg-gray-500 bg-opacity-50 backdrop-blur-sm flex items-center justify-center"
   >
-    <div
-      class="itbkk-modal-setting max-w-[500px] mx-auto mt-[20%] border border-gray-600 h-[200px]"
-    >
-      <div class="flex flex-col justify-between bg-white p-4 h-[100px]">
-        <div class="itbkk-title w-full h-[70px] mt-1 border-b">
-          <h1 class="text-xl font-bold text-justify">Status Settings</h1>
-        </div>
+    <div class="max-w-lg w-full bg-white border border-gray-600 p-4">
+      <div class="border-b pb-2 mb-4">
+        <h1 class="text-xl font-bold">Status Settings</h1>
+      </div>
+      <div class="flex flex-col space-y-4">
+        <p>
+          Users can limit the number of tasks in a status by setting the maximum
+          tasks in each status (except "No Status" and "Done" statuses).
+        </p>
 
-        <div
-          class="flex flex-row items-center justify-between w-[70%] h-[100%]"
+        <label class="inline-flex items-center cursor-pointer">
+          <input type="checkbox" value="" class="sr-only peer" checked />
+          <div
+            class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+          ></div>
+          <span
+            class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300"
+          >
+            Limit tasks in this status</span
+          >
+        </label>
+        <div>
+          <label class="block text-sm font-medium text-gray-700"
+            >Maximum tasks</label
+          >
+          <input
+            type="text"
+            class="mt-1 block w-full bg-gray-50 border border-gray-300 rounded-lg text-sm p-2.5"
+            placeholder="Write your Number tasks"
+            required
+          />
+        </div>
+      </div>
+      <div class="flex justify-end space-x-2 mt-4 border-t pt-4">
+        <button
+          class="bg-green-400 text-white py-1 px-3 rounded hover:bg-green-500"
         >
-          <div class="pl-4 mt-4">
-            Users can limit the number of task in a status by setting the
-            Maximum tasks in each status(except "No Status" and "Done"
-            statuses).
-            <label
-              class="itbkk-limit-task inline-flex items-center cursor-pointer"
-            >
-              <input type="checkbox" value="" class="sr-only peer" checked />
-              <div
-                class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
-              ></div>
-              <span
-                class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >Limit tasks in this status</span
-              >
-            </label>
-            <p>Maximum tasks</p>
-            <input
-              type="text"
-              class="itbkk-max-task bg-gray-50 border text-gray-400 text-sm rounded-lg w-[210px]"
-              placeholder="Write your Number tasks "
-              required
-            />
-          </div>
-        </div>
-        <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
-          <button
-            class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
-          >
-            <div class="btn text-center">Save</div>
-          </button>
-
-          <button
-            class="itbkk-button-cancel bg-red-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
-            @click="
-              ;[
-                $emit('clearLimitPopUp', true),
-                $router.replace({ name: 'Task' })
-              ]
-            "
-          >
-            <div class="btn text-center">Cancel</div>
-          </button>
-        </div>
+          Save
+        </button>
+        <button
+          class="bg-red-400 text-white py-1 px-3 rounded hover:bg-red-500"
+          @click="
+            $emit('clearLimitPopUp', true), $router.replace({ name: 'Task' })
+          "
+        >
+          Cancel
+        </button>
       </div>
     </div>
   </div>
