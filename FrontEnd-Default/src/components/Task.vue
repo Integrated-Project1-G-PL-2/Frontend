@@ -171,15 +171,15 @@ const showStatusesLimit = function () {
       :operate="'edit'"
     />
     <div class="flex justify-end">
-      <div class="flex justify-start">
+      <div class="flex items-center space-x-2">
         <input
           type="text"
-          class="itbkk-status-filter bg-gray-50 border text-gray-400 text-sm rounded-lg w-[210px]"
+          class="itbkk-status-filter bg-gray-50 border text-gray-400 text-sm rounded-lg w-[210px] p-2"
           placeholder="Filter by status(es)"
           required
         />
         <svg
-          class="fill-current h-6 w-6 text-gray-500"
+          class="fill-current h-6 w-6 text-gray-500 cursor-pointer"
           role="button"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
