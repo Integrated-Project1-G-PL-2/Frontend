@@ -4,7 +4,7 @@ defineEmits(['clearLimitPopUp'])
 
 <template>
   <div
-    class="fixed inset-0 bg-gray-500 bg-opacity-50 backdrop-blur-sm flex items-center justify-center"
+    class="itbkk-modal-setting fixed inset-0 bg-gray-500 bg-opacity-50 backdrop-blur-sm flex items-center justify-center"
   >
     <div class="max-w-lg w-full bg-white border border-gray-600 p-4">
       <div class="border-b pb-2 mb-4">
@@ -17,7 +17,12 @@ defineEmits(['clearLimitPopUp'])
         </p>
 
         <label class="inline-flex items-center cursor-pointer">
-          <input type="checkbox" value="" class="sr-only peer" checked />
+          <input
+            type="checkbox"
+            value=""
+            class="itbkk-limit-task sr-only peer"
+            checked
+          />
           <div
             class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
           ></div>
@@ -33,7 +38,7 @@ defineEmits(['clearLimitPopUp'])
           >
           <input
             type="text"
-            class="mt-1 block w-full bg-gray-50 border border-gray-300 rounded-lg text-sm p-2.5"
+            class="itbkk-max-task mt-1 block w-full bg-gray-50 border border-gray-300 rounded-lg text-sm p-2.5"
             placeholder="Write your Number tasks"
             required
           />
