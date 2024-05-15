@@ -111,7 +111,9 @@ const closeGreenPopup = async function (operate) {
 
 <template>
   <div class="bg-white relative border rounded-lg overflow-auto">
-    <h1 class="font-bold text-center">IT-Bangmod Kradan Kanban</h1>
+    <h1 class="font-bold text-center cursor-default">
+      IT-Bangmod Kradan Kanban
+    </h1>
     <AlertPopUp
       v-if="greenPopup.add.state"
       :titles="'The status  ' + greenPopup.add.taskStatus + ' has been added.'"
@@ -223,10 +225,10 @@ const closeGreenPopup = async function (operate) {
     <table class="w-full text-sm text-left text-gray-500">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50 cursor-default">
         <tr>
-          <th class="text-md px-3 py-3"></th>
-          <th class="text-md px-8 py-3">Name</th>
-          <th class="text-md px-20 py-3">Description</th>
-          <th class="text-md px-30 py-3 text-center">Action</th>
+          <th class="text-md px-3 py-3 cursor-default"></th>
+          <th class="text-md px-8 py-3 cursor-default">Name</th>
+          <th class="text-md px-20 py-3 cursor-default">Description</th>
+          <th class="text-md px-30 py-3 text-center cursor-default">Action</th>
         </tr>
       </thead>
       <tbody>

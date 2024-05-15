@@ -21,6 +21,7 @@ const showStatusDetailLimit = ref(false)
 const router = useRouter()
 const route = useRoute()
 const showTaskDetailModal = ref(false)
+const switchSort = ref(false)
 const taskManager = useTaskManager()
 const taskDetail = reactive({})
 const showDeleteTaskDetail = ref(false)
@@ -119,11 +120,21 @@ const showStatusesList = function () {
 const showStatusesLimit = function () {
   showStatusDetailLimit.value = true
 }
+
+const switchDefault = function () {
+  switchSort.value = true
+}
+
+const switchBack = function () {
+  switchSort.value = false
+}
 </script>
 
 <template>
   <div class="bg-white relative border rounded-lg overflow-auto">
-    <h1 class="font-bold text-center">IT-Bangmod Kradan Kanban</h1>
+    <h1 class="font-bold text-center cursor-default">
+      IT-Bangmod Kradan Kanban
+    </h1>
     <AlertPopUp
       v-if="greenPopup.add.state"
       :titles="
@@ -227,16 +238,19 @@ const showStatusesLimit = function () {
     <table class="w-full text-sm text-left text-gray-500">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50">
         <tr>
-          <th class="px-4 py-3"></th>
-          <th class="px-4 py-3">Title</th>
-          <th class="px-4 py-3">Assignees</th>
-          <th class="px-4 py-3 flex items-center space-x-2">
+          <th class="px-4 py-3 cursor-default"></th>
+          <th class="px-4 py-3 cursor-default">Title</th>
+          <th class="px-4 py-3 cursor-default">Assignees</th>
+          <th class="px-4 py-3 flex items-center space-x-2 cursor-default">
             <span>Status</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
+              class="cursor-pointer"
               width="1.2rem"
               height="1.2rem"
               viewBox="0 0 48 48"
+              v-if="!switchSort"
+              @click="switchDefault"
             >
               <path fill="#afacac" d="M38 33V5h-4v28h-6l8 10l8-10z" />
               <path
@@ -246,10 +260,12 @@ const showStatusesLimit = function () {
             </svg>
             <svg
               xmlns="http://www.w3.org/2000/svg"
+              class="cursor-pointer"
               width="1.2rem"
               height="1.2rem"
               viewBox="0 0 16 16"
-              v-if="(click = false)"
+              v-if="switchSort"
+              @click="switchBack"
             >
               <g fill="#afacac">
                 <path
@@ -293,19 +309,19 @@ const showStatusesLimit = function () {
           </td>
           <td class="itbkk-title px-4 py-3">
             <div
-              class="hover:text-sky-500"
+              class="hover:text-sky-500 cursor-default"
               @click="showTaskDetail(task.id, 'show')"
             >
               {{ task.title }}
             </div>
           </td>
           <td
-            class="itbkk-assignees px-4 py-3"
+            class="itbkk-assignees px-4 py-3 cursor-default"
             :class="task.assignees == null ? 'italic' : ''"
           >
             {{ task.assignees == null ? 'Unassigned' : task.assignees }}
           </td>
-          <td class="itbkk-status px-4 py-3">
+          <td class="itbkk-status px-4 py-3 cursor-default">
             <div
               class="w-full bg-emerald-500 flex justify-center rounded-md"
               :style="{
