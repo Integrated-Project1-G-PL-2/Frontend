@@ -15,7 +15,11 @@ import AlertPopUp from './../components/AlertPopUp.vue'
 import StatusesList from './StatusesList.vue'
 import { useStatusManager } from '@/stores/StatusManager'
 import StatusLimitSetting from './StatusLimitSetting.vue'
-import { sortByTitle, sortByTitleReverse } from '@/stores/SortManager.js'
+import {
+  sortByTitle,
+  sortByTitleReverse,
+  sortByTitleDate
+} from '@/stores/SortManager.js'
 
 const statusManager = useStatusManager()
 const showStatusDetailModal = ref(false)
@@ -140,6 +144,7 @@ const switchSortText = function () {
 const switchBack = function () {
   switchSort2.value = false
   switchDate.value = false
+  // sortByTitleDate(taskGroups)
 }
 const taskGroups = ref(taskManager.getTasks())
 </script>
@@ -294,7 +299,7 @@ const taskGroups = ref(taskManager.getTasks())
               height="1.2rem"
               viewBox="0 0 16 16"
               v-if="switchSort2"
-              @click="switchBack"
+              @click=";[(switchBack, sortByTitleDate(taskGroups))]"
             >
               <g fill="#1e40af">
                 <path

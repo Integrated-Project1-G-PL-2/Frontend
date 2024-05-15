@@ -8,5 +8,8 @@ function sortByTitleReverse(tasks) {
     b.title.localeCompare(a.title, 'th', { sensitivity: 'base' })
   )
 }
+function sortByTitleDate(tasks) {
+  tasks.sort((a, b) => a.createdOn - b.createdOn)
+}
 
-export { sortByTitle, sortByTitleReverse }
+export { sortByTitle, sortByTitleReverse, sortByTitleDate }
