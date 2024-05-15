@@ -15,6 +15,7 @@ import AlertPopUp from './../components/AlertPopUp.vue'
 import StatusesList from './StatusesList.vue'
 import { useStatusManager } from '@/stores/StatusManager'
 import StatusLimitSetting from './StatusLimitSetting.vue'
+
 const statusManager = useStatusManager()
 const showStatusDetailModal = ref(false)
 const showStatusDetailLimit = ref(false)
@@ -137,6 +138,7 @@ const switchBack = function () {
   switchSort2.value = false
   switchDate.value = false
 }
+const taskGroups = ref(taskManager.getTasks())
 </script>
 
 <template>
@@ -259,7 +261,7 @@ const switchBack = function () {
               height="1.2rem"
               viewBox="0 0 48 48"
               v-if="!switchDate"
-              @click="switchDefault"
+              @click=";[(switchDefault, sortByTitle(taskGroups))]"
             >
               <path fill="#afacac" d="M38 33V5h-4v28h-6l8 10l8-10z" />
               <path
@@ -306,7 +308,7 @@ const switchBack = function () {
       </thead>
       <tbody>
         <tr
-          v-for="(task, index) in taskManager.getTasks()"
+          v-for="(task, index) in taskGroups"
           :key="task.id"
           class="itbkk-item border-b cursor-pointer"
         >
