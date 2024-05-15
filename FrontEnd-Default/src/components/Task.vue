@@ -128,11 +128,13 @@ const showStatusesLimit = function () {
 const switchDefault = function () {
   switchDate.value = true
   switchSort.value = true
+  // sortByTitle(taskGroups)
 }
 
 const switchSortText = function () {
   switchSort.value = false
   switchSort2.value = true
+  // sortByTitleReverse(taskGroups)
 }
 
 const switchBack = function () {
