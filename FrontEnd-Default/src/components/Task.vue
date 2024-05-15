@@ -204,7 +204,7 @@ const showStatusesLimit = function () {
       </button>
       <button
         @click="showStatusesLimit"
-        class="itbkk-manage-status bg-gray-500 scr-m:btn-sm scr-l:btn-md w-[50px] scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2"
+        class="itbkk-manage-status bg-gray-500 w-[80px] flex items-center justify-center text-gray-100 hover:text-gray-200 mr-3 mt-2 rounded-md"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
