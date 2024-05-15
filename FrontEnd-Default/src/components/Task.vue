@@ -22,6 +22,8 @@ const router = useRouter()
 const route = useRoute()
 const showTaskDetailModal = ref(false)
 const switchSort = ref(false)
+const switchSort2 = ref(false)
+const switchDate = ref(false)
 const taskManager = useTaskManager()
 const taskDetail = reactive({})
 const showDeleteTaskDetail = ref(false)
@@ -122,11 +124,18 @@ const showStatusesLimit = function () {
 }
 
 const switchDefault = function () {
+  switchDate.value = true
   switchSort.value = true
 }
 
-const switchBack = function () {
+const switchSortText = function () {
   switchSort.value = false
+  switchSort2.value = true
+}
+
+const switchBack = function () {
+  switchSort2.value = false
+  switchDate.value = false
 }
 </script>
 
@@ -249,7 +258,7 @@ const switchBack = function () {
               width="1.2rem"
               height="1.2rem"
               viewBox="0 0 48 48"
-              v-if="!switchSort"
+              v-if="!switchDate"
               @click="switchDefault"
             >
               <path fill="#afacac" d="M38 33V5h-4v28h-6l8 10l8-10z" />
@@ -264,8 +273,8 @@ const switchBack = function () {
               width="1.2rem"
               height="1.2rem"
               viewBox="0 0 48 48"
-              v-if="!switchSort"
-              @click="switchDefault"
+              v-if="switchSort"
+              @click="switchSortText"
             >
               <path fill="#1e40af" d="M38 33V5h-4v28h-6l8 10l8-10z" />
               <path
@@ -279,7 +288,7 @@ const switchBack = function () {
               width="1.2rem"
               height="1.2rem"
               viewBox="0 0 16 16"
-              v-if="switchSort"
+              v-if="switchSort2"
               @click="switchBack"
             >
               <g fill="#1e40af">
