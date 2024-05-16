@@ -150,7 +150,20 @@ const switchBack = function () {
   // sortByTitleDate(taskGroups)
 }
 const taskGroups = ref(taskManager.getTasks())
+console.log(taskGroups)
 const searchStatus = ref('')
+const cloneTaskGroups = {...taskGroups}
+console.log(cloneTaskGroups)
+
+
+// const cloneTaskGroups = function () {
+//     return [...taskGroups.value]; // Deep clone on each access
+//   }
+// const clonedItems= function () {
+//       // Clone the items array
+//       return this.taskGroups.map(item => ({ ...item }));
+//     }
+
 
 
 
@@ -224,7 +237,7 @@ watch(searchStatus, (status) => {
           v-model="searchStatus"
           
         >
-        <option v-for="task in taskGroups" :key="task.status.id" > 
+        <option v-for="task in cloneTaskGroups" :key="task.status.id" > 
           {{ task.status.name }} 
         </option>
         
