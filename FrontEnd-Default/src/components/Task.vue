@@ -22,6 +22,7 @@ import {
   searchByStatus
 } from '@/stores/SortManager.js'
 
+
 const statusManager = useStatusManager()
 const showStatusDetailModal = ref(false)
 const showStatusDetailLimit = ref(false)
@@ -208,13 +209,17 @@ const filteredStatus = computed(() => {
     />
     <div class="flex justify-end">
       <div class="flex items-center space-x-2 mr-auto ml-4 my-3 border">
-        <input
-          type="text"
+        <select
+          multiple
           class="itbkk-status-filter text-sm rounded-lg w-[210px] p-2"
           placeholder="Filter by status(es)"
           required
           v-model="searchStatus"
-        />
+        >
+        <option v-for="task in taskGroups" :key="task.status.id"> {{ task.status.name }} </option>
+        
+      </select>
+
         <svg
           class="itbkk-filter-clear fill-current h-6 w-6 text-gray-400 cursor-pointer"
           role="button"
