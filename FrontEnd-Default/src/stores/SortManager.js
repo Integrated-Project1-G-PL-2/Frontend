@@ -14,9 +14,14 @@ function sortByTitleDate(tasks) {
 
 function searchByStatus(items, keywords) {
   const lowerCaseKeywords = keywords.toLowerCase()
-  items.filter((items) => items.status.name.includes(lowerCaseKeywords)) ||
-    items.id.toString().includes(lowerCaseKeywords) ||
-    items.title.includes(lowerCaseKeywords) ||
-    items.assignees.includes(lowerCaseKeywords)
+  items.filter(
+    (items) =>
+      items.id.toString().includes(lowerCaseKeywords) ||
+      items.title.toLowerCase().includes(lowerCaseKeywords) ||
+      items.assignees.includes(lowerCaseKeywords) ||
+      items.status.some((statusName) =>
+        statusName.name.toLowerCase().includes(lowerCaseKeywords)
+      )
+  )
 }
 export { sortByTitle, sortByTitleReverse, sortByTitleDate, searchByStatus }
