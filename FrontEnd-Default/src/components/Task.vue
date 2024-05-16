@@ -329,7 +329,7 @@ watch(
       </thead>
       <tbody>
         <tr
-          v-for="(task, index) in filteredStatus"
+          v-for="(task, index) in taskGroups"
           :key="task.id"
           class="itbkk-item border-b cursor-pointer"
         >
