@@ -23,8 +23,6 @@ import {
 } from '@/stores/SortManager.js'
 import { storeToRefs } from 'pinia'
 
-
-
 const statusManager = useStatusManager()
 const showStatusDetailModal = ref(false)
 const showStatusDetailLimit = ref(false)
@@ -156,9 +154,8 @@ const switchBack = function () {
 const taskGroups = ref(taskManager.getTasks())
 console.log(taskGroups.value)
 const searchStatus = ref('')
-const cloneTaskGroups = ref({...taskGroups})
+const cloneTaskGroups = ref({ ...taskGroups })
 console.log(cloneTaskGroups)
-
 
 // const cloneTaskGroups = function () {
 //     return [...taskGroups.value]; // Deep clone on each access
@@ -168,22 +165,20 @@ console.log(cloneTaskGroups)
 //       return this.taskGroups.map(item => ({ ...item }));
 //     }
 
-
-
-
 watch(searchStatus, (status) => {
-  if(collectStatus.includes(status) || status === null) {
+  if (collectStatus.includes(status) || status === null) {
     return
-  } collectStatus.push(status)
-  
+  }
+  collectStatus.push(status)
+
   console.log(collectStatus)
-}) 
+})
 </script>
 
 <template>
   <div class="bg-white relative border rounded-lg overflow-auto">
     <h1 class="font-bold text-center cursor-default">
-      IT-Bangmod Kradan Kanban 
+      IT-Bangmod Kradan Kanban
     </h1>
     <AlertPopUp
       v-if="greenPopup.add.state"
@@ -234,32 +229,36 @@ watch(searchStatus, (status) => {
     <div class="flex justify-end">
       <div class="flex items-center space-x-2 mr-auto ml-4 my-3 border">
         <select
-          
-          class="itbkk-status-filter text-sm rounded-lg w-[210px] p-2"
+          class="itbkk-status-filter text-sm rounded-lg w-[210px] p-2 bg-white"
           placeholder="Filter by status(es)"
           required
           v-model="searchStatus"
-          
         >
-        <option v-for="task in taskGroups" :key="task.status.id" > 
-          {{ task.status.name }} 
-        </option>
-        
-      </select>
+          <option v-for="task in taskGroups" :key="task.status.id">
+            {{ task.status.name }}
+          </option>
+        </select>
 
         <svg
           class="itbkk-filter-clear fill-current h-6 w-6 text-gray-400 cursor-pointer"
           role="button"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
-          @click="collectStatus.length = 0 , searchStatus = null"
+          @click=";(collectStatus.length = 0), (searchStatus = null)"
         >
           <path
             d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"
           />
         </svg>
       </div>
-     
+      <div class="flex items-center space-x-2 mr-4 ml-4 my-3 border">
+        <input
+          class="itbkk-status-filter text-sm rounded-lg w-[700px] p-2  "
+          required
+          v-model="searchStatus"
+        ></input>
+      </div>
+
       <button
         @click="showAddPopUpTaskDetail('add')"
         class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
