@@ -9,7 +9,7 @@ function sortByTitleReverse(tasks) {
   )
 }
 function sortByTitleDate(tasks) {
-  tasks.sort((a, b) => a.createdOn - b.createdOn)
+  tasks.sort((a, b) => new Date(b.createdOn) - new Date(a.createdOn))
 }
 
 export { sortByTitle, sortByTitleReverse, sortByTitleDate }
