@@ -251,14 +251,15 @@ watch(searchStatus, (status) => {
           />
         </svg>
       </div>
-      <div class="flex items-center space-x-2 mr-4 ml-4 my-3 border">
-        <input
-          class="itbkk-status-filter text-sm rounded-lg w-[700px] p-2  "
-          required
-          v-model="searchStatus"
-        ></input>
+      <div class="container p-4 border rounded-lg mr-2 ml-2 my-3 w-[650px]">
+        <div
+          v-for="statusName in collectStatus"
+          :key="statusName.status.id"
+          class="flex items-center space-x-2 mb-2"
+        >
+          {{ statusName.status.name }}
+        </div>
       </div>
-
       <button
         @click="showAddPopUpTaskDetail('add')"
         class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
