@@ -35,6 +35,7 @@ const taskManager = useTaskManager()
 const taskDetail = reactive({})
 const showDeleteTaskDetail = ref(false)
 const operation = ref('')
+const collectStatus = reactive([])
 const greenPopup = reactive({
   add: { state: false, taskTitle: '' },
   edit: { state: false, taskTitle: '' },
@@ -148,17 +149,18 @@ const switchBack = function () {
   // sortByTitleDate(taskGroups)
 }
 const taskGroups = ref(taskManager.getTasks())
+
 const searchStatus = ref('')
 
-const filteredStatus = ref()
 
-watch(
-  () => searchStatus.value,
-  () => {
-    filteredStatus.value = searchByStatus(taskGroups.value, searchStatus.value)
-    console.log(taskGroups.value)
-  }
-)
+
+watch(searchStatus, (status) => {
+  if(collectStatus.includes(status) || status === null) {
+    return
+  } collectStatus.push(status)
+
+  console.log(collectStatus)
+})
 </script>
 
 <template>
@@ -214,19 +216,26 @@ watch(
     />
     <div class="flex justify-end">
       <div class="flex items-center space-x-2 mr-auto ml-4 my-3 border">
-        <input
-          type="text"
+        <select
+
           class="itbkk-status-filter text-sm rounded-lg w-[210px] p-2"
           placeholder="Filter by status(es)"
           required
           v-model="searchStatus"
-        />
+
+        >
+        <option v-for="task in taskGroups" :key="task.status.id" > 
+          {{ task.status.name }} 
+        </option>
+
+      </select>
+
         <svg
           class="itbkk-filter-clear fill-current h-6 w-6 text-gray-400 cursor-pointer"
           role="button"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
-          @click="$emit('closePopUp')"
+          @click="collectStatus.length = 0 , searchStatus = null"
         >
           <path
             d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"
