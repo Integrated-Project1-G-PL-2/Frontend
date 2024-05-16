@@ -36,6 +36,7 @@ const taskManager = useTaskManager()
 const taskDetail = reactive({})
 const showDeleteTaskDetail = ref(false)
 const operation = ref('')
+const collectStatus = reactive([])
 const greenPopup = reactive({
   add: { state: false, taskTitle: '' },
   edit: { state: false, taskTitle: '' },
@@ -151,9 +152,14 @@ const switchBack = function () {
 const taskGroups = ref(taskManager.getTasks())
 const searchStatus = ref('')
 
-const filteredStatus = computed(() => {
-  return searchByStatus(taskGroups.value, searchStatus.value)
-})
+
+
+watch(searchStatus, (status) => {
+  if(collectStatus.includes(status)) {
+    return
+  } collectStatus.push(status)
+  console.log(collectStatus)
+}) 
 </script>
 
 <template>
@@ -210,13 +216,13 @@ const filteredStatus = computed(() => {
     <div class="flex justify-end">
       <div class="flex items-center space-x-2 mr-auto ml-4 my-3 border">
         <select
-          multiple
+          
           class="itbkk-status-filter text-sm rounded-lg w-[210px] p-2"
           placeholder="Filter by status(es)"
           required
           v-model="searchStatus"
         >
-        <option v-for="task in taskGroups" :key="task.status.id"> {{ task.status.name }} </option>
+        <option v-for="task in taskGroups" :key="task.status.id" > {{ task.status.name }} </option>
         
       </select>
 
@@ -232,6 +238,7 @@ const filteredStatus = computed(() => {
           />
         </svg>
       </div>
+     
       <button
         @click="showAddPopUpTaskDetail('add')"
         class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
