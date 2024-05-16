@@ -21,6 +21,8 @@ import {
   sortByTitleDate,
   searchByStatus
 } from '@/stores/SortManager.js'
+import { storeToRefs } from 'pinia'
+
 
 
 const statusManager = useStatusManager()
@@ -149,10 +151,12 @@ const switchBack = function () {
   switchDate.value = false
   // sortByTitleDate(taskGroups)
 }
+// const {tasks} = storeToRefs(taskManager)
+
 const taskGroups = ref(taskManager.getTasks())
-console.log(taskGroups)
+console.log(taskGroups.value)
 const searchStatus = ref('')
-const cloneTaskGroups = {...taskGroups}
+const cloneTaskGroups = ref({...taskGroups})
 console.log(cloneTaskGroups)
 
 
@@ -179,7 +183,7 @@ watch(searchStatus, (status) => {
 <template>
   <div class="bg-white relative border rounded-lg overflow-auto">
     <h1 class="font-bold text-center cursor-default">
-      IT-Bangmod Kradan Kanban
+      IT-Bangmod Kradan Kanban 
     </h1>
     <AlertPopUp
       v-if="greenPopup.add.state"
@@ -237,7 +241,7 @@ watch(searchStatus, (status) => {
           v-model="searchStatus"
           
         >
-        <option v-for="task in cloneTaskGroups" :key="task.status.id" > 
+        <option v-for="task in taskGroups" :key="task.status.id" > 
           {{ task.status.name }} 
         </option>
         
