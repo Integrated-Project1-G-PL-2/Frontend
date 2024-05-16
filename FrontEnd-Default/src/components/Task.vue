@@ -150,9 +150,15 @@ const switchBack = function () {
 const taskGroups = ref(taskManager.getTasks())
 const searchStatus = ref('')
 
-const filteredStatus = computed(() => {
-  return searchByStatus(taskGroups.value, searchStatus.value)
-})
+const filteredStatus = ref()
+
+watch(
+  () => searchStatus.value,
+  () => {
+    filteredStatus.value = searchByStatus(taskGroups.value, searchStatus.value)
+    console.log(taskGroups.value)
+  }
+)
 </script>
 
 <template>
@@ -323,7 +329,7 @@ const filteredStatus = computed(() => {
       </thead>
       <tbody>
         <tr
-          v-for="(task, index) in taskGroups"
+          v-for="(task, index) in filteredStatus"
           :key="task.id"
           class="itbkk-item border-b cursor-pointer"
         >
