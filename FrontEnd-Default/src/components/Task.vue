@@ -269,7 +269,7 @@ const taskGroups = ref(taskManager.getTasks())
               height="1.2rem"
               viewBox="0 0 48 48"
               v-if="!switchDate"
-              @click=";[(switchDefault, sortByTitle(taskGroups))]"
+              @click=";[(switchDefault(), sortByTitle(taskGroups))]"
             >
               <path fill="#afacac" d="M38 33V5h-4v28h-6l8 10l8-10z" />
               <path
@@ -284,7 +284,7 @@ const taskGroups = ref(taskManager.getTasks())
               height="1.2rem"
               viewBox="0 0 48 48"
               v-if="switchSort"
-              @click=";[(switchSortText, sortByTitleReverse(taskGroups))]"
+              @click=";[(switchSortText(), sortByTitleReverse(taskGroups))]"
             >
               <path fill="#1e40af" d="M38 33V5h-4v28h-6l8 10l8-10z" />
               <path
@@ -299,7 +299,7 @@ const taskGroups = ref(taskManager.getTasks())
               height="1.2rem"
               viewBox="0 0 16 16"
               v-if="switchSort2"
-              @click=";[(switchBack, sortByTitleDate(taskGroups))]"
+              @click=";[(switchBack(), sortByTitleDate(taskGroups))]"
             >
               <g fill="#1e40af">
                 <path
