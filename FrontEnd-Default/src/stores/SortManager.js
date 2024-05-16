@@ -19,9 +19,7 @@ function searchByStatus(items, keywords) {
       items.id.toString().includes(lowerCaseKeywords) ||
       items.title.toLowerCase().includes(lowerCaseKeywords) ||
       items.assignees.includes(lowerCaseKeywords) ||
-      items.status.some((statusName) =>
-        statusName.name.toLowerCase().includes(lowerCaseKeywords)
-      )
+      items.status.name.toLowerCase().includes(lowerCaseKeywords)
   )
 }
 export { sortByTitle, sortByTitleReverse, sortByTitleDate, searchByStatus }
