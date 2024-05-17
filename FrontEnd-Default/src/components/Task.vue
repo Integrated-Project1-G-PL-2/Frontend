@@ -257,7 +257,7 @@ watch(searchStatus, (status) => {
         <div
           v-for="(statusName, index) in collectStatus"
           :key="index"
-          class="flex items-center justify-between space-x-2 mb-2 border w-[100px] bg-gray-300"
+          class="flex items-center justify-between space-x-2 border w-[100px] bg-gray-300"
         >
           {{ statusName }}
           <svg
