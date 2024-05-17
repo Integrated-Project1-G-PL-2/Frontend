@@ -164,7 +164,9 @@ console.log(cloneTaskGroups.value)
 //       // Clone the items array
 //       return this.taskGroups.map(item => ({ ...item }));
 //     }
-
+const deleteOneStatus = function () {
+  collectStatus.filter(item => item !== statusName)
+}
 
 
 watch(searchStatus, (status) => {
