@@ -135,49 +135,45 @@ const showStatusesLimit = function () {
 const switchDefault = function () {
   switchDate.value = true
   switchSort.value = true
-  // sortByTitle(taskGroups)
+
 }
 
 const switchSortText = function () {
   switchSort.value = false
   switchSort2.value = true
-  // sortByTitleReverse(taskGroups)
+
 }
 
 const switchBack = function () {
   switchSort2.value = false
   switchDate.value = false
-  // sortByTitleDate(taskGroups)
+
 }
-// const {tasks} = storeToRefs(taskManager)
+
 
 const taskGroups = ref(taskManager.getTasks())
-console.log(taskGroups.value)
+
 const searchStatus = ref('')
 const cloneTaskGroups = ref(statusManager.getStatuses())
-console.log(cloneTaskGroups.value)
-const newCollectStatus = reactive([])
-
-// const cloneTaskGroups = function () {
-//     return [...taskGroups.value]; // Deep clone on each access
-//   }
-// const clonedItems= function () {
-//       // Clone the items array
-//       return this.taskGroups.map(item => ({ ...item }));
-//     }
-const changeCollectStatus = function () {
-  collectStatus = newCollectStatus
-}
 
 
 
-watch(searchStatus, (status) => {
+
+
+
+
+watch(searchStatus,(status) => {
   if (collectStatus.includes(status) || status === null) {
     return
   }
   collectStatus.push(status)
+  
+  
 
-  console.log(collectStatus)
+})
+watch(collectStatus, async() => {
+  
+  taskManager.setTasks( await getItems(`${import.meta.env.VITE_BASE_URL}?statusName=${collectStatus.join()}`))
 })
 </script>
 
@@ -272,9 +268,8 @@ watch(searchStatus, (status) => {
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
             @click="
-              newCollectStatus = collectStatus.splice(index,1),
-              changeCollectStatus,
-                (searchStatus = null),console.log(statusName,index),console.log(collectStatus),console.log(newCollectStatus)
+               collectStatus.splice(index,1),(searchStatus = null)
+              
             "
           >
             <path
