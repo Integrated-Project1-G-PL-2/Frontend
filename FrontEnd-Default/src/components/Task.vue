@@ -252,7 +252,7 @@ watch(searchStatus, (status) => {
         </svg>
       </div>
       <div
-        class="container p-4 border rounded-lg mr-2 ml-2 my-3 w-[650px] flex flex-wrap"
+        class="container p-4 border rounded-lg mr-2 ml-2 my-3 w-[650px] flex flex-wrap gap-2"
       >
         <div
           v-for="(statusName, index) in collectStatus"
