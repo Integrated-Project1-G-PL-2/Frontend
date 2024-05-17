@@ -120,7 +120,6 @@ const handleClick = async () => {
       router.replace({ name: 'Task' })
       emits('showTaskDetailModal', false)
     }
-    return
   }
 }
 </script>
