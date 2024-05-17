@@ -154,8 +154,9 @@ const switchBack = function () {
 const taskGroups = ref(taskManager.getTasks())
 console.log(taskGroups.value)
 const searchStatus = ref('')
-const cloneTaskGroups = ref(taskManager.getTasks())
+const cloneTaskGroups = ref(statusManager.getStatuses())
 console.log(cloneTaskGroups.value)
+const newCollectStatus = reactive([])
 
 // const cloneTaskGroups = function () {
 //     return [...taskGroups.value]; // Deep clone on each access
@@ -166,7 +167,10 @@ console.log(cloneTaskGroups.value)
 //     }
 const deleteOneStatus = function () {
   collectStatus.filter((item) => item !== statusName)
+const changeCollectStatus = function () {
+  collectStatus = newCollectStatus
 }
+
 
 watch(searchStatus, (status) => {
   if (collectStatus.includes(status) || status === null) {
@@ -237,8 +241,8 @@ watch(searchStatus, (status) => {
           required
           v-model="searchStatus"
         >
-          <option v-for="(task, index) in cloneTaskGroups" :key="index">
-            {{ task.status.name }}
+          <option v-for="(status, index) in cloneTaskGroups" :key="index">
+            {{ status.name }}
           </option>
         </select>
 
@@ -255,11 +259,12 @@ watch(searchStatus, (status) => {
         </svg>
       </div>
       <div
-        class="container p-4 border rounded-lg mr-2 ml-2 my-3 w-[650px] flex gap-2 overflow-auto"
+        class="container p-4 border rounded-lg mr-2 ml-2 my-3 w-[650px] flex overflow-auto gap-2"
       >
         <div
           v-for="(statusName, index) in collectStatus"
           :key="index"
+          class="flex items-center justify-between space-x-2 border w-auto bg-gray-300"
           class="flex items-center justify-between space-x-2 border w-[25%] bg-gray-300"
         >
           {{ statusName }}
