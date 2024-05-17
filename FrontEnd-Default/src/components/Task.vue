@@ -154,7 +154,7 @@ const switchBack = function () {
 const taskGroups = ref(taskManager.getTasks())
 console.log(taskGroups.value)
 const searchStatus = ref('')
-const cloneTaskGroups = ref(taskManager.getTasks())
+const cloneTaskGroups = ref(statusManager.getStatuses())
 console.log(cloneTaskGroups.value)
 const newCollectStatus = reactive([])
 
@@ -169,13 +169,6 @@ const changeCollectStatus = function () {
   collectStatus = newCollectStatus
 }
 
-//test filter ชื่อไม่ซ้ำ
-const uniqueStatus =function () {
-  return cloneTaskGroups.filter(element => {
-     element.status.name !== cloneTaskGroups.status.name;
-  });
-}
-//
 
 
 watch(searchStatus, (status) => {
@@ -247,8 +240,8 @@ watch(searchStatus, (status) => {
           required
           v-model="searchStatus"
         >
-          <option v-for="(task, index) in uniqueStatus" :key="index">
-            {{ task.status.name }}
+          <option v-for="(status, index) in cloneTaskGroups" :key="index">
+            {{ status.name }}
           </option>
         </select>
 
@@ -265,12 +258,12 @@ watch(searchStatus, (status) => {
         </svg>
       </div>
       <div
-        class="container p-4 border rounded-lg mr-2 ml-2 my-3 w-[650px] flex flex-wrap gap-2"
+        class="container p-4 border rounded-lg mr-2 ml-2 my-3 w-[650px] flex  overflow-auto gap-2"
       >
         <div
           v-for="(statusName, index) in collectStatus"
           :key="index"
-          class="flex items-center justify-between space-x-2 border w-[100px] bg-gray-300"
+          class="flex items-center justify-between space-x-2 border w-auto bg-gray-300 "
         >
           {{ statusName }}
           <svg
