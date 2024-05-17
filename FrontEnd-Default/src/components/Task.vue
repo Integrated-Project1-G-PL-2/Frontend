@@ -255,7 +255,7 @@ watch(searchStatus, (status) => {
         <div
           v-for="statusName in collectStatus"
           :key="statusName.status.id"
-          class="flex items-center space-x-2 mb-2"
+          class="flex items-center space-x-2 mb-2 border border-gray-400"
         >
           {{ statusName.status.name }}
         </div>
