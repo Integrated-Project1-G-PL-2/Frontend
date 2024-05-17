@@ -259,7 +259,7 @@ watch(searchStatus, (status) => {
         >
           {{ statusName.status.name }}
           <svg
-            class="itbkk-filter-clear fill-current h-6 w-6 text-gray-400 cursor-pointer"
+            class="itbkk-filter-clear fill-current h-6 w-6 text-gray-400 cursor-pointer ml-60 mr-7"
             role="button"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
