@@ -156,6 +156,7 @@ console.log(taskGroups.value)
 const searchStatus = ref('')
 const cloneTaskGroups = ref(taskManager.getTasks())
 console.log(cloneTaskGroups.value)
+const newCollectStatus = reactive([])
 
 // const cloneTaskGroups = function () {
 //     return [...taskGroups.value]; // Deep clone on each access
@@ -164,8 +165,8 @@ console.log(cloneTaskGroups.value)
 //       // Clone the items array
 //       return this.taskGroups.map(item => ({ ...item }));
 //     }
-const deleteOneStatus = function () {
-  collectStatus.filter(item => item !== statusName)
+const changeCollectStatus = function () {
+  collectStatus = newCollectStatus
 }
 
 
@@ -270,8 +271,9 @@ watch(searchStatus, (status) => {
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
             @click="
-              collectStatus = collectStatus.filter(item => item !== statusName),
-                (searchStatus = null),console.log(statusName,index),console.log(collectStatus)
+              newCollectStatus = collectStatus.splice(index,1),
+              changeCollectStatus,
+                (searchStatus = null),console.log(statusName,index),console.log(collectStatus),console.log(newCollectStatus)
             "
           >
             <path
