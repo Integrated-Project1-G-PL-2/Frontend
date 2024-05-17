@@ -165,11 +165,10 @@ const newCollectStatus = reactive([])
 //       // Clone the items array
 //       return this.taskGroups.map(item => ({ ...item }));
 //     }
-const deleteOneStatus = function () {
-  collectStatus.filter((item) => item !== statusName)
 const changeCollectStatus = function () {
   collectStatus = newCollectStatus
 }
+
 
 
 watch(searchStatus, (status) => {
@@ -259,13 +258,12 @@ watch(searchStatus, (status) => {
         </svg>
       </div>
       <div
-        class="container p-4 border rounded-lg mr-2 ml-2 my-3 w-[650px] flex overflow-auto gap-2"
+        class="container p-4 border rounded-lg mr-2 ml-2 my-3 w-[650px] flex  overflow-auto gap-2"
       >
         <div
           v-for="(statusName, index) in collectStatus"
           :key="index"
-          class="flex items-center justify-between space-x-2 border w-auto bg-gray-300"
-          class="flex items-center justify-between space-x-2 border w-[25%] bg-gray-300"
+          class="flex items-center justify-between space-x-2 border w-auto bg-gray-300 "
         >
           {{ statusName }}
           <svg
@@ -274,12 +272,9 @@ watch(searchStatus, (status) => {
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
             @click="
-              ;(collectStatus = collectStatus.filter(
-                (item) => item !== statusName
-              )),
-                (searchStatus = null),
-                console.log(statusName, index),
-                console.log(collectStatus)
+              newCollectStatus = collectStatus.splice(index,1),
+              changeCollectStatus,
+                (searchStatus = null),console.log(statusName,index),console.log(collectStatus),console.log(newCollectStatus)
             "
           >
             <path
