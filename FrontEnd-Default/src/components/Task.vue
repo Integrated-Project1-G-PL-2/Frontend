@@ -165,9 +165,8 @@ console.log(cloneTaskGroups.value)
 //       return this.taskGroups.map(item => ({ ...item }));
 //     }
 const deleteOneStatus = function () {
-  collectStatus.filter(item => item !== statusName)
+  collectStatus.filter((item) => item !== statusName)
 }
-
 
 watch(searchStatus, (status) => {
   if (collectStatus.includes(status) || status === null) {
@@ -256,12 +255,12 @@ watch(searchStatus, (status) => {
         </svg>
       </div>
       <div
-        class="container p-4 border rounded-lg mr-2 ml-2 my-3 w-[650px] flex flex-wrap gap-2"
+        class="container p-4 border rounded-lg mr-2 ml-2 my-3 w-[650px] flex gap-2 overflow-auto"
       >
         <div
           v-for="(statusName, index) in collectStatus"
           :key="index"
-          class="flex items-center justify-between space-x-2 border w-[100px] bg-gray-300"
+          class="flex items-center justify-between space-x-2 border w-[25%] bg-gray-300"
         >
           {{ statusName }}
           <svg
@@ -270,8 +269,12 @@ watch(searchStatus, (status) => {
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
             @click="
-              collectStatus = collectStatus.filter(item => item !== statusName),
-                (searchStatus = null),console.log(statusName,index),console.log(collectStatus)
+              ;(collectStatus = collectStatus.filter(
+                (item) => item !== statusName
+              )),
+                (searchStatus = null),
+                console.log(statusName, index),
+                console.log(collectStatus)
             "
           >
             <path
