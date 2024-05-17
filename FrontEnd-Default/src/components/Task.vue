@@ -135,45 +135,35 @@ const showStatusesLimit = function () {
 const switchDefault = function () {
   switchDate.value = true
   switchSort.value = true
-
 }
 
 const switchSortText = function () {
   switchSort.value = false
   switchSort2.value = true
-
 }
 
 const switchBack = function () {
   switchSort2.value = false
   switchDate.value = false
-
 }
-
 
 const taskGroups = ref(taskManager.getTasks())
 
 const searchStatus = ref('')
 const cloneTaskGroups = ref(statusManager.getStatuses())
 
-
-
-
-
-
-
-watch(searchStatus,(status) => {
+watch(searchStatus, (status) => {
   if (collectStatus.includes(status) || status === null) {
     return
   }
   collectStatus.push(status)
-  
-  
-
 })
-watch(collectStatus, async() => {
-  
-  taskManager.setTasks( await getItems(`${import.meta.env.VITE_BASE_URL}?statusName=${collectStatus.join()}`))
+watch(collectStatus, async () => {
+  taskManager.setTasks(
+    await getItems(
+      `${import.meta.env.VITE_BASE_URL}?statusName=${collectStatus.join()}`
+    )
+  )
 })
 </script>
 
@@ -254,12 +244,12 @@ watch(collectStatus, async() => {
         </svg>
       </div>
       <div
-        class="container p-4 border rounded-lg mr-2 ml-2 my-3 w-[650px] flex  overflow-auto gap-2"
+        class="container p-4 border rounded-lg mr-2 ml-2 my-3 w-[650px] flex overflow-auto gap-2"
       >
         <div
           v-for="(statusName, index) in collectStatus"
           :key="index"
-          class="flex items-center justify-between space-x-2 border w-auto bg-gray-300 "
+          class="flex items-center justify-between space-x-2 border w-auto bg-gray-300"
         >
           {{ statusName }}
           <svg
@@ -267,10 +257,7 @@ watch(collectStatus, async() => {
             role="button"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
-            @click="
-               collectStatus.splice(index,1),(searchStatus = null)
-              
-            "
+            @click="collectStatus.splice(index, 1), (searchStatus = null)"
           >
             <path
               d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"
