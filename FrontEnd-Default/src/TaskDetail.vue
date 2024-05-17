@@ -60,50 +60,58 @@ const handleClick = async () => {
     assignees: task.taskAssignees?.length > 0 ? task.taskAssignees : null,
     description: task.taskDescription?.length > 0 ? task.taskDescription : null
   }
-  if (prop.operate == 'add') {
-    addOrUpdateTaskDetail.status = statusManager.findStatusByName(
-      task.taskStatus
-    ).id
-    const newTask = await addItem(
-      import.meta.env.VITE_BASE_URL,
-      addOrUpdateTaskDetail
-    )
-    router.replace({ name: 'Task' })
-    if (newTask.status != '500') {
-      taskManager.addTask(newTask)
-      emits('showGreenPopup', {
-        taskTitle: newTask.title,
-        operate: prop.operate
-      })
+  if (isTitleOverLimit.value) {
+    if (prop.operate == 'add') {
+      addOrUpdateTaskDetail.status = statusManager.findStatusByName(
+        task.taskStatus
+      ).id
+      const newTask = await addItem(
+        import.meta.env.VITE_BASE_URL,
+        addOrUpdateTaskDetail
+      )
+      router.replace({ name: 'Task' })
+      if (newTask.status != '500') {
+        taskManager.addTask(newTask)
+        emits('showGreenPopup', {
+          taskTitle: newTask.title,
+          operate: prop.operate
+        })
+      }
+      emits('showTaskDetailModal', false)
+    } else if (prop.operate == 'edit') {
+      addOrUpdateTaskDetail.status = statusManager.findStatusByName(
+        task.taskStatus
+      )
+      const editTask = await editItem(
+        import.meta.env.VITE_BASE_URL,
+        task.id,
+        addOrUpdateTaskDetail
+      )
+      if (editTask.status != '500' && editTask.status != '404') {
+        taskManager.editTask(editTask.id, editTask)
+        emits('showGreenPopup', {
+          taskTitle: editTask.title,
+          operate: prop.operate
+        })
+      } else {
+        emits('showRedPopup', {
+          taskTitle: !editTask.title ? task.taskTitle : editTask.title,
+          operate: prop.operate
+        })
+      }
+      router.replace({ name: 'Task' })
+      emits('showTaskDetailModal', false)
     }
-    emits('showTaskDetailModal', false)
-  } else if (prop.operate == 'edit') {
-    addOrUpdateTaskDetail.status = statusManager.findStatusByName(
-      task.taskStatus
-    )
-    const editTask = await editItem(
-      import.meta.env.VITE_BASE_URL,
-      task.id,
-      addOrUpdateTaskDetail
-    )
-    if (editTask.status != '500' && editTask.status != '404') {
-      taskManager.editTask(editTask.id, editTask)
-      emits('showGreenPopup', {
-        taskTitle: editTask.title,
-        operate: prop.operate
-      })
-    } else {
-      emits('showRedPopup', {
-        taskTitle: !editTask.title ? task.taskTitle : editTask.title,
-        operate: prop.operate
-      })
-    }
-    router.replace({ name: 'Task' })
-    emits('showTaskDetailModal', false)
+    return
   }
 }
 
 const taskSet = ref((task.taskStatus = 'No Status'))
+const isTitleOverLimit = ref(false)
+
+const checkTitleLength = () => {
+  isTitleOverLimit.value = task.taskTitle.length > 100
+}
 </script>
 
 <template>
@@ -118,12 +126,12 @@ const taskSet = ref((task.taskStatus = 'No Status'))
             class="itbkk-title font-bold text-justify w-full breal-all border border-gray-300 rounded-md"
             :disabled="operate == 'show'"
             v-model.trim="task.taskTitle"
-            maxlength="100"
+            @input="checkTitleLength"
           >
           </textarea>
           <div
             style="display: flex; align-items: center"
-            v-if="maxlength > 100"
+            v-if="isTitleOverLimit"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -159,7 +167,7 @@ const taskSet = ref((task.taskStatus = 'No Status'))
               ></textarea>
               <div
                 style="display: flex; align-items: center"
-                v-if="maxlength > 500"
+                v-if="isTitleOverLimit"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -195,7 +203,7 @@ const taskSet = ref((task.taskStatus = 'No Status'))
                 ></textarea>
                 <div
                   style="display: flex; align-items: center"
-                  v-if="maxlength > 30"
+                  v-if="isTitleOverLimit"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
