@@ -156,8 +156,8 @@ const switchBack = function () {
 const taskGroups = ref(taskManager.getTasks())
 console.log(taskGroups.value)
 const searchStatus = ref('')
-const cloneTaskGroups = ref({...taskGroups})
-console.log(cloneTaskGroups)
+const cloneTaskGroups = ref(taskManager.getTasks())
+console.log(cloneTaskGroups.value)
 
 
 // const cloneTaskGroups = function () {
@@ -241,7 +241,7 @@ watch(searchStatus, (status) => {
           v-model="searchStatus"
           
         >
-        <option v-for="task in taskGroups" :key="task.status.id" > 
+        <option v-for="(task,index) in cloneTaskGroups" :key="index" > 
           {{ task.status.name }} 
         </option>
         
