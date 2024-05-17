@@ -41,18 +41,18 @@ const validation = function () {
       status.description === prop.statusDetail.value?.description)
   )
 }
-const isTitleOverLimit = ref(false)
-const isTitleOverLimit2 = ref(false)
+const isNameOverLimit = ref(false)
+const isDescriptionOverLimit = ref(false)
 
-const checkTitleLength = () => {
-  isTitleOverLimit.value = status.name.length > 50
+const checkNameLength = () => {
+  isNameOverLimit.value = status.name.length > 50
 }
-const checkTitleLength2 = () => {
-  isTitleOverLimit2.value = status.description.length > 200
+const checkDescriptionLength = () => {
+  isDescriptionOverLimit.value = status.description.length > 200
 }
 
 const saveClick = async () => {
-  if (isTitleOverLimit.value || isTitleOverLimit2.value) {
+  if (isNameOverLimit.value || isDescriptionOverLimit.value) {
     return
   }
   if (prop.operate === 'add') {
@@ -117,12 +117,12 @@ init()
           <textarea
             v-model="status.name"
             class="itbkk-status-name w-[90%] h-[40%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
-            @input="checkTitleLength"
+            @input="checkNameLength"
           >
           </textarea>
           <div
             style="display: flex; align-items: center"
-            v-if="isTitleOverLimit"
+            v-if="isNameOverLimit"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -150,11 +150,11 @@ init()
               v-model="status.description"
               class="itbkk-status-description w-[90%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
               placeholder="No Description Provided"
-              @input="checkTitleLength2"
+              @input="checkDescriptionLength"
             ></textarea>
             <div
               style="display: flex; align-items: center"
-              v-if="isTitleOverLimit2"
+              v-if="isDescriptionOverLimit"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

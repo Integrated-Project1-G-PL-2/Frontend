@@ -50,17 +50,17 @@ if (prop.taskDetail.value) {
 }
 const taskSet = ref((task.taskStatus = 'No Status'))
 const isTitleOverLimit = ref(false)
-const isTitleOverLimit2 = ref(false)
-const isTitleOverLimit3 = ref(false)
+const isDescriptionOverLimit = ref(false)
+const isAssigneesOverLimit = ref(false)
 
 const checkTitleLength = () => {
   isTitleOverLimit.value = task.taskTitle.length > 100
 }
-const checkTitleLength2 = () => {
-  isTitleOverLimit2.value = task.taskDescription.length > 500
+const checkDescriptionLength = () => {
+  isDescriptionOverLimit.value = task.taskDescription.length > 500
 }
-const checkTitleLength3 = () => {
-  isTitleOverLimit3.value = task.taskAssignees.length > 30
+const checkAssigneesLength = () => {
+  isAssigneesOverLimit.value = task.taskAssignees.length > 30
 }
 
 const handleClick = async () => {
@@ -76,8 +76,8 @@ const handleClick = async () => {
   }
   if (
     isTitleOverLimit.value ||
-    isTitleOverLimit2.value ||
-    isTitleOverLimit3.value
+    isDescriptionOverLimit.value ||
+    isAssigneesOverLimit.value
   ) {
     return
   }
@@ -175,11 +175,11 @@ const handleClick = async () => {
                 "
                 class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                 placeholder="No Description Provided"
-                @input="checkTitleLength2"
+                @input="checkDescriptionLength"
               ></textarea>
               <div
                 style="display: flex; align-items: center"
-                v-if="isTitleOverLimit2"
+                v-if="isDescriptionOverLimit"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -212,11 +212,11 @@ const handleClick = async () => {
                     task.taskAssigneess == null ? 'italic text-gray-500 ' : ''
                   "
                   placeholder="Unassigned"
-                  @input="checkTitleLength3"
+                  @input="checkAssigneesLength"
                 ></textarea>
                 <div
                   style="display: flex; align-items: center"
-                  v-if="isTitleOverLimit3"
+                  v-if="isAssigneesOverLimit"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
