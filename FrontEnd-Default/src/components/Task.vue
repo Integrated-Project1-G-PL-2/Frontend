@@ -169,6 +169,14 @@ const changeCollectStatus = function () {
   collectStatus = newCollectStatus
 }
 
+//test filter ชื่อไม่ซ้ำ
+const uniqueStatus =function () {
+  return cloneTaskGroups.filter(element => {
+     element.status.name !== cloneTaskGroups.status.name;
+  });
+}
+//
+
 
 watch(searchStatus, (status) => {
   if (collectStatus.includes(status) || status === null) {
@@ -239,7 +247,7 @@ watch(searchStatus, (status) => {
           required
           v-model="searchStatus"
         >
-          <option v-for="(task, index) in cloneTaskGroups" :key="index">
+          <option v-for="(task, index) in uniqueStatus" :key="index">
             {{ task.status.name }}
           </option>
         </select>
