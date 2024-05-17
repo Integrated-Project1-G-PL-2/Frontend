@@ -48,6 +48,20 @@ if (prop.taskDetail.value) {
     updatedOn: null
   })
 }
+const taskSet = ref((task.taskStatus = 'No Status'))
+const isTitleOverLimit = ref(false)
+const isTitleOverLimit2 = ref(false)
+const isTitleOverLimit3 = ref(false)
+
+const checkTitleLength = () => {
+  isTitleOverLimit.value = task.taskTitle.length > 100
+}
+const checkTitleLength2 = () => {
+  isTitleOverLimit2.value = task.taskDescription.length > 500
+}
+const checkTitleLength3 = () => {
+  isTitleOverLimit3.value = task.taskAssignees.length > 30
+}
 
 const handleClick = async () => {
   if (prop.operate == 'show') {
@@ -60,7 +74,11 @@ const handleClick = async () => {
     assignees: task.taskAssignees?.length > 0 ? task.taskAssignees : null,
     description: task.taskDescription?.length > 0 ? task.taskDescription : null
   }
-  if (isTitleOverLimit.value) {
+  if (
+    isTitleOverLimit.value &&
+    isTitleOverLimit2.value &&
+    isTitleOverLimit3.value
+  ) {
     if (prop.operate == 'add') {
       addOrUpdateTaskDetail.status = statusManager.findStatusByName(
         task.taskStatus
@@ -104,13 +122,6 @@ const handleClick = async () => {
     }
     return
   }
-}
-
-const taskSet = ref((task.taskStatus = 'No Status'))
-const isTitleOverLimit = ref(false)
-
-const checkTitleLength = () => {
-  isTitleOverLimit.value = task.taskTitle.length > 100
 }
 </script>
 
@@ -164,10 +175,11 @@ const checkTitleLength = () => {
                 "
                 class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                 placeholder="No Description Provided"
+                @input="checkTitleLength2"
               ></textarea>
               <div
                 style="display: flex; align-items: center"
-                v-if="isTitleOverLimit"
+                v-if="isTitleOverLimit2"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -200,10 +212,11 @@ const checkTitleLength = () => {
                     task.taskAssigneess == null ? 'italic text-gray-500 ' : ''
                   "
                   placeholder="Unassigned"
+                  @input="checkTitleLength3"
                 ></textarea>
                 <div
                   style="display: flex; align-items: center"
-                  v-if="isTitleOverLimit"
+                  v-if="isTitleOverLimit3"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
