@@ -251,9 +251,12 @@ watch(searchStatus, (status) => {
           />
         </svg>
       </div>
-      <div class="container p-4 border rounded-lg mr-2 ml-2 my-3 w-[650px]">
+      <div
+        class="container p-4 border rounded-lg mr-2 ml-2 my-3 w-[650px] flex flex-wrap"
+      >
         <div
           v-for="(statusName, index) in collectStatus"
+          :key="index"
           class="flex items-center space-x-2 mb-2 border w-[100px] bg-gray-300"
         >
           {{ statusName }}
