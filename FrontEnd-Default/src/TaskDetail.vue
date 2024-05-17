@@ -75,52 +75,52 @@ const handleClick = async () => {
     description: task.taskDescription?.length > 0 ? task.taskDescription : null
   }
   if (
-    isTitleOverLimit.value &&
-    isTitleOverLimit2.value &&
+    isTitleOverLimit.value ||
+    isTitleOverLimit2.value ||
     isTitleOverLimit3.value
   ) {
-    if (prop.operate == 'add') {
-      addOrUpdateTaskDetail.status = statusManager.findStatusByName(
-        task.taskStatus
-      ).id
-      const newTask = await addItem(
-        import.meta.env.VITE_BASE_URL,
-        addOrUpdateTaskDetail
-      )
-      router.replace({ name: 'Task' })
-      if (newTask.status != '500') {
-        taskManager.addTask(newTask)
-        emits('showGreenPopup', {
-          taskTitle: newTask.title,
-          operate: prop.operate
-        })
-      }
-      emits('showTaskDetailModal', false)
-    } else if (prop.operate == 'edit') {
-      addOrUpdateTaskDetail.status = statusManager.findStatusByName(
-        task.taskStatus
-      )
-      const editTask = await editItem(
-        import.meta.env.VITE_BASE_URL,
-        task.id,
-        addOrUpdateTaskDetail
-      )
-      if (editTask.status != '500' && editTask.status != '404') {
-        taskManager.editTask(editTask.id, editTask)
-        emits('showGreenPopup', {
-          taskTitle: editTask.title,
-          operate: prop.operate
-        })
-      } else {
-        emits('showRedPopup', {
-          taskTitle: !editTask.title ? task.taskTitle : editTask.title,
-          operate: prop.operate
-        })
-      }
-      router.replace({ name: 'Task' })
-      emits('showTaskDetailModal', false)
-    }
     return
+  }
+  if (prop.operate == 'add') {
+    addOrUpdateTaskDetail.status = statusManager.findStatusByName(
+      task.taskStatus
+    ).id
+    const newTask = await addItem(
+      import.meta.env.VITE_BASE_URL,
+      addOrUpdateTaskDetail
+    )
+    router.replace({ name: 'Task' })
+    if (newTask.status != '500') {
+      taskManager.addTask(newTask)
+      emits('showGreenPopup', {
+        taskTitle: newTask.title,
+        operate: prop.operate
+      })
+    }
+    emits('showTaskDetailModal', false)
+  } else if (prop.operate == 'edit') {
+    addOrUpdateTaskDetail.status = statusManager.findStatusByName(
+      task.taskStatus
+    )
+    const editTask = await editItem(
+      import.meta.env.VITE_BASE_URL,
+      task.id,
+      addOrUpdateTaskDetail
+    )
+    if (editTask.status != '500' && editTask.status != '404') {
+      taskManager.editTask(editTask.id, editTask)
+      emits('showGreenPopup', {
+        taskTitle: editTask.title,
+        operate: prop.operate
+      })
+    } else {
+      emits('showRedPopup', {
+        taskTitle: !editTask.title ? task.taskTitle : editTask.title,
+        operate: prop.operate
+      })
+    }
+    router.replace({ name: 'Task' })
+    emits('showTaskDetailModal', false)
   }
 }
 </script>
