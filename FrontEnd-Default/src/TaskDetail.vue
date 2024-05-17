@@ -158,7 +158,7 @@ const handleClick = async () => {
                   class="itbkk-status mt-1 ml-4 select select-bordered w-[95%] h-[40px] px-4 py-2 bg-inherit border-2 border-gray-200 text-gray-400 rounded-md"
                 >
                   <option disabled selected >Status</option>
-                  <option v-for="(status) in statusManager.getStatuses()"  :value="status.name">{{ statusManager.transformStatus(status.name) }}</option>
+                  <option v-for="(status) in statusManager.getStatuses()"  :value="status.name">{{ status.name }}</option>
                 </select>
               </label>
             </div>

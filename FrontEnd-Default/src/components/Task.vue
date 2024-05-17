@@ -238,7 +238,7 @@ const showStatusesList = function () {
                     : '#90EE90'
               }"
             >
-              <p>{{ statusManager.transformStatus(task.status.name) }}</p>
+              <p>{{ task.status.name }}</p>
             </div>
           </td>
         </tr>
