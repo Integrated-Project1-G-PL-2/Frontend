@@ -165,6 +165,8 @@ console.log(cloneTaskGroups.value)
 //       return this.taskGroups.map(item => ({ ...item }));
 //     }
 
+
+
 watch(searchStatus, (status) => {
   if (collectStatus.includes(status) || status === null) {
     return
@@ -266,8 +268,8 @@ watch(searchStatus, (status) => {
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
             @click="
-              ;(collectStatus = collectStatus.splice(index, 1)),
-                (searchStatus = null)
+              collectStatus = collectStatus.filter(item => item !== statusName),
+                (searchStatus = null),console.log(statusName,index),console.log(collectStatus)
             "
           >
             <path
