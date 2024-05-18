@@ -98,6 +98,16 @@ const saveClick = async () => {
 }
 
 init()
+const allStatus = statusManager.getStatuses()
+
+const checkUnique = function (Name) {
+  for (const eachStatus of allStatus) {
+    const eachStatusName = eachStatus.name
+    if (eachStatusName.toUpperCase() == Name.toUpperCase()) {
+      return true
+    }
+  }
+}
 </script>
 
 <template>
@@ -182,7 +192,7 @@ init()
           <button
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
             @click="saveClick"
-            :disabled="validation()"
+            :disabled="validation() || checkUnique(status.name)"
           >
             save
           </button>
