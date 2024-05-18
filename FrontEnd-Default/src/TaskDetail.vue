@@ -134,7 +134,8 @@ const handleClick = async () => {
         <div class="w-full h-[10%] mt-2">
           <div class="pl-4 mt-4">Title</div>
           <textarea
-            class="itbkk-title font-bold text-justify w-full breal-all border border-gray-300 rounded-md"
+            class="itbkk-title font-bold text-justify w-full breal-all border border-gray-300 rounded-md resize-none"
+            :class="{ 'border-red-600 text-red-600': isTitleOverLimit }"
             :disabled="operate == 'show'"
             v-model.trim="task.taskTitle"
             @input="checkTitleLength"
@@ -171,9 +172,10 @@ const handleClick = async () => {
                 :disabled="operate == 'show'"
                 v-model="task.taskDescription"
                 :class="
-                  task.taskAssignees == null ? 'italic text-gray-500 ' : ''
+                  (task.taskAssignees == null ? 'italic text-gray-500 ' : '',
+                  isDescriptionOverLimit ? 'border-red-600 text-red-600' : '')
                 "
-                class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
                 placeholder="No Description Provided"
                 @input="checkDescriptionLength"
               ></textarea>
@@ -207,9 +209,10 @@ const handleClick = async () => {
                 <textarea
                   :disabled="operate == 'show'"
                   v-model="task.taskAssignees"
-                  class="itbkk-assignees w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bbg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                  class="itbkk-assignees w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bbg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
                   :class="
-                    task.taskAssigneess == null ? 'italic text-gray-500 ' : ''
+                    (task.taskAssigneess == null ? 'italic text-gray-500 ' : '',
+                    isAssigneesOverLimit ? 'border-red-600 text-red-600' : '')
                   "
                   placeholder="Unassigned"
                   @input="checkAssigneesLength"

@@ -118,6 +118,7 @@ init()
             v-model="status.name"
             class="itbkk-status-name w-[90%] h-[40%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
             @input="checkNameLength"
+            :class="{ 'border-red-600 text-red-600': isNameOverLimit }"
           >
           </textarea>
           <div
@@ -151,6 +152,7 @@ init()
               class="itbkk-status-description w-[90%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
               placeholder="No Description Provided"
               @input="checkDescriptionLength"
+              :class="{ 'border-red-600 text-red-600': isDescriptionOverLimit }"
             ></textarea>
             <div
               style="display: flex; align-items: center"
