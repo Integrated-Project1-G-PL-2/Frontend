@@ -89,7 +89,7 @@ const allStatus = statusManager.getStatuses()
 
 const checkUnique = function (Name) {for(const eachStatus of allStatus){
   const eachStatusName = eachStatus.name
-  if(eachStatusName == Name){
+  if(eachStatusName.toUpperCase() == Name.toUpperCase()){
     return true
   }
 }
