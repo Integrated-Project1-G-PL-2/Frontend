@@ -88,11 +88,11 @@ const saveClick = async () => {
 const allStatus = statusManager.getStatuses()
 
 const checkUnique = function (Name) {for(const eachStatus of allStatus){
-  const eachStatusName = eachStatus.name
+  if(prop.operate === 'add'){const eachStatusName = eachStatus.name
   if(eachStatusName.toUpperCase() == Name.toUpperCase()){
     return true
   }
-}
+}}
 }
 
 
