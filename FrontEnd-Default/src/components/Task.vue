@@ -174,7 +174,7 @@ const showDelComplete = async function () {
           :key="task.id"
           class="itbkk-item border-b cursor-pointer"
         >
-          <td class="px-4 py-3">
+          <td class=" px-4 py-3">
             {{ index + 1 }}
             <div
               class="inline-flex"
@@ -182,8 +182,9 @@ const showDelComplete = async function () {
             >
               ⚙️
             </div>
+            
             <div
-              class="inline-flex"
+              class="itbkk-button-delete inline-flex"
               @click="
                 showDeletePopUpTaskDetail({
                   id: task.id,

@@ -62,7 +62,7 @@ const handleClick = async () => {
   const addOrUpdateTaskDetail = {
     title: task.taskTitle?.length > 0 ? task.taskTitle : null,
     assignees: task.taskAssignees?.length > 0 ? task.taskAssignees : null,
-    description: task.taskDescription?.length > 0 ? task.taskDescription : null,
+    description: task.taskDescription?.length > 0 ? task.taskDescription.trim() : null,
     status: task.taskStatus.toUpperCase().replace(/\s+/g, '_'),
   };
   if (prop.operate == "add") {
