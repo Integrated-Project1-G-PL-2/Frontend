@@ -24,6 +24,7 @@ const statusDetail = reactive({})
 const operation = ref('')
 const showStatusModal = ref(false)
 const isDelete = ref()
+
 const greenPopup = reactive({
   add: { state: false, taskStatus: '' },
   edit: { state: false, taskStatus: '' },
@@ -63,6 +64,7 @@ const showDeletePopUpTaskDetail = async function (obj) {
   }
   showDeleteStatusDetail.value = true
 }
+
 
 const setDeleteOperate = function (operate) {
   operation.value = operate
