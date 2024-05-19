@@ -3,6 +3,7 @@ import { reactive, ref } from 'vue'
 import { useTaskManager } from '@/stores/TaskManager'
 import { useStatusManager } from '@/stores/StatusManager'
 import { useRouter } from 'vue-router'
+import { onMounted } from 'vue'
 import {
   getItems,
   getItemById,

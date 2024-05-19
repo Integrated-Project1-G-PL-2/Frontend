@@ -16,6 +16,7 @@ import StatusPopUp from './StatusPopUp.vue'
 import DeleteStatus from './DeleteStatus.vue'
 import { useTaskManager } from '@/stores/TaskManager'
 
+
 const taskManager = useTaskManager()
 const deClareemit = defineEmits(['editStatus'])
 const router = useRouter()
@@ -79,15 +80,27 @@ const showAddStatusesModal = function (operate) {
 
 const showEditStatusesModal = function (obj) {
   const status = statusManager.findStatusById(obj.id)
-  console.log(statusManager.getStatuses())
-  router.push({ name: 'StatusEdit', params: { id: status.id } })
+  router.push({ name: 'StatusEdit', params: { id: obj.id } })
   statusDetail.value = status
   operation.value = obj.operate
   showStatusModal.value = true
 }
 
+
+
+const showEditStatusesModalV2 = async function (obj) {
+  const status = await getItemById(import.meta.env.VITE_BASE_URL_V2,obj.id)
+  if (status.status == '404' || status.status == '500') {
+    redPopup.edit.state = true
+    return
+    }
+  router.push({ name: 'StatusEdit', params: { id: obj.id} })
+  statusDetail.value = status
+  operation.value = obj.operate
+  showStatusModal.value = true
+}
 if (route.params.id) {
-  showEditStatusesModal({id: route.params.id, operate: 'edit'})
+  showEditStatusesModalV2({id: route.params.id, operate: 'edit'})
 }
 
 const closeDeleteStatusPopup = function () {
@@ -199,12 +212,10 @@ const closeGreenPopup = async function (operate) {
     <AlertPopUp
       v-if="redPopup.edit.state"
       :titles="
-        'An error has occurred, the status ' +
-        redPopup.edit.taskStatus +
-        ' does not exist.'
+        'An error has occurred, the status does not exist'
       "
       @closePopUp="closeRedPopup"
-      message="Success!!"
+      message="Error!!"
       styleType="red"
       :operate="'edit'"
     />

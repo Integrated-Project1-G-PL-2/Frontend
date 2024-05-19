@@ -26,7 +26,7 @@ export const useStatusManager = defineStore('statusManager', () => {
     return statuses.find(el => el.name === name)
   }
   const findStatusById = function(id){
-    return statuses.find(el => el.id === id)
+    return statuses.find(el => el.id == id)
   }
   const deleteStatuses = function (id) {
     const index = statuses.findIndex((el) => {

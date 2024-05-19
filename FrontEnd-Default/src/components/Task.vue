@@ -277,7 +277,7 @@ watch(collectStatus, async () => {
       >
         ⚙️ Manage Status
       </button>
-      <button
+      <!-- <button
         @click="showStatusesLimit"
         class="itbkk-manage-status bg-gray-500 w-[80px] flex items-center justify-center text-gray-100 hover:text-gray-200 mr-3 rounded-md my-3"
       >
@@ -297,7 +297,7 @@ watch(collectStatus, async () => {
             />
           </g>
         </svg>
-      </button>
+      </button> -->
     </div>
     <table class="w-full text-sm text-left text-gray-500">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50">
