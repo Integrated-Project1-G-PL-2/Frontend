@@ -24,6 +24,7 @@ const statusDetail = reactive({})
 const operation = ref('')
 const showStatusModal = ref(false)
 const isDelete = ref()
+const route = useRoute()
 const greenPopup = reactive({
   add: { state: false, taskStatus: '' },
   edit: { state: false, taskStatus: '' },
@@ -64,24 +65,29 @@ const showDeletePopUpTaskDetail = async function (obj) {
   showDeleteStatusDetail.value = true
 }
 
+
 const setDeleteOperate = function (operate) {
   operation.value = operate
 }
 
 const showAddStatusesModal = function (operate) {
-  router.replace({ name: 'StatusAdd' })
+  router.push({ name: 'StatusAdd' })
   operation.value = operate
   statusDetail.value = null
   showStatusModal.value = true
 }
 
 const showEditStatusesModal = function (obj) {
-  const status = statusManager.findStatusByName(obj.name)
-  console.log(status)
-  router.replace({ name: 'StatusEdit', params: { id: status.id } })
+  const status = statusManager.findStatusById(obj.id)
+  console.log(statusManager.getStatuses())
+  router.push({ name: 'StatusEdit', params: { id: status.id } })
   statusDetail.value = status
   operation.value = obj.operate
   showStatusModal.value = true
+}
+
+if (route.params.id) {
+  showEditStatusesModal({id: route.params.id, operate: 'edit'})
 }
 
 const closeDeleteStatusPopup = function () {
@@ -107,6 +113,7 @@ const closeGreenPopup = async function (operate) {
   router.push({ name: 'StatusList' })
   greenPopup[operate].state = false
 }
+
 </script>
 
 <template>
@@ -266,7 +273,7 @@ const closeGreenPopup = async function (operate) {
                 @click="
                   showEditStatusesModal({
                     operate: 'edit',
-                    name: statuses.name
+                    id: statuses.id
                   })
                 "
               >

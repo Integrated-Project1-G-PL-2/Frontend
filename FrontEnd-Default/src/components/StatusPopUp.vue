@@ -24,6 +24,10 @@ const prop = defineProps({
 })
 const title = ref(prop.operate)
 
+onMounted(async () => {
+  statusManager.setStatuses(await getItems(import.meta.env.VITE_BASE_URL_V2))
+})
+
 let status
 
 const init = () => {
