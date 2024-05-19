@@ -255,7 +255,7 @@ const handleClick = async () => {
                     v-for="status in statusManager.getStatuses()"
                     :value="status.name"
                   >
-                    {{ statusManager.transformStatus(status.name) }}
+                    {{ status.name }}
                   </option>
                 </select>
               </label>
