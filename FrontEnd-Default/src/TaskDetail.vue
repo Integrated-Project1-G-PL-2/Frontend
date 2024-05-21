@@ -48,6 +48,20 @@ if (prop.taskDetail.value) {
     updatedOn: null
   })
 }
+const taskSet = ref((task.taskStatus = 'No Status'))
+const isTitleOverLimit = ref(false)
+const isDescriptionOverLimit = ref(false)
+const isAssigneesOverLimit = ref(false)
+
+const checkTitleLength = () => {
+  isTitleOverLimit.value = task.taskTitle.length > 100
+}
+const checkDescriptionLength = () => {
+  isDescriptionOverLimit.value = task.taskDescription.length > 500
+}
+const checkAssigneesLength = () => {
+  isAssigneesOverLimit.value = task.taskAssignees.length > 30
+}
 
 const handleClick = async () => {
   if (prop.operate == 'show') {
@@ -58,11 +72,19 @@ const handleClick = async () => {
   const addOrUpdateTaskDetail = {
     title: task.taskTitle?.length > 0 ? task.taskTitle : null,
     assignees: task.taskAssignees?.length > 0 ? task.taskAssignees : null,
-    description: task.taskDescription?.length > 0 ? task.taskDescription : null,
-    
+    description: task.taskDescription?.length > 0 ? task.taskDescription : null
+  }
+  if (
+    isTitleOverLimit.value ||
+    isDescriptionOverLimit.value ||
+    isAssigneesOverLimit.value
+  ) {
+    return
   }
   if (prop.operate == 'add') {
-    addOrUpdateTaskDetail.status = statusManager.findStatusByName(task.taskStatus).id
+    addOrUpdateTaskDetail.status = statusManager.findStatusByName(
+      task.taskStatus
+    ).id
     const newTask = await addItem(
       import.meta.env.VITE_BASE_URL,
       addOrUpdateTaskDetail
@@ -77,7 +99,9 @@ const handleClick = async () => {
     }
     emits('showTaskDetailModal', false)
   } else if (prop.operate == 'edit') {
-    addOrUpdateTaskDetail.status = statusManager.findStatusByName(task.taskStatus)
+    addOrUpdateTaskDetail.status = statusManager.findStatusByName(
+      task.taskStatus
+    )
     const editTask = await editItem(
       import.meta.env.VITE_BASE_URL,
       task.id,
@@ -103,18 +127,41 @@ const handleClick = async () => {
 
 <template>
   <div
-    class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[100px] overflow-auto"
+    class="itbkk-modal-task bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[100px] overflow-auto"
   >
     <div class="w-[90%] m-[auto]">
       <div class="flex flex-col justify-between bg-white p-4">
         <div class="w-full h-[10%] mt-2">
           <div class="pl-4 mt-4">Title</div>
           <textarea
-            class="itbkk-title font-bold text-justify w-full breal-all border border-gray-300 rounded-md"
+            class="itbkk-title font-bold text-justify w-full breal-all border border-gray-300 rounded-md resize-none"
+            :class="{ 'border-red-600 text-red-600': isTitleOverLimit }"
             :disabled="operate == 'show'"
             v-model.trim="task.taskTitle"
+            @input="checkTitleLength"
           >
           </textarea>
+          <div
+            style="display: flex; align-items: center"
+            v-if="isTitleOverLimit"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="-mt-px h-4 w-[20rem]"
+              class="w-[15px] text-red-600"
+            >
+              <path
+                fillRule="evenodd"
+                d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 01.67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 11-.671-1.34l.041-.022zM12 9a.75.75 0 100-1.5.75.75 0 000 1.5z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <div class="text-sm text-red-600">
+              Limit text to 100 characters or less.
+            </div>
+          </div>
         </div>
         <div class="border-b w-full mt-4"></div>
         <div class="flex flex-row">
@@ -125,11 +172,34 @@ const handleClick = async () => {
                 :disabled="operate == 'show'"
                 v-model="task.taskDescription"
                 :class="
-                  task.taskAssignees == null ? 'italic text-gray-500 ' : ''
+                  (task.taskAssignees == null ? 'italic text-gray-500 ' : '',
+                  isDescriptionOverLimit ? 'border-red-600 text-red-600' : '')
                 "
-                class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
                 placeholder="No Description Provided"
+                @input="checkDescriptionLength"
               ></textarea>
+              <div
+                style="display: flex; align-items: center"
+                v-if="isDescriptionOverLimit"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="-mt-px h-4 w-[20rem]"
+                  class="w-[15px] text-red-600"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 01.67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 11-.671-1.34l.041-.022zM12 9a.75.75 0 100-1.5.75.75 0 000 1.5z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <div class="text-sm text-red-600">
+                  Limit text to 500 characters or less.
+                </div>
+              </div>
             </div>
           </div>
           <div class="w-[30%] h-[50%] flex-col">
@@ -139,12 +209,35 @@ const handleClick = async () => {
                 <textarea
                   :disabled="operate == 'show'"
                   v-model="task.taskAssignees"
-                  class="itbkk-assignees w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bbg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                  class="itbkk-assignees w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bbg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
                   :class="
-                    task.taskAssigneess == null ? 'italic text-gray-500 ' : ''
+                    (task.taskAssigneess == null ? 'italic text-gray-500 ' : '',
+                    isAssigneesOverLimit ? 'border-red-600 text-red-600' : '')
                   "
                   placeholder="Unassigned"
+                  @input="checkAssigneesLength"
                 ></textarea>
+                <div
+                  style="display: flex; align-items: center"
+                  v-if="isAssigneesOverLimit"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="-mt-px h-4 w-[20rem]"
+                    class="w-[15px] text-red-600"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 01.67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 11-.671-1.34l.041-.022zM12 9a.75.75 0 100-1.5.75.75 0 000 1.5z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  <div class="text-sm text-red-600">
+                    Limit text to 30 characters or less.
+                  </div>
+                </div>
               </div>
             </div>
             <div class="w-full h-[100px]">
@@ -157,8 +250,13 @@ const handleClick = async () => {
                   v-model="task.taskStatus"
                   class="itbkk-status mt-1 ml-4 select select-bordered w-[95%] h-[40px] px-4 py-2 bg-inherit border-2 border-gray-200 text-gray-400 rounded-md"
                 >
-                  <option disabled selected >Status</option>
-                  <option v-for="(status) in statusManager.getStatuses()"  :value="status.name">{{ status.name }}</option>
+                  <option disabled selected>Status</option>
+                  <option
+                    v-for="status in statusManager.getStatuses()"
+                    :value="status.name"
+                  >
+                    {{ status.name }}
+                  </option>
                 </select>
               </label>
             </div>

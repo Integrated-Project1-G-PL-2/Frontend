@@ -22,7 +22,7 @@ const routes = [
         name: 'TaskDetail'
       },
       {
-        path: '/add',
+        path: 'add',
         component: TaskDetail,
         name: 'AddTaskDetail'
       },
@@ -44,18 +44,18 @@ const routes = [
     component: StatusesList,
     children: [
       {
-        path: '/status/add',
+        path: 'add',
         component: StatusPopUp,
         name: 'StatusAdd'
       },
       {
-        path: '/status/:id/delete',
+        path: ':id/delete',
         component: DeleteStatus,
         name: 'DeleteStatus'
       }
       ,
       {
-        path: '/status/:id/edit',
+        path: ':id/edit',
         component: StatusPopUp,
         name: 'StatusEdit'
       }

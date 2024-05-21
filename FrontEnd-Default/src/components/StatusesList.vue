@@ -16,7 +16,8 @@ import StatusPopUp from './StatusPopUp.vue'
 import DeleteStatus from './DeleteStatus.vue'
 import { useTaskManager } from '@/stores/TaskManager'
 
-const taskManager = useTaskManager();
+
+const taskManager = useTaskManager()
 const deClareemit = defineEmits(['editStatus'])
 const router = useRouter()
 const statusManager = useStatusManager()
@@ -24,6 +25,7 @@ const statusDetail = reactive({})
 const operation = ref('')
 const showStatusModal = ref(false)
 const isDelete = ref()
+const route = useRoute()
 const greenPopup = reactive({
   add: { state: false, taskStatus: '' },
   edit: { state: false, taskStatus: '' },
@@ -54,7 +56,7 @@ const showDeletePopUpTaskDetail = async function (obj) {
     setDeleteOperate('delete')
   }
   transferDelList.value = await getItems(import.meta.env.VITE_BASE_URL_V2)
-  isDelete.value = !(taskManager.findStatusById(obj.id))
+  isDelete.value = !taskManager.findStatusById(obj.id)
   router.push({ name: 'DeleteStatus', params: { id: obj.id } })
   statusDetail.value = {
     id: obj.id,
@@ -64,24 +66,41 @@ const showDeletePopUpTaskDetail = async function (obj) {
   showDeleteStatusDetail.value = true
 }
 
+
 const setDeleteOperate = function (operate) {
   operation.value = operate
 }
 
 const showAddStatusesModal = function (operate) {
-  router.replace({ name: 'StatusAdd' })
+  router.push({ name: 'StatusAdd' })
   operation.value = operate
   statusDetail.value = null
   showStatusModal.value = true
 }
 
 const showEditStatusesModal = function (obj) {
-  const status = statusManager.findStatusByName(obj.name)
-  console.log(status)
-  router.replace({ name: 'StatusEdit', params: { id: status.id } })
+  const status = statusManager.findStatusById(obj.id)
+  router.push({ name: 'StatusEdit', params: { id: obj.id } })
   statusDetail.value = status
   operation.value = obj.operate
   showStatusModal.value = true
+}
+
+
+
+const showEditStatusesModalV2 = async function (obj) {
+  const status = await getItemById(import.meta.env.VITE_BASE_URL_V2,obj.id)
+  if (status.status == '404' || status.status == '500') {
+    redPopup.edit.state = true
+    return
+    }
+  router.push({ name: 'StatusEdit', params: { id: obj.id} })
+  statusDetail.value = status
+  operation.value = obj.operate
+  showStatusModal.value = true
+}
+if (route.params.id) {
+  showEditStatusesModalV2({id: route.params.id, operate: 'edit'})
 }
 
 const closeDeleteStatusPopup = function () {
@@ -107,11 +126,14 @@ const closeGreenPopup = async function (operate) {
   router.push({ name: 'StatusList' })
   greenPopup[operate].state = false
 }
+
 </script>
 
 <template>
   <div class="bg-white relative border rounded-lg overflow-auto">
-    <h1 class="font-bold text-center">IT-Bangmod Kradan Kanban</h1>
+    <h1 class="font-bold text-center cursor-default">
+      IT-Bangmod Kradan Kanban
+    </h1>
     <AlertPopUp
       v-if="greenPopup.add.state"
       :titles="'The status  ' + greenPopup.add.taskStatus + ' has been added.'"
@@ -190,31 +212,29 @@ const closeGreenPopup = async function (operate) {
     <AlertPopUp
       v-if="redPopup.edit.state"
       :titles="
-        'An error has occurred, the status ' +
-        redPopup.edit.taskStatus +
-        ' does not exist.'
+        'An error has occurred, the status does not exist'
       "
       @closePopUp="closeRedPopup"
-      message="Success!!"
+      message="Error!!"
       styleType="red"
       :operate="'edit'"
     />
     <div class="flex justify-start">
       <button
         @click="goBackToHomePage"
-        class="itbkk-button-home scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 hover:text-blue-500 mr-3 mt-2 text-blue-400"
+        class="itbkk-button-home scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 hover:text-blue-500 mr-3 mt-2 text-blue-400 my-3"
       >
         🏠 Home
       </button>
       <div
-        class="scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 mr-3 mt-2 font-bold"
+        class="scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 mr-3 mt-2 my-3 font-bold"
       >
         > Task Status
       </div>
       <div class="flex ml-auto">
         <button
           @click="showAddStatusesModal('add')"
-          class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2"
+          class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2 my-3"
         >
           ✚ Add Status
         </button>
@@ -223,10 +243,10 @@ const closeGreenPopup = async function (operate) {
     <table class="w-full text-sm text-left text-gray-500">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50 cursor-default">
         <tr>
-          <th class="text-md px-3 py-3"></th>
-          <th class="text-md px-8 py-3">Name</th>
-          <th class="text-md px-20 py-3">Description</th>
-          <th class="text-md px-30 py-3 text-center">Action</th>
+          <th class="text-md px-3 py-3 cursor-default"></th>
+          <th class="text-md px-8 py-3 cursor-default">Name</th>
+          <th class="text-md px-20 py-3 cursor-default">Description</th>
+          <th class="text-md px-30 py-3 text-center cursor-default">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -245,10 +265,14 @@ const closeGreenPopup = async function (operate) {
           </td>
           <td
             class="itbkk-status-description px-20 py-3"
-            :class="statuses.description == null ? 'italic' : ''"
+            :class="
+              statuses.description == null || statuses.description === ''
+                ? 'italic'
+                : ''
+            "
           >
             {{
-              statuses.description == null
+              statuses.description == null || statuses.description === ''
                 ? 'No description is provided'
                 : statuses.description
             }}
@@ -260,7 +284,7 @@ const closeGreenPopup = async function (operate) {
                 @click="
                   showEditStatusesModal({
                     operate: 'edit',
-                    name: statuses.name
+                    id: statuses.id
                   })
                 "
               >
