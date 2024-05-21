@@ -226,7 +226,7 @@ watch(collectStatus, async () => {
           required
           v-model="searchStatus"
         >
-          <option v-for="(status, index) in cloneTaskGroups" :key="index">
+          <option v-for="(status, index) in cloneTaskGroups" :key="index" class="itbkk-status-choice">
             {{ status.name }}
           </option>
         </select>
@@ -305,16 +305,17 @@ watch(collectStatus, async () => {
           <th class="px-4 py-3 cursor-default"></th>
           <th class="px-4 py-3 cursor-default">Title</th>
           <th class="px-4 py-3 cursor-default">Assignees</th>
-          <th class="px-4 py-3 flex items-center space-x-2 cursor-default">
-            <span>Status</span>
+          <th class="px-4 py-3 flex items-center space-x-2 cursor-default " >
+            <span >Status </span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="cursor-pointer"
+              class="cursor-pointer itbkk-status-sort"
               width="1.2rem"
               height="1.2rem"
               viewBox="0 0 48 48"
               v-if="!switchDate"
               @click=";[(switchDefault(), sortByTitle(taskGroups))]"
+              
             >
               <path fill="#afacac" d="M38 33V5h-4v28h-6l8 10l8-10z" />
               <path
@@ -324,7 +325,7 @@ watch(collectStatus, async () => {
             </svg>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="cursor-pointer"
+              class="cursor-pointer itbkk-status-sort"
               width="1.2rem"
               height="1.2rem"
               viewBox="0 0 48 48"
@@ -339,7 +340,7 @@ watch(collectStatus, async () => {
             </svg>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="cursor-pointer"
+              class="cursor-pointer itbkk-status-sort"
               width="1.2rem"
               height="1.2rem"
               viewBox="0 0 16 16"
