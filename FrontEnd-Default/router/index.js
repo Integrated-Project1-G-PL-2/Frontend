@@ -5,7 +5,7 @@ import DeleteTaskDetail from '@/DeletePopUp.vue'
 import StatusesList from '@/components/StatusesList.vue'
 import StatusPopUp from '@/components/StatusPopUp.vue'
 import DeleteStatus from '@/components/DeleteStatus.vue'
-const history = createWebHistory()
+const history = createWebHistory(import.meta.env.BASE_URL)
 const routes = [
   {
     path: '/',
