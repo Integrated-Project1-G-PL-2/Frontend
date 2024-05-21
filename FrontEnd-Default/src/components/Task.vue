@@ -161,7 +161,7 @@ watch(searchStatus, (status) => {
 watch(collectStatus, async () => {
   taskManager.setTasks(
     await getItems(
-      `${import.meta.env.VITE_BASE_URL}?statusName=${collectStatus.join()}`
+      `${import.meta.env.VITE_BASE_URL}?filterStatuses=${collectStatus.join()}`
     )
   )
 })
