@@ -219,9 +219,9 @@ watch(collectStatus, async () => {
       :operate="'edit'"
     />
     <div class="flex justify-end">
-      <div class="flex items-center space-x-2 mr-auto ml-4 my-3 border">
+      <div class="itbkk-status-filter flex items-center space-x-2 mr-auto ml-4 my-3 border">
         <select
-          class="itbkk-status-filter text-sm rounded-lg w-[210px] p-2 bg-white"
+          class="text-sm rounded-lg w-[210px] p-2 bg-white"
           placeholder="Filter by status(es)"
           required
           v-model="searchStatus"
