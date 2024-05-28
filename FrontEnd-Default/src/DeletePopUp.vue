@@ -8,7 +8,6 @@ const props = defineProps(['taskId'])
 const router = useRouter()
 const deletedTask = reactive({})
 const taskManager = useTaskManager()
-console.log(props.taskId)
 const deleteTask = async (deleteId) => {
   deletedTask.value = await deleteItemById(
     import.meta.env.VITE_BASE_URL,
