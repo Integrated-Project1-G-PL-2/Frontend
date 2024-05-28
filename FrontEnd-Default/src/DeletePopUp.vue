@@ -15,9 +15,8 @@ const deleteTask = async (deleteId) => {
     deleteId
   )
   if (deletedTask.value == '404') {
-    deClareemit('redAlert', true)
+    deClareemit('redAlert')
     deClareemit('cancelDetail', true)
-    router.replace({ name: 'Task' })
     return
   }
   taskManager.deleteTask(deleteId)

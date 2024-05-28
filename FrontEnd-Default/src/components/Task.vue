@@ -90,8 +90,9 @@ const showDeletePopUpTaskDetail = function (obj) {
 }
 
 const openRedPopup = function (obj) {
-  redPopup[obj.operate].state = true
-  redPopup[obj.operate].taskTitle = obj.taskTitle
+  const newObj = obj == undefined ? { operate: 'delete', taskTitle: '' } : obj
+  redPopup[newObj.operate].state = true
+  redPopup[newObj.operate].taskTitle = newObj.taskTitle
 }
 
 const openGreenPopup = function (obj) {
@@ -219,14 +220,20 @@ watch(collectStatus, async () => {
       :operate="'edit'"
     />
     <div class="flex justify-end">
-      <div class="itbkk-status-filter flex items-center space-x-2 mr-auto ml-4 my-3 border">
+      <div
+        class="itbkk-status-filter flex items-center space-x-2 mr-auto ml-4 my-3 border"
+      >
         <select
           class="text-sm rounded-lg w-[210px] p-2 bg-white"
           placeholder="Filter by status(es)"
           required
           v-model="searchStatus"
         >
-          <option v-for="(status, index) in cloneTaskGroups" :key="index" class="itbkk-status-choice">
+          <option
+            v-for="(status, index) in cloneTaskGroups"
+            :key="index"
+            class="itbkk-status-choice"
+          >
             {{ status.name }}
           </option>
         </select>
@@ -305,8 +312,8 @@ watch(collectStatus, async () => {
           <th class="px-4 py-3 cursor-default"></th>
           <th class="px-4 py-3 cursor-default">Title</th>
           <th class="px-4 py-3 cursor-default">Assignees</th>
-          <th class="px-4 py-3 flex items-center space-x-2 cursor-default " >
-            <span >Status </span>
+          <th class="px-4 py-3 flex items-center space-x-2 cursor-default">
+            <span>Status </span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="cursor-pointer itbkk-status-sort"
@@ -315,7 +322,6 @@ watch(collectStatus, async () => {
               viewBox="0 0 48 48"
               v-if="!switchDate"
               @click=";[(switchDefault(), sortByTitle(taskGroups))]"
-              
             >
               <path fill="#afacac" d="M38 33V5h-4v28h-6l8 10l8-10z" />
               <path
