@@ -2,7 +2,7 @@
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useTaskManager } from '@/stores/TaskManager'
-import { addItem, editItem } from './utils/fetchUtils'
+import { addItem, editItem } from '@/utils/fetchUtils'
 import { useStatusManager } from '@/stores/StatusManager'
 const emits = defineEmits([
   'showTaskDetailModal',

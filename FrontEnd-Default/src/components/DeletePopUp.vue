@@ -1,6 +1,6 @@
 <script setup>
 import { ref, reactive } from 'vue'
-import { deleteItemById } from './utils/fetchUtils'
+import { deleteItemById } from '@/utils/fetchUtils'
 import { useTaskManager } from '@/stores/TaskManager'
 import { useRoute, useRouter } from 'vue-router'
 const deClareemit = defineEmits(['confirmDetail', 'cancelDetail', 'redAlert'])
