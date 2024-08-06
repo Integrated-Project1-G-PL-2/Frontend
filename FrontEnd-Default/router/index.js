@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Task from '@/components/Task.vue'
-import TaskDetail from '@/TaskDetail.vue'
-import DeleteTaskDetail from '@/DeletePopUp.vue'
+import TaskDetail from '@/components/TaskDetail.vue'
+import DeleteTaskDetail from '@/components/DeletePopUp.vue'
 import StatusesList from '@/components/StatusesList.vue'
 import StatusPopUp from '@/components/StatusPopUp.vue'
 import DeleteStatus from '@/components/DeleteStatus.vue'
@@ -52,8 +52,7 @@ const routes = [
         path: ':id/delete',
         component: DeleteStatus,
         name: 'DeleteStatus'
-      }
-      ,
+      },
       {
         path: ':id/edit',
         component: StatusPopUp,

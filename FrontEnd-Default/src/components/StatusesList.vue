@@ -8,14 +8,13 @@ import {
   editItem
 } from '../utils/fetchUtils.js'
 import { useStatusManager } from '@/stores/StatusManager'
-import TaskDetail from '@/TaskDetail.vue'
+import TaskDetail from './../components/TaskDetail.vue'
 import { useRoute, useRouter } from 'vue-router'
-import DeletePopUp from '@/DeletePopUp.vue'
+import DeletePopUp from './../components/DeletePopUp.vue'
 import AlertPopUp from './../components/AlertPopUp.vue'
 import StatusPopUp from './StatusPopUp.vue'
 import DeleteStatus from './DeleteStatus.vue'
 import { useTaskManager } from '@/stores/TaskManager'
-
 
 const taskManager = useTaskManager()
 const deClareemit = defineEmits(['editStatus'])
@@ -66,7 +65,6 @@ const showDeletePopUpTaskDetail = async function (obj) {
   showDeleteStatusDetail.value = true
 }
 
-
 const setDeleteOperate = function (operate) {
   operation.value = operate
 }
@@ -86,21 +84,19 @@ const showEditStatusesModal = function (obj) {
   showStatusModal.value = true
 }
 
-
-
 const showEditStatusesModalV2 = async function (obj) {
-  const status = await getItemById(import.meta.env.VITE_BASE_URL_V2,obj.id)
+  const status = await getItemById(import.meta.env.VITE_BASE_URL_V2, obj.id)
   if (status.status == '404' || status.status == '500') {
     redPopup.edit.state = true
     return
-    }
-  router.push({ name: 'StatusEdit', params: { id: obj.id} })
+  }
+  router.push({ name: 'StatusEdit', params: { id: obj.id } })
   statusDetail.value = status
   operation.value = obj.operate
   showStatusModal.value = true
 }
 if (route.params.id) {
-  showEditStatusesModalV2({id: route.params.id, operate: 'edit'})
+  showEditStatusesModalV2({ id: route.params.id, operate: 'edit' })
 }
 
 const closeDeleteStatusPopup = function () {
@@ -126,7 +122,6 @@ const closeGreenPopup = async function (operate) {
   router.push({ name: 'StatusList' })
   greenPopup[operate].state = false
 }
-
 </script>
 
 <template>
@@ -211,9 +206,7 @@ const closeGreenPopup = async function (operate) {
     />
     <AlertPopUp
       v-if="redPopup.edit.state"
-      :titles="
-        'An error has occurred, the status does not exist'
-      "
+      :titles="'An error has occurred, the status does not exist'"
       @closePopUp="closeRedPopup"
       message="Error!!"
       styleType="red"
