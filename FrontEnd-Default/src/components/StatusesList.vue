@@ -89,9 +89,8 @@ const showEditStatusesModal = function (obj) {
 
 
 const showEditStatusesModalV2 = async function (obj) {
- // const status = await getItemById(import.meta.env.VITE_BASE_URL_V2,obj.id)
-  const status = await getItemById(import.meta.env.VITE_BASE_URL_V2,999)
-  if (status == null || status == null) {
+  const status = await getItemById(import.meta.env.VITE_BASE_URL_V2,obj.id)
+  if (status == null) {
     redPopup.edit.state = true
     return
     }

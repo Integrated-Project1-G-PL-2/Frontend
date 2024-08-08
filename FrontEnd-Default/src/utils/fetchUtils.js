@@ -89,7 +89,7 @@ async function editItem(url, id, editedItem) {
     });
     if (!res.ok) {
       console.error(`Failed to edit item with ID ${id}: ${res.status}`);
-      return null; // Return null or an appropriate error value
+      return null // Return null or an appropriate error value
     }
     return await res.json();
   } catch (error) {

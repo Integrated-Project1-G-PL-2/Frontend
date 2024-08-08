@@ -28,7 +28,7 @@ const deleteStatus = async (deleteId) => {
     import.meta.env.VITE_BASE_URL_V2,
     deleteId
   )
-  if (deletedStatuses.value == '404' && '500' && '400') {
+  if (deletedStatuses.value == '404' || '500' || '400') {
     deClareemit('redAlert', {
       taskStatus: props.statusId.value.statusName,
       operate: props.operate

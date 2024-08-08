@@ -90,7 +90,7 @@ const handleClick = async () => {
       addOrUpdateTaskDetail
     )
     router.replace({ name: 'Task' })
-    if (newTask.status != '500') {
+    if (newTask != null) {
       taskManager.addTask(newTask)
       emits('showGreenPopup', {
         taskTitle: newTask.title,
@@ -107,7 +107,8 @@ const handleClick = async () => {
       task.id,
       addOrUpdateTaskDetail
     )
-    if (editTask.status != '500' && editTask.status != '404') {
+    if (editTask != null) {
+      console.log(editTask);
       taskManager.editTask(editTask.id, editTask)
       emits('showGreenPopup', {
         taskTitle: editTask.title,
@@ -115,7 +116,7 @@ const handleClick = async () => {
       })
     } else {
       emits('showRedPopup', {
-        taskTitle: !editTask.title ? task.taskTitle : editTask.title,
+        taskTitle: task.taskTitle ,
         operate: prop.operate
       })
     }
