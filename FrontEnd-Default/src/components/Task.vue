@@ -55,7 +55,7 @@ const showTaskDetail = async function (id, operate) {
   router.push({ name: 'TaskDetail', params: { id: id } })
   operation.value = operate
   taskDetail.value = await getItemById(import.meta.env.VITE_BASE_URL, id)
-  if (taskDetail.value.status == '404') {
+  if (taskDetail.value == null) {
     alert('The requested task does not exist')
     router.replace({ name: 'Task' })
     return
@@ -67,7 +67,7 @@ const showEditTaskDetail = async function (id, operate) {
   router.push({ name: 'EditTaskDetail', params: { id: id } })
   operation.value = operate
   taskDetail.value = await getItemById(import.meta.env.VITE_BASE_URL, id)
-  if (taskDetail.value.status == '404') {
+  if (taskDetail.value == null) {
     alert('The requested task does not exist')
     router.replace({ name: 'Task' })
     return
