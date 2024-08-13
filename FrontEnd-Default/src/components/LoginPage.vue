@@ -2,9 +2,12 @@
 import { reactive, ref } from 'vue'
 import Task from './../components/Task.vue'
 import AlertPopUp from './../components/AlertPopUp.vue'
+import { useRouter } from 'vue-router'
 const showTaskModal = ref(false)
 const showMessage = ref(false)
+const router = useRouter()
 const TaskModal = function () {
+  router.replace({ name: 'Task' })
   showTaskModal.value = true
 }
 const redPopup = function () {
@@ -25,7 +28,7 @@ const redPopup = function () {
       :operate="'delete'"
     />
     <h1 class="text-3xl font-bold text-gray-800 mb-6">Welcome To ITB-KK</h1>
-    <form class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
       <div class="mb-4">
         <label for="first" class="block text-gray-700 font-semibold mb-2"
           >Username</label
@@ -60,13 +63,13 @@ const redPopup = function () {
         <button
           itbkk-button-signin
           type="signIn"
-          @click="TaskModal()"
+          @click="TaskModal"
           class="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-700"
         >
           Sign in
         </button>
       </div>
-    </form>
+    </div>
   </div>
   <Teleport to="body" v-if="showTaskModal">
     <Task></Task>
