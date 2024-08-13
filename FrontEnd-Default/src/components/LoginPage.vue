@@ -8,9 +8,10 @@
     <form class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
       <div class="mb-4">
         <label for="first" class="block text-gray-700 font-semibold mb-2"
-          >Username:</label
+          >Username</label
         >
         <input
+          itbkk-username
           type="text"
           id="first"
           name="first"
@@ -22,9 +23,10 @@
 
       <div class="mb-6">
         <label for="password" class="block text-gray-700 font-semibold mb-2"
-          >Password:</label
+          >Password</label
         >
         <input
+          itbkk-password
           type="password"
           id="password"
           name="password"
@@ -36,8 +38,9 @@
 
       <div class="wrap">
         <button
+          itbkk-button-signin
           type="signIn"
-          onclick="solve()"
+          onclick=""
           class="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-700"
         >
           Sign in
