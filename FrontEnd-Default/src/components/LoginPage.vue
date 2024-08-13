@@ -7,6 +7,7 @@ import { useRouter } from 'vue-router'
 const showTaskModal = ref(false)
 const username = ref('')
 const password = ref('')
+const isPasswordVisible = ref(false) // State to toggle password visibility
 const router = useRouter()
 const isUserNameOverLimit = ref(false)
 const isPasswordOverLimit = ref(false)
@@ -37,6 +38,10 @@ const checkUserNameLength = () => {
 const checkPasswordLength = () => {
   isPasswordOverLimit.value = trimmedPassword.value.length > 14
 }
+
+const togglePasswordVisibility = () => {
+  isPasswordVisible.value = !isPasswordVisible.value
+}
 </script>
 
 <template>
@@ -52,7 +57,7 @@ const checkPasswordLength = () => {
     />
     <AlertPopUp
       v-if="redPopup.error.state"
-      :titles="'There is a problem. Please try agin later.'"
+      :titles="'There is a problem. Please try again later.'"
       @closePopUp="closeRedPopup"
       message="Error!!"
       styleType="red"
@@ -103,18 +108,56 @@ const checkPasswordLength = () => {
         <label for="password" class="block text-gray-700 font-semibold mb-2">
           Password
         </label>
-        <input
-          itbkk-password
-          type="password"
-          id="password"
-          name="password"
-          placeholder="Enter your Password"
-          v-model="password"
-          required
-          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          @input="checkPasswordLength"
-          :class="{ 'border-red-600 text-red-600': isPasswordOverLimit }"
-        />
+        <div class="relative">
+          <input
+            itbkk-password
+            :type="isPasswordVisible ? 'text' : 'password'"
+            id="password"
+            name="password"
+            placeholder="Enter your Password"
+            v-model="password"
+            required
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            @input="checkPasswordLength"
+            :class="{ 'border-red-600 text-red-600': isPasswordOverLimit }"
+          />
+          <button
+            type="button"
+            @click="togglePasswordVisibility"
+            class="absolute inset-y-0 right-0 pr-3 flex items-center"
+          >
+            <svg
+              v-if="isPasswordVisible"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              class="h-5 w-5 text-gray-500"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 5c4.418 0 8 3.582 8 8s-3.582 8-8 8-8-3.582-8-8 3.582-8 8-8zm0 4a4 4 0 00-4 4 4 4 0 008 0 4 4 0 00-4-4z"
+              />
+            </svg>
+            <svg
+              v-else
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              class="h-5 w-5 text-gray-500"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13.828 10.828a4 4 0 10-5.656 5.656M12 5c4.418 0 8 3.582 8 8s-3.582 8-8 8-8-3.582-8-8 3.582-8 8-8z"
+              />
+            </svg>
+          </button>
+        </div>
         <div
           style="display: flex; align-items: center"
           v-if="isPasswordOverLimit"
