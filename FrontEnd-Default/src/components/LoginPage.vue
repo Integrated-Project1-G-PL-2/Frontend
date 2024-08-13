@@ -173,6 +173,7 @@ const togglePasswordVisibility = () => {
 
       <div class="flex items-center justify-center">
         <button
+          @click="TaskModal"
           :disabled="!trimmedUsername || !trimmedPassword"
           :class="{
             'bg-gray-400 cursor-not-allowed':
