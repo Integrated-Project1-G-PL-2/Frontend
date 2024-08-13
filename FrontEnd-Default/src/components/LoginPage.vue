@@ -1,4 +1,6 @@
-<script setup></script>
+<script setup>
+import Task from './../components/Task.vue'
+</script>
 
 <template>
   <div
@@ -40,7 +42,7 @@
         <button
           itbkk-button-signin
           type="signIn"
-          onclick=""
+          @click="showTaskModal = true"
           class="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-700"
         >
           Sign in
@@ -48,6 +50,9 @@
       </div>
     </form>
   </div>
+  <Teleport to="body" v-if="showTaskModal">
+    <Task @showTaskModal="showTaskModal = true"></Task>
+  </Teleport>
 </template>
 
 <style scoped></style>
