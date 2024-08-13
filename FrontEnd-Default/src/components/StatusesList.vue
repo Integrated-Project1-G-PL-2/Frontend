@@ -8,13 +8,14 @@ import {
   editItem
 } from '../utils/fetchUtils.js'
 import { useStatusManager } from '@/stores/StatusManager'
-import TaskDetail from './../components/TaskDetail.vue'
+import TaskDetail from '@/TaskDetail.vue'
 import { useRoute, useRouter } from 'vue-router'
-import DeletePopUp from './../components/DeletePopUp.vue'
+import DeletePopUp from '@/DeletePopUp.vue'
 import AlertPopUp from './../components/AlertPopUp.vue'
 import StatusPopUp from './StatusPopUp.vue'
 import DeleteStatus from './DeleteStatus.vue'
 import { useTaskManager } from '@/stores/TaskManager'
+import ButtonStyle from './ButtonStyle.vue'
 
 const taskManager = useTaskManager()
 const deClareemit = defineEmits(['editStatus'])
@@ -24,6 +25,8 @@ const statusDetail = reactive({})
 const operation = ref('')
 const showStatusModal = ref(false)
 const isDelete = ref()
+const editColor = ref('editColor')
+const deleteColor = ref('deleteColor')
 const route = useRoute()
 const greenPopup = reactive({
   add: { state: false, taskStatus: '' },
@@ -272,7 +275,7 @@ const closeGreenPopup = async function (operate) {
           </td>
           <td class="itbkk-status px-30 py-3 text-center">
             <div v-if="statuses.name !== 'No Status'">
-              <button
+              <!-- <button
                 class="itbkk-button-edit bg-green-400 font-sans text-center gap-5 text-gray-100 hover:text-gray-200 mr-5 w-14 rounded-[8px]"
                 @click="
                   showEditStatusesModal({
@@ -282,9 +285,24 @@ const closeGreenPopup = async function (operate) {
                 "
               >
                 Edit
-              </button>
-              <button
-                class="itbkk-button-delete bg-red-400 rounded-[8px] font-sans text-center gap-5 text-gray-100 hover:text-gray-200 w-14"
+              </button> -->
+
+              <ButtonStyle :bgColor="editColor">
+                <button
+                  class="itbkk-button-edit"
+                  @click="
+                    showEditStatusesModal({
+                      operate: 'edit',
+                      id: statuses.id
+                    })
+                  "
+                >
+                  Edit
+                </button>
+              </ButtonStyle>
+
+              <!-- <button
+                class="itbkk-button-delete bg-red-400 rounded-[8px] font-sans text-center gap-5 text-gray-100 hover:text-gray-200 w-14 mr-5"
                 @click="
                   showDeletePopUpTaskDetail({
                     id: statuses.id,
@@ -294,7 +312,20 @@ const closeGreenPopup = async function (operate) {
                 "
               >
                 Delete
-              </button>
+              </button> -->
+              <ButtonStyle :bgColor="deleteColor">
+                <button
+                  class="itbkk-button-edit"
+                  @click="
+                    showEditStatusesModal({
+                      operate: 'edit',
+                      id: statuses.id
+                    })
+                  "
+                >
+                  Delete
+                </button>
+              </ButtonStyle>
             </div>
           </td>
         </tr>
