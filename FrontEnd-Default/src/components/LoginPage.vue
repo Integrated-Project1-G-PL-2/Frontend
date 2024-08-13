@@ -1,5 +1,10 @@
 <script setup>
+import { ref } from 'vue'
 import Task from './../components/Task.vue'
+const showTaskModal = ref(false)
+const TaskModal = function () {
+  showTaskModal.value = true
+}
 </script>
 
 <template>
@@ -42,7 +47,7 @@ import Task from './../components/Task.vue'
         <button
           itbkk-button-signin
           type="signIn"
-          @click="showTaskModal = true"
+          @click="TaskModal"
           class="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-700"
         >
           Sign in
@@ -51,7 +56,7 @@ import Task from './../components/Task.vue'
     </form>
   </div>
   <Teleport to="body" v-if="showTaskModal">
-    <Task @showTaskModal="showTaskModal = true"></Task>
+    <Task></Task>
   </Teleport>
 </template>
 
