@@ -14,7 +14,7 @@ defineEmits(['closePopUp'])
 </script>
 <template>
   <div
-    class="px-4 py-3 rounded relative"
+    class="itbkk-message px-4 py-3 rounded relative"
     :class="
       styleType === 'green'
         ? 'bg-green-100 border border-green-400 text-green-700 '

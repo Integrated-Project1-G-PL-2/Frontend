@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import Task from './../components/Task.vue'
+import AlertPopUp from './../components/AlertPopUp.vue'
 const showTaskModal = ref(false)
 const TaskModal = function () {
   showTaskModal.value = true
@@ -12,6 +13,14 @@ const TaskModal = function () {
     class="main flex flex-col items-center justify-center min-h-screen bg-gray-100"
   >
     <h1 class="text-3xl font-bold text-gray-800 mb-6">Welcome To ITB-KK</h1>
+    <AlertPopUp
+      v-if="redPopup.delete.state"
+      :titles="'Username or Password is incorrect.'"
+      @closePopUp="closeRedPopup"
+      message="Error!!"
+      styleType="red"
+      :operate="'delete'"
+    />
     <form class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
       <div class="mb-4">
         <label for="first" class="block text-gray-700 font-semibold mb-2"
