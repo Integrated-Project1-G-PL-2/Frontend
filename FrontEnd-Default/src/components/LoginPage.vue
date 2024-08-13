@@ -1,10 +1,14 @@
 <script setup>
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import Task from './../components/Task.vue'
 import AlertPopUp from './../components/AlertPopUp.vue'
 const showTaskModal = ref(false)
+const showMessage = ref(false)
 const TaskModal = function () {
   showTaskModal.value = true
+}
+const redPopup = function () {
+  showMessage.value = true
 }
 </script>
 
@@ -12,15 +16,15 @@ const TaskModal = function () {
   <div
     class="main flex flex-col items-center justify-center min-h-screen bg-gray-100"
   >
-    <h1 class="text-3xl font-bold text-gray-800 mb-6">Welcome To ITB-KK</h1>
     <AlertPopUp
-      v-if="redPopup.delete.state"
+      v-if="showMessage"
       :titles="'Username or Password is incorrect.'"
       @closePopUp="closeRedPopup"
       message="Error!!"
       styleType="red"
       :operate="'delete'"
     />
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Welcome To ITB-KK</h1>
     <form class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
       <div class="mb-4">
         <label for="first" class="block text-gray-700 font-semibold mb-2"
@@ -56,7 +60,7 @@ const TaskModal = function () {
         <button
           itbkk-button-signin
           type="signIn"
-          @click="TaskModal"
+          @click="TaskModal()"
           class="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-700"
         >
           Sign in
