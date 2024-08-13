@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import Task from './../components/Task.vue'
 import AlertPopUp from './../components/AlertPopUp.vue'
 import { useRouter } from 'vue-router'
@@ -22,10 +22,6 @@ const redPopup = () => {
 const closeRedPopup = () => {
   showMessage.value = false
 }
-
-const isDisabled = computed(() => {
-  return !username.value || !password.value
-})
 </script>
 
 <template>
@@ -52,7 +48,7 @@ const isDisabled = computed(() => {
           id="first"
           name="first"
           placeholder="Enter your Username"
-          v-model="username"
+          v-model.trim="username"
           required
           class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
@@ -68,7 +64,7 @@ const isDisabled = computed(() => {
           id="password"
           name="password"
           placeholder="Enter your Password"
-          v-model="password"
+          v-model.trim="password"
           required
           class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
@@ -79,7 +75,7 @@ const isDisabled = computed(() => {
           itbkk-button-signin
           type="button"
           @click="TaskModal"
-          :disabled="isDisabled"
+          :disabled="!username || !password"
           class="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-700"
         >
           Sign in
