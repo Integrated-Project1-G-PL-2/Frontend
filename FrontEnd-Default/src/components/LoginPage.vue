@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { reactive, ref, computed } from 'vue'
 import Task from './../components/Task.vue'
 import AlertPopUp from './../components/AlertPopUp.vue'
 import { useRouter } from 'vue-router'
@@ -21,12 +21,14 @@ const TaskModal = () => {
   showTaskModal.value = true
 }
 
-const redPopup = () => {
-  showMessage.value = true
-}
+const redPopup = reactive({
+  incorrect: { state: false, taskTitle: '' },
+  error: { state: false, taskTitle: '' }
+})
 
-const closeRedPopup = () => {
-  showMessage.value = false
+const closeRedPopup = async function (operate) {
+  router.push({ name: 'Login' })
+  redPopup[operate].state = false
 }
 
 const checkUserNameLength = () => {
@@ -43,12 +45,18 @@ const checkPasswordLength = () => {
     class="main flex flex-col items-center justify-center min-h-screen bg-gray-100"
   >
     <AlertPopUp
-      v-if="showMessage"
+      v-if="redPopup.incorrect.state"
       :titles="'Username or Password is incorrect.'"
       @closePopUp="closeRedPopup"
       message="Error!!"
       styleType="red"
-      :operate="'delete'"
+    />
+    <AlertPopUp
+      v-if="redPopup.error.state"
+      :titles="'There is a problem. Please try agin later.'"
+      @closePopUp="closeRedPopup"
+      message="Error!!"
+      styleType="red"
     />
     <h1 class="text-3xl font-bold text-gray-800 mb-6">Welcome To ITB-KK</h1>
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
