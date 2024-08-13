@@ -8,9 +8,9 @@ import {
   editItem
 } from '../utils/fetchUtils.js'
 import { useStatusManager } from '@/stores/StatusManager'
-import TaskDetail from '@/TaskDetail.vue'
+import TaskDetail from './../components/TaskDetail.vue'
 import { useRoute, useRouter } from 'vue-router'
-import DeletePopUp from '@/DeletePopUp.vue'
+import DeletePopUp from './../components/DeletePopUp.vue'
 import AlertPopUp from './../components/AlertPopUp.vue'
 import StatusPopUp from './StatusPopUp.vue'
 import DeleteStatus from './DeleteStatus.vue'
