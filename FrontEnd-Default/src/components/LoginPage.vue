@@ -135,7 +135,12 @@ const checkPasswordLength = () => {
           itbkk-button-signin
           type="button"
           @click="TaskModal"
-          :disabled="!trimmedUsername || !trimmedPassword"
+          :disabled="
+            !trimmedUsername ||
+            !trimmedPassword ||
+            isUserNameOverLimit ||
+            isPasswordOverLimit
+          "
           :class="{
             'bg-gray-400 cursor-not-allowed':
               !trimmedUsername || !trimmedPassword,
