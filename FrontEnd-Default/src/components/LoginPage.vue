@@ -75,6 +75,7 @@ const checkPasswordLength = () => {
           @input="checkUserNameLength"
           :class="{ 'border-red-600 text-red-600': isUserNameOverLimit }"
         />
+
         <div
           style="display: flex; align-items: center"
           v-if="isUserNameOverLimit"
