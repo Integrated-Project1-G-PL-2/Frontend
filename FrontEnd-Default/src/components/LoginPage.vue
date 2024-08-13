@@ -76,7 +76,11 @@ const closeRedPopup = () => {
           type="button"
           @click="TaskModal"
           :disabled="!username || !password"
-          class="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-700"
+          :class="{
+            'bg-gray-400 cursor-not-allowed': !username || !password,
+            'bg-purple-500 hover:bg-purple-600': username && password
+          }"
+          class="w-full text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-700"
         >
           Sign in
         </button>
