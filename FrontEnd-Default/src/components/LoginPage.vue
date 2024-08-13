@@ -5,7 +5,6 @@ import AlertPopUp from './../components/AlertPopUp.vue'
 import { useRouter } from 'vue-router'
 
 const showTaskModal = ref(false)
-const showMessage = ref(false)
 const username = ref('')
 const password = ref('')
 const router = useRouter()
