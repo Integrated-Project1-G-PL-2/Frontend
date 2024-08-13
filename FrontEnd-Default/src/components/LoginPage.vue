@@ -1,31 +1,50 @@
 <script setup></script>
 
 <template>
-  <div class="main">
-    <h1>Welcome To ITB-KK</h1>
-    <form action="">
-      <label for="first"> Username: </label>
-      <input
-        type="text"
-        id="first"
-        name="first"
-        placeholder="Enter your Username"
-        required
-      />
+  <div
+    class="main flex flex-col items-center justify-center min-h-screen bg-gray-100"
+  >
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Welcome To ITB-KK</h1>
+    <form class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+      <div class="mb-4">
+        <label for="first" class="block text-gray-700 font-semibold mb-2"
+          >Username:</label
+        >
+        <input
+          type="text"
+          id="first"
+          name="first"
+          placeholder="Enter your Username"
+          required
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
 
-      <label for="password"> Password: </label>
-      <input
-        type="password"
-        id="password"
-        name="password"
-        placeholder="Enter your Password"
-        required
-      />
+      <div class="mb-6">
+        <label for="password" class="block text-gray-700 font-semibold mb-2"
+          >Password:</label
+        >
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Enter your Password"
+          required
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
 
       <div class="wrap">
-        <button type="signIn" onclick="solve()">Sign in</button>
+        <button
+          type="signIn"
+          onclick="solve()"
+          class="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-700"
+        >
+          Sign in
+        </button>
       </div>
     </form>
   </div>
 </template>
+
 <style scoped></style>
