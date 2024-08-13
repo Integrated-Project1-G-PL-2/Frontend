@@ -1,18 +1,31 @@
 <script setup>
-import { reactive, ref } from 'vue'
+import { ref, computed } from 'vue'
 import Task from './../components/Task.vue'
 import AlertPopUp from './../components/AlertPopUp.vue'
 import { useRouter } from 'vue-router'
+
 const showTaskModal = ref(false)
 const showMessage = ref(false)
+const username = ref('')
+const password = ref('')
 const router = useRouter()
-const TaskModal = function () {
+
+const TaskModal = () => {
   router.replace({ name: 'Task' })
   showTaskModal.value = true
 }
-const redPopup = function () {
+
+const redPopup = () => {
   showMessage.value = true
 }
+
+const closeRedPopup = () => {
+  showMessage.value = false
+}
+
+const isDisabled = computed(() => {
+  return !username.value || !password.value
+})
 </script>
 
 <template>
@@ -30,30 +43,32 @@ const redPopup = function () {
     <h1 class="text-3xl font-bold text-gray-800 mb-6">Welcome To ITB-KK</h1>
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
       <div class="mb-4">
-        <label for="first" class="block text-gray-700 font-semibold mb-2"
-          >Username</label
-        >
+        <label for="first" class="block text-gray-700 font-semibold mb-2">
+          Username
+        </label>
         <input
           itbkk-username
           type="text"
           id="first"
           name="first"
           placeholder="Enter your Username"
+          v-model="username"
           required
           class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
 
       <div class="mb-6">
-        <label for="password" class="block text-gray-700 font-semibold mb-2"
-          >Password</label
-        >
+        <label for="password" class="block text-gray-700 font-semibold mb-2">
+          Password
+        </label>
         <input
           itbkk-password
           type="password"
           id="password"
           name="password"
           placeholder="Enter your Password"
+          v-model="password"
           required
           class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
@@ -62,8 +77,9 @@ const redPopup = function () {
       <div class="wrap">
         <button
           itbkk-button-signin
-          type="signIn"
+          type="button"
           @click="TaskModal"
+          :disabled="isDisabled"
           class="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-700"
         >
           Sign in
