@@ -7,12 +7,11 @@ import { useRouter } from 'vue-router'
 const showTaskModal = ref(false)
 const username = ref('')
 const password = ref('')
-const isPasswordVisible = ref(false) // State to toggle password visibility
+const isPasswordVisible = ref(false)
 const router = useRouter()
 const isUserNameOverLimit = ref(false)
 const isPasswordOverLimit = ref(false)
 
-// Computed properties for trimmed values
 const trimmedUsername = computed(() => username.value.trim())
 const trimmedPassword = computed(() => password.value.trim())
 
@@ -32,11 +31,11 @@ const closeRedPopup = async function (operate) {
 }
 
 const checkUserNameLength = () => {
-  isUserNameOverLimit.value = trimmedUsername.value.length > 50
+  isUserNameOverLimit.value = trimmedUsername.value.length >= 50
 }
 
 const checkPasswordLength = () => {
-  isPasswordOverLimit.value = trimmedPassword.value.length > 14
+  isPasswordOverLimit.value = trimmedPassword.value.length >= 14
 }
 
 const togglePasswordVisibility = () => {
@@ -79,6 +78,7 @@ const togglePasswordVisibility = () => {
           class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           @input="checkUserNameLength"
           :class="{ 'border-red-600 text-red-600': isUserNameOverLimit }"
+          maxlength="50"
         />
 
         <div
@@ -120,6 +120,7 @@ const togglePasswordVisibility = () => {
             class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             @input="checkPasswordLength"
             :class="{ 'border-red-600 text-red-600': isPasswordOverLimit }"
+            maxlength="14"
           />
           <button
             type="button"
@@ -193,6 +194,4 @@ const togglePasswordVisibility = () => {
   </Teleport>
 </template>
 
-<style scoped>
-/* Optional: Add custom styles here if needed */
-</style>
+<style scoped></style>
