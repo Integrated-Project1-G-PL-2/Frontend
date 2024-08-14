@@ -21,16 +21,6 @@ const TaskModal = () => {
   showTaskModal.value = true
 }
 
-// const redPopup = reactive({
-//   incorrect: { state: false, taskTitle: '' },
-//   error: { state: false, taskTitle: '' }
-// })
-
-// const closeRedPopup = async function (operate) {
-//   router.push({ name: 'Login' })
-//   redPopup[operate].state = false
-// }
-
 const closeIncorrectAlter = () => {
   incorrect.value = false
 }
