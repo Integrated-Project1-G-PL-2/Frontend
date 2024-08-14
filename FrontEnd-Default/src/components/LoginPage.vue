@@ -183,7 +183,10 @@ const togglePasswordVisibility = () => {
         <button
           @click="TaskModal"
           :disabled="
-            trimmedUsername.length === 0 || trimmedPassword.length === 0
+            trimmedUsername.length === 0 ||
+            trimmedPassword.length === 0 ||
+            isUserNameOverLimit ||
+            isPasswordOverLimit
           "
           :class="{
             'bg-gray-400 text-gray-200 cursor-not-allowed':
