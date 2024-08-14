@@ -16,6 +16,9 @@ const error = ref(false)
 const trimmedUsername = computed(() => username.value.trim())
 const trimmedPassword = computed(() => password.value.trim())
 
+const MAX_USERNAME_LENGTH = 50
+const MAX_PASSWORD_LENGTH = 14
+
 const TaskModal = () => {
   router.replace({ name: 'Task' })
   showTaskModal.value = true
@@ -27,12 +30,23 @@ const closeIncorrectAlter = () => {
 const closeProblemAlter = () => {
   error.value = false
 }
+
 const checkUserNameLength = () => {
-  isUserNameOverLimit.value = trimmedUsername.value.length > 50
+  if (trimmedUsername.value.length > MAX_USERNAME_LENGTH) {
+    isUserNameOverLimit.value = true
+    username.value = trimmedUsername.value.substring(0, MAX_USERNAME_LENGTH)
+  } else {
+    isUserNameOverLimit.value = false
+  }
 }
 
 const checkPasswordLength = () => {
-  isPasswordOverLimit.value = trimmedPassword.value.length > 14
+  if (trimmedPassword.value.length > MAX_PASSWORD_LENGTH) {
+    isPasswordOverLimit.value = true
+    password.value = trimmedPassword.value.substring(0, MAX_PASSWORD_LENGTH)
+  } else {
+    isPasswordOverLimit.value = false
+  }
 }
 
 const togglePasswordVisibility = () => {
@@ -75,9 +89,7 @@ const togglePasswordVisibility = () => {
           class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           @input="checkUserNameLength"
           :class="{ 'border-red-600 text-red-600': isUserNameOverLimit }"
-          maxlength="50"
         />
-
         <div
           style="display: flex; align-items: center"
           v-if="isUserNameOverLimit"
@@ -117,7 +129,6 @@ const togglePasswordVisibility = () => {
             class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             @input="checkPasswordLength"
             :class="{ 'border-red-600 text-red-600': isPasswordOverLimit }"
-            maxlength="14"
           />
           <button
             type="button"
@@ -154,13 +165,12 @@ const togglePasswordVisibility = () => {
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="currentColor"
-            className="-mt-px h-4 w-[20rem]"
             class="w-[15px] text-red-600"
           >
             <path
-              fillRule="evenodd"
-              d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 01.67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 11-.671-1.34l.041-.022z"
-              clipRule="evenodd"
+              fill-rule="evenodd"
+              d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 01.67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 11-.671-1.34l.041-.022zM12 9a.75.75 0 100-1.5.75.75 0 000 1.5z"
+              clip-rule="evenodd"
             />
           </svg>
           <div class="text-sm text-red-600">
@@ -169,26 +179,25 @@ const togglePasswordVisibility = () => {
         </div>
       </div>
 
-      <div class="flex items-center justify-center">
+      <div class="mb-4">
         <button
           @click="TaskModal"
-          :disabled="!trimmedUsername || !trimmedPassword"
+          :disabled="
+            trimmedUsername.length === 0 || trimmedPassword.length === 0
+          "
           :class="{
-            'bg-gray-400 cursor-not-allowed':
-              !trimmedUsername || !trimmedPassword,
-            'bg-purple-500 hover:bg-purple-600':
-              trimmedUsername && trimmedPassword
+            'bg-gray-400 text-gray-200 cursor-not-allowed':
+              trimmedUsername.length === 0 || trimmedPassword.length === 0,
+            'bg-purple-500 hover:bg-purple-600 text-white':
+              trimmedUsername.length > 0 && trimmedPassword.length > 0
           }"
-          class="w-full text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-700"
+          class="w-full py-2 rounded-md"
         >
-          Sign in
+          Sign In
         </button>
       </div>
     </div>
   </div>
-  <Teleport to="body" v-if="showTaskModal">
-    <Task></Task>
-  </Teleport>
 </template>
 
 <style scoped></style>
