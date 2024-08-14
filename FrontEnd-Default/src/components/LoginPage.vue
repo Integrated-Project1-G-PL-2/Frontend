@@ -11,7 +11,8 @@ const isPasswordVisible = ref(false)
 const router = useRouter()
 const isUserNameOverLimit = ref(false)
 const isPasswordOverLimit = ref(false)
-
+const incorrect = ref(false)
+const error = ref(false)
 const trimmedUsername = computed(() => username.value.trim())
 const trimmedPassword = computed(() => password.value.trim())
 
@@ -20,16 +21,22 @@ const TaskModal = () => {
   showTaskModal.value = true
 }
 
-const redPopup = reactive({
-  incorrect: { state: false, taskTitle: '' },
-  error: { state: false, taskTitle: '' }
-})
+// const redPopup = reactive({
+//   incorrect: { state: false, taskTitle: '' },
+//   error: { state: false, taskTitle: '' }
+// })
 
-const closeRedPopup = async function (operate) {
-  router.push({ name: 'Login' })
-  redPopup[operate].state = false
+// const closeRedPopup = async function (operate) {
+//   router.push({ name: 'Login' })
+//   redPopup[operate].state = false
+// }
+
+const closeIncorrectAlter = () => {
+  incorrect.value = false
 }
-
+const closeProblemAlter = () => {
+  error.value = false
+}
 const checkUserNameLength = () => {
   isUserNameOverLimit.value = trimmedUsername.value.length >= 50
 }
@@ -48,16 +55,16 @@ const togglePasswordVisibility = () => {
     class="main flex flex-col items-center justify-center min-h-screen bg-gray-100"
   >
     <AlertPopUp
-      v-if="redPopup.incorrect.state"
+      v-if="incorrect"
       :titles="'Username or Password is incorrect.'"
-      @closePopUp="closeRedPopup"
+      @closePopUp="closeIncorrectAlter"
       message="Error!!"
       styleType="red"
     />
     <AlertPopUp
-      v-if="redPopup.error.state"
+      v-if="error"
       :titles="'There is a problem. Please try again later.'"
-      @closePopUp="closeRedPopup"
+      @closePopUp="closeProblemAlter"
       message="Error!!"
       styleType="red"
     />
