@@ -28,11 +28,11 @@ const closeProblemAlter = () => {
   error.value = false
 }
 const checkUserNameLength = () => {
-  isUserNameOverLimit.value = trimmedUsername.value.length >= 50
+  isUserNameOverLimit.value = trimmedUsername.value.length > 50
 }
 
 const checkPasswordLength = () => {
-  isPasswordOverLimit.value = trimmedPassword.value.length >= 14
+  isPasswordOverLimit.value = trimmedPassword.value.length > 14
 }
 
 const togglePasswordVisibility = () => {
