@@ -20,8 +20,14 @@ const MAX_USERNAME_LENGTH = 50
 const MAX_PASSWORD_LENGTH = 14
 
 const TaskModal = () => {
+  const userData = {
+    username: trimmedUsername.value,
+    password: trimmedPassword.value
+  }
   router.replace({ name: 'Task' })
   showTaskModal.value = true
+
+  emit('signIn', userData)
 }
 
 const closeIncorrectAlter = () => {
