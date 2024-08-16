@@ -151,6 +151,7 @@ const switchBack = function () {
 }
 
 const taskGroups = ref(taskManager.getTasks())
+
 const searchStatus = ref('')
 const cloneTaskGroups = ref(statusManager.getStatuses())
 
