@@ -22,7 +22,8 @@ const MAX_PASSWORD_LENGTH = 14
 const TaskModal = () => {
   router.replace({ name: 'Task' })
   showTaskModal.value = true
-  console.log(username)
+  console.log(trimmedUsername)
+  console.log(trimmedPassword)
 }
 
 const closeIncorrectAlter = () => {
