@@ -39,6 +39,7 @@ const handleLogin = async () => {
     console.error(err)
     incorrect.value = true
   }
+  error.value = true
 }
 
 const closeIncorrectAlter = () => {
