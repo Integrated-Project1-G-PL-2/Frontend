@@ -1,6 +1,5 @@
 import { reactive } from 'vue'
 import { defineStore, acceptHMRUpdate } from 'pinia'
-import axios from 'axios'
 
 export const userManager = defineStore('userManager', () => {
   const users = reactive([])
