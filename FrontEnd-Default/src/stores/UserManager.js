@@ -11,18 +11,13 @@ export const userManager = defineStore('userManager', () => {
 
   const fetchUsers = async function () {
     try {
-      const response = await axios.get('/api/users') // Replace with your backend endpoint
+      const response = await axios.get('/api/users')
       const userData = response.data
 
-      // Assuming userData is an array of objects, each representing a user
       userData.forEach((user) => {
         users.push({
-          oid: user.oid,
           username: user.username,
-          password: user.password, // Note: Store passwords securely
-          name: user.name,
-          email: user.email,
-          role: user.role
+          password: user.password
         })
       })
     } catch (error) {
@@ -35,8 +30,3 @@ export const userManager = defineStore('userManager', () => {
     fetchUsers
   }
 })
-
-// For HMR support
-if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(userManager, import.meta.hot))
-}
