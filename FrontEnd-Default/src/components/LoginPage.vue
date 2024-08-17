@@ -2,7 +2,7 @@
 import { reactive, ref, computed } from 'vue'
 import AlertPopUp from './../components/AlertPopUp.vue'
 import { useRouter } from 'vue-router'
-import { userManager } from '@/stores/UserManager'
+import { login } from '@/stores/userManager' // นำเข้าฟังก์ชัน login
 
 const showTaskModal = ref(false)
 const username = ref('')
@@ -19,11 +19,26 @@ const trimmedPassword = computed(() => password.value.trim())
 const MAX_USERNAME_LENGTH = 50
 const MAX_PASSWORD_LENGTH = 14
 
-const TaskModal = () => {
-  router.replace({ name: 'Task' })
-  showTaskModal.value = true
-  console.log(trimmedUsername)
-  console.log(trimmedPassword)
+const handleLogin = async () => {
+  try {
+    const data = await login({
+      username: trimmedUsername.value,
+      password: trimmedPassword.value
+    })
+
+    const token = data.token
+
+    // Store the JWT in localStorage (or sessionStorage)
+    localStorage.setItem('jwt', token)
+
+    // Redirect to the Task page
+    router.replace({ name: 'Task' })
+
+    showTaskModal.value = true
+  } catch (err) {
+    console.error(err)
+    incorrect.value = true
+  }
 }
 
 const closeIncorrectAlter = () => {
@@ -183,7 +198,7 @@ const togglePasswordVisibility = () => {
 
       <div class="mb-4">
         <button
-          @click="TaskModal"
+          @click="handleLogin"
           :disabled="
             trimmedUsername.length === 0 ||
             trimmedPassword.length === 0 ||
