@@ -34,7 +34,6 @@ export const userManager = defineStore('userManager', () => {
 
   return {
     getUser,
-    fetchUsers,
     compareUser
   }
 })
