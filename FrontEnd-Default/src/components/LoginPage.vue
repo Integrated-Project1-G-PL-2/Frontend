@@ -1,8 +1,8 @@
 <script setup>
 import { reactive, ref, computed } from 'vue'
-import Task from './../components/Task.vue'
 import AlertPopUp from './../components/AlertPopUp.vue'
 import { useRouter } from 'vue-router'
+import { userManager } from '@/stores/UserManager'
 
 const showTaskModal = ref(false)
 const username = ref('')
