@@ -26,9 +26,15 @@ const handleLogin = async () => {
       password: trimmedPassword.value
     })
 
-    router.replace({ name: 'Task' })
-
-    showTaskModal.value = true
+    // ตรวจสอบเงื่อนไขที่ต้องการ เช่น การมี token หรือ status ที่ถูกต้อง
+    if (data && data.token) {
+      // ถ้าตรงเงื่อนไข ให้เปลี่ยนเส้นทางไปยังหน้า 'Task'
+      router.replace({ name: 'Task' })
+      showTaskModal.value = true
+    } else {
+      // ถ้าไม่ตรงเงื่อนไข ตั้งค่า error.value = true
+      error.value = true
+    }
   } catch (err) {
     console.error(err)
     incorrect.value = true
