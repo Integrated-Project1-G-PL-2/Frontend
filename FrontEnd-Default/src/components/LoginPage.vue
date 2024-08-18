@@ -31,11 +31,17 @@ const handleLogin = async () => {
       const decodedToken = decodeJWT(data.token) // ถอดรหัส JWT เพื่อตรวจสอบข้อมูล
       console.log('Decoded JWT:', decodedToken) // แสดงข้อมูล JWT ที่ถอดรหัสใน console
 
-      // เปลี่ยนเส้นทางไปยังหน้า 'Task' และแสดง modal
-      router.replace({ name: 'Task' })
-      showTaskModal.value = true
+      // ตรวจสอบว่าค่าที่กรอกมาตรงกับข้อมูลใน JWT หรือไม่
+      if (decodedToken.payload.sub === trimmedUsername.value) {
+        // เปลี่ยนเส้นทางไปยังหน้า 'Task' และแสดง modal
+        router.replace({ name: 'Task' })
+        showTaskModal.value = true
+      } else {
+        console.error('Username does not match the JWT payload')
+        error.value = true // ถ้าไม่ตรงกัน ให้แสดง error
+      }
     } else {
-      // ถ้าไม่ตรงเงื่อนไข ให้ตั้งค่า error.value = true
+      // ถ้าไม่มีโทเค็น ให้ตั้งค่า error.value = true
       error.value = true
     }
   } catch (err) {
@@ -43,7 +49,6 @@ const handleLogin = async () => {
     incorrect.value = true
   }
 }
-
 const closeIncorrectAlter = () => {
   incorrect.value = false
 }
