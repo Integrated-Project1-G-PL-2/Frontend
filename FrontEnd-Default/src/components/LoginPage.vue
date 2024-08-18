@@ -2,7 +2,7 @@
 import { reactive, ref, computed } from 'vue'
 import AlertPopUp from './../components/AlertPopUp.vue'
 import { useRouter } from 'vue-router'
-import { login } from '@/stores/userManager' // นำเข้าฟังก์ชัน login
+import { login } from '@/stores/UserManager' // นำเข้าฟังก์ชัน login
 
 const showTaskModal = ref(false)
 const username = ref('')
