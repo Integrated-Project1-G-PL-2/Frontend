@@ -1,24 +1,21 @@
-// userManager.js
-
-// ฟังก์ชันสำหรับ signUp (ลงทะเบียน)
-export async function signUp(userCredentials) {
+// ฟังก์ชันสำหรับถอดรหัส JWT
+export function decodeJWT(token) {
   try {
-    const response = await fetch('/auth/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(userCredentials)
-    })
+    // แบ่ง JWT ออกเป็นสามส่วน: HEADER, PAYLOAD, SIGNATURE
+    const [header, payload, signature] = token.split('.')
 
-    if (!response.ok) {
-      throw new Error('Sign Up failed')
+    // แปลงจาก Base64 URL Safe เป็น JSON object
+    const decodedHeader = JSON.parse(atob(header))
+    const decodedPayload = JSON.parse(atob(payload))
+
+    // คืนค่าที่ถูกถอดรหัส
+    return {
+      header: decodedHeader,
+      payload: decodedPayload,
+      signature: signature
     }
-
-    const data = await response.json()
-    return data // คืนค่าผลลัพธ์ที่ได้จากการลงทะเบียน
   } catch (error) {
-    throw new Error(error.message)
+    throw new Error('Invalid JWT Token')
   }
 }
 
@@ -38,6 +35,8 @@ export async function login(userCredentials) {
     }
 
     const data = await response.json()
+    const decodedToken = decodeJWT(data.token) // ถอดรหัส JWT
+    console.log('Decoded JWT:', decodedToken) // แสดงผล JWT ที่ถูกถอดรหัสใน console
     localStorage.setItem('jwt', data.token) // เก็บ JWT ไว้ใน localStorage
     return data // คืนค่าผลลัพธ์ที่ได้จากการเข้าสู่ระบบ
   } catch (error) {
@@ -62,6 +61,8 @@ export async function refreshToken(token) {
     }
 
     const data = await response.json()
+    const decodedToken = decodeJWT(data.token) // ถอดรหัส JWT
+    console.log('Decoded JWT:', decodedToken) // แสดงผล JWT ที่ถูกถอดรหัสใน console
     localStorage.setItem('jwt', data.token) // อัปเดต JWT ใน localStorage
     return data // คืนค่าผลลัพธ์ที่ได้จากการรีเฟรชโทเค็น
   } catch (error) {

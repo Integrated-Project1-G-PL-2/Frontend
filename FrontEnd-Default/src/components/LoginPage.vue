@@ -28,7 +28,10 @@ const handleLogin = async () => {
 
     // ตรวจสอบเงื่อนไขว่ามีโทเค็นหรือไม่
     if (data && data.token) {
-      // ถ้าตรงเงื่อนไข ให้เปลี่ยนเส้นทางไปยังหน้า 'Task'
+      const decodedToken = decodeJWT(data.token) // ถอดรหัส JWT เพื่อตรวจสอบข้อมูล
+      console.log('Decoded JWT:', decodedToken) // แสดงข้อมูล JWT ที่ถอดรหัสใน console
+
+      // เปลี่ยนเส้นทางไปยังหน้า 'Task' และแสดง modal
       router.replace({ name: 'Task' })
       showTaskModal.value = true
     } else {
@@ -40,7 +43,6 @@ const handleLogin = async () => {
     incorrect.value = true
   }
 }
-
 const closeIncorrectAlter = () => {
   incorrect.value = false
 }
