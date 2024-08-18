@@ -2,7 +2,7 @@
 import { reactive, ref, computed } from 'vue'
 import AlertPopUp from './../components/AlertPopUp.vue'
 import { useRouter } from 'vue-router'
-import { login } from '@/stores/UserManager' // นำเข้าฟังก์ชัน login
+import { login } from '@/stores/UserManager'
 
 const showTaskModal = ref(false)
 const username = ref('')
@@ -26,12 +26,6 @@ const handleLogin = async () => {
       password: trimmedPassword.value
     })
 
-    const token = data.token
-
-    // Store the JWT in localStorage (or sessionStorage)
-    localStorage.setItem('jwt', token)
-
-    // Redirect to the Task page
     router.replace({ name: 'Task' })
 
     showTaskModal.value = true
@@ -39,7 +33,6 @@ const handleLogin = async () => {
     console.error(err)
     incorrect.value = true
   }
-  error.value = true
 }
 
 const closeIncorrectAlter = () => {
