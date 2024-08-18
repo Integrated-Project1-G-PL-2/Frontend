@@ -8,6 +8,28 @@ export function decodeJWT(token) {
     const decodedHeader = JSON.parse(atob(header))
     const decodedPayload = JSON.parse(atob(payload))
 
+    // ตรวจสอบค่าจาก header
+    if (decodedHeader.typ !== 'JWT' || decodedHeader.alg !== 'HS256') {
+      throw new Error('Invalid JWT header')
+    }
+
+    // ตรวจสอบค่าจาก payload
+    const requiredFields = [
+      'role',
+      'name',
+      'oid',
+      'email',
+      'sub',
+      'iat',
+      'exp',
+      'iss'
+    ]
+    for (const field of requiredFields) {
+      if (!decodedPayload.hasOwnProperty(field)) {
+        throw new Error(`Missing required field in JWT payload: ${field}`)
+      }
+    }
+
     // คืนค่าที่ถูกถอดรหัส
     return {
       header: decodedHeader,
@@ -15,7 +37,7 @@ export function decodeJWT(token) {
       signature: signature
     }
   } catch (error) {
-    throw new Error('Invalid JWT Token')
+    throw new Error('Invalid JWT Token: ' + error.message)
   }
 }
 
