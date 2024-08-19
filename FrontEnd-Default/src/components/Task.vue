@@ -208,7 +208,7 @@ const returnLoginPage = () => {
         </svg>
         <button
           @click="returnLoginPage"
-          class="bg-blue-500 text-sm rounded-[6px] font-sans text-gray-100 hover:text-gray-600 px-3 py-1"
+          class="bg-blue-500 text-sm rounded-[6px] font-sans text-gray-100 hover:text-gray-600 px-7 py-1"
         >
           Log out
         </button>
