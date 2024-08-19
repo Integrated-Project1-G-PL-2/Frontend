@@ -35,9 +35,9 @@ export function decodeJWT(token) {
       }
     }
 
-    // เก็บค่า name จาก payload ลงใน ref userName
+    // เก็บค่า name จาก payload ลงใน ref userName และ localStorage
     userName.value = decodedPayload.name
-
+    localStorage.setItem('userName', decodedPayload.name)
     // คืนค่าที่ถูกถอดรหัส
     return {
       header: decodedHeader,
@@ -78,38 +78,38 @@ export async function login(userCredentials) {
   }
 }
 
-// ฟังก์ชันสำหรับ refreshToken (รีเฟรชโทเค็น)
-export async function refreshToken(token) {
-  try {
-    const response = await fetch('/auth/refresh', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}` // ส่ง JWT เพื่อรีเฟรช
-      },
-      body: JSON.stringify({ token })
-    })
+// // ฟังก์ชันสำหรับ refreshToken (รีเฟรชโทเค็น)
+// export async function refreshToken(token) {
+//   try {
+//     const response = await fetch('/auth/refresh', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         Authorization: `Bearer ${token}` // ส่ง JWT เพื่อรีเฟรช
+//       },
+//       body: JSON.stringify({ token })
+//     })
 
-    if (!response.ok) {
-      throw new Error('Token refresh failed')
-    }
+//     if (!response.ok) {
+//       throw new Error('Token refresh failed')
+//     }
 
-    const data = await response.json()
-    const decodedToken = decodeJWT(data.token) // ถอดรหัส JWT
-    console.log('Decoded JWT:', decodedToken) // แสดงผล JWT ที่ถูกถอดรหัสใน console
-    localStorage.setItem('jwt', data.token) // อัปเดต JWT ใน localStorage
-    return data // คืนค่าผลลัพธ์ที่ได้จากการรีเฟรชโทเค็น
-  } catch (error) {
-    throw new Error(error.message)
-  }
-}
+//     const data = await response.json()
+//     const decodedToken = decodeJWT(data.token) // ถอดรหัส JWT
+//     console.log('Decoded JWT:', decodedToken) // แสดงผล JWT ที่ถูกถอดรหัสใน console
+//     localStorage.setItem('jwt', data.token) // อัปเดต JWT ใน localStorage
+//     return data // คืนค่าผลลัพธ์ที่ได้จากการรีเฟรชโทเค็น
+//   } catch (error) {
+//     throw new Error(error.message)
+//   }
+// }
 
-// ฟังก์ชันสำหรับตรวจสอบว่า JWT มีอยู่ใน localStorage หรือไม่
-export function getToken() {
-  return localStorage.getItem('jwt')
-}
+// // ฟังก์ชันสำหรับตรวจสอบว่า JWT มีอยู่ใน localStorage หรือไม่
+// export function getToken() {
+//   return localStorage.getItem('jwt')
+// }
 
-// ฟังก์ชันสำหรับ logout (ออกจากระบบ)
-export function logout() {
-  localStorage.removeItem('jwt') // ลบ JWT ออกจาก localStorage
-}
+// // ฟังก์ชันสำหรับ logout (ออกจากระบบ)
+// export function logout() {
+//   localStorage.removeItem('jwt') // ลบ JWT ออกจาก localStorage
+// }

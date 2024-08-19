@@ -168,6 +168,12 @@ watch(collectStatus, async () => {
     )
   )
 })
+onMounted(() => {
+  const storedUserName = localStorage.getItem('userName')
+  if (storedUserName) {
+    userName.value = storedUserName
+  }
+})
 
 const returnLoginPage = () => {
   router.replace({ name: 'Login' })
