@@ -2,7 +2,7 @@
 import { reactive, ref, computed } from 'vue'
 import AlertPopUp from './../components/AlertPopUp.vue'
 import { useRouter } from 'vue-router'
-import { login } from '@/stores/UserManager'
+import { login, decodeJWT } from '@/stores/UserManager'
 
 const showTaskModal = ref(false)
 const username = ref('')
@@ -20,33 +20,26 @@ const MAX_USERNAME_LENGTH = 50
 const MAX_PASSWORD_LENGTH = 14
 
 const handleLogin = async () => {
-  try {
-    const data = await login({
-      username: trimmedUsername.value,
-      password: trimmedPassword.value
-    })
-
-    // ตรวจสอบเงื่อนไขว่ามีโทเค็นหรือไม่
-    if (data && data.token) {
-      const decodedToken = decodeJWT(data.token) // ถอดรหัส JWT เพื่อตรวจสอบข้อมูล
-      console.log('Decoded JWT:', decodedToken) // แสดงข้อมูล JWT ที่ถอดรหัสใน console
-
-      // ตรวจสอบว่าค่าที่กรอกมาตรงกับข้อมูลใน JWT หรือไม่
-      if (decodedToken.payload.sub === trimmedUsername.value) {
-        // เปลี่ยนเส้นทางไปยังหน้า 'Task' และแสดง modal
-        router.replace({ name: 'Task' })
-        showTaskModal.value = true
-      } else {
-        console.error('Username does not match the JWT payload')
-        error.value = true // ถ้าไม่ตรงกัน ให้แสดง error
-      }
-    } else {
-      // ถ้าไม่มีโทเค็น ให้ตั้งค่า error.value = true
-      error.value = true
-    }
-  } catch (err) {
-    console.error(err)
+  const data = await login({
+    userName: trimmedUsername.value,
+    password: trimmedPassword.value
+  })
+  if (data == '400' || '401') {
     incorrect.value = true
+  } else if ((data != 400, data != 401)) {
+    error.value = true
+  }
+  // ตรวจสอบเงื่อนไขว่ามีโทเค็นหรือไม่
+  if (data && data.token) {
+    const decodedToken = decodeJWT(data.token) // ถอดรหัส JWT เพื่อตรวจสอบข้อมูล
+    console.log('Decoded JWT:', decodedToken) // แสดงข้อมูล JWT ที่ถอดรหัสใน console
+
+    // ตรวจสอบว่าค่าที่กรอกมาตรงกับข้อมูลใน JWT หรือไม่
+    if (decodedToken.payload.sub === trimmedUsername.value) {
+      // เปลี่ยนเส้นทางไปยังหน้า 'Task' และแสดง modal
+      router.replace({ name: 'Task' })
+      showTaskModal.value = true
+    }
   }
 }
 const closeIncorrectAlter = () => {
@@ -101,7 +94,7 @@ const togglePasswordVisibility = () => {
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
       <div class="mb-4">
         <label for="first" class="block text-gray-700 font-semibold mb-2">
-          Username
+          Username itbkk.olarn
         </label>
         <input
           itbkk-username
@@ -140,7 +133,7 @@ const togglePasswordVisibility = () => {
 
       <div class="mb-6">
         <label for="password" class="block text-gray-700 font-semibold mb-2">
-          Password
+          Password ip23/OLA
         </label>
         <div class="relative">
           <input

@@ -43,17 +43,21 @@ export function decodeJWT(token) {
 
 // ฟังก์ชันสำหรับ signIn (เข้าสู่ระบบ)
 export async function login(userCredentials) {
+  console.log(userCredentials)
   try {
-    const response = await fetch('/auth/signin', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(userCredentials)
-    })
+    const response = await fetch(
+      'http://localhost:8080/authentications/login',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ ...userCredentials })
+      }
+    )
 
     if (!response.ok) {
-      throw new Error('Login failed')
+      return response.status
     }
 
     const data = await response.json()

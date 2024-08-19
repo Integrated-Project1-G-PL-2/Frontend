@@ -22,7 +22,6 @@ import {
   searchByStatus
 } from '@/stores/SortManager.js'
 import { storeToRefs } from 'pinia'
-import { userName } from './LoginPage.vue'
 
 const statusManager = useStatusManager()
 const showStatusDetailModal = ref(false)
@@ -181,7 +180,7 @@ const returnLoginPage = () => {
       IT-Bangmod Kradan Kanban
     </h1>
     <div class="flex flex-col items-end pr-4 font-bold space-y-2">
-      <h1 class="font-bold font-sans cursor-default">{{ userName }}</h1>
+      <h1 class="font-bold font-sans cursor-default"></h1>
       <div class="grid grid-cols-1 items-center justify-items-center space-y-2">
         <svg
           class="w-8 h-8 text-gray-800 dark:text-gray-700"
