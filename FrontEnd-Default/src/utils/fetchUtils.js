@@ -1,19 +1,28 @@
 async function getItems(url) {
   try {
-    const data = await fetch(url)
-    const items = await data.json()
-    return items
+    const res = await fetch(url)
+    if (!res.ok) {
+      console.error(`Failed to fetch items: ${res.status}`)
+      return null // Return null or an appropriate error value
+    }
+    return await res.json()
   } catch (error) {
-    console.log(`error: ${error}`)
+    console.error(`Network error: ${error}`)
+    return null // Return null or an appropriate error value
   }
 }
+
 async function getItemById(url, id) {
   try {
-    const data = await fetch(`${url}/${id}`)
-    const item = await data.json()
-    return item
+    const res = await fetch(`${url}/${id}`)
+    if (!res.ok) {
+      console.error(`Failed to fetch item with ID ${id}: ${res.status}`)
+      return null // Return null or an appropriate error value
+    }
+    return await res.json()
   } catch (error) {
-    console.log(`error: ${error}`)
+    console.error(`Network error: ${error}`)
+    return null // Return null or an appropriate error value
   }
 }
 
@@ -22,20 +31,32 @@ async function deleteItemById(url, id) {
     const res = await fetch(`${url}/${id}`, {
       method: 'DELETE'
     })
+    if (!res.ok) {
+      console.error(`Failed to delete item with ID ${id}: ${res.status}`)
+      return res.status
+    }
     return res.status
   } catch (error) {
-    console.log(`error: ${error}`)
+    console.error(`Network error: ${error}`)
+    return null // Return null or an appropriate error value
   }
 }
 
-async function deleteAndTransferItem(url, id,newId) {
+async function deleteAndTransferItem(url, id, newId) {
   try {
     const res = await fetch(`${url}/${id}/${newId}`, {
       method: 'DELETE'
     })
+    if (!res.ok) {
+      console.error(
+        `Failed to delete and transfer item with ID ${id} to ${newId}: ${res.status}`
+      )
+      return res.status
+    }
     return res.status
   } catch (error) {
-    console.log(`error: ${error}`)
+    console.error(`Network error: ${error}`)
+    return null // Return null or an appropriate error value
   }
 }
 
@@ -44,34 +65,46 @@ async function addItem(url, newItem) {
     const res = await fetch(url, {
       method: 'POST',
       headers: {
-        'content-type': 'application/json'
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        ...newItem
-      })
+      body: JSON.stringify(newItem)
     })
-    const addedItem = await res.json()
-    return addedItem
+    if (!res.ok) {
+      console.error(`Failed to add item: ${res.status}`)
+      return null // Return null or an appropriate error value
+    }
+    return await res.json()
   } catch (error) {
-    console.log(`error: ${error}`)
+    console.error(`Network error: ${error}`)
+    return null // Return null or an appropriate error value
   }
 }
 
-async function editItem(url, id, editItem) {
+async function editItem(url, id, editedItem) {
   try {
     const res = await fetch(`${url}/${id}`, {
       method: 'PUT',
       headers: {
-        'content-type': 'application/json'
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        ...editItem
-      })
+      body: JSON.stringify(editedItem)
     })
-    const editedItem = await res.json()
-    return editedItem
+    if (!res.ok) {
+      console.error(`Failed to edit item with ID ${id}: ${res.status}`)
+      return null // Return null or an appropriate error value
+    }
+    return await res.json()
   } catch (error) {
-    console.log(`error: ${error}`)
+    console.error(`Network error: ${error}`)
+    return null // Return null or an appropriate error value
   }
 }
-export { getItems, getItemById, deleteItemById, addItem, editItem , deleteAndTransferItem}
+
+export {
+  getItems,
+  getItemById,
+  deleteItemById,
+  addItem,
+  editItem,
+  deleteAndTransferItem
+}
