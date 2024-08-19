@@ -62,7 +62,7 @@ const saveClick = async () => {
   }
   if (prop.operate === 'add') {
     const addedStatus = await addItem(import.meta.env.VITE_BASE_URL_V2, status)
-    if (addedStatus.status != '400' && addedStatus.status != '500') {
+    if (addedStatus != null) {
       statusManager.addStatuses(addedStatus)
       emits('showStatusGreenPopup', {
         taskStatus: addedStatus.name,
@@ -84,8 +84,7 @@ const saveClick = async () => {
       prop.statusDetail.value.id,
       status
     )
-
-    if (editedStatus.status != '400' && editedStatus.status != '500') {
+    if (editedStatus != null) {
       statusManager.editStatues(editedStatus.id, editedStatus)
       emits('showStatusGreenPopup', {
         taskStatus: editedStatus.name,
@@ -93,7 +92,7 @@ const saveClick = async () => {
       })
     } else {
       emits('showStatusRedPopup', {
-        taskStatus: editedStatus.name,
+        taskStatus: '',
         operate: prop.operate
       })
     }
@@ -107,10 +106,12 @@ const allStatus = statusManager.getStatuses()
 
 const checkUnique = function (Name) {
   for (const eachStatus of allStatus) {
-    if(prop.operate === 'add'){const eachStatusName = eachStatus.name
-    if (eachStatusName.toUpperCase() == Name.toUpperCase()) {
-      return true
-    }}
+    if (prop.operate === 'add') {
+      const eachStatusName = eachStatus.name
+      if (eachStatusName.toUpperCase() == Name.toUpperCase()) {
+        return true
+      }
+    }
   }
 }
 </script>
