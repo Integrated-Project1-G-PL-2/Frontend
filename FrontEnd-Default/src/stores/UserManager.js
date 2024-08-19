@@ -1,4 +1,9 @@
-// ฟังก์ชันสำหรับถอดรหัส JWT
+import { ref } from 'vue'
+
+// สร้าง ref เพื่อเก็บชื่อผู้ใช้
+export const userName = ref('')
+
+// ฟังก์ชันถอดรหัส JWT
 export function decodeJWT(token) {
   try {
     // แบ่ง JWT ออกเป็นสามส่วน: HEADER, PAYLOAD, SIGNATURE
@@ -29,6 +34,9 @@ export function decodeJWT(token) {
         throw new Error(`Missing required field in JWT payload: ${field}`)
       }
     }
+
+    // เก็บค่า name จาก payload ลงใน ref userName
+    userName.value = decodedPayload.name
 
     // คืนค่าที่ถูกถอดรหัส
     return {
