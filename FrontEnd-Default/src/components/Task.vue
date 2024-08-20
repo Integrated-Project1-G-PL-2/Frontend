@@ -187,7 +187,7 @@ const returnLoginPage = () => {
       IT-Bangmod Kradan Kanban
     </h1>
     <div class="flex flex-col items-end pr-4 font-bold space-y-2">
-      <h1 class="font-bold font-sans cursor-default">
+      <h1 class="itbkk-fullname font-bold font-sans cursor-default">
         {{ userName }}
       </h1>
       <div class="grid grid-cols-1 items-center justify-items-center space-y-2">

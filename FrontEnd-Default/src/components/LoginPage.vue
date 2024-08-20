@@ -59,6 +59,7 @@ const checkUserNameLength = () => {
 }
 
 const checkPasswordLength = () => {
+  console.log(trimmedPassword.value.length)
   if (trimmedPassword.value.length > MAX_PASSWORD_LENGTH) {
     isPasswordOverLimit.value = true
     password.value = trimmedPassword.value.substring(0, MAX_PASSWORD_LENGTH)
@@ -97,14 +98,13 @@ const togglePasswordVisibility = () => {
           Username
         </label>
         <input
-          itbkk-username
           type="text"
           id="first"
           name="first"
           placeholder="Enter your Username"
           v-model="username"
           required
-          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="itbkk-username w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           @input="checkUserNameLength"
           :class="{ 'border-red-600 text-red-600': isUserNameOverLimit }"
         />
@@ -137,14 +137,13 @@ const togglePasswordVisibility = () => {
         </label>
         <div class="relative">
           <input
-            itbkk-password
             :type="isPasswordVisible ? 'text' : 'password'"
             id="password"
             name="password"
             placeholder="Enter your Password"
             v-model="password"
             required
-            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="itbkk-password w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             @input="checkPasswordLength"
             :class="{ 'border-red-600 text-red-600': isPasswordOverLimit }"
           />
@@ -201,18 +200,15 @@ const togglePasswordVisibility = () => {
         <button
           @click="handleLogin"
           :disabled="
-            trimmedUsername.length === 0 ||
-            trimmedPassword.length === 0 ||
-            isUserNameOverLimit ||
-            isPasswordOverLimit
+            trimmedUsername.length === 0 || trimmedPassword.length === 0
           "
           :class="{
-            'bg-gray-400 text-gray-200 cursor-not-allowed':
+            'disabled bg-gray-400 text-gray-200 cursor-not-allowed':
               trimmedUsername.length === 0 || trimmedPassword.length === 0,
             'bg-purple-500 hover:bg-purple-600 text-white':
               trimmedUsername.length > 0 && trimmedPassword.length > 0
           }"
-          class="w-full py-2 rounded-md"
+          class="itbkk-button-signin w-full py-2 rounded-md"
         >
           Sign In
         </button>
