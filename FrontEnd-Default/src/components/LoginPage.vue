@@ -30,8 +30,8 @@ const handleLogin = async () => {
     error.value = true
   }
   // ตรวจสอบเงื่อนไขว่ามีโทเค็นหรือไม่
-  if (data && data.token) {
-    const decodedToken = decodeJWT(data.token) // ถอดรหัส JWT เพื่อตรวจสอบข้อมูล
+  if (data && data.access_token) {
+    const decodedToken = decodeJWT(data.access_token) // ถอดรหัส JWT เพื่อตรวจสอบข้อมูล
     console.log('Decoded JWT:', decodedToken) // แสดงข้อมูล JWT ที่ถอดรหัสใน console
 
     // ตรวจสอบว่าค่าที่กรอกมาตรงกับข้อมูลใน JWT หรือไม่

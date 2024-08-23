@@ -53,25 +53,22 @@ export function decodeJWT(token) {
 export async function login(userCredentials) {
   console.log(userCredentials)
   try {
-    const response = await fetch(
-      'http://localhost:8080/authentications/login',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ ...userCredentials })
-      }
-    )
+    const response = await fetch('http://localhost:8080/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ ...userCredentials })
+    })
 
     if (!response.ok) {
       return response.status
     }
 
     const data = await response.json()
-    const decodedToken = decodeJWT(data.token) // ถอดรหัส JWT
+    const decodedToken = decodeJWT(data.access_token) // ถอดรหัส JWT
     console.log('Decoded JWT:', decodedToken) // แสดงผล JWT ที่ถูกถอดรหัสใน console
-    localStorage.setItem('jwt', data.token) // เก็บ JWT ไว้ใน localStorage
+    localStorage.setItem('jwt', data.access_token) // เก็บ JWT ไว้ใน localStorage
     return data // คืนค่าผลลัพธ์ที่ได้จากการเข้าสู่ระบบ
   } catch (error) {
     throw new Error(error.message)
