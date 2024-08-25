@@ -10,7 +10,7 @@ const deletedTask = reactive({})
 const taskManager = useTaskManager()
 const deleteTask = async (deleteId) => {
   deletedTask.value = await deleteItemById(
-    import.meta.env.VITE_BASE_URL,
+    `${import.meta.env.VITE_BASE_URL}/v2/tasks`,
     deleteId
   )
   if (deletedTask.value == '404') {

@@ -53,7 +53,7 @@ export function decodeJWT(token) {
 export async function login(userCredentials) {
   console.log(userCredentials)
   try {
-    const response = await fetch('http://localhost:8080/login', {
+    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

@@ -43,8 +43,12 @@ const redPopup = reactive({
 const showDeleteStatusDetail = ref(false)
 const transferDelList = ref({})
 onMounted(async () => {
-  taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
-  statusManager.setStatuses(await getItems(import.meta.env.VITE_BASE_URL_V2))
+  taskManager.setTasks(
+    await getItems(`${import.meta.env.VITE_BASE_URL}/v2/tasks`)
+  )
+  statusManager.setStatuses(
+    await getItems(`${import.meta.env.VITE_BASE_URL}/v2/statuses`)
+  )
 })
 
 const goBackToHomePage = function () {
@@ -57,7 +61,9 @@ const showDeletePopUpTaskDetail = async function (obj) {
   } else {
     setDeleteOperate('delete')
   }
-  transferDelList.value = await getItems(import.meta.env.VITE_BASE_URL_V2)
+  transferDelList.value = await getItems(
+    `${import.meta.env.VITE_BASE_URL}/v2/statuses`
+  )
   isDelete.value = !taskManager.findStatusById(obj.id)
   router.push({ name: 'DeleteStatus', params: { id: obj.id } })
   statusDetail.value = {
@@ -88,7 +94,10 @@ const showEditStatusesModal = function (obj) {
 }
 
 const showEditStatusesModalV2 = async function (obj) {
-  const status = await getItemById(import.meta.env.VITE_BASE_URL_V2, obj.id)
+  const status = await getItemById(
+    `${import.meta.env.VITE_BASE_URL}/v2/statuses`,
+    obj.id
+  )
   if (status.status == '404' || status.status == '500') {
     redPopup.edit.state = true
     return
@@ -315,11 +324,12 @@ const closeGreenPopup = async function (operate) {
               </button> -->
               <ButtonStyle :bgColor="deleteColor">
                 <button
-                  class="itbkk-button-edit"
+                  class="itbkk-button-delete"
                   @click="
-                    showEditStatusesModal({
-                      operate: 'edit',
-                      id: statuses.id
+                    showDeletePopUpTaskDetail({
+                      id: statuses.id,
+                      statusName: statuses.name,
+                      index: index + 1
                     })
                   "
                 >

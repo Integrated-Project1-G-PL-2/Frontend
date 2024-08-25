@@ -50,13 +50,20 @@ const redPopup = reactive({
 })
 
 onMounted(async () => {
-  taskManager.setTasks(await getItems(import.meta.env.VITE_BASE_URL))
-  statusManager.setStatuses(await getItems(import.meta.env.VITE_BASE_URL_V2))
+  taskManager.setTasks(
+    await getItems(`${import.meta.env.VITE_BASE_URL}/v2/tasks`)
+  )
+  statusManager.setStatuses(
+    await getItems(`${import.meta.env.VITE_BASE_URL}/v2/statuses`)
+  )
 })
 const showTaskDetail = async function (id, operate) {
   router.push({ name: 'TaskDetail', params: { id: id } })
   operation.value = operate
-  taskDetail.value = await getItemById(import.meta.env.VITE_BASE_URL, id)
+  taskDetail.value = await getItemById(
+    `${import.meta.env.VITE_BASE_URL}/v2/tasks`,
+    id
+  )
   if (taskDetail.value.status == '404') {
     alert('The requested task does not exist')
     router.replace({ name: 'Task' })
@@ -68,7 +75,10 @@ const showTaskDetail = async function (id, operate) {
 const showEditTaskDetail = async function (id, operate) {
   router.push({ name: 'EditTaskDetail', params: { id: id } })
   operation.value = operate
-  taskDetail.value = await getItemById(import.meta.env.VITE_BASE_URL, id)
+  taskDetail.value = await getItemById(
+    `${import.meta.env.VITE_BASE_URL}/v2/tasks`,
+    id
+  )
   if (taskDetail.value.status == '404') {
     alert('The requested task does not exist')
     router.replace({ name: 'Task' })
@@ -164,7 +174,9 @@ watch(searchStatus, (status) => {
 watch(collectStatus, async () => {
   taskManager.setTasks(
     await getItems(
-      `${import.meta.env.VITE_BASE_URL}?filterStatuses=${collectStatus.join()}`
+      `${
+        import.meta.env.VITE_BASE_URL
+      }/v2/tasks?filterStatuses=${collectStatus.join()}`
     )
   )
 })

@@ -26,7 +26,9 @@ const prop = defineProps({
 const title = ref(prop.operate)
 
 onMounted(async () => {
-  statusManager.setStatuses(await getItems(import.meta.env.VITE_BASE_URL_V2))
+  statusManager.setStatuses(
+    await getItems(`${import.meta.env.VITE_BASE_URL}/v2/statuses`)
+  )
 })
 
 let status
@@ -61,7 +63,10 @@ const saveClick = async () => {
     return
   }
   if (prop.operate === 'add') {
-    const addedStatus = await addItem(import.meta.env.VITE_BASE_URL_V2, status)
+    const addedStatus = await addItem(
+      `${import.meta.env.VITE_BASE_URL}/v2/statuses`,
+      status
+    )
     if (addedStatus != null) {
       statusManager.addStatuses(addedStatus)
       emits('showStatusGreenPopup', {
@@ -80,7 +85,7 @@ const saveClick = async () => {
         ? status.description
         : status.description.trim()
     const editedStatus = await editItem(
-      import.meta.env.VITE_BASE_URL_V2,
+      `${import.meta.env.VITE_BASE_URL}/v2/statuses`,
       prop.statusDetail.value.id,
       status
     )

@@ -86,7 +86,7 @@ const handleClick = async () => {
       task.taskStatus
     ).id
     const newTask = await addItem(
-      import.meta.env.VITE_BASE_URL,
+      `${import.meta.env.VITE_BASE_URL}/v2/tasks`,
       addOrUpdateTaskDetail
     )
     router.replace({ name: 'Task' })
@@ -103,7 +103,7 @@ const handleClick = async () => {
       task.taskStatus
     )
     const editTask = await editItem(
-      import.meta.env.VITE_BASE_URL,
+      `${import.meta.env.VITE_BASE_URL}/v2/tasks`,
       task.id,
       addOrUpdateTaskDetail
     )
