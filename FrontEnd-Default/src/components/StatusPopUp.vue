@@ -27,7 +27,7 @@ const title = ref(prop.operate)
 
 onMounted(async () => {
   statusManager.setStatuses(
-    await getItems(`${import.meta.env.VITE_BASE_URL}/v2/statuses`)
+    await getItems(`${import.meta.env.VITE_BASE_URL}/statuses`)
   )
 })
 
@@ -64,7 +64,7 @@ const saveClick = async () => {
   }
   if (prop.operate === 'add') {
     const addedStatus = await addItem(
-      `${import.meta.env.VITE_BASE_URL}/v2/statuses`,
+      `${import.meta.env.VITE_BASE_URL}/statuses`,
       status
     )
     if (addedStatus != null) {
@@ -85,7 +85,7 @@ const saveClick = async () => {
         ? status.description
         : status.description.trim()
     const editedStatus = await editItem(
-      `${import.meta.env.VITE_BASE_URL}/v2/statuses`,
+      `${import.meta.env.VITE_BASE_URL}/statuses`,
       prop.statusDetail.value.id,
       status
     )

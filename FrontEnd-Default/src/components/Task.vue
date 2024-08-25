@@ -51,17 +51,17 @@ const redPopup = reactive({
 
 onMounted(async () => {
   taskManager.setTasks(
-    await getItems(`${import.meta.env.VITE_BASE_URL}/v2/tasks`)
+    await getItems(`${import.meta.env.VITE_BASE_URL}/tasks`)
   )
   statusManager.setStatuses(
-    await getItems(`${import.meta.env.VITE_BASE_URL}/v2/statuses`)
+    await getItems(`${import.meta.env.VITE_BASE_URL}/statuses`)
   )
 })
 const showTaskDetail = async function (id, operate) {
   router.push({ name: 'TaskDetail', params: { id: id } })
   operation.value = operate
   taskDetail.value = await getItemById(
-    `${import.meta.env.VITE_BASE_URL}/v2/tasks`,
+    `${import.meta.env.VITE_BASE_URL}/tasks`,
     id
   )
   if (taskDetail.value.status == '404') {
@@ -76,7 +76,7 @@ const showEditTaskDetail = async function (id, operate) {
   router.push({ name: 'EditTaskDetail', params: { id: id } })
   operation.value = operate
   taskDetail.value = await getItemById(
-    `${import.meta.env.VITE_BASE_URL}/v2/tasks`,
+    `${import.meta.env.VITE_BASE_URL}/tasks`,
     id
   )
   if (taskDetail.value.status == '404') {
@@ -176,7 +176,7 @@ watch(collectStatus, async () => {
     await getItems(
       `${
         import.meta.env.VITE_BASE_URL
-      }/v2/tasks?filterStatuses=${collectStatus.join()}`
+      }/tasks?filterStatuses=${collectStatus.join()}`
     )
   )
 })
