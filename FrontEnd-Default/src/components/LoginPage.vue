@@ -19,6 +19,8 @@ const trimmedPassword = computed(() => password.value.trim())
 const MAX_USERNAME_LENGTH = 50
 const MAX_PASSWORD_LENGTH = 14
 
+useAuthGuard()
+
 const handleLogin = async () => {
   const data = await login({
     userName: trimmedUsername.value,
