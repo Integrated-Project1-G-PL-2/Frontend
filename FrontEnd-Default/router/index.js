@@ -18,51 +18,62 @@ const routes = [
     component: LoginPage
   },
   {
-    path: '/task',
-    name: 'Task',
-    component: Task,
+    path:'/board',
+    name:'Board',
+    component: BoardList,
     children: [
-      {
-        path: ':id',
-        component: TaskDetail,
-        name: 'TaskDetail'
-      },
-      {
-        path: 'add',
-        component: TaskDetail,
-        name: 'AddTaskDetail'
-      },
-      {
-        path: ':id/edit',
-        component: TaskDetail,
-        name: 'EditTaskDetail'
-      },
-      {
-        path: ':id/delete',
-        component: DeleteTaskDetail,
-        name: 'DeleteTaskDetail'
-      }
-    ]
-  },
-  {
-    path: '/status',
-    name: 'StatusList',
-    component: StatusesList,
-    children: [
-      {
-        path: 'add',
-        component: StatusPopUp,
-        name: 'StatusAdd'
-      },
-      {
-        path: ':id/delete',
-        component: DeleteStatus,
-        name: 'DeleteStatus'
-      },
-      {
-        path: ':id/edit',
-        component: StatusPopUp,
-        name: 'StatusEdit'
+      {path: ':id',
+        name: 'BoardTask',
+        component: Task,
+        children:[
+          {
+            path: '/task/:id',
+            component: TaskDetail,
+            name: 'TaskDetail',
+          },
+          {
+            path: '/task/:id',
+            component: TaskDetail,
+            name: 'TaskDetail'
+          },
+          {
+            path: '/task/add',
+            component: TaskDetail,
+            name: 'AddTaskDetail'
+          },
+          {
+            path: '/task/:id/edit',
+            component: TaskDetail,
+            name: 'EditTaskDetail'
+          },
+          {
+            path: '/task/:id/delete',
+            component: DeleteTaskDetail,
+            name: 'DeleteTaskDetail'
+          },
+          {
+            path: '/status',
+            name: 'StatusList',
+            component: StatusesList,
+            children: [
+              {
+                path: 'add',
+                component: StatusPopUp,
+                name: 'StatusAdd'
+              },
+              {
+                path: ':id/delete',
+                component: DeleteStatus,
+                name: 'DeleteStatus'
+              },
+              {
+                path: ':id/edit',
+                component: StatusPopUp,
+                name: 'StatusEdit'
+              }
+            ]
+          }
+        ]
       }
     ]
   }
