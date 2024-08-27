@@ -6,6 +6,7 @@ import StatusesList from '@/components/StatusesList.vue'
 import StatusPopUp from '@/components/StatusPopUp.vue'
 import DeleteStatus from '@/components/DeleteStatus.vue'
 import LoginPage from '@/components/LoginPage.vue'
+import BoardList from '@/components/BoardList.vue'
 const history = createWebHistory(import.meta.env.BASE_URL)
 const routes = [
   {
@@ -22,37 +23,38 @@ const routes = [
     name:'Board',
     component: BoardList,
     children: [
-      {path: ':id',
+      {
+        path: ':id',
         name: 'BoardTask',
         component: Task,
-        children:[
+        children: [
           {
-            path: '/task/:id',
-            component: TaskDetail,
-            name: 'TaskDetail',
-          },
-          {
-            path: '/task/:id',
+            path: 'task/:id',
             component: TaskDetail,
             name: 'TaskDetail'
           },
           {
-            path: '/task/add',
+            path: 'task/:id',
+            component: TaskDetail,
+            name: 'TaskDetail'
+          },
+          {
+            path: 'task/add',
             component: TaskDetail,
             name: 'AddTaskDetail'
           },
           {
-            path: '/task/:id/edit',
+            path: 'task/:id/edit',
             component: TaskDetail,
             name: 'EditTaskDetail'
           },
           {
-            path: '/task/:id/delete',
+            path: 'task/:id/delete',
             component: DeleteTaskDetail,
             name: 'DeleteTaskDetail'
           },
           {
-            path: '/status',
+            path: 'status',
             name: 'StatusList',
             component: StatusesList,
             children: [
