@@ -2,7 +2,7 @@
 import { reactive, ref, computed } from 'vue'
 import AlertPopUp from './../components/AlertPopUp.vue'
 import { useRouter } from 'vue-router'
-import { login, decodeJWT } from '@/stores/UserManager'
+import { login, decodeJWT, useAuthGuard } from '@/stores/UserManager'
 
 const showTaskModal = ref(false)
 const username = ref('')
