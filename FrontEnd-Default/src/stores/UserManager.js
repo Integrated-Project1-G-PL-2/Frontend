@@ -107,6 +107,8 @@ export async function login(userCredentials) {
 // }
 
 // // ฟังก์ชันสำหรับ logout (ออกจากระบบ)
-// export function logout() {
-//   localStorage.removeItem('jwt') // ลบ JWT ออกจาก localStorage
-// }
+export function logout() {
+  localStorage.removeItem('jwt') // ลบ JWT ออกจาก localStorage
+  localStorage.removeItem('userName') // ลบ userName ออกจาก localStorage
+  userName.value = '' // รีเซ็ตค่า userName
+}

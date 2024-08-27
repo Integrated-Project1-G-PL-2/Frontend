@@ -23,6 +23,7 @@ import {
 } from '@/stores/SortManager.js'
 import { storeToRefs } from 'pinia'
 import { userName } from '@/stores/UserManager'
+import { logout } from '@/stores/UserManager'
 
 const statusManager = useStatusManager()
 const showStatusDetailModal = ref(false)
@@ -50,9 +51,7 @@ const redPopup = reactive({
 })
 
 onMounted(async () => {
-  taskManager.setTasks(
-    await getItems(`${import.meta.env.VITE_BASE_URL}/tasks`)
-  )
+  taskManager.setTasks(await getItems(`${import.meta.env.VITE_BASE_URL}/tasks`))
   statusManager.setStatuses(
     await getItems(`${import.meta.env.VITE_BASE_URL}/statuses`)
   )
@@ -188,6 +187,7 @@ onMounted(() => {
 })
 
 const returnLoginPage = () => {
+  logout()
   router.replace({ name: 'Login' })
   returnPage.value = true
 }
