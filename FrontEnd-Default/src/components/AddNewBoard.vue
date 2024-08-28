@@ -1,6 +1,6 @@
 <script setup>
-import { ref, reactive } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
 const deClareemit = defineEmits(['saveDetail', 'cancelDetail'])
 const router = useRouter()
 </script>
@@ -18,18 +18,19 @@ const router = useRouter()
         </div>
 
         <div class="w-[70%] h-[100%]">
-          <div class="flex pl-4 mt-5">
-            Do you want to delete the task "{{ props.taskId.value.index }}.
-            {{ props.taskId.value.taskTitle }}" ?
-          </div>
+          <div class="flex pl-4 mt-5">Name</div>
+          <textarea
+            class="itbkk-board-name font-bold text-justify w-full breal-all border border-gray-300 rounded-md resize-none"
+          >
+          </textarea>
         </div>
       </div>
       <div class="flex flex-row w-full justify-end border-t h-[60%]">
         <button
-          class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"
+          class="itbkk-button-ok bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"
           @click="deleteTask(props.taskId.value.id)"
         >
-          <div class="btn text-center">Confirm</div>
+          <div class="btn text-center">save</div>
         </button>
         <button
           class="itbkk-button-cancel bg-red-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"

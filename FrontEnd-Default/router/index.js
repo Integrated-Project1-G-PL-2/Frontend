@@ -6,6 +6,8 @@ import StatusesList from '@/components/StatusesList.vue'
 import StatusPopUp from '@/components/StatusPopUp.vue'
 import DeleteStatus from '@/components/DeleteStatus.vue'
 import LoginPage from '@/components/LoginPage.vue'
+import BoardList from '@/components/BoardList.vue'
+import AddNewBoard from '@/components/AddNewBoard.vue'
 const history = createWebHistory(import.meta.env.BASE_URL)
 const routes = [
   {
@@ -65,6 +67,11 @@ const routes = [
         name: 'StatusEdit'
       }
     ]
+  },
+  {
+    path: '/board',
+    name: 'BoardList',
+    component: BoardList
   }
 ]
 
