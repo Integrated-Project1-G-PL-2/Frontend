@@ -13,7 +13,9 @@ const showAddNewBoardPopUp = function () {
   </button>
 
   <teleport to="body" v-if="showAddNewBoardPopUp">
-    <AddNewBoard @cancelDetail="clearDeletePopUp" @saveDetail="showDelComplete">
-    </AddNewBoard>
+    <AddNewBoard
+      @cancelDetail="clearDeletePopUp"
+      @saveDetail="showDelComplete"
+    ></AddNewBoard>
   </teleport>
 </template>
