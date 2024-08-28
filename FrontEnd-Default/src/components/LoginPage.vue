@@ -19,7 +19,6 @@ const trimmedPassword = computed(() => password.value.trim())
 const MAX_USERNAME_LENGTH = 50
 const MAX_PASSWORD_LENGTH = 14
 
-// Navigation Guard for authentication
 useAuthGuard()
 
 const handleLogin = async () => {

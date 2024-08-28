@@ -81,7 +81,6 @@ export function useAuthGuard() {
 
   router.beforeEach((to, from, next) => {
     const token = localStorage.getItem('jwt')
-    console.log('Navigating from:', from.name, 'to:', to.name)
 
     if (token) {
       try {
