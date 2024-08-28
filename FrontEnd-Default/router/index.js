@@ -6,7 +6,6 @@ import StatusesList from '@/components/StatusesList.vue'
 import StatusPopUp from '@/components/StatusPopUp.vue'
 import DeleteStatus from '@/components/DeleteStatus.vue'
 import LoginPage from '@/components/LoginPage.vue'
-import BoardList from '@/components/BoardList.vue'
 const history = createWebHistory(import.meta.env.BASE_URL)
 const routes = [
   {
@@ -19,63 +18,51 @@ const routes = [
     component: LoginPage
   },
   {
-    path: '/board',
-    name: 'Board',
-    component: BoardList,
+    path: '/task',
+    name: 'Task',
+    component: Task,
     children: [
       {
         path: ':id',
-        name: 'BoardTask',
-        component: Task,
-        children: [
-          {
-            path: 'task/:id',
-            component: TaskDetail,
-            name: 'TaskDetail'
-          },
-          {
-            path: 'task/:id',
-            component: TaskDetail,
-            name: 'TaskDetail'
-          },
-          {
-            path: 'task/add',
-            component: TaskDetail,
-            name: 'AddTaskDetail'
-          },
-          {
-            path: 'task/:id/edit',
-            component: TaskDetail,
-            name: 'EditTaskDetail'
-          },
-          {
-            path: 'task/:id/delete',
-            component: DeleteTaskDetail,
-            name: 'DeleteTaskDetail'
-          },
-          {
-            path: 'status',
-            name: 'StatusList',
-            component: StatusesList,
-            children: [
-              {
-                path: 'add',
-                component: StatusPopUp,
-                name: 'StatusAdd'
-              },
-              {
-                path: ':id/delete',
-                component: DeleteStatus,
-                name: 'DeleteStatus'
-              },
-              {
-                path: ':id/edit',
-                component: StatusPopUp,
-                name: 'StatusEdit'
-              }
-            ]
-          }
-        ]
+        component: TaskDetail,
+        name: 'TaskDetail'
+      },
+      {
+        path: 'add',
+        component: TaskDetail,
+        name: 'AddTaskDetail'
+      },
+      {
+        path: ':id/edit',
+        component: TaskDetail,
+        name: 'EditTaskDetail'
+      },
+      {
+        path: ':id/delete',
+        component: DeleteTaskDetail,
+        name: 'DeleteTaskDetail'
+      }
+    ]
+  },
+  {
+    path: '/status',
+    name: 'StatusList',
+    component: StatusesList,
+    children: [
+      {
+        path: 'add',
+        component: StatusPopUp,
+        name: 'StatusAdd'
+      },
+      {
+        path: ':id/delete',
+        component: DeleteStatus,
+        name: 'DeleteStatus'
+      },
+      {
+        path: ':id/edit',
+        component: StatusPopUp,
+        name: 'StatusEdit'
       }
     ]
   }
