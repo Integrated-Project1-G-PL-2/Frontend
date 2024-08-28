@@ -19,8 +19,8 @@ const routes = [
     component: LoginPage
   },
   {
-    path:'/board',
-    name:'Board',
+    path: '/board',
+    name: 'Board',
     component: BoardList,
     children: [
       {
