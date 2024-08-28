@@ -1,6 +1,6 @@
 <script>
-import AddNewBoard from "./../components/AddNewBoard.vue"
-const showAddNewBoard = true = ref(true)
+import AddNewBoard from './../components/AddNewBoard.vue'
+const showAddNewBoard = ref(true)
 const showAddNewBoardPopUp = function () {
   showAddNewBoard.value = true
 }
