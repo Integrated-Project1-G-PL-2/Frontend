@@ -79,7 +79,7 @@ export function logout() {
 export function useAuthGuard() {
   const router = useRouter()
 
-  router.beforeEach((to, next) => {
+  router.beforeEach((to, from, next) => {
     const token = localStorage.getItem('jwt')
 
     if (token) {
