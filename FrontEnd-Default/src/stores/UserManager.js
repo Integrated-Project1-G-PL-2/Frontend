@@ -46,13 +46,16 @@ export function decodeJWT(token) {
 // ฟังก์ชันสำหรับเข้าสู่ระบบ (login)
 export async function login(userCredentials) {
   try {
-    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ ...userCredentials })
-    })
+    const response = await apiRequest(
+      `${import.meta.env.VITE_BASE_URL}/login`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ ...userCredentials })
+      }
+    )
 
     if (!response.ok) {
       return response.status

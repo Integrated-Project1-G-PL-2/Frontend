@@ -34,28 +34,22 @@ const handleLogin = async () => {
 
   if (data === '400' || data === '401') {
     incorrect.value = true
-  } else if (data != 400 && data != 401) {
+  } else if ((data != 400, data != 401)) {
     error.value = true
   }
-
-  // ตรวจสอบว่ามีโทเค็นใน response หรือไม่
+  // ตรวจสอบเงื่อนไขว่ามีโทเค็นหรือไม่
   if (data && data.access_token) {
     const decodedToken = decodeJWT(data.access_token) // ถอดรหัส JWT เพื่อตรวจสอบข้อมูล
     console.log('Decoded JWT:', decodedToken) // แสดงข้อมูล JWT ที่ถอดรหัสใน console
 
     // ตรวจสอบว่าค่าที่กรอกมาตรงกับข้อมูลใน JWT หรือไม่
-    if (decodedToken.sub === trimmedUsername.value) {
-      // `sub` เป็นฟิลด์มาตรฐานใน JWT สำหรับ subject
-      // เก็บโทเค็นใน localStorage
-      localStorage.setItem('jwt', data.access_token)
-
+    if (decodedToken.payload.sub === trimmedUsername.value) {
       // เปลี่ยนเส้นทางไปยังหน้า 'Task' และแสดง modal
       router.replace({ name: 'Task' })
       showTaskModal.value = true
     }
   }
 }
-
 const closeIncorrectAlter = () => {
   incorrect.value = false
 }
