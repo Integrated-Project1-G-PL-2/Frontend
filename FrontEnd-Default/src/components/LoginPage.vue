@@ -2,7 +2,12 @@
 import { reactive, ref, computed } from 'vue'
 import AlertPopUp from './../components/AlertPopUp.vue'
 import { useRouter } from 'vue-router'
-import { login, decodeJWT, useAuthGuard } from '@/stores/UserManager'
+import {
+  login,
+  decodeJWT,
+  useAuthGuard,
+  apiRequest
+} from '@/stores/UserManager'
 
 const showTaskModal = ref(false)
 const username = ref('')
@@ -22,36 +27,26 @@ const MAX_PASSWORD_LENGTH = 14
 useAuthGuard()
 
 const handleLogin = async () => {
-  try {
-    // Use apiRequest instead of login for a more consistent API call
-    const data = await apiRequest(() =>
-      login({
-        userName: trimmedUsername.value,
-        password: trimmedPassword.value
-      })
-    )
-
-    if (data.status === 400 || data.status === 401) {
-      incorrect.value = true
-    } else if (data.status !== 200) {
-      error.value = true
-    }
-
-    // ตรวจสอบเงื่อนไขว่ามีโทเค็นหรือไม่
-    if (data && data.access_token) {
-      const decodedToken = decodeJWT(data.access_token) // ถอดรหัส JWT เพื่อตรวจสอบข้อมูล
-      console.log('Decoded JWT:', decodedToken) // แสดงข้อมูล JWT ที่ถอดรหัสใน console
-
-      // ตรวจสอบว่าค่าที่กรอกมาตรงกับข้อมูลใน JWT หรือไม่
-      if (decodedToken.payload.sub === trimmedUsername.value) {
-        // เปลี่ยนเส้นทางไปยังหน้า 'Task' และแสดง modal
-        router.replace({ name: 'Task' })
-        showTaskModal.value = true
-      }
-    }
-  } catch (error) {
-    console.error('Login failed:', error)
+  const data = await login({
+    userName: trimmedUsername.value,
+    password: trimmedPassword.value
+  })
+  if (data == '400' || '401') {
+    incorrect.value = true
+  } else if ((data != 400, data != 401)) {
     error.value = true
+  }
+  // ตรวจสอบเงื่อนไขว่ามีโทเค็นหรือไม่
+  if (data && data.access_token) {
+    const decodedToken = decodeJWT(data.access_token) // ถอดรหัส JWT เพื่อตรวจสอบข้อมูล
+    console.log('Decoded JWT:', decodedToken) // แสดงข้อมูล JWT ที่ถอดรหัสใน console
+
+    // ตรวจสอบว่าค่าที่กรอกมาตรงกับข้อมูลใน JWT หรือไม่
+    if (decodedToken.payload.sub === trimmedUsername.value) {
+      // เปลี่ยนเส้นทางไปยังหน้า 'Task' และแสดง modal
+      router.replace({ name: 'Task' })
+      showTaskModal.value = true
+    }
   }
 }
 const closeIncorrectAlter = () => {
