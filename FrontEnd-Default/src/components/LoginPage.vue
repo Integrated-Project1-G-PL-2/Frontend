@@ -2,12 +2,7 @@
 import { reactive, ref, computed } from 'vue'
 import AlertPopUp from './../components/AlertPopUp.vue'
 import { useRouter } from 'vue-router'
-import {
-  login,
-  decodeJWT,
-  useAuthGuard,
-  apiRequest
-} from '@/stores/UserManager'
+import { login, decodeJWT, useAuthGuard } from '@/stores/UserManager'
 
 const showTaskModal = ref(false)
 const username = ref('')
@@ -20,11 +15,8 @@ const incorrect = ref(false)
 const error = ref(false)
 const trimmedUsername = computed(() => username.value.trim())
 const trimmedPassword = computed(() => password.value.trim())
-
 const MAX_USERNAME_LENGTH = 50
 const MAX_PASSWORD_LENGTH = 14
-
-useAuthGuard()
 
 const handleLogin = async () => {
   const data = await login({
@@ -45,6 +37,8 @@ const handleLogin = async () => {
     // ตรวจสอบว่าค่าที่กรอกมาตรงกับข้อมูลใน JWT หรือไม่
     if (decodedToken.payload.sub === trimmedUsername.value) {
       // เปลี่ยนเส้นทางไปยังหน้า 'Task' และแสดง modal
+      // เรียก useAuthGuard เพื่อเริ่มต้นการตรวจสอบ token
+      useAuthGuard()
       router.replace({ name: 'Task' })
       showTaskModal.value = true
     }
