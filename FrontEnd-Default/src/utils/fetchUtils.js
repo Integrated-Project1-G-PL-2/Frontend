@@ -1,36 +1,56 @@
+const token = localStorage.getItem('jwt')
+
 async function getItems(url) {
   try {
-    const res = await fetch(url)
+    const options = {}
+    if (token) {
+      options.headers = {
+        Authorization: `Bearer ${token}`
+      }
+    }
+    const res = await fetch(url, options)
     if (!res.ok) {
       console.error(`Failed to fetch items: ${res.status}`)
-      return null // Return null or an appropriate error value
+      return null
     }
     return await res.json()
   } catch (error) {
     console.error(`Network error: ${error}`)
-    return null // Return null or an appropriate error value
+    return null
   }
 }
 
 async function getItemById(url, id) {
   try {
-    const res = await fetch(`${url}/${id}`)
+    const options = {}
+    if (token) {
+      options.headers = {
+        Authorization: `Bearer ${token}`
+      }
+    }
+    const res = await fetch(`${url}/${id}`, options)
     if (!res.ok) {
       console.error(`Failed to fetch item with ID ${id}: ${res.status}`)
-      return null // Return null or an appropriate error value
+      return null
     }
     return await res.json()
   } catch (error) {
     console.error(`Network error: ${error}`)
-    return null // Return null or an appropriate error value
+    return null
   }
 }
 
 async function deleteItemById(url, id) {
   try {
-    const res = await fetch(`${url}/${id}`, {
+    const options = {
       method: 'DELETE'
-    })
+    }
+    if (token) {
+      options.headers = {
+        Authorization: `Bearer ${token}`
+      }
+    }
+    const res = await fetch(`${url}/${id}`, options)
     if (!res.ok) {
       console.error(`Failed to delete item with ID ${id}: ${res.status}`)
       return res.status
@@ -38,15 +58,21 @@ async function deleteItemById(url, id) {
     return res.status
   } catch (error) {
     console.error(`Network error: ${error}`)
-    return null // Return null or an appropriate error value
+    return null
   }
 }
 
 async function deleteAndTransferItem(url, id, newId) {
   try {
-    const res = await fetch(`${url}/${id}/${newId}`, {
+    const options = {
       method: 'DELETE'
-    })
+    }
+    if (token) {
+      options.headers = {
+        Authorization: `Bearer ${token}`
+      }
+    }
+    const res = await fetch(`${url}/${id}/${newId}`, options)
     if (!res.ok) {
       console.error(
         `Failed to delete and transfer item with ID ${id} to ${newId}: ${res.status}`
@@ -56,47 +82,55 @@ async function deleteAndTransferItem(url, id, newId) {
     return res.status
   } catch (error) {
     console.error(`Network error: ${error}`)
-    return null // Return null or an appropriate error value
+    return null
   }
 }
 
 async function addItem(url, newItem) {
   try {
-    const res = await fetch(url, {
+    const options = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(newItem)
-    })
+    }
+    if (token) {
+      options.headers.Authorization = `Bearer ${token}`
+    }
+    const res = await fetch(url, options)
     if (!res.ok) {
       console.error(`Failed to add item: ${res.status}`)
-      return null // Return null or an appropriate error value
+      return null
     }
     return await res.json()
   } catch (error) {
     console.error(`Network error: ${error}`)
-    return null // Return null or an appropriate error value
+    return null
   }
 }
 
 async function editItem(url, id, editedItem) {
   try {
-    const res = await fetch(`${url}/${id}`, {
+    const options = {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(editedItem)
-    })
+    }
+    if (token) {
+      options.headers.Authorization = `Bearer ${token}`
+    }
+    const res = await fetch(`${url}/${id}`, options)
     if (!res.ok) {
       console.error(`Failed to edit item with ID ${id}: ${res.status}`)
-      return null // Return null or an appropriate error value
+      return null
     }
     return await res.json()
   } catch (error) {
     console.error(`Network error: ${error}`)
-    return null // Return null or an appropriate error value
+    return null
   }
 }
 
