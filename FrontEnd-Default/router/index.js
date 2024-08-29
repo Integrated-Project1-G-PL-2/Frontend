@@ -20,32 +20,50 @@ const routes = [
     component: LoginPage
   },
   {
-    path: '/task',
-    name: 'Task',
-    component: Task,
+    path: '/board',
+    name: 'Board',
+    component: BoardList,
     children: [
-      {
-        path: ':id',
-        component: TaskDetail,
-        name: 'TaskDetail'
-      },
-      {
-        path: 'add',
-        component: TaskDetail,
-        name: 'AddTaskDetail'
-      },
-      {
-        path: ':id/edit',
-        component: TaskDetail,
-        name: 'EditTaskDetail'
-      },
-      {
-        path: ':id/delete',
-        component: DeleteTaskDetail,
-        name: 'DeleteTaskDetail'
-      }
+          {
+            path: 'id',
+            component: Task,
+            name: 'Task'
+          }
     ]
   },
+  // {
+  //   path: '/board/id',
+  //   name: 'Task',
+  //   component: Task,
+  // },
+  // },
+  // {
+  //   path: '/task',
+  //   name: 'Task',
+  //   component: Task,
+  //   children: [
+  //     {
+  //       path: ':id',
+  //       component: TaskDetail,
+  //       name: 'TaskDetail'
+  //     },
+  //     {
+  //       path: 'add',
+  //       component: TaskDetail,
+  //       name: 'AddTaskDetail'
+  //     },
+  //     {
+  //       path: ':id/edit',
+  //       component: TaskDetail,
+  //       name: 'EditTaskDetail'
+  //     },
+  //     {
+  //       path: ':id/delete',
+  //       component: DeleteTaskDetail,
+  //       name: 'DeleteTaskDetail'
+  //     }
+  //   ]
+  // },
   {
     path: '/status',
     name: 'StatusList',
@@ -67,11 +85,6 @@ const routes = [
         name: 'StatusEdit'
       }
     ]
-  },
-  {
-    path: '/board',
-    name: 'BoardList',
-    component: BoardList
   }
 ]
 
