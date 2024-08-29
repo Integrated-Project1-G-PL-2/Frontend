@@ -96,13 +96,13 @@ export function useAuthGuard() {
         next() // token ถูกต้องและยังไม่หมดอายุ ให้ดำเนินการต่อ
       } catch (error) {
         logout() // ถอดรหัส token ไม่สำเร็จ, ให้ logout และเปลี่ยนเส้นทางไปยังหน้า login
-        next({ name: 'Login' })
+        return next({ name: 'Login' })
       }
     } else {
       if (to.name !== 'Login') {
-        next({ name: 'Login' }) // ไม่มี token และพยายามเข้าหน้าอื่น ให้เปลี่ยนเส้นทางไป login
+        return next({ name: 'Login' }) // ไม่มี token และพยายามเข้าหน้าอื่น ให้เปลี่ยนเส้นทางไป login
       } else {
-        next() // ถ้าไปหน้า login ให้ดำเนินการต่อ
+        return next() // ถ้าไปหน้า login ให้ดำเนินการต่อ
       }
     }
   })
@@ -124,7 +124,7 @@ export async function apiRequest(url, options = {}) {
   if (response.status === 401) {
     logout() // ถ้า response เป็น 401, ให้ logout และเปลี่ยนเส้นทางไป login
     const router = useRouter()
-    router.replace({ name: 'Login' })
+    await router.replace({ name: 'Login' })
   }
 
   return response
