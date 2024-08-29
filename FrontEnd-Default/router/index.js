@@ -23,19 +23,29 @@ const routes = [
     path: '/board',
     name: 'Board',
     component: BoardList,
+    // children: [
+    //       {
+    //         path: 'id',
+    //         name: 'Task',
+    //         component: Task
+    //       }
+    // ]
+  },
+  {
+    path: '/board/id',
+    name: 'Task',
+    component: Task,
     children: [
-          {
-            path: 'id',
-            component: Task,
-            name: 'Task'
-          }
+      {
+        path: '/board/id/task/add',
+        name: 'AddTaskDetail',
+        component: TaskDetail
+      }
     ]
   },
-  // {
-  //   path: '/board/id',
-  //   name: 'Task',
-  //   component: Task,
-  // },
+ 
+
+
   // },
   // {
   //   path: '/task',
