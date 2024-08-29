@@ -110,14 +110,14 @@ export function useAuthGuard() {
 
 // ฟังก์ชันสำหรับทำ API request พร้อมแนบ token
 export async function apiRequest(url, options = {}) {
-  const token = localStorage.getItem('jwt')
+  // const token = localStorage.getItem('jwt')
 
-  if (token) {
-    options.headers = {
-      ...options.headers,
-      Authorization: `Bearer ${token}`
-    }
-  }
+  // if (token) {
+  //   options.headers = {
+  //     ...options.headers,
+  //     Authorization: `Bearer ${token}`
+  //   }
+  // }
 
   const response = await fetch(url, options)
 
