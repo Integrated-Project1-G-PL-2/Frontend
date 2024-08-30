@@ -7,6 +7,7 @@ import StatusPopUp from '@/components/StatusPopUp.vue'
 import DeleteStatus from '@/components/DeleteStatus.vue'
 import LoginPage from '@/components/LoginPage.vue'
 import BoardList from '@/components/BoardList.vue'
+import BoardHome from '@/components/BoardHome.vue'
 import AddNewBoard from '@/components/AddNewBoard.vue'
 const history = createWebHistory(import.meta.env.BASE_URL)
 const routes = [
@@ -70,8 +71,8 @@ const routes = [
   },
   {
     path: '/board',
-    name: 'BoardList',
-    component: BoardList
+    name: 'BoardHome',
+    component: BoardHome
   }
 ]
 

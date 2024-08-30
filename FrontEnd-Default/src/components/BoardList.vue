@@ -30,9 +30,11 @@ const returnLoginPage = () => {
 </script>
 
 <template>
-  <div class="flex flex-col items-end pr-4 font-bold space-y-2">
+  <div
+    class="flex flex-col items-end pr-4 font-bold space-y-2 border-b border-r-slate-500"
+  >
     <!-- Align this button to the left -->
-    <div class="flex justify-start items-start w-full">
+    <div class="flex justify-start items-start w-full border border-gray-400">
       <button
         @click="goBackToHomePage"
         class="itbkk-button-home scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 hover:text-blue-500 mr-3 mt-2 text-blue-400 my-3"
@@ -40,7 +42,6 @@ const returnLoginPage = () => {
         🏠 ITB-KK
       </button>
     </div>
-
     <h1 class="itbkk-fullname font-bold font-sans cursor-default">
       {{ userName }}
     </h1>
@@ -69,6 +70,7 @@ const returnLoginPage = () => {
         Log out
       </button>
     </div>
+
     <button
       class="bg-gray-300 text-sm rounded-[6px] font-sans text-gray-700 hover:text-white px-7 py-1"
       @click="showAddNewBoardPopUp"
