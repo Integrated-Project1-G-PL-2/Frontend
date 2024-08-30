@@ -9,7 +9,7 @@ const router = useRouter()
   <div
     class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[10px]"
   >
-    <div class="w-[59%] m-[auto] border border-green-700 mt-[20%]">
+    <div class="w-[40%] m-[auto] border border-green-700 mt-[20%]">
       <div class="flex flex-col justify-between bg-white p-4 h-[10%]">
         <div class="itbkk-title w-full h-[40px] mt-1 border-b">
           <h1 class="text-xl font-bold text-justify text-green-500">
@@ -18,9 +18,9 @@ const router = useRouter()
         </div>
 
         <div class="w-[70%] h-[100%]">
-          <div class="flex pl-4 mt-5">Name</div>
+          <div class="flex mt-5">Name</div>
           <textarea
-            class="itbkk-board-name font-bold text-justify w-full breal-all border border-gray-300 rounded-md resize-none"
+            class="itbkk-board-name font-bold text-justify w-[143%] breal-all border border-gray-300 rounded-md resize-none"
           >
           </textarea>
         </div>
