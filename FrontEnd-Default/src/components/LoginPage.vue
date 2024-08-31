@@ -23,9 +23,10 @@ const handleLogin = async () => {
     userName: trimmedUsername.value,
     password: trimmedPassword.value
   })
-
-  if (data === '400' || data === '401') {
+  console.log(data)
+  if (data == '400' || data == '401') {
     incorrect.value = true
+    return
   } else if ((data != 400, data != 401)) {
     error.value = true
   }
@@ -38,7 +39,7 @@ const handleLogin = async () => {
     if (decodedToken.payload.sub === trimmedUsername.value) {
       // เปลี่ยนเส้นทางไปยังหน้า 'Task' และแสดง modal
       // เรียก useAuthGuard เพื่อเริ่มต้นการตรวจสอบ token
-      useAuthGuard()
+
       router.replace({ name: 'Task' })
       showTaskModal.value = true
     }
