@@ -27,9 +27,9 @@ const handleLogin = async () => {
     router
   )
 
-  if (data === '400' || data === '401') {
+  if (data == '400' || data == '401') {
     incorrect.value = true
-  } else if ((data != 400, data != 401)) {
+  } else if ((data != '400', data != '401')) {
     error.value = true
   }
   // ตรวจสอบเงื่อนไขว่ามีโทเค็นหรือไม่
