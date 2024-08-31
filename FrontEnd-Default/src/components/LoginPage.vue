@@ -44,7 +44,7 @@ const handleLogin = async () => {
     // ตรวจสอบว่าค่าที่กรอกมาตรงกับข้อมูลใน JWT หรือไม่
     if (decodedToken.payload.sub === trimmedUsername.value) {
       // เปลี่ยนเส้นทางไปยังหน้า 'Task' และแสดง modal
-      router.replace({ name: 'Board' })
+      router.replace({ name: 'Task' })
       showTaskModal.value = true
     }
   }
