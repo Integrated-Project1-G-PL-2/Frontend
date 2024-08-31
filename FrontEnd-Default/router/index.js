@@ -7,7 +7,6 @@ import StatusPopUp from '@/components/StatusPopUp.vue'
 import DeleteStatus from '@/components/DeleteStatus.vue'
 import LoginPage from '@/components/LoginPage.vue'
 import BoardList from '@/components/BoardList.vue'
-import BoardHome from '@/components/BoardHome.vue'
 import AddNewBoard from '@/components/AddNewBoard.vue'
 const history = createWebHistory(import.meta.env.BASE_URL)
 const routes = [
@@ -21,32 +20,73 @@ const routes = [
     component: LoginPage
   },
   {
-    path: '/task',
+    path: '/board',
+    name: 'Board',
+    component: BoardList
+    // children: [
+    //       {
+    //         path: 'id',
+    //         name: 'Task',
+    //         component: Task
+    //       }
+    // ]
+  },
+  {
+    path: '/board/id',
     name: 'Task',
     component: Task,
     children: [
       {
-        path: ':id',
-        component: TaskDetail,
-        name: 'TaskDetail'
+        path: '/board/id/task/add',
+        name: 'AddTaskDetail',
+        component: TaskDetail
       },
       {
-        path: 'add',
-        component: TaskDetail,
-        name: 'AddTaskDetail'
+        path: '/board/id/task/:id',
+        name: 'TaskDetail',
+        component: TaskDetail
       },
       {
-        path: ':id/edit',
-        component: TaskDetail,
-        name: 'EditTaskDetail'
+        path: '/board/id/task/:id/edit',
+        name: 'EditTaskDetail',
+        component: TaskDetail
       },
       {
-        path: ':id/delete',
-        component: DeleteTaskDetail,
-        name: 'DeleteTaskDetail'
+        path: '/board/id/task/:id/delete',
+        name: 'DeleteTaskDetail',
+        component: DeleteTaskDetail
       }
     ]
   },
+
+  // },
+  // {
+  //   path: '/task',
+  //   name: 'Task',
+  //   component: Task,
+  //   children: [
+  //     {
+  //       path: ':id',
+  //       component: TaskDetail,
+  //       name: 'TaskDetail'
+  //     },
+  //     {
+  //       path: 'add',
+  //       component: TaskDetail,
+  //       name: 'AddTaskDetail'
+  //     },
+  //     {
+  //       path: ':id/edit',
+  //       component: TaskDetail,
+  //       name: 'EditTaskDetail'
+  //     },
+  //     {
+  //       path: ':id/delete',
+  //       component: DeleteTaskDetail,
+  //       name: 'DeleteTaskDetail'
+  //     }
+  //   ]
+  // },
   {
     path: '/status',
     name: 'StatusList',
@@ -68,11 +108,6 @@ const routes = [
         name: 'StatusEdit'
       }
     ]
-  },
-  {
-    path: '/board',
-    name: 'BoardHome',
-    component: BoardHome
   }
 ]
 
