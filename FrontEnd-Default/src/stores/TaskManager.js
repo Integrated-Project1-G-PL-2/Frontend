@@ -7,10 +7,12 @@ export const useTaskManager = defineStore('taskManager', () => {
   }
   const setTasks = function (taskList = []) {
     tasks.length = 0
-
-    taskList.forEach((task) => {
-      tasks.push(task)
-    })
+    console.log(taskList)
+    if (taskList != null) {
+      taskList.forEach((task) => {
+        tasks.push(task)
+      })
+    }
   }
   const addTask = function (newTask) {
     tasks.push(newTask)
