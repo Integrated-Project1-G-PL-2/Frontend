@@ -9,6 +9,7 @@ async function getItems(url) {
       }
     }
     const res = await fetch(url, options)
+    console.log(res.status)
     if (!res.ok) {
       console.error(`Failed to fetch items: ${res.status}`)
       return null
