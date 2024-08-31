@@ -19,10 +19,13 @@ const MAX_USERNAME_LENGTH = 50
 const MAX_PASSWORD_LENGTH = 14
 
 const handleLogin = async () => {
-  const data = await login({
-    userName: trimmedUsername.value,
-    password: trimmedPassword.value
-  })
+  const data = await login(
+    {
+      userName: trimmedUsername.value,
+      password: trimmedPassword.value
+    },
+    router
+  )
 
   if (data === '400' || data === '401') {
     incorrect.value = true
@@ -38,7 +41,7 @@ const handleLogin = async () => {
     if (decodedToken.payload.sub === trimmedUsername.value) {
       // เปลี่ยนเส้นทางไปยังหน้า 'Task' และแสดง modal
       // เรียก useAuthGuard เพื่อเริ่มต้นการตรวจสอบ token
-      useAuthGuard()
+      useAuthGuard(router)
       router.replace({ name: 'Task' })
       showTaskModal.value = true
     }
