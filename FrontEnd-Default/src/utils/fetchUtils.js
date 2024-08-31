@@ -1,7 +1,6 @@
-const token = localStorage.getItem('jwt')
-
 async function getItems(url) {
   try {
+    const token = localStorage.getItem('jwt')
     const options = {}
     if (token) {
       options.headers = {
@@ -22,6 +21,7 @@ async function getItems(url) {
 
 async function getItemById(url, id) {
   try {
+    const token = localStorage.getItem('jwt')
     const options = {}
     if (token) {
       options.headers = {
@@ -42,6 +42,7 @@ async function getItemById(url, id) {
 
 async function deleteItemById(url, id) {
   try {
+    const token = localStorage.getItem('jwt')
     const options = {
       method: 'DELETE'
     }
@@ -64,6 +65,7 @@ async function deleteItemById(url, id) {
 
 async function deleteAndTransferItem(url, id, newId) {
   try {
+    const token = localStorage.getItem('jwt')
     const options = {
       method: 'DELETE'
     }
@@ -88,6 +90,7 @@ async function deleteAndTransferItem(url, id, newId) {
 
 async function addItem(url, newItem) {
   try {
+    const token = localStorage.getItem('jwt')
     const options = {
       method: 'POST',
       headers: {
@@ -112,6 +115,7 @@ async function addItem(url, newItem) {
 
 async function editItem(url, id, editedItem) {
   try {
+    const token = localStorage.getItem('jwt')
     const options = {
       method: 'PUT',
       headers: {

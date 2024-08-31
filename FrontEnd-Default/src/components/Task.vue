@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, reactive, ref, watch, computed } from 'vue'
+import { onBeforeMount,onMounted, reactive, ref, watch, computed } from 'vue'
 import {
   getItems,
   getItemById,
@@ -52,6 +52,7 @@ const redPopup = reactive({
 
 onMounted(async () => {
   taskManager.setTasks(await getItems(`${import.meta.env.VITE_BASE_URL}/tasks`))
+  console.log('this is onmounted')
   statusManager.setStatuses(
     await getItems(`${import.meta.env.VITE_BASE_URL}/statuses`)
   )
