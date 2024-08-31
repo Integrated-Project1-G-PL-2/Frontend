@@ -37,22 +37,22 @@ const routes = [
     component: Task,
     children: [
       {
-        path: '/board/id/task/add',
+        path: 'add',
         name: 'AddTaskDetail',
         component: TaskDetail
       },
       {
-        path: '/board/id/task/:id',
+        path: ':id',
         name: 'TaskDetail',
         component: TaskDetail
       },
       {
-        path: '/board/id/task/:id/edit',
+        path: 'edit',
         name: 'EditTaskDetail',
         component: TaskDetail
       },
       {
-        path: '/board/id/task/:id/delete',
+        path: 'delete',
         name: 'DeleteTaskDetail',
         component: DeleteTaskDetail
       }
@@ -90,7 +90,7 @@ const routes = [
   //   ]
   // },
   {
-    path: '/status',
+    path: '/board/id/status',
     name: 'StatusList',
     component: StatusesList,
     children: [
