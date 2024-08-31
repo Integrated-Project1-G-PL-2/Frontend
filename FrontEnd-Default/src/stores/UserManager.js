@@ -1,5 +1,4 @@
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 
 // เก็บค่า userName ใน ref
 export const userName = ref('')
@@ -44,28 +43,28 @@ export function decodeJWT(token) {
 }
 
 // ฟังก์ชันสำหรับเข้าสู่ระบบ (login)
-export async function login(userCredentials) {
-  try {
-    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/login`, {
+export async function login(userCredentials, router) {
+  const response = await apiRequest(
+    `${import.meta.env.VITE_BASE_URL}/login`,
+    {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ ...userCredentials })
-    })
+    },
+    router
+  )
 
-    if (!response.ok) {
-      return response.status
-    }
-
-    const data = await response.json()
-    const decodedToken = decodeJWT(data.access_token)
-    console.log('Decoded JWT:', decodedToken)
-    localStorage.setItem('jwt', data.access_token)
-    return data
-  } catch (error) {
-    throw new Error(error.message)
+  if (!response.ok) {
+    return response.status
   }
+
+  const data = await response.json()
+  const decodedToken = decodeJWT(data.access_token)
+  console.log('Decoded JWT:', decodedToken)
+  localStorage.setItem('jwt', data.access_token)
+  return data
 }
 
 // ฟังก์ชันสำหรับออกจากระบบ (logout)
@@ -76,9 +75,7 @@ export function logout() {
 }
 
 // Navigation Guard สำหรับตรวจสอบการยืนยันตัวตน
-export function useAuthGuard() {
-  const router = useRouter()
-
+export function useAuthGuard(router) {
   router.beforeEach((to, from, next) => {
     const token = localStorage.getItem('jwt')
 
@@ -109,7 +106,7 @@ export function useAuthGuard() {
 }
 
 // ฟังก์ชันสำหรับทำ API request พร้อมแนบ token
-export async function apiRequest(url, options = {}) {
+export async function apiRequest(url, options = {}, router) {
   // const token = localStorage.getItem('jwt')
 
   // if (token) {
@@ -123,40 +120,9 @@ export async function apiRequest(url, options = {}) {
 
   if (response.status === 401) {
     logout() // ถ้า response เป็น 401, ให้ logout และเปลี่ยนเส้นทางไป login
-    const router = useRouter()
-    await router.replace({ name: 'Login' })
+
+    router.replace({ name: 'Login' })
   }
 
   return response
 }
-
-// // ฟังก์ชันสำหรับ refreshToken (รีเฟรชโทเค็น)
-// export async function refreshToken(token) {
-//   try {
-//     const response = await fetch('/auth/refresh', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//         Authorization: `Bearer ${token}` // ส่ง JWT เพื่อรีเฟรช
-//       },
-//       body: JSON.stringify({ token })
-//     })
-
-//     if (!response.ok) {
-//       throw new Error('Token refresh failed')
-//     }
-
-//     const data = await response.json()
-//     const decodedToken = decodeJWT(data.token) // ถอดรหัส JWT
-//     console.log('Decoded JWT:', decodedToken) // แสดงผล JWT ที่ถูกถอดรหัสใน console
-//     localStorage.setItem('jwt', data.token) // อัปเดต JWT ใน localStorage
-//     return data // คืนค่าผลลัพธ์ที่ได้จากการรีเฟรชโทเค็น
-//   } catch (error) {
-//     throw new Error(error.message)
-//   }
-// }
-
-// // ฟังก์ชันสำหรับตรวจสอบว่า JWT มีอยู่ใน localStorage หรือไม่
-// export function getToken() {
-//   return localStorage.getItem('jwt')
-// }

@@ -24,7 +24,7 @@ const trimmedPassword = computed(() => password.value.trim())
 const MAX_USERNAME_LENGTH = 50
 const MAX_PASSWORD_LENGTH = 14
 
-useAuthGuard()
+
 
 const handleLogin = async () => {
   const data = await login({
@@ -44,6 +44,7 @@ const handleLogin = async () => {
     // ตรวจสอบว่าค่าที่กรอกมาตรงกับข้อมูลใน JWT หรือไม่
     if (decodedToken.payload.sub === trimmedUsername.value) {
       // เปลี่ยนเส้นทางไปยังหน้า 'Task' และแสดง modal
+      useAuthGuard(router)
       router.replace({ name: 'Task' })
       showTaskModal.value = true
     }
