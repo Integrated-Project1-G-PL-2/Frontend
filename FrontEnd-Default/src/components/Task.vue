@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onBeforeMount, reactive, ref, watch, computed } from 'vue'
+import { onMounted, reactive, ref, watch, computed } from 'vue'
 import {
   getItems,
   getItemById,
@@ -50,7 +50,7 @@ const redPopup = reactive({
   delete: { state: false, taskTitle: '' }
 })
 
-onBeforeMount(async () => {
+onMounted(async () => {
   taskManager.setTasks(await getItems(`${import.meta.env.VITE_BASE_URL}/tasks`))
   statusManager.setStatuses(
     await getItems(`${import.meta.env.VITE_BASE_URL}/statuses`)
