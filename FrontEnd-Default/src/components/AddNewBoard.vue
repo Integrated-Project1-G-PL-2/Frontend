@@ -1,11 +1,23 @@
 <script setup>
-import { reactive, ref } from 'vue'
+import { watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
 const deClareemit = defineEmits(['saveDetail', 'cancelDetail'])
 const router = useRouter()
+const name = ref('')
 const isNameOverLimit = ref(false)
+const isNameEmpty = ref(false)
+
+const MAX_LENGTH = 120
+
+const checkNameLength = () => {
+  isNameOverLimit.value = name.value.length > MAX_LENGTH
+  isNameEmpty.value = name.value.trim() === ''
+}
+
+// Watch for changes in `name` to update validation state
+watch(name, checkNameLength)
 const saveClick = async () => {
-  if (isNameOverLimit.value) {
+  if (isNameOverLimit.value || isNameEmpty.value) {
     return
   }
   if (prop.operate === 'add') {
@@ -51,9 +63,6 @@ const saveClick = async () => {
   router.replace({ name: 'StatusList' })
   emits('showStatusDetailModal')
 }
-const checkNameLength = () => {
-  isNameOverLimit.value = status.name.length > 50
-}
 </script>
 
 <template>
@@ -73,6 +82,7 @@ const checkNameLength = () => {
         <div class="w-[70%] h-[100%]">
           <div class="flex mt-5 my-2">Name</div>
           <textarea
+            v-model="name"
             class="itbkk-board-name font-bold text-justify w-[143%] breal-all border border-gray-300 rounded-md resize-none"
             @input="checkNameLength"
             :class="{ 'border-red-600 text-red-600': isNameOverLimit }"
@@ -105,7 +115,7 @@ const checkNameLength = () => {
         <button
           class="itbkk-button-ok bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"
           @click="saveClick"
-          :class="{ disabled: d }"
+          :class="{ disabled: isNameOverLimit || isNameEmpty }"
         >
           <div class="btn text-center">save</div>
         </button>
