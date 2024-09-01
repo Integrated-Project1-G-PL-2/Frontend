@@ -34,7 +34,7 @@ const returnLoginPage = () => {
     class="flex flex-col items-end pr-4 font-bold space-y-2 border-b border-r-slate-500"
   >
     <!-- Align this button to the left -->
-    <div class="flex justify-start items-start w-full border border-gray-400">
+    <div class="flex justify-start items-start w-full">
       <button
         @click="goBackToHomePage"
         class="itbkk-button-home scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 hover:text-blue-500 mr-3 mt-2 text-blue-400 my-3"
@@ -70,143 +70,25 @@ const returnLoginPage = () => {
         Log out
       </button>
     </div>
-
-    <button
-      class="bg-gray-300 text-sm rounded-[6px] font-sans text-gray-700 hover:text-white px-7 py-1"
-      @click="showAddNewBoardPopUp"
-    >
-      Create personal board
-    </button>
   </div>
   <div class="bg-white relative border rounded-lg overflow-auto">
-    <h1 class="font-bold text-center cursor-default">
-      IT-Bangmod Kradan Kanban
-    </h1>
+    <h1 class="font-bold text-center cursor-default">Board List</h1>
     <div class="flex flex-col items-end pr-4 font-bold space-y-2">
-      <h1 class="itbkk-fullname font-bold font-sans cursor-default">
-        {{ userName }}
-      </h1>
-      <div class="grid grid-cols-1 items-center justify-items-center space-y-2">
-        <svg
-          class="w-8 h-8 text-gray-800 dark:text-gray-700"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-          />
-        </svg>
-        <button
-          @click="returnLoginPage"
-          class="bg-blue-500 text-sm rounded-[6px] font-sans text-gray-100 hover:text-gray-600 px-7 py-1"
-        >
-          Log out
-        </button>
-      </div>
-    </div>
-    <div class="flex justify-end">
-      <div
-        class="itbkk-status-filter flex items-center space-x-2 mr-auto ml-4 my-3 border"
-      >
-        <select
-          class="text-sm rounded-lg w-[210px] p-2 bg-white"
-          placeholder="Filter by status(es)"
-          required
-          v-model="searchStatus"
-        >
-          <option
-            v-for="(status, index) in cloneTaskGroups"
-            :key="index"
-            class="itbkk-status-choice"
-          >
-            {{ status.name }}
-          </option>
-        </select>
-
-        <svg
-          class="itbkk-filter-clear fill-current h-6 w-6 text-gray-400 cursor-pointer"
-          role="button"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          @click=";(collectStatus.length = 0), (searchStatus = null)"
-        >
-          <path
-            d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"
-          />
-        </svg>
-      </div>
-      <div
-        class="container p-4 border rounded-lg mr-2 ml-2 my-3 w-[650px] flex overflow-auto gap-2"
-      >
-        <div
-          v-for="(statusName, index) in collectStatus"
-          :key="index"
-          class="flex items-center justify-between space-x-2 border w-auto bg-gray-300"
-        >
-          {{ statusName }}
-          <svg
-            class="itbkk-filter-clear fill-current h-6 w-6 text-gray-500 cursor-pointer ml-auto"
-            role="button"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            @click="collectStatus.splice(index, 1), (searchStatus = null)"
-          >
-            <path
-              d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"
-            />
-          </svg>
-        </div>
-      </div>
       <button
-        @click="showAddPopUpTaskDetail('add')"
-        class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
+        class="itbkk-button-create bg-gray-300 text-sm rounded-[6px] font-sans text-gray-700 hover:text-white px-7 py-1"
+        @click="showAddNewBoardPopUp"
       >
-        ✚ Add New Task
+        Create personal board
       </button>
-      <button
-        @click="showStatusesList"
-        class="itbkk-manage-status bg-gray-500 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 my-3"
-      >
-        ⚙️ Manage Status
-      </button>
-      <!-- <button
-        @click="showStatusesLimit"
-        class="itbkk-manage-status bg-gray-500 w-[80px] flex items-center justify-center text-gray-100 hover:text-gray-200 mr-3 rounded-md my-3"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="1.2rem"
-          height="1.2rem"
-          viewBox="0 0 24 24"
-        >
-          <g fill="none" fill-rule="evenodd">
-            <path
-              d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"
-            />
-            <path
-              fill="currentColor"
-              d="M18 4a1 1 0 1 0-2 0v1H4a1 1 0 0 0 0 2h12v1a1 1 0 1 0 2 0V7h2a1 1 0 1 0 0-2h-2zM4 11a1 1 0 1 0 0 2h2v1a1 1 0 1 0 2 0v-1h12a1 1 0 1 0 0-2H8v-1a1 1 0 0 0-2 0v1zm-1 7a1 1 0 0 1 1-1h12v-1a1 1 0 1 1 2 0v1h2a1 1 0 1 1 0 2h-2v1a1 1 0 1 1-2 0v-1H4a1 1 0 0 1-1-1"
-            />
-          </g>
-        </svg>
-      </button> -->
     </div>
     <table class="w-full text-sm text-left text-gray-500">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50">
         <tr>
           <th class="px-4 py-3 cursor-default"></th>
-          <th class="px-4 py-3 cursor-default">Title</th>
-          <th class="px-4 py-3 cursor-default">Assignees</th>
+          <th class="px-4 py-3 cursor-default">No</th>
+          <th class="px-4 py-3 cursor-default">Name</th>
           <th class="px-4 py-3 flex items-center space-x-2 cursor-default">
-            <span>Status </span>
+            <span>action</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="cursor-pointer itbkk-status-sort"
