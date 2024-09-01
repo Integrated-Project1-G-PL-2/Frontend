@@ -191,24 +191,36 @@ const returnLoginPage = () => {
   router.replace({ name: 'Login' })
   returnPage.value = true
 }
+
+const goBackToHomeBoard = () => {
+  router.replace({ name: 'Board' })
+}
 </script>
 
 <template>
   <div class="bg-white relative border rounded-lg overflow-auto">
-    <h1 class="font-bold text-center cursor-default">
+    <h1 class="font-bold text-center cursor-default text-xl">
       IT-Bangmod Kradan Kanban
     </h1>
-    <div class="flex flex-col items-end pr-4 font-bold space-y-2">
-      <h1 class="itbkk-fullname font-bold font-sans cursor-default">
-        {{ userName }}
-      </h1>
-      <div class="grid grid-cols-1 items-center justify-items-center space-y-2">
+    <div
+      class="flex justify-between items-start w-full font-bold space-y-2 border-b py-2 border-r-slate-500"
+    >
+      <button
+        @click="goBackToHomeBoard"
+        class="itbkk-button-home scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 hover:text-blue-500 mr-3 ml-2 mt-2 text-blue-400 my-3"
+      >
+        🏠 ITB-KK
+      </button>
+      <div class="flex flex-col items-center space-y-1">
+        <h1 class="itbkk-fullname font-bold font-sans cursor-default text-xs">
+          {{ userName }}
+        </h1>
         <svg
-          class="w-8 h-8 text-gray-800 dark:text-gray-700"
+          class="w-6 h-6 text-gray-800 dark:text-gray-700"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
+          width="18"
+          height="18"
           fill="none"
           viewBox="0 0 24 24"
         >
@@ -222,7 +234,7 @@ const returnLoginPage = () => {
         </svg>
         <button
           @click="returnLoginPage"
-          class="bg-blue-500 text-sm rounded-[6px] font-sans text-gray-100 hover:text-gray-600 px-7 py-1"
+          class="bg-blue-500 text-xs rounded-[4px] font-sans text-gray-100 hover:text-gray-600 px-4 py-1 mt-1"
         >
           Log out
         </button>
