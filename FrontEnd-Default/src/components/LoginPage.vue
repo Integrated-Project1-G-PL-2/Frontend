@@ -42,7 +42,7 @@ const handleLogin = async () => {
       // เปลี่ยนเส้นทางไปยังหน้า 'Task' และแสดง modal
       // เรียก useAuthGuard เพื่อเริ่มต้นการตรวจสอบ token
       useAuthGuard(router)
-      router.replace({ name: 'Task' })
+      router.replace({ name: 'Board' })
       showTaskModal.value = true
     }
   }
