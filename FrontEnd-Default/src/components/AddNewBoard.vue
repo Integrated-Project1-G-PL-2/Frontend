@@ -20,7 +20,7 @@ const router = useRouter()
         </div>
 
         <div class="w-[70%] h-[100%]">
-          <div class="flex mt-5">Name</div>
+          <div class="flex mt-5 my-2">Name</div>
           <textarea
             class="itbkk-board-name font-bold text-justify w-[143%] breal-all border border-gray-300 rounded-md resize-none"
           >
