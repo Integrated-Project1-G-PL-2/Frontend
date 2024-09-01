@@ -3,6 +3,57 @@ import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 const deClareemit = defineEmits(['saveDetail', 'cancelDetail'])
 const router = useRouter()
+const isNameOverLimit = ref(false)
+const saveClick = async () => {
+  if (isNameOverLimit.value) {
+    return
+  }
+  if (prop.operate === 'add') {
+    const addedStatus = await addItem(
+      `${import.meta.env.VITE_BASE_URL}/statuses`,
+      status
+    )
+    if (addedStatus != null) {
+      statusManager.addStatuses(addedStatus)
+      emits('showStatusGreenPopup', {
+        taskStatus: addedStatus.name,
+        operate: prop.operate
+      })
+    } else {
+      emits('showStatusRedPopup', {
+        taskStatus: status.name,
+        operate: prop.operate
+      })
+    }
+  } else if (prop.operate === 'edit') {
+    status.description =
+      status.description == null
+        ? status.description
+        : status.description.trim()
+    const editedStatus = await editItem(
+      `${import.meta.env.VITE_BASE_URL}/statuses`,
+      prop.statusDetail.value.id,
+      status
+    )
+    if (editedStatus != null) {
+      statusManager.editStatues(editedStatus.id, editedStatus)
+      emits('showStatusGreenPopup', {
+        taskStatus: editedStatus.name,
+        operate: prop.operate
+      })
+    } else {
+      emits('showStatusRedPopup', {
+        taskStatus: '',
+        operate: prop.operate
+      })
+    }
+  }
+  router.replace({ name: 'StatusList' })
+  emits('showStatusDetailModal')
+}
+const checkNameLength = () => {
+  isNameOverLimit.value = status.name.length > 50
+}
 </script>
 
 <template>
@@ -23,14 +74,38 @@ const router = useRouter()
           <div class="flex mt-5 my-2">Name</div>
           <textarea
             class="itbkk-board-name font-bold text-justify w-[143%] breal-all border border-gray-300 rounded-md resize-none"
+            @input="checkNameLength"
+            :class="{ 'border-red-600 text-red-600': isNameOverLimit }"
           >
           </textarea>
+          <div
+            style="display: flex; align-items: center"
+            v-if="isNameOverLimit"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="-mt-px h-4 w-[20rem]"
+              class="w-[15px] text-red-600"
+            >
+              <path
+                fillRule="evenodd"
+                d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 01.67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 11-.671-1.34l.041-.022zM12 9a.75.75 0 100-1.5.75.75 0 000 1.5z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <div class="text-sm text-red-600">
+              Limit text to 120 characters or less.
+            </div>
+          </div>
         </div>
       </div>
       <div class="flex flex-row w-full justify-end border-t h-[60%]">
         <button
           class="itbkk-button-ok bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"
-          @click="deleteTask(props.taskId.value.id)"
+          @click="saveClick"
+          :class="{ disabled: d }"
         >
           <div class="btn text-center">save</div>
         </button>
