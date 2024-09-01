@@ -22,14 +22,14 @@ const routes = [
   {
     path: '/board',
     name: 'Board',
-    component: BoardList
-    // children: [
-    //       {
-    //         path: 'id',
-    //         name: 'Task',
-    //         component: Task
-    //       }
-    // ]
+    component: BoardList,
+    children: [
+      {
+        path: '/board/add',
+        name: 'AddNewBoard',
+        component: AddNewBoard
+      }
+    ]
   },
   {
     path: '/board/id',

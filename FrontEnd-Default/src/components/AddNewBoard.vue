@@ -9,7 +9,9 @@ const router = useRouter()
   <div
     class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[10px]"
   >
-    <div class="w-[40%] m-[auto] border border-green-700 mt-[20%]">
+    <div
+      class="itbkk-modal-new w-[40%] m-[auto] border border-green-700 mt-[20%]"
+    >
       <div class="flex flex-col justify-between bg-white p-4 h-[10%]">
         <div class="itbkk-title w-full h-[40px] mt-1 border-b">
           <h1 class="text-xl font-bold text-justify text-green-500">

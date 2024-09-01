@@ -12,6 +12,7 @@ const returnPage = ref(false)
 
 const showAddNewBoardPopUp = function () {
   showAddNewBoard.value = true // Set to true when the button is clicked
+  router.push({ name: 'AddNewBoard' })
 }
 
 const clearDeletePopUp = function () {
