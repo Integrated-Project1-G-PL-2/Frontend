@@ -200,7 +200,7 @@ const goBackToHomeBoard = () => {
 <template>
   <div class="bg-white relative border rounded-lg overflow-auto">
     <h1 class="font-bold text-center cursor-default text-xl">
-      IT-Bangmod Kradan Kanban
+      {{ userName + ' personal board ' }}
     </h1>
     <div
       class="flex justify-between items-start w-full font-bold space-y-2 border-b py-2 border-r-slate-500"
