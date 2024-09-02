@@ -186,9 +186,9 @@ const closeProblemAlter = () => {
           <td class="itbkk-title px-4 py-3">
             <div
               class="hover:text-sky-500 cursor-default"
-              @click="showTaskDetail(task.id, 'show')"
+              @click="showBoardDetail(task.id, 'show')"
             >
-              {{ task.title }}
+              {{ board.name }}
             </div>
           </td>
           <td
@@ -236,9 +236,7 @@ const closeProblemAlter = () => {
     >
     </DeletePopUp>
   </teleport>
-  <Teleport to="body" v-if="showStatusDetailModal">
-    <StatusesList> </StatusesList>
-  </Teleport>
+
   <Teleport to="body" v-if="showStatusDetailLimit">
     <StatusLimitSetting
       @clearLimitPopUp="clearLimitStatusPopUp"

@@ -1,28 +1,28 @@
 import { reactive } from 'vue'
 import { defineStore, acceptHMRUpdate } from 'pinia'
-export const useTaskManager = defineStore('boardManager', () => {
+export const useBoardManager = defineStore('boardManager', () => {
   const boards = reactive([])
   const getBoards = function () {
     return boards
   }
-  const setTasks = function (taskList = []) {
+  const setBoards = function (BoardList = []) {
     boards.length = 0
-    console.log(taskList)
-    if (taskList != null) {
-      taskList.forEach((task) => {
+    console.log(BoardList)
+    if (BoardList != null) {
+      BoardList.forEach((task) => {
         boards.push(task)
       })
     }
   }
-  const addTask = function (newTask) {
-    boards.push(newTask)
+  const addBoard = function (newBoard) {
+    boards.push(newBoard)
   }
   const findIndexById = function (id) {
     return boards.findIndex((el) => el.id === id)
   }
-  const editTask = function (id, newTask) {
+  const editBoard = function (id, newBoard) {
     const index = findIndexById(id)
-    boards[index] = newTask
+    boards[index] = newBoard
   }
 
   const deleteTask = function (id) {
@@ -36,15 +36,15 @@ export const useTaskManager = defineStore('boardManager', () => {
     return tasks.find((el) => el.status.id == id)
   }
   return {
-    getTasks,
-    setTasks,
-    addTask,
-    editTask,
+    getBoards,
+    setBoards,
+    addBoard,
+    editBoard,
     deleteTask,
     findStatusById
   }
 })
 
 if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useTaskManager, import.meta.hot))
+  import.meta.hot.accept(acceptHMRUpdate(useBoardManager, import.meta.hot))
 }
