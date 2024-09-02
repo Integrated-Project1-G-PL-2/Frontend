@@ -27,6 +27,12 @@ const MAX_USERNAME_LENGTH = 50
 const MAX_PASSWORD_LENGTH = 14
 const boardManager = useBoardManager()
 
+const checkUserBoard = () => {
+  // ตรวจสอบว่ามีบอร์ดในรายการหรือไม่
+  const boards = boardManager.getBoards()
+  return boards.length > 0
+}
+
 const handleLogin = async () => {
   const data = await login(
     {
@@ -41,21 +47,27 @@ const handleLogin = async () => {
   } else if ((data != '400', data != '401')) {
     error.value = true
   }
-  // ตรวจสอบเงื่อนไขว่ามีโทเค็นหรือไม่
-  if (data && data.access_token) {
-    const decodedToken = decodeJWT(data.access_token) // ถอดรหัส JWT เพื่อตรวจสอบข้อมูล
-    console.log('Decoded JWT:', decodedToken) // แสดงข้อมูล JWT ที่ถอดรหัสใน console
 
-    // ตรวจสอบว่าค่าที่กรอกมาตรงกับข้อมูลใน JWT หรือไม่
+  if (data && data.access_token) {
+    const decodedToken = decodeJWT(data.access_token)
+    console.log('Decoded JWT:', decodedToken)
+
     if (decodedToken.payload.sub === trimmedUsername.value) {
-      // เปลี่ยนเส้นทางไปยังหน้า 'Task' และแสดง modal
-      // เรียก useAuthGuard เพื่อเริ่มต้นการตรวจสอบ token
       useAuthGuard(router)
-      router.replace({ name: 'Board' })
-      showTaskModal.value = true
+
+      // ตรวจสอบว่าผู้ใช้มีบอร์ดอยู่แล้วหรือไม่
+      if (checkUserBoard()) {
+        // ถ้ามีบอร์ดให้ไปยังหน้า Task
+        router.replace({ name: 'Task' })
+      } else {
+        // ถ้าไม่มีบอร์ดให้ไปยังหน้า Board
+        router.replace({ name: 'Board' })
+        showTaskModal.value = true
+      }
     }
   }
 }
+
 const closeIncorrectAlter = () => {
   incorrect.value = false
 }
