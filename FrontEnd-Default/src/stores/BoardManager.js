@@ -1,18 +1,19 @@
 import { reactive } from 'vue'
 import { defineStore, acceptHMRUpdate } from 'pinia'
+
 export const useBoardManager = defineStore('boardManager', () => {
   const boards = reactive([])
   const getBoards = function () {
     return boards
   }
-  const setBoards = function (BoardList = []) {
+  const setBoards = function (boardsList = []) {
     boards.length = 0
-    console.log(BoardList)
-    if (BoardList != null) {
-      BoardList.forEach((task) => {
-        boards.push(task)
+    if (boardsList != null) {
+      boardsList.forEach((board) => {
+        boards.push(board)
       })
     }
+    console.log(boards)
   }
   const addBoard = function (newBoard) {
     boards.push(newBoard)
@@ -20,28 +21,23 @@ export const useBoardManager = defineStore('boardManager', () => {
   const findIndexById = function (id) {
     return boards.findIndex((el) => el.id === id)
   }
-  const editBoard = function (id, newBoard) {
-    const index = findIndexById(id)
-    boards[index] = newBoard
-  }
+  // const editBoard = function (id, newBoard) {
+  //   const index = findIndexById(id)
+  //   boards[index] = newBoard
+  // }
 
-  const deleteTask = function (id) {
-    const index = tasks.findIndex((el) => {
-      return el.id == id
-    })
-    tasks.splice(index, 1)
-  }
+  // const deleteBoard = function (id) {
+  //   const index = boards.findIndex((el) => {
+  //     return el.id == id
+  //   })
+  //   boards.splice(index, 1)
+  // }
 
-  const findStatusById = function (id) {
-    return tasks.find((el) => el.status.id == id)
-  }
   return {
     getBoards,
     setBoards,
     addBoard,
-    editBoard,
-    deleteTask,
-    findStatusById
+    findIndexById
   }
 })
 
