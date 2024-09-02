@@ -14,8 +14,6 @@ const checkNameLength = () => {
   isNameEmpty.value = name.value.trim() === ''
 }
 
-// Watch for changes in `name` to update validation state
-watch(name, checkNameLength)
 const saveClick = async () => {
   if (isNameOverLimit.value || isNameEmpty.value) {
     return
@@ -115,7 +113,7 @@ const saveClick = async () => {
         <button
           class="itbkk-button-ok bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"
           @click="saveClick"
-          :class="{ disabled: isNameOverLimit || isNameEmpty }"
+          :disabled="isNameOverLimit || name.length == 0"
         >
           <div class="btn text-center">save</div>
         </button>
