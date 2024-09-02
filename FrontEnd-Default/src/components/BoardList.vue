@@ -4,8 +4,10 @@ import AddNewBoard from './../components/AddNewBoard.vue'
 import { userName } from '@/stores/UserManager'
 import { logout } from '@/stores/UserManager'
 import { useRoute, useRouter } from 'vue-router'
+import AlertPopUp from './../components/AlertPopUp.vue'
 const router = useRouter()
 const route = useRoute()
+const error = ref(false)
 
 const showAddNewBoard = ref(false) // Initial value is false
 const returnPage = ref(false)
@@ -27,6 +29,10 @@ const returnLoginPage = () => {
   logout()
   router.replace({ name: 'Login' })
   returnPage.value = true
+}
+
+const closeProblemAlter = () => {
+  error.value = false
 }
 </script>
 
@@ -75,6 +81,13 @@ const returnLoginPage = () => {
     <h1 class="font-bold text-center cursor-default text-3xl py-3">
       Board List
     </h1>
+    <AlertPopUp
+      v-if="error"
+      :titles="'There is a problem. Please try again later.'"
+      @closePopUp="closeProblemAlter"
+      message="Error!!"
+      styleType="red"
+    />
     <div class="flex flex-col items-end pr-4 font-bold space-y-2">
       <button
         class="itbkk-button-create bg-gray-300 text-sm rounded-[6px] font-sans text-gray-700 hover:text-white px-7 py-2 mr-2 my-3"
