@@ -25,6 +25,7 @@ const trimmedUsername = computed(() => username.value.trim())
 const trimmedPassword = computed(() => password.value.trim())
 const MAX_USERNAME_LENGTH = 50
 const MAX_PASSWORD_LENGTH = 14
+const boardManager = useBoardManager()
 
 const handleLogin = async () => {
   const data = await login(
