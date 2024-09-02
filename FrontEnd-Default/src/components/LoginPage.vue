@@ -3,6 +3,14 @@ import { reactive, ref, computed } from 'vue'
 import AlertPopUp from './../components/AlertPopUp.vue'
 import { useRouter } from 'vue-router'
 import { login, decodeJWT, useAuthGuard } from '@/stores/UserManager'
+import { useBoardManager } from '@/stores/BoardManager'
+import {
+  getItems,
+  getItemById,
+  deleteItemById,
+  addItem,
+  editItem
+} from '../utils/fetchUtils.js'
 
 const showTaskModal = ref(false)
 const username = ref('')
