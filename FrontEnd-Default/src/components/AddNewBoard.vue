@@ -9,7 +9,7 @@ import {
   editItem
 } from '../utils/fetchUtils.js'
 import { useBoardManager } from '@/stores/BoardManager'
-const deClareemit = defineEmits(['saveDetail', 'cancelDetail'])
+const emits = defineEmits(['saveDetail', 'cancelDetail'])
 const router = useRouter()
 const name = ref('')
 const isNameOverLimit = ref(false)
@@ -33,6 +33,8 @@ const saveClick = async () => {
     id: Date.now(), // สามารถเปลี่ยนให้เป็นการสร้าง id ที่เหมาะสมได้
     name: name.value
   }
+  emits('saveDetail', true)
+  router.replace({ name: 'Board' })
 
   try {
     // เพิ่มบอร์ดใหม่ใน `useBoardManager`
@@ -40,7 +42,7 @@ const saveClick = async () => {
     boardManager.addBoard(newBoard)
 
     // เปลี่ยนเส้นทางไปยังหน้า 'Board'
-    router.replace({ name: 'Task' })
+    router.replace({ name: 'ฺBoard' })
   } catch (err) {
     console.error('Error saving board:', err)
     error.value = true
@@ -105,7 +107,7 @@ const saveClick = async () => {
         <button
           class="itbkk-button-cancel bg-red-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"
           @click="
-            ;[$emit('cancelDetail', true), $router.replace({ name: 'Task' })]
+            ;[$emit('cancelDetail', true), $router.replace({ name: 'Board' })]
           "
         >
           <div class="btn text-center">Cancel</div>
