@@ -116,7 +116,6 @@ const returnLoginPage = () => {
     <table class="w-full text-sm text-left text-gray-500">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50">
         <tr>
-          <th class="px-4 py-3 cursor-default"></th>
           <th class="px-4 py-3 cursor-default">No</th>
           <th class="px-4 py-3 cursor-default">Name</th>
           <th class="px-4 py-3 flex items-center space-x-2 cursor-default">
@@ -145,14 +144,7 @@ const returnLoginPage = () => {
               🗑️
             </div>
           </td>
-          <td class="itbkk-title px-4 py-3">
-            <div
-              class="hover:text-sky-500 cursor-default"
-              
-            >
-            {{ index + 1 }}
-            </div>
-          </td>
+         
           <td
             class="itbkk-assignees px-4 py-3 cursor-default"
           >
