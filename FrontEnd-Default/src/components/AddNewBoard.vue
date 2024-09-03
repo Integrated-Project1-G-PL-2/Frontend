@@ -1,12 +1,20 @@
 <script setup>
 import { watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import {
+  getItems,
+  getItemById,
+  deleteItemById,
+  addItem,
+  editItem
+} from '../utils/fetchUtils.js'
+import { useBoardManager } from '@/stores/BoardManager'
 const deClareemit = defineEmits(['saveDetail', 'cancelDetail'])
 const router = useRouter()
 const name = ref('')
 const isNameOverLimit = ref(false)
 const isNameEmpty = ref(false)
-
+const error = ref(false)
 const MAX_LENGTH = 120
 
 const checkNameLength = () => {
@@ -15,51 +23,30 @@ const checkNameLength = () => {
 }
 
 const saveClick = async () => {
+  checkNameLength() // ตรวจสอบความยาวของชื่ออีกครั้ง
+
+  // ตรวจสอบว่าไม่มีข้อผิดพลาดในการกรอกชื่อบอร์ด
   if (isNameOverLimit.value || isNameEmpty.value) {
     return
   }
-  if (prop.operate === 'add') {
-    const addedStatus = await addItem(
-      `${import.meta.env.VITE_BASE_URL}/statuses`,
-      status
-    )
-    if (addedStatus != null) {
-      statusManager.addStatuses(addedStatus)
-      emits('showStatusGreenPopup', {
-        taskStatus: addedStatus.name,
-        operate: prop.operate
-      })
-    } else {
-      emits('showStatusRedPopup', {
-        taskStatus: status.name,
-        operate: prop.operate
-      })
-    }
-  } else if (prop.operate === 'edit') {
-    status.description =
-      status.description == null
-        ? status.description
-        : status.description.trim()
-    const editedStatus = await editItem(
-      `${import.meta.env.VITE_BASE_URL}/statuses`,
-      prop.statusDetail.value.id,
-      status
-    )
-    if (editedStatus != null) {
-      statusManager.editStatues(editedStatus.id, editedStatus)
-      emits('showStatusGreenPopup', {
-        taskStatus: editedStatus.name,
-        operate: prop.operate
-      })
-    } else {
-      emits('showStatusRedPopup', {
-        taskStatus: '',
-        operate: prop.operate
-      })
-    }
+
+  // สร้างบอร์ดใหม่ด้วยชื่อที่กำหนด
+  const newBoard = {
+    id: Date.now(), // สามารถเปลี่ยนให้เป็นการสร้าง id ที่เหมาะสมได้
+    name: name.value
   }
-  router.replace({ name: 'StatusList' })
-  emits('showStatusDetailModal')
+
+  try {
+    // เพิ่มบอร์ดใหม่ใน `useBoardManager`
+    const boardManager = useBoardManager()
+    boardManager.addBoard(newBoard)
+
+    // เปลี่ยนเส้นทางไปยังหน้า 'Board'
+    router.replace({ name: 'Board' })
+  } catch (err) {
+    console.error('Error saving board:', err)
+    error.value = true
+  }
 }
 </script>
 

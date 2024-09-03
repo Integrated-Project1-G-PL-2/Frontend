@@ -129,7 +129,7 @@ const closeProblemAlter = () => {
       <tbody>
         <tr
           v-for="(board, index) in boardsList"
-          :key="board.id.boardId"
+          :key="board.id"
           class="itbkk-item border-b cursor-pointer"
         >
           <td class="px-4 py-3">
@@ -158,7 +158,7 @@ const closeProblemAlter = () => {
           <td
             class="itbkk-assignees px-4 py-3 cursor-default"
           >
-            {{ board.board.name }}
+            {{ board.name }}
           </td>
           <td class="itbkk-status px-4 py-3 cursor-default">
             <div
