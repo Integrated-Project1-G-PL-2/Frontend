@@ -8,13 +8,15 @@ const router = useRouter()
 const name = ref('')
 const isNameOverLimit = ref(false)
 const isNameEmpty = ref(false)
-
+const boardManager = useBoardManager()
 const MAX_LENGTH = 120
 
 const checkNameLength = () => {
   isNameOverLimit.value = name.value.length > MAX_LENGTH
   isNameEmpty.value = name.value.trim() === ''
 }
+
+
 
 // Watch for changes in `name` to update validation state
 watch(name, checkNameLength)
@@ -75,18 +77,19 @@ const saveClick = async () => {
 // )
 let newBoardName
 
-const newBoard = async (newBoardName) => {
+const boardsList = boardManager.getBoards()
 
+const newBoard = async (newBoardName) => {
   
     const newBoard = await addItem(
       `${import.meta.env.VITE_BASE_URL}/v3/boards`,
-      newBoardName
+      {name: newBoardName} 
     )
-    console.log(newBoardName)
-    router.replace({ name: 'Board' })
+    boardManager.addBoard(newBoard)
+    deClareemit('cancelDetail',true)
     
-    useBoardManager.addBoard(newBoard)
-     
+    router.push({ name: 'Task' ,params: { id: boardsList.at(-1).id } })
+    
   } 
 
 

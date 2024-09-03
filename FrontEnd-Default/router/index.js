@@ -32,78 +32,50 @@ const routes = [
     ]
   },
   {
-    path: '/board/id',
+    path: '/board/:id',
     name: 'Task',
     component: Task,
     children: [
       {
-        path: '/board/id/task/add',
+        path: '/board/:id/task/add',
         name: 'AddTaskDetail',
         component: TaskDetail
       },
       {
-        path: '/board/id/task/:id',
+        path: '/board/:id/task/:tid',
         name: 'TaskDetail',
         component: TaskDetail
       },
       {
-        path: '/board/id/task/:id/edit',
+        path: '/board/:id/task/:tid/edit',
         name: 'EditTaskDetail',
         component: TaskDetail
       },
       {
-        path: '/board/id/task/:id/delete',
+        path: '/board/:id/task/:tid/delete',
         name: 'DeleteTaskDetail',
         component: DeleteTaskDetail
       }
     ]
   },
 
-  // },
-  // {
-  //   path: '/task',
-  //   name: 'Task',
-  //   component: Task,
-  //   children: [
-  //     {
-  //       path: ':id',
-  //       component: TaskDetail,
-  //       name: 'TaskDetail'
-  //     },
-  //     {
-  //       path: 'add',
-  //       component: TaskDetail,
-  //       name: 'AddTaskDetail'
-  //     },
-  //     {
-  //       path: ':id/edit',
-  //       component: TaskDetail,
-  //       name: 'EditTaskDetail'
-  //     },
-  //     {
-  //       path: ':id/delete',
-  //       component: DeleteTaskDetail,
-  //       name: 'DeleteTaskDetail'
-  //     }
-  //   ]
-  // },
   {
-    path: '/status',
+    path: '/board/:id/status',
     name: 'StatusList',
     component: StatusesList,
     children: [
       {
-        path: 'add',
+        path: '/board/:id/status/add',
         component: StatusPopUp,
         name: 'StatusAdd'
       },
       {
-        path: ':id/delete',
+        path: '/board/:id/status/:sid/delete',
         component: DeleteStatus,
         name: 'DeleteStatus'
       },
       {
-        path: ':id/edit',
+        path: '/board/:id/status:sid/edit',
         component: StatusPopUp,
         name: 'StatusEdit'
       }

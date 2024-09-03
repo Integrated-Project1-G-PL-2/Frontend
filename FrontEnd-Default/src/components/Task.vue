@@ -51,16 +51,16 @@ const redPopup = reactive({
 })
 
 onMounted(async () => {
-  taskManager.setTasks(await getItems(`${import.meta.env.VITE_BASE_URL}/tasks`))
+  taskManager.setTasks(await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`))
   statusManager.setStatuses(
-    await getItems(`${import.meta.env.VITE_BASE_URL}/statuses`)
+    await getItems(`${import.meta.env.VITE_BASE_URL}v3/boards/${route.params.id}/statuses`)
   )
 })
 const showTaskDetail = async function (id, operate) {
-  router.push({ name: 'TaskDetail', params: { id: id } })
+  router.push({ name: 'TaskDetail', params: { tid: id } })
   operation.value = operate
   taskDetail.value = await getItemById(
-    `${import.meta.env.VITE_BASE_URL}/tasks`,
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
     id
   )
   if (taskDetail.value.status == '404') {
@@ -72,10 +72,10 @@ const showTaskDetail = async function (id, operate) {
 }
 
 const showEditTaskDetail = async function (id, operate) {
-  router.push({ name: 'EditTaskDetail', params: { id: id } })
+  router.push({ name: 'EditTaskDetail', params: { tid: id } })
   operation.value = operate
   taskDetail.value = await getItemById(
-    `${import.meta.env.VITE_BASE_URL}/tasks`,
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
     id
   )
   if (taskDetail.value.status == '404') {

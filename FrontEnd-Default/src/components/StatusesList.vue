@@ -44,10 +44,10 @@ const showDeleteStatusDetail = ref(false)
 const transferDelList = ref({})
 onMounted(async () => {
   taskManager.setTasks(
-    await getItems(`${import.meta.env.VITE_BASE_URL}/tasks`)
+    await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`)
   )
   statusManager.setStatuses(
-    await getItems(`${import.meta.env.VITE_BASE_URL}/statuses`)
+    await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`)
   )
 })
 

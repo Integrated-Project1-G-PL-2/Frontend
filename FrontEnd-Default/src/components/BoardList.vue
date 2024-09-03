@@ -51,7 +51,7 @@ const returnLoginPage = () => {
 </script>
 
 <template>
-  <!-- <h1>{{ boardsList[0].role }}</h1> -->
+  <!-- <h1>{{ boardsList[0] }}</h1> -->
   <div
     class="flex flex-col items-end pr-4 font-bold space-y-2 border-b py-2 border-r-slate-500"
   >
@@ -147,14 +147,14 @@ const returnLoginPage = () => {
           <td
             class="itbkk-assignees px-4 py-3 cursor-default"
           >
-            {{ board.board.name }}
+            {{ board.board?.name == undefined ? board.name : board.board.name }}
           </td>
           <td class="itbkk-status px-4 py-3 cursor-default">
             <div
               class="w-full   r rounded-md"
               
             >
-              <p>{{ board.role }}</p>
+              <p>{{ board.role == undefined ? 'owner' : board.role}}</p>
             </div>
           </td>
         </tr>
