@@ -1,6 +1,8 @@
 <script setup>
+import { addItem } from '@/utils/fetchUtils';
 import { watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useBoardManager } from '@/stores/BoardManager'
 const deClareemit = defineEmits(['saveDetail', 'cancelDetail'])
 const router = useRouter()
 const name = ref('')
@@ -63,6 +65,31 @@ const saveClick = async () => {
   router.replace({ name: 'StatusList' })
   emits('showStatusDetailModal')
 }
+
+
+
+
+// const newBoard = await addItem(
+//   `${import.meta.env.VITE_BASE_URL}/tasks`,
+//       addBoardDetails
+// )
+let newBoardName
+
+const newBoard = async (newBoardName) => {
+
+  
+    const newBoard = await addItem(
+      `${import.meta.env.VITE_BASE_URL}/v3/boards`,
+      newBoardName
+    )
+    console.log(newBoardName)
+    router.replace({ name: 'Board' })
+    
+    useBoardManager.addBoard(newBoard)
+     
+  } 
+
+
 </script>
 
 <template>
@@ -82,7 +109,7 @@ const saveClick = async () => {
         <div class="w-[70%] h-[100%]">
           <div class="flex mt-5 my-2">Name</div>
           <textarea
-            v-model="name"
+            v-model="newBoardName"
             class="itbkk-board-name font-bold text-justify w-[143%] breal-all border border-gray-300 rounded-md resize-none"
             @input="checkNameLength"
             :class="{ 'border-red-600 text-red-600': isNameOverLimit }"
@@ -114,7 +141,7 @@ const saveClick = async () => {
       <div class="flex flex-row w-full justify-end border-t h-[60%]">
         <button
           class="itbkk-button-ok bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"
-          @click="saveClick"
+          @click="newBoard(newBoardName)"
           :class="{ disabled: isNameOverLimit || isNameEmpty }"
         >
           <div class="btn text-center">save</div>

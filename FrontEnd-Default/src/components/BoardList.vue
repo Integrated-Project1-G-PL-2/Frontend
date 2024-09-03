@@ -47,6 +47,7 @@ const returnLoginPage = () => {
   router.replace({ name: 'Login' })
   returnPage.value = true
 }
+
 </script>
 
 <template>
