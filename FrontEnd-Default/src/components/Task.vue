@@ -24,6 +24,9 @@ import {
 import { storeToRefs } from 'pinia'
 import { userName } from '@/stores/UserManager'
 import { logout } from '@/stores/UserManager'
+import { useBoardManager } from '@/stores/BoardManager'
+const boardManager = useBoardManager()
+const boardsList = boardManager.getBoards()
 
 const statusManager = useStatusManager()
 const showStatusDetailModal = ref(false)
@@ -51,9 +54,15 @@ const redPopup = reactive({
 })
 
 onMounted(async () => {
-  taskManager.setTasks(await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`))
+  taskManager.setTasks(
+    await getItems(
+      `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
+    )
+  )
   statusManager.setStatuses(
-    await getItems(`${import.meta.env.VITE_BASE_URL}v3/boards/${route.params.id}/statuses`)
+    await getItems(
+      `${import.meta.env.VITE_BASE_URL}v3/boards/${route.params.id}/statuses`
+    )
   )
 })
 const showTaskDetail = async function (id, operate) {
@@ -199,9 +208,7 @@ const goBackToHomeBoard = () => {
 
 <template>
   <div class="bg-white relative border rounded-lg overflow-auto">
-    <h1 class="font-bold text-center cursor-default text-xl">
-      IT-Bangmod Kradan Kanban
-    </h1>
+    <h1 class="font-bold text-center cursor-default text-xl">dd</h1>
     <div
       class="flex justify-between items-start w-full font-bold space-y-2 border-b py-2 border-r-slate-500"
     >
