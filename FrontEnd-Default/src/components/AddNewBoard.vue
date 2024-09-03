@@ -1,5 +1,5 @@
 <script setup>
-import { addItem } from '@/utils/fetchUtils';
+import { addItem } from '@/utils/fetchUtils'
 import { watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useBoardManager } from '@/stores/BoardManager'
@@ -15,8 +15,6 @@ const checkNameLength = () => {
   isNameOverLimit.value = name.value.length > MAX_LENGTH
   isNameEmpty.value = name.value.trim() === ''
 }
-
-
 
 // Watch for changes in `name` to update validation state
 watch(name, checkNameLength)
@@ -68,28 +66,20 @@ const saveClick = async () => {
   emits('showStatusDetailModal')
 }
 
-
-
-
-
-let newBoardName =ref('')
+let newBoardName = ref('')
 
 const boardsList = boardManager.getBoards()
 
 const newBoard = async (newBoardName) => {
-  
-    const newBoard = await addItem(
-      `${import.meta.env.VITE_BASE_URL}/v3/boards`,
-      {name: newBoardName} 
-    )
-    boardManager.addBoard(newBoard)
-    deClareemit('cancelDetail',true)
-    
-    router.replace({ name: 'EditTaskDetail' ,params: { id: boardsList.at(-1).id } })
-    
-  } 
-//test
+  const newBoard = await addItem(`${import.meta.env.VITE_BASE_URL}/v3/boards`, {
+    name: newBoardName
+  })
+  boardManager.addBoard(newBoard)
+  deClareemit('cancelDetail', true)
 
+  router.replace({ name: 'Task', params: { id: boardsList.at(-1).id } })
+}
+//test
 </script>
 
 <template>
@@ -142,7 +132,7 @@ const newBoard = async (newBoardName) => {
         <button
           class="itbkk-button-ok bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"
           @click="newBoard(newBoardName)"
-          :disabled=" isNameOverLimit || newBoardName == ''"
+          :disabled="isNameOverLimit || newBoardName == ''"
         >
           <div class="btn text-center">save</div>
         </button>
