@@ -95,7 +95,7 @@ const showAddPopUpTaskDetail = function (operate) {
   showTaskDetailModal.value = true
 }
 const showDeletePopUpTaskDetail = function (obj) {
-  router.push({ name: 'DeleteTaskDetail', params: { id: obj.id } })
+  router.push({ name: 'DeleteTaskDetail', params: { tid: obj.id } })
   taskDetail.value = { id: obj.id, taskTitle: obj.taskTitle, index: obj.index }
   showDeleteTaskDetail.value = true
 }
