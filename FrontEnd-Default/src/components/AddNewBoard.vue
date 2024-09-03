@@ -88,7 +88,7 @@ const newBoard = async (newBoardName) => {
     router.replace({ name: 'EditTaskDetail' ,params: { id: boardsList.at(-1).id } })
     
   } 
-//test
+
 
 </script>
 

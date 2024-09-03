@@ -56,8 +56,10 @@ onMounted(async () => {
     await getItems(`${import.meta.env.VITE_BASE_URL}v3/boards/${route.params.id}/statuses`)
   )
 })
+
+
 const showTaskDetail = async function (id, operate) {
-  router.push({ name: 'TaskDetail', params: { tid: id } })
+  router.push({ name: 'DetailTask', params: { tid: id } })
   operation.value = operate
   taskDetail.value = await getItemById(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
@@ -85,9 +87,11 @@ const showEditTaskDetail = async function (id, operate) {
   }
   showTaskDetailModal.value = true
 }
-if (route.params.id) {
-  showTaskDetail(route.params.id, 'show')
-}
+
+// อันนี้คืออะไรมันทำ path พัง
+// if (route.params.id) {
+//   showTaskDetail(route.params.id, 'show')
+// }
 const showAddPopUpTaskDetail = function (operate) {
   router.push({ name: 'AddTaskDetail' })
   taskDetail.value = null
@@ -175,7 +179,7 @@ watch(collectStatus, async () => {
     await getItems(
       `${
         import.meta.env.VITE_BASE_URL
-      }/tasks?filterStatuses=${collectStatus.join()}`
+      }/v3/boards/tasks?filterStatuses=${collectStatus.join()}`
     )
   )
 })

@@ -62,7 +62,7 @@ const showDeletePopUpTaskDetail = async function (obj) {
     setDeleteOperate('delete')
   }
   transferDelList.value = await getItems(
-    `${import.meta.env.VITE_BASE_URL}/statuses`
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/statuses`
   )
   isDelete.value = !taskManager.findStatusById(obj.id)
   router.push({ name: 'DeleteStatus', params: { id: obj.id } })
@@ -95,7 +95,7 @@ const showEditStatusesModal = function (obj) {
 
 const showEditStatusesModalV2 = async function (obj) {
   const status = await getItemById(
-    `${import.meta.env.VITE_BASE_URL}/statuses`,
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/statuses`,
     obj.id
   )
   if (status.status == '404' || status.status == '500') {
