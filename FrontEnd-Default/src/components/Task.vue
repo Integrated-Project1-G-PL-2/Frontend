@@ -49,6 +49,7 @@ const redPopup = reactive({
   edit: { state: false, taskTitle: '' },
   delete: { state: false, taskTitle: '' }
 })
+const name = ref('')
 
 onMounted(async () => {
   taskManager.setTasks(await getItems(`${import.meta.env.VITE_BASE_URL}/tasks`))

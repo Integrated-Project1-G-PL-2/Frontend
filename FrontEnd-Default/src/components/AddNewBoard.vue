@@ -23,8 +23,6 @@ const checkNameLength = () => {
 }
 
 const saveClick = async () => {
-  checkNameLength() // ตรวจสอบความยาวของชื่ออีกครั้ง
-
   // ตรวจสอบว่าไม่มีข้อผิดพลาดในการกรอกชื่อบอร์ด
   if (isNameOverLimit.value || isNameEmpty.value) {
     return
@@ -42,7 +40,7 @@ const saveClick = async () => {
     boardManager.addBoard(newBoard)
 
     // เปลี่ยนเส้นทางไปยังหน้า 'Board'
-    router.replace({ name: 'Board' })
+    router.replace({ name: 'Task' })
   } catch (err) {
     console.error('Error saving board:', err)
     error.value = true
@@ -107,7 +105,7 @@ const saveClick = async () => {
         <button
           class="itbkk-button-cancel bg-red-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"
           @click="
-            ;[$emit('cancelDetail', true), $router.replace({ name: 'Board' })]
+            ;[$emit('cancelDetail', true), $router.replace({ name: 'Task' })]
           "
         >
           <div class="btn text-center">Cancel</div>
