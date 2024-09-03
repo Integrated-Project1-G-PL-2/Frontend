@@ -12,7 +12,6 @@ const MAX_LENGTH = 120
 
 const checkNameLength = () => {
   isNameOverLimit.value = newBoardName.value.length > MAX_LENGTH
-  isNameEmpty.value = newBoardName.value.trim() === ''
 }
 
 let newBoardName = ref('')
@@ -20,9 +19,6 @@ let newBoardName = ref('')
 const boardsList = boardManager.getBoards()
 
 const newBoard = async (newBoardName) => {
-  if (isNameOverLimit.value || isNameEmpty.value) {
-    return
-  }
   const newBoard = await addItem(`${import.meta.env.VITE_BASE_URL}/v3/boards`, {
     name: newBoardName
   })
