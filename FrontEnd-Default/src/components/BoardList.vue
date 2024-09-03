@@ -12,14 +12,16 @@ import {
   addItem,
   editItem
 } from '../utils/fetchUtils.js'
-
+import AlertPopUp from './../components/AlertPopUp.vue'
 const router = useRouter()
 const route = useRoute()
 
 const boardManager = useBoardManager()
-
+const error = ref(false)
 const boardsList = boardManager.getBoards()
-
+const closeProblemAlter = () => {
+  error.value = false
+}
 onMounted(async () => {
   boardManager.setBoards(await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards`))
 })
