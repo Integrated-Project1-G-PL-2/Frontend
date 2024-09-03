@@ -9,7 +9,7 @@ const isNameOverLimit = ref(false)
 const isNameEmpty = ref(false)
 const boardManager = useBoardManager()
 const MAX_LENGTH = 120
-
+const error = ref(false)
 const checkNameLength = () => {
   isNameOverLimit.value = newBoardName.value.length > MAX_LENGTH
 }
