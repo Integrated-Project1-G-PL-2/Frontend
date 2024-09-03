@@ -5,15 +5,14 @@ import { useRouter } from 'vue-router'
 import { useBoardManager } from '@/stores/BoardManager'
 const deClareemit = defineEmits(['saveDetail', 'cancelDetail'])
 const router = useRouter()
-const name = ref('')
 const isNameOverLimit = ref(false)
 const isNameEmpty = ref(false)
 const boardManager = useBoardManager()
 const MAX_LENGTH = 120
 
 const checkNameLength = () => {
-  isNameOverLimit.value = name.value.length > MAX_LENGTH
-  isNameEmpty.value = name.value.trim() === ''
+  isNameOverLimit.value = newBoardName.value.length > MAX_LENGTH
+  isNameEmpty.value = newBoardName.value.trim() === ''
 }
 
 let newBoardName = ref('')
@@ -21,6 +20,9 @@ let newBoardName = ref('')
 const boardsList = boardManager.getBoards()
 
 const newBoard = async (newBoardName) => {
+  if (isNameOverLimit.value || isNameEmpty.value) {
+    return
+  }
   const newBoard = await addItem(`${import.meta.env.VITE_BASE_URL}/v3/boards`, {
     name: newBoardName
   })
