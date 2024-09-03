@@ -42,7 +42,7 @@ const routes = [
         component: TaskDetail
       },
       {
-        path: '/board/:id/task/:tid',
+        path: '/board/:id/task/bbb',
         name: 'TaskDetail',
         component: TaskDetail
       },

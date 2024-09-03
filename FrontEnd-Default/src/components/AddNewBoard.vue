@@ -71,11 +71,8 @@ const saveClick = async () => {
 
 
 
-// const newBoard = await addItem(
-//   `${import.meta.env.VITE_BASE_URL}/tasks`,
-//       addBoardDetails
-// )
-let newBoardName
+
+let newBoardName =ref('')
 
 const boardsList = boardManager.getBoards()
 
@@ -88,7 +85,7 @@ const newBoard = async (newBoardName) => {
     boardManager.addBoard(newBoard)
     deClareemit('cancelDetail',true)
     
-    router.push({ name: 'Task' ,params: { id: boardsList.at(-1).id } })
+    router.replace({ name: 'Task' ,params: { id: boardsList.at(-1).id } })
     
   } 
 
@@ -145,7 +142,7 @@ const newBoard = async (newBoardName) => {
         <button
           class="itbkk-button-ok bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"
           @click="newBoard(newBoardName)"
-          :class="{ disabled: isNameOverLimit || isNameEmpty }"
+          :disabled=" isNameOverLimit || newBoardName == ''"
         >
           <div class="btn text-center">save</div>
         </button>
