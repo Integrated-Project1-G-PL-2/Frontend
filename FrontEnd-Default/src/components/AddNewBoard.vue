@@ -1,6 +1,6 @@
 <script setup>
 import { addItem } from '@/utils/fetchUtils'
-import { watch, ref } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useBoardManager } from '@/stores/BoardManager'
 const deClareemit = defineEmits(['saveDetail', 'cancelDetail'])
