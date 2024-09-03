@@ -16,56 +16,6 @@ const checkNameLength = () => {
   isNameEmpty.value = name.value.trim() === ''
 }
 
-// Watch for changes in `name` to update validation state
-watch(name, checkNameLength)
-const saveClick = async () => {
-  if (isNameOverLimit.value || isNameEmpty.value) {
-    return
-  }
-  if (prop.operate === 'add') {
-    const addedStatus = await addItem(
-      `${import.meta.env.VITE_BASE_URL}/statuses`,
-      status
-    )
-    if (addedStatus != null) {
-      statusManager.addStatuses(addedStatus)
-      emits('showStatusGreenPopup', {
-        taskStatus: addedStatus.name,
-        operate: prop.operate
-      })
-    } else {
-      emits('showStatusRedPopup', {
-        taskStatus: status.name,
-        operate: prop.operate
-      })
-    }
-  } else if (prop.operate === 'edit') {
-    status.description =
-      status.description == null
-        ? status.description
-        : status.description.trim()
-    const editedStatus = await editItem(
-      `${import.meta.env.VITE_BASE_URL}/statuses`,
-      prop.statusDetail.value.id,
-      status
-    )
-    if (editedStatus != null) {
-      statusManager.editStatues(editedStatus.id, editedStatus)
-      emits('showStatusGreenPopup', {
-        taskStatus: editedStatus.name,
-        operate: prop.operate
-      })
-    } else {
-      emits('showStatusRedPopup', {
-        taskStatus: '',
-        operate: prop.operate
-      })
-    }
-  }
-  router.replace({ name: 'StatusList' })
-  emits('showStatusDetailModal')
-}
-
 let newBoardName = ref('')
 
 const boardsList = boardManager.getBoards()

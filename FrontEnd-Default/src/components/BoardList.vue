@@ -96,6 +96,13 @@ const returnLoginPage = () => {
     <h1 class="font-bold text-center cursor-default text-3xl py-3">
       Board List
     </h1>
+    <AlertPopUp
+      v-if="error"
+      :titles="'There is a problem. Please try again later.'"
+      @closePopUp="closeProblemAlter"
+      message="Error!!"
+      styleType="red"
+    />
     <div class="flex flex-col items-end pr-4 font-bold space-y-2">
       <button
         class="itbkk-button-create bg-gray-300 text-sm rounded-[6px] font-sans text-gray-700 hover:text-white px-7 py-2 mr-2 my-3"
