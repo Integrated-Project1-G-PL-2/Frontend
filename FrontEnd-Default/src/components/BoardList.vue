@@ -5,6 +5,7 @@ import { userName } from '@/stores/UserManager'
 import { logout } from '@/stores/UserManager'
 import { useRoute, useRouter } from 'vue-router'
 import { useBoardManager } from '@/stores/BoardManager'
+import AlertPopUp from './../components/AlertPopUp.vue'
 import {
   getItems,
   getItemById,
@@ -12,16 +13,26 @@ import {
   addItem,
   editItem
 } from '../utils/fetchUtils.js'
-
+const emits = defineEmits([
+  'NameBoard'
+])
 const router = useRouter()
 const route = useRoute()
 
 const boardManager = useBoardManager()
 
 const boardsList = boardManager.getBoards()
+const error = ref(false)
 
+const closeProblemAlter = () => {
+  error.value = false
+}
 onMounted(async () => {
   boardManager.setBoards(await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards`))
+  const storedUserName = localStorage.getItem('userName')
+  if (storedUserName) {
+    userName.value = storedUserName
+  }
 })
 
 
@@ -56,8 +67,7 @@ const returnLoginPage = () => {
   >
     <div class="flex justify-between items-start w-full">
       <button
-        @click="goBackToHomePage"
-        class="itbkk-button-home scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 hover:text-blue-500 mr-3 ml-2 mt-2 text-blue-400 my-3"
+        class="itbkk-button-home scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5  mr-3 ml-2 mt-2 text-blue-400 my-3 cursor-default"
       >
         🏠 ITB-KK
       </button>
@@ -95,6 +105,13 @@ const returnLoginPage = () => {
     <h1 class="font-bold text-center cursor-default text-3xl py-3">
       Board List
     </h1>
+    <AlertPopUp
+      v-if="error"
+      :titles="'There is a problem. Please try again later.'"
+      @closePopUp="closeProblemAlter"
+      message="Error!!"
+      styleType="red"
+    />
     <div class="flex flex-col items-end pr-4 font-bold space-y-2">
       <button
         class="itbkk-button-create bg-gray-300 text-sm rounded-[6px] font-sans text-gray-700 hover:text-white px-7 py-2 mr-2 my-3"
@@ -106,7 +123,6 @@ const returnLoginPage = () => {
     <table class="w-full text-sm text-left text-gray-500">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50">
         <tr>
-          <th class="px-4 py-3 cursor-default"></th>
           <th class="px-4 py-3 cursor-default">No</th>
           <th class="px-4 py-3 cursor-default">Name</th>
           <th class="px-4 py-3 flex items-center space-x-2 cursor-default">
@@ -135,17 +151,10 @@ const returnLoginPage = () => {
               🗑️
             </div>
           </td>
-          <td class="itbkk-title px-4 py-3">
-            <div
-              class="hover:text-sky-500 cursor-default"
-              
-            >
-            {{ index + 1 }}
-            </div>
-          </td>
           <td
-            class="itbkk-assignees px-4 py-3 cursor-default"
-            @click="router.replace({ name: 'Task', params: { id: board.id.boardId } })"
+            class="itbkk-assignees px-4 py-3  hover:text-sky-500"
+            @click=";[
+                emits('NameBoard', board.board.name),router.replace({ name: 'Task', params: { id: board.id.boardId } })]"
           >
             {{ board.board?.name == undefined ? board.name : board.board.name }}
           </td>

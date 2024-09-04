@@ -24,6 +24,7 @@ import {
 import { storeToRefs } from 'pinia'
 import { userName } from '@/stores/UserManager'
 import { logout } from '@/stores/UserManager'
+import boardsList from './../components/BoardList.vue'
 
 const statusManager = useStatusManager()
 const showStatusDetailModal = ref(false)
@@ -49,19 +50,28 @@ const redPopup = reactive({
   edit: { state: false, taskTitle: '' },
   delete: { state: false, taskTitle: '' }
 })
+const showNameBoard = ref('IT-Bangmod Kradan Kanban')
 
+const emits = defineEmits(['NameBoard'])
+const NameBoards = emits.NameBoard
+console.log(NameBoards)
 onMounted(async () => {
-  taskManager.setTasks(await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`))
-  statusManager.setStatuses(
-    await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`)
+  taskManager.setTasks(
+    await getItems(
+      `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
+    )
   )
-  
+  statusManager.setStatuses(
+    await getItems(
+      `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`
+    )
+  )
+
   const storedUserName = localStorage.getItem('userName')
   if (storedUserName) {
     userName.value = storedUserName
   }
 })
-
 
 const showTaskDetail = async function (id, operate) {
   router.push({ name: 'DetailTask', params: { tid: id } })
@@ -178,9 +188,9 @@ watch(searchStatus, (status) => {
 watch(collectStatus, async () => {
   taskManager.setTasks(
     await getItems(
-      `${
-        import.meta.env.VITE_BASE_URL
-      }/v3/boards/${route.params.id}/tasks?filterStatuses=${collectStatus.join()}`
+      `${import.meta.env.VITE_BASE_URL}/v3/boards/${
+        route.params.id
+      }/tasks?filterStatuses=${collectStatus.join()}`
     )
   )
 })
@@ -205,7 +215,7 @@ const goBackToHomeBoard = () => {
 <template>
   <div class="bg-white relative border rounded-lg overflow-auto">
     <h1 class="font-bold text-center cursor-default text-xl">
-      IT-Bangmod Kradan Kanban
+      {{ showNameBoard }}
     </h1>
     <div
       class="flex justify-between items-start w-full font-bold space-y-2 border-b py-2 border-r-slate-500"
