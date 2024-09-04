@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted,ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import AddNewBoard from './../components/AddNewBoard.vue'
 import { userName } from '@/stores/UserManager'
 import { logout } from '@/stores/UserManager'
@@ -13,9 +13,7 @@ import {
   addItem,
   editItem
 } from '../utils/fetchUtils.js'
-const emits = defineEmits([
-  'NameBoard'
-])
+const emits = defineEmits(['NameBoard'])
 const router = useRouter()
 const route = useRoute()
 
@@ -28,13 +26,14 @@ const closeProblemAlter = () => {
   error.value = false
 }
 onMounted(async () => {
-  boardManager.setBoards(await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards`))
+  boardManager.setBoards(
+    await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards`)
+  )
   const storedUserName = localStorage.getItem('userName')
   if (storedUserName) {
     userName.value = storedUserName
   }
 })
-
 
 const showAddNewBoard = ref(false) // Initial value is false
 const returnPage = ref(false)
@@ -57,7 +56,6 @@ const returnLoginPage = () => {
   router.replace({ name: 'Login' })
   returnPage.value = true
 }
-
 </script>
 
 <template>
@@ -67,7 +65,7 @@ const returnLoginPage = () => {
   >
     <div class="flex justify-between items-start w-full">
       <button
-        class="itbkk-button-home scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5  mr-3 ml-2 mt-2 text-blue-400 my-3 cursor-default"
+        class="itbkk-button-home scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 mr-3 ml-2 mt-2 text-blue-400 my-3 cursor-default"
       >
         🏠 ITB-KK
       </button>
@@ -101,7 +99,10 @@ const returnLoginPage = () => {
       </div>
     </div>
   </div>
-  <div class="bg-white relative border rounded-lg overflow-auto">
+  <div
+    class="bg-white relative border rounded-lg overflow-auto max-h-[calc(100vh-10rem)] p-4"
+  >
+    <!-- Adjust the height and padding as needed -->
     <h1 class="font-bold text-center cursor-default text-3xl py-3">
       Board List
     </h1>
@@ -120,57 +121,37 @@ const returnLoginPage = () => {
         Create personal board
       </button>
     </div>
-    <table class="w-full text-sm text-left text-gray-500">
-      <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-        <tr>
-          <th class="px-4 py-3 cursor-default">No</th>
-          <th class="px-4 py-3 cursor-default">Name</th>
-          <th class="px-4 py-3 flex items-center space-x-2 cursor-default">
-            <th class="px-4 py-3 cursor-default">Action</th>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="(board, index) in boardsList"
-          :key="board.id.boardId"
-          class="itbkk-item border-b cursor-pointer"
-        >
-          <td class="px-4 py-3">
-            {{ index + 1 }}
-            <div
-              class="inline-flex"
-              
-            >
-              ⚙️
-            </div>
-            <div
-              class="inline-flex"
-            
-            >
-              🗑️
-            </div>
-          </td>
-          <td
-            class="itbkk-assignees px-4 py-3  hover:text-sky-500"
-            @click=";[
-                emits('NameBoard', board.board.name),router.replace({ name: 'Task', params: { id: board.id.boardId } })]"
-          >
-            {{ board.board?.name == undefined ? board.name : board.board.name }}
-          </td>
-          <td class="itbkk-status px-4 py-3 cursor-default">
-            <div
-              class="w-full   r rounded-md"
-              
-            >
-              <p>{{ board.role == undefined ? 'owner' : board.role}}</p>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+    >
+      <!-- Grid layout for dashboard-like appearance -->
+      <div
+        v-for="(board, index) in boardsList"
+        :key="board.id.boardId"
+        class="bg-white border rounded-lg shadow-md p-4 flex flex-col space-y-2 cursor-pointer hover:bg-gray-100"
+        @click="
+          ;[
+            emits('NameBoard', board.board.name),
+            router.replace({ name: 'Task', params: { id: board.id.boardId } })
+          ]
+        "
+      >
+        <div class="flex justify-between items-center">
+          <span class="font-bold text-lg">{{ index + 1 }}</span>
+          <div class="flex space-x-2">
+            <span>⚙️</span>
+            <span>🗑️</span>
+          </div>
+        </div>
+        <div class="text-xl font-semibold">
+          {{ board.board?.name == undefined ? board.name : board.board.name }}
+        </div>
+        <div class="text-sm text-gray-500">
+          <p>{{ board.role == undefined ? 'owner' : board.role }}</p>
+        </div>
+      </div>
+    </div>
   </div>
-  
 
   <teleport to="body" v-if="showAddNewBoard">
     <AddNewBoard
