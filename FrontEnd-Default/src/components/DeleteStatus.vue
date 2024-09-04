@@ -48,7 +48,7 @@ const deleteStatus = async (deleteId) => {
 
 const transferStatus = async (deleteId, newId) => {
   deletedStatuses.value = await deleteAndTransferItem(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards/statuses`,
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`,
     deleteId,
     newId
   )
