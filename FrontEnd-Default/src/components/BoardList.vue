@@ -69,6 +69,10 @@ const returnLoginPage = () => {
       >
         🏠 ITB-KK
       </button>
+      <!-- Adjust the height and padding as needed -->
+      <h1 class="font-bold text-center cursor-default text-3xl py-3">
+        Board List
+      </h1>
       <div class="flex flex-col items-center space-y-1">
         <h1 class="itbkk-fullname font-bold font-sans cursor-default text-xs">
           {{ userName }}
@@ -102,10 +106,6 @@ const returnLoginPage = () => {
   <div
     class="bg-white relative border rounded-lg overflow-auto max-h-[calc(100vh-10rem)] p-4"
   >
-    <!-- Adjust the height and padding as needed -->
-    <h1 class="font-bold text-center cursor-default text-3xl py-3">
-      Board List
-    </h1>
     <AlertPopUp
       v-if="error"
       :titles="'There is a problem. Please try again later.'"
