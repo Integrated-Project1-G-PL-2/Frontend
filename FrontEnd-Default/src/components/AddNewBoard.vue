@@ -23,13 +23,13 @@ const newBoard = async (newBoardName) => {
   const newBoard = await addItem(`${import.meta.env.VITE_BASE_URL}/v3/boards`, {
     name: newBoardName
   })
-  console.log(newBoardName.status)
-  if (newBoard.status == '201') {
+  console.log(newBoard)
+  if ('201') {
     boardManager.addBoard(newBoard)
     deClareemit('cancelDetail', true)
 
     router.replace({ name: 'Task', params: { id: boardsList.at(-1).id } })
-  } else if (newBoard.status == '401') {
+  } else if ('401') {
     router.replace({ name: 'Login' })
   } else {
     error.value = true
