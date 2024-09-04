@@ -22,10 +22,10 @@ const router = useRouter()
 const deletedStatuses = reactive({})
 const statusSelect = ref() //ชั่วคราว
 const statusManager = useStatusManager()
-
+const route = useRoute()
 const deleteStatus = async (deleteId) => {
   deletedStatuses.value = await deleteItemById(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards/statuses`,
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`,
     deleteId
   )
   if (deletedStatuses.value == '404' && '500' && '400') {

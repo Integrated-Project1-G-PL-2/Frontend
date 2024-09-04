@@ -20,6 +20,7 @@ async function getItems(url) {
   }
 }
 
+
 async function getItemById(url, id) {
   try {
     const token = localStorage.getItem('jwt')
@@ -54,6 +55,7 @@ async function deleteItemById(url, id) {
     }
     const res = await fetch(`${url}/${id}`, options)
     if (!res.ok) {
+     console.log(await res.json())
       console.error(`Failed to delete item with ID ${id}: ${res.status}`)
       return res.status
     }
@@ -145,5 +147,6 @@ export {
   deleteItemById,
   addItem,
   editItem,
-  deleteAndTransferItem
+  deleteAndTransferItem,
+
 }

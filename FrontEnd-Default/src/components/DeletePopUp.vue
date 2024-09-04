@@ -7,10 +7,11 @@ const deClareemit = defineEmits(['confirmDetail', 'cancelDetail', 'redAlert'])
 const props = defineProps(['taskId'])
 const router = useRouter()
 const deletedTask = reactive({})
+const route = useRoute()
 const taskManager = useTaskManager()
 const deleteTask = async (deleteId) => {
   deletedTask.value = await deleteItemById(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards/tasks`,
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
     deleteId
   )
   if (deletedTask.value == '404') {

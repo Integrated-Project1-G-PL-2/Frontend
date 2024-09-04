@@ -53,8 +53,13 @@ const redPopup = reactive({
 onMounted(async () => {
   taskManager.setTasks(await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`))
   statusManager.setStatuses(
-    await getItems(`${import.meta.env.VITE_BASE_URL}v3/boards/${route.params.id}/statuses`)
+    await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`)
   )
+  
+  const storedUserName = localStorage.getItem('userName')
+  if (storedUserName) {
+    userName.value = storedUserName
+  }
 })
 
 
@@ -88,10 +93,6 @@ const showEditTaskDetail = async function (id, operate) {
   showTaskDetailModal.value = true
 }
 
-// อันนี้คืออะไรมันทำ path พัง
-// if (route.params.id) {
-//   showTaskDetail(route.params.id, 'show')
-// }
 const showAddPopUpTaskDetail = function (operate) {
   router.push({ name: 'AddTaskDetail' })
   taskDetail.value = null
@@ -179,16 +180,16 @@ watch(collectStatus, async () => {
     await getItems(
       `${
         import.meta.env.VITE_BASE_URL
-      }/v3/boards/tasks?filterStatuses=${collectStatus.join()}`
+      }/v3/boards/${route.params.id}/tasks?filterStatuses=${collectStatus.join()}`
     )
   )
 })
-onMounted(() => {
-  const storedUserName = localStorage.getItem('userName')
-  if (storedUserName) {
-    userName.value = storedUserName
-  }
-})
+// onMounted(() => {
+//   const storedUserName = localStorage.getItem('userName')
+//   if (storedUserName) {
+//     userName.value = storedUserName
+//   }
+// })
 
 const returnLoginPage = () => {
   logout()

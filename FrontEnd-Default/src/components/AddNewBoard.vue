@@ -85,7 +85,7 @@ const newBoard = async (newBoardName) => {
     boardManager.addBoard(newBoard)
     deClareemit('cancelDetail',true)
     
-    router.replace({ name: 'EditTaskDetail' ,params: { id: boardsList.at(-1).id } })
+    router.replace({ name: 'Task' ,params: { id: boardsList.at(-1).id } })
     
   } 
 

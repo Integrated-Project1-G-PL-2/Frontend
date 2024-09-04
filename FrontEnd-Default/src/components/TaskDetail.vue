@@ -1,6 +1,6 @@
 <script setup>
 import { reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter ,useRoute } from 'vue-router'
 import { useTaskManager } from '@/stores/TaskManager'
 import { addItem, editItem } from '@/utils/fetchUtils'
 import { useStatusManager } from '@/stores/StatusManager'
@@ -12,10 +12,12 @@ const emits = defineEmits([
 const taskManager = useTaskManager()
 const statusManager = useStatusManager()
 const router = useRouter()
+const route = useRoute()
 const prop = defineProps({
   taskDetail: Object,
   operate: String
 })
+
 let task
 if (prop.taskDetail.value) {
   task = reactive({
@@ -86,7 +88,7 @@ const handleClick = async () => {
       task.taskStatus
     ).id
     const newTask = await addItem(
-      `${import.meta.env.VITE_BASE_URL}/v3/boards/tasks`,
+      `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
       addOrUpdateTaskDetail
     )
     router.replace({ name: 'Task' })
@@ -103,7 +105,7 @@ const handleClick = async () => {
       task.taskStatus
     )
     const editTask = await editItem(
-      `${import.meta.env.VITE_BASE_URL}/v3/boards/tasks`,
+      `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
       task.id,
       addOrUpdateTaskDetail
     )
@@ -123,6 +125,7 @@ const handleClick = async () => {
     emits('showTaskDetailModal', false)
   }
 }
+
 </script>
 
 <template>

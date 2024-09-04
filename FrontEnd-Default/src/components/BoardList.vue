@@ -23,8 +23,7 @@ const boardsList = boardManager.getBoards()
 onMounted(async () => {
   boardManager.setBoards(await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards`))
 })
-console.log(boardsList)
-console.log(boardsList)
+
 
 const showAddNewBoard = ref(false) // Initial value is false
 const returnPage = ref(false)
@@ -146,6 +145,7 @@ const returnLoginPage = () => {
           </td>
           <td
             class="itbkk-assignees px-4 py-3 cursor-default"
+            @click="router.replace({ name: 'Task', params: { id: board.id.boardId } })"
           >
             {{ board.board?.name == undefined ? board.name : board.board.name }}
           </td>

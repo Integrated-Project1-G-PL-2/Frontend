@@ -62,10 +62,10 @@ const showDeletePopUpTaskDetail = async function (obj) {
     setDeleteOperate('delete')
   }
   transferDelList.value = await getItems(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards/statuses`
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`
   )
   isDelete.value = !taskManager.findStatusById(obj.id)
-  router.push({ name: 'DeleteStatus', params: { id: obj.id } })
+  router.push({ name: 'DeleteStatus', params: { sid: obj.id } })
   statusDetail.value = {
     id: obj.id,
     statusName: obj.statusName,
@@ -87,7 +87,7 @@ const showAddStatusesModal = function (operate) {
 
 const showEditStatusesModal = function (obj) {
   const status = statusManager.findStatusById(obj.id)
-  router.push({ name: 'StatusEdit', params: { id: obj.id } })
+  router.push({ name: 'StatusEdit', params: { sid: obj.id } })
   statusDetail.value = status
   operation.value = obj.operate
   showStatusModal.value = true
@@ -95,20 +95,21 @@ const showEditStatusesModal = function (obj) {
 
 const showEditStatusesModalV2 = async function (obj) {
   const status = await getItemById(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards/statuses`,
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`,
     obj.id
   )
+  
   if (status.status == '404' || status.status == '500') {
     redPopup.edit.state = true
     return
   }
-  router.push({ name: 'StatusEdit', params: { id: obj.id } })
+  router.push({ name: 'StatusEdit', params: { sid: obj.id } })
   statusDetail.value = status
   operation.value = obj.operate
   showStatusModal.value = true
 }
-if (route.params.id) {
-  showEditStatusesModalV2({ id: route.params.id, operate: 'edit' })
+if (route.params.sid) {
+  showEditStatusesModalV2({ id: route.params.sid, operate: 'edit' })
 }
 
 const closeDeleteStatusPopup = function () {
@@ -134,6 +135,7 @@ const closeGreenPopup = async function (operate) {
   router.push({ name: 'StatusList' })
   greenPopup[operate].state = false
 }
+
 </script>
 
 <template>

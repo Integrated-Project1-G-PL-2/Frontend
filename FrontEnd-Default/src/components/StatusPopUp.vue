@@ -2,7 +2,7 @@
 import { reactive, ref } from 'vue'
 import { useTaskManager } from '@/stores/TaskManager'
 import { useStatusManager } from '@/stores/StatusManager'
-import { useRouter } from 'vue-router'
+import { useRouter,useRoute } from 'vue-router'
 import { onMounted } from 'vue'
 import {
   getItems,
@@ -12,6 +12,7 @@ import {
   editItem
 } from '../utils/fetchUtils.js'
 const router = useRouter()
+const route = useRoute()
 const statusManager = useStatusManager()
 const emits = defineEmits([
   'openEditDetail',
@@ -27,7 +28,7 @@ const title = ref(prop.operate)
 
 onMounted(async () => {
   statusManager.setStatuses(
-    await getItems(`${import.meta.env.VITE_BASE_URL}/statuses`)
+    await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`)
   )
 })
 
@@ -64,7 +65,7 @@ const saveClick = async () => {
   }
   if (prop.operate === 'add') {
     const addedStatus = await addItem(
-      `${import.meta.env.VITE_BASE_URL}/statuses`,
+      `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`,
       status
     )
     if (addedStatus != null) {
@@ -85,7 +86,7 @@ const saveClick = async () => {
         ? status.description
         : status.description.trim()
     const editedStatus = await editItem(
-      `${import.meta.env.VITE_BASE_URL}/statuses`,
+      `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`,
       prop.statusDetail.value.id,
       status
     )

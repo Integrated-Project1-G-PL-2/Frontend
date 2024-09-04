@@ -6,10 +6,12 @@ export const useStatusManager = defineStore('statusManager', () => {
     return statuses
   }
   const setStatuses = function (statusesList = []) {
+    
     statuses.length = 0
     statusesList.forEach((status) => {
       statuses.push(status)
     })
+    
   }
   const addStatuses = function (newStatus) {
     statuses.push(newStatus)
