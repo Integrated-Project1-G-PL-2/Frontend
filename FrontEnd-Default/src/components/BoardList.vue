@@ -137,17 +137,18 @@ const returnLoginPage = () => {
         "
       >
         <div class="flex justify-between items-center">
-          <span class="font-bold text-lg">{{ index + 1 }}</span>
+          <span class="font-bold text-lg">No : {{ index + 1 }}</span>
           <div class="flex space-x-2">
             <span>⚙️</span>
             <span>🗑️</span>
           </div>
         </div>
         <div class="text-xl font-semibold">
+          Name :
           {{ board.board?.name == undefined ? board.name : board.board.name }}
         </div>
         <div class="text-sm text-gray-500">
-          <p>{{ board.role == undefined ? 'owner' : board.role }}</p>
+          <p>Action : {{ board.role == undefined ? 'owner' : board.role }}</p>
         </div>
       </div>
     </div>
