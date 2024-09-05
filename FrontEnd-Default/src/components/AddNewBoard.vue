@@ -32,7 +32,8 @@ const newBoard = async (newBoardName) => {
   router.replace({ name: 'Task', params: { id: boardsList.at(-1).id } })
   if (newBoards.status === 401) {
     router.replace({ name: 'Login' })
-  } else {
+  }
+  if (newBoards.status !== 201 || newBoards.status !== 200) {
     deClareemit('errorOccurred', (error.value = true))
   }
 }
