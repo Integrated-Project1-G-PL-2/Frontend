@@ -13,7 +13,7 @@ import { useRoute, useRouter } from 'vue-router'
 import DeletePopUp from './../components/DeletePopUp.vue'
 import AlertPopUp from './../components/AlertPopUp.vue'
 import StatusesList from './StatusesList.vue'
-import { useStatusManager } from '@/stores/StatusManager'
+import { useStatusManager } from 'useBoardManagerStatusManager'
 import StatusLimitSetting from './StatusLimitSetting.vue'
 import {
   sortByTitle,
@@ -25,6 +25,7 @@ import { storeToRefs } from 'pinia'
 import { userName } from '@/stores/UserManager'
 import { logout } from '@/stores/UserManager'
 import boardsList from './../components/BoardList.vue'
+import { useBoardManager } from '@/stores//BoardManager'
 
 const statusManager = useStatusManager()
 const showStatusDetailModal = ref(false)
