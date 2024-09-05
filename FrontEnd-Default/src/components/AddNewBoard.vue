@@ -20,20 +20,22 @@ let newBoardName = ref('')
 const boardsList = boardManager.getBoards()
 
 const newBoard = async (newBoardName) => {
-  const newBoard = await addItem(`${import.meta.env.VITE_BASE_URL}/v3/boards`, {
-    name: newBoardName
-  })
-  console.log(newBoard.status)
-  if (newBoard.status === 201) {
-    boardManager.addBoard(newBoard)
-    deClareemit('cancelDetail', true)
-
-    router.replace({ name: 'Task', params: { id: boardsList.at(-1).id } })
-  } else if (newBoard.status === 401) {
+  const newBoards = await addItem(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards`,
+    {
+      name: newBoardName
+    }
+  )
+  if (newBoards.status === 401) {
     router.replace({ name: 'Login' })
-  } else {
+  }
+  if (newBoards.status !== 201 || newBoards.status !== 200) {
     error.value = true
   }
+  console.log(newBoards)
+  boardManager.addBoard(newBoards)
+  deClareemit('cancelDetail', true)
+  router.replace({ name: 'Task', params: { id: boardsList.at(-1).id } })
 }
 </script>
 
