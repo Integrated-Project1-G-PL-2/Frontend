@@ -51,6 +51,9 @@ const showDelComplete = function () {
   // Add your save logic here
   showAddNewBoard.value = false // Close the popup after saving
 }
+const showErrorMessage = function () {
+  error.value = true
+}
 const returnLoginPage = () => {
   logout()
   router.replace({ name: 'Login' })
@@ -158,6 +161,7 @@ const returnLoginPage = () => {
     <AddNewBoard
       @cancelDetail="clearDeletePopUp"
       @saveDetail="showDelComplete"
+      @errorOccurred="showErrorMessage"
     ></AddNewBoard>
   </teleport>
 </template>
