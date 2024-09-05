@@ -52,7 +52,6 @@ const redPopup = reactive({
   delete: { state: false, taskTitle: '' }
 })
 
-const showNameBoard = ref('IT-Bangmod Kradan Kanban')
 const bName = ref()
 onMounted(async () => {
   taskManager.setTasks(

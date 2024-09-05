@@ -3,7 +3,7 @@ import { addItem } from '@/utils/fetchUtils'
 import { watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useBoardManager } from '@/stores/BoardManager'
-import AlertPopUp from './../components/AlertPopUp.vue'
+
 const deClareemit = defineEmits(['saveDetail', 'cancelDetail', 'errorOccurred'])
 const router = useRouter()
 const isNameOverLimit = ref(false)
