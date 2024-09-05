@@ -24,6 +24,7 @@ import {
 import { storeToRefs } from 'pinia'
 import { userName } from '@/stores/UserManager'
 import { logout } from '@/stores/UserManager'
+import { useBoardManager } from '@/stores/BoardManager.js'
 
 const statusManager = useStatusManager()
 const showStatusDetailModal = ref(false)
@@ -40,6 +41,8 @@ const showDeleteTaskDetail = ref(false)
 const operation = ref('')
 const returnPage = ref(false)
 const collectStatus = reactive([])
+const boardManager = useBoardManager()
+const bName = ref()
 const greenPopup = reactive({
   add: { state: false, taskTitle: '' },
   edit: { state: false, taskTitle: '' },
@@ -56,11 +59,16 @@ onMounted(async () => {
     await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`)
   )
   
+  const getBoardName = await getItemById(`${import.meta.env.VITE_BASE_URL}/v3/boards`,`${route.params.id}`)
+  bName.value = getBoardName.name
+
   const storedUserName = localStorage.getItem('userName')
   if (storedUserName) {
     userName.value = storedUserName
   }
 })
+
+
 
 
 const showTaskDetail = async function (id, operate) {
@@ -205,7 +213,7 @@ const goBackToHomeBoard = () => {
 <template>
   <div class="bg-white relative border rounded-lg overflow-auto">
     <h1 class="font-bold text-center cursor-default text-xl">
-      IT-Bangmod Kradan Kanban
+      {{ bName }}
     </h1>
     <div
       class="flex justify-between items-start w-full font-bold space-y-2 border-b py-2 border-r-slate-500"

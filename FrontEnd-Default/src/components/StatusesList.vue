@@ -28,6 +28,7 @@ const isDelete = ref()
 const editColor = ref('editColor')
 const deleteColor = ref('deleteColor')
 const route = useRoute()
+const bName = ref()
 const greenPopup = reactive({
   add: { state: false, taskStatus: '' },
   edit: { state: false, taskStatus: '' },
@@ -49,6 +50,8 @@ onMounted(async () => {
   statusManager.setStatuses(
     await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`)
   )
+  const getBoardName = await getItemById(`${import.meta.env.VITE_BASE_URL}/v3/boards`,`${route.params.id}`)
+  bName.value = getBoardName.name
 })
 
 const goBackToHomePage = function () {
@@ -141,7 +144,7 @@ const closeGreenPopup = async function (operate) {
 <template>
   <div class="bg-white relative border rounded-lg overflow-auto">
     <h1 class="font-bold text-center cursor-default">
-      IT-Bangmod Kradan Kanban
+      {{bName}}
     </h1>
     <AlertPopUp
       v-if="greenPopup.add.state"
