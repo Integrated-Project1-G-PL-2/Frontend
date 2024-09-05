@@ -28,6 +28,7 @@ const isDelete = ref()
 const editColor = ref('editColor')
 const deleteColor = ref('deleteColor')
 const route = useRoute()
+const bName = ref()
 const greenPopup = reactive({
   add: { state: false, taskStatus: '' },
   edit: { state: false, taskStatus: '' },
@@ -44,11 +45,20 @@ const showDeleteStatusDetail = ref(false)
 const transferDelList = ref({})
 onMounted(async () => {
   taskManager.setTasks(
-    await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`)
+    await getItems(
+      `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
+    )
   )
   statusManager.setStatuses(
-    await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`)
+    await getItems(
+      `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`
+    )
   )
+  const getBoardName = await getItemById(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards`,
+    `${route.params.id}`
+  )
+  bName.value = getBoardName.name
 })
 
 const goBackToHomePage = function () {
@@ -98,7 +108,7 @@ const showEditStatusesModalV2 = async function (obj) {
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`,
     obj.id
   )
-  
+
   if (status.status == '404' || status.status == '500') {
     redPopup.edit.state = true
     return
@@ -135,13 +145,12 @@ const closeGreenPopup = async function (operate) {
   router.push({ name: 'StatusList' })
   greenPopup[operate].state = false
 }
-
 </script>
 
 <template>
   <div class="bg-white relative border rounded-lg overflow-auto">
     <h1 class="font-bold text-center cursor-default">
-      IT-Bangmod Kradan Kanban
+      {{ bName }}
     </h1>
     <AlertPopUp
       v-if="greenPopup.add.state"

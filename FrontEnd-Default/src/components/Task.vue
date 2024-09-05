@@ -51,11 +51,9 @@ const redPopup = reactive({
   edit: { state: false, taskTitle: '' },
   delete: { state: false, taskTitle: '' }
 })
-const boardManager = useBoardManager()
+
 const showNameBoard = ref('IT-Bangmod Kradan Kanban')
-const emits = defineEmits(['NameBoard'])
-const NameBoards = emits.NameBoard
-console.log(NameBoards)
+const bName = ref()
 onMounted(async () => {
   taskManager.setTasks(
     await getItems(
@@ -72,12 +70,11 @@ onMounted(async () => {
   if (storedUserName) {
     userName.value = storedUserName
   }
-  const boards = await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards`)
-  boardManager.setBoards(boards)
-  if (boardManager.getBoards().length > 0) {
-    showNameBoard.value =
-      boardManager.getBoards()[1].board?.name || 'No Board Name'
-  }
+  const getBoardName = await getItemById(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards`,
+    `${route.params.id}`
+  )
+  bName.value = getBoardName.name
 })
 
 const showTaskDetail = async function (id, operate) {
@@ -222,7 +219,7 @@ const goBackToHomeBoard = () => {
 <template>
   <div class="bg-white relative border rounded-lg overflow-auto">
     <h1 class="font-bold text-center cursor-default text-xl">
-      {{ showNameBoard }}
+      {{ bName }}
     </h1>
     <div
       class="flex justify-between items-start w-full font-bold space-y-2 border-b py-2 border-r-slate-500"
