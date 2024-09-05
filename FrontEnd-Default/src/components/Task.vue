@@ -74,12 +74,10 @@ onMounted(async () => {
   }
   const boards = await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards`)
   boardManager.setBoards(boards)
-
-  // ตั้งค่า boardsList ด้วยข้อมูลบอร์ดที่ได้จาก boardManager
-  boardsList.value = boardManager.getBoards()
-
-  // กำหนดค่า showNameBoard ตาม ID ที่ต้องการ
-  showNameBoard.value = findBoardNameById(selectedBoardId.value)
+  if (boardManager.getBoards().length > 0) {
+    showNameBoard.value =
+      boardManager.getBoards()[1].board?.name || 'No Board Name'
+  }
 })
 
 const showTaskDetail = async function (id, operate) {
