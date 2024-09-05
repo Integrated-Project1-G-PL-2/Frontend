@@ -13,7 +13,7 @@ import {
   addItem,
   editItem
 } from '../utils/fetchUtils.js'
-const emits = defineEmits(['NameBoard'])
+const emits = defineEmits(['NameBoard', 'errorOccurred'])
 const router = useRouter()
 const route = useRoute()
 
@@ -53,6 +53,7 @@ const showDelComplete = function () {
 }
 const showErrorMessage = function () {
   error.value = true
+  showAddNewBoard.value = false
 }
 const returnLoginPage = () => {
   logout()

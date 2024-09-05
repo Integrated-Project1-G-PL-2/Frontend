@@ -4,7 +4,7 @@ import { watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useBoardManager } from '@/stores/BoardManager'
 import AlertPopUp from './../components/AlertPopUp.vue'
-const deClareemit = defineEmits(['saveDetail', 'cancelDetail'])
+const deClareemit = defineEmits(['saveDetail', 'cancelDetail', 'errorOccurred'])
 const router = useRouter()
 const isNameOverLimit = ref(false)
 const isNameEmpty = ref(false)
@@ -27,11 +27,10 @@ const newBoard = async (newBoardName) => {
       name: newBoardName
     }
   )
-  if (newBoards.status === 201) {
-    boardManager.addBoard(newBoards)
-    deClareemit('cancelDetail', true)
-    router.replace({ name: 'Task', params: { id: boardsList.at(-1).id } })
-  } else if (newBoards.status === 401) {
+  boardManager.addBoard(newBoards)
+  deClareemit('cancelDetail', true)
+  router.replace({ name: 'Task', params: { id: boardsList.at(-1).id } })
+  if (newBoards.status === 401) {
     router.replace({ name: 'Login' })
   } else {
     deClareemit('errorOccurred', (error.value = true))
