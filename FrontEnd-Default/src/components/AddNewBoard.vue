@@ -27,16 +27,15 @@ const newBoard = async (newBoardName) => {
       name: newBoardName
     }
   )
-  if (newBoards.status === 401) {
+  if (newBoards.status === 201) {
+    boardManager.addBoard(newBoards)
+    deClareemit('cancelDetail', true)
+    router.replace({ name: 'Task', params: { id: boardsList.at(-1).id } })
+  } else if (newBoards.status === 401) {
     router.replace({ name: 'Login' })
-  }
-  if (newBoards.status !== 201 || newBoards.status !== 200) {
+  } else {
     deClareemit('errorOccurred', (error.value = true))
   }
-  console.log(newBoards)
-  boardManager.addBoard(newBoards)
-  deClareemit('cancelDetail', true)
-  router.replace({ name: 'Task', params: { id: boardsList.at(-1).id } })
 }
 </script>
 
