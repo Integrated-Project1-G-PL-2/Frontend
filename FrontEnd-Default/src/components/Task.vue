@@ -51,8 +51,8 @@ const redPopup = reactive({
   edit: { state: false, taskTitle: '' },
   delete: { state: false, taskTitle: '' }
 })
+const boardManager = useBoardManager()
 const showNameBoard = ref('IT-Bangmod Kradan Kanban')
-
 const emits = defineEmits(['NameBoard'])
 const NameBoards = emits.NameBoard
 console.log(NameBoards)
@@ -72,6 +72,14 @@ onMounted(async () => {
   if (storedUserName) {
     userName.value = storedUserName
   }
+  const boards = await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards`)
+  boardManager.setBoards(boards)
+
+  // ตั้งค่า boardsList ด้วยข้อมูลบอร์ดที่ได้จาก boardManager
+  boardsList.value = boardManager.getBoards()
+
+  // กำหนดค่า showNameBoard ตาม ID ที่ต้องการ
+  showNameBoard.value = findBoardNameById(selectedBoardId.value)
 })
 
 const showTaskDetail = async function (id, operate) {
