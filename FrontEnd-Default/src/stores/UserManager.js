@@ -62,7 +62,6 @@ export async function login(userCredentials, router) {
 
   const data = await response.json()
   const decodedToken = decodeJWT(data.access_token)
-  console.log('Decoded JWT:', decodedToken)
   localStorage.setItem('jwt', data.access_token)
   return data
 }

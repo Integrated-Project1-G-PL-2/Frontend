@@ -13,12 +13,10 @@ export const useBoardManager = defineStore('boardManager', () => {
             boards.push(board)
         })
       }
-      console.log(boards)
+
     }
     const addBoard = function (newBoard) {
-      console.log(newBoard)
       boards.push(newBoard)
-      console.log(boards)
     }
     const findIndexById = function (id) {
       return boards.findIndex((el) => el.id === id)

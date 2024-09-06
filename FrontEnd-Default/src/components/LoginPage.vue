@@ -35,7 +35,7 @@ const handleLogin = async () => {
   // ตรวจสอบเงื่อนไขว่ามีโทเค็นหรือไม่
   if (data && data.access_token) {
     const decodedToken = decodeJWT(data.access_token) // ถอดรหัส JWT เพื่อตรวจสอบข้อมูล
-    console.log('Decoded JWT:', decodedToken) // แสดงข้อมูล JWT ที่ถอดรหัสใน console
+    // console.log('Decoded JWT:', decodedToken) // แสดงข้อมูล JWT ที่ถอดรหัสใน console
 
     // ตรวจสอบว่าค่าที่กรอกมาตรงกับข้อมูลใน JWT หรือไม่
     if (decodedToken.payload.sub === trimmedUsername.value) {
@@ -64,7 +64,6 @@ const checkUserNameLength = () => {
 }
 
 const checkPasswordLength = () => {
-  console.log(trimmedPassword.value.length)
   if (trimmedPassword.value.length > MAX_PASSWORD_LENGTH) {
     isPasswordOverLimit.value = true
     password.value = trimmedPassword.value.substring(0, MAX_PASSWORD_LENGTH)
