@@ -3,6 +3,7 @@ import { addItem } from '@/utils/fetchUtils'
 import { watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useBoardManager } from '@/stores/BoardManager'
+import { userName } from '@/stores/UserManager'
 
 const deClareemit = defineEmits(['saveDetail', 'cancelDetail', 'errorOccurred'])
 const router = useRouter()
@@ -16,7 +17,7 @@ const checkNameLength = () => {
   isNameEmpty.value = newBoardName.value.trim() === ''
 }
 
-let newBoardName = ref('')
+let newBoardName = ref(`${userName.value} personal board`)
 
 const boardsList = boardManager.getBoards()
 
@@ -27,15 +28,19 @@ const newBoard = async (newBoardName) => {
       name: newBoardName
     }
   )
-  boardManager.addBoard(newBoards)
-  deClareemit('cancelDetail', true)
-  router.replace({ name: 'Task', params: { id: boardsList.at(-1).id } })
-  if (newBoards.status === 401) {
+  if (newBoards == 401) {
     router.replace({ name: 'Login' })
   }
-  if (newBoards.status !== 201 || newBoards.status !== 200) {
+  if (!newBoards.id) {
     deClareemit('errorOccurred', (error.value = true))
+    return
   }
+
+  boardManager.addBoard(newBoards)
+  
+  deClareemit('cancelDetail', true)
+  router.replace({ name: 'Task', params: { id: boardsList.at(-1).id } })
+  
 }
 </script>
 

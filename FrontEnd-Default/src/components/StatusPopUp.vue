@@ -90,6 +90,7 @@ const saveClick = async () => {
       prop.statusDetail.value.id,
       status
     )
+    console.log(editedStatus)
     if (editedStatus != null) {
       statusManager.editStatues(editedStatus.id, editedStatus)
       emits('showStatusGreenPopup', {

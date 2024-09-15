@@ -107,7 +107,7 @@ async function addItem(url, newItem) {
     const res = await fetch(url, options)
     if (!res.ok) {
       console.error(`Failed to add item: ${res.status}`)
-      return null
+      return res.status
     }
     return await res.json()
   } catch (error) {
