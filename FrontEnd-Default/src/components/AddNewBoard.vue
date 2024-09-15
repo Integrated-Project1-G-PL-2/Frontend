@@ -16,6 +16,7 @@ const checkNameLength = () => {
   isNameOverLimit.value = newBoardName.value.length > MAX_LENGTH
   isNameEmpty.value = newBoardName.value.trim() === ''
 }
+import { userName } from '@/stores/UserManager'
 
 let newBoardName = ref(`${userName.value} personal board`)
 

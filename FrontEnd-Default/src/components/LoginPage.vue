@@ -99,7 +99,7 @@ const togglePasswordVisibility = () => {
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
       <div class="mb-4">
         <label for="first" class="block text-gray-700 font-semibold mb-2">
-          itbkk.olarn
+          Username
         </label>
         <input
           type="text"
@@ -137,7 +137,7 @@ const togglePasswordVisibility = () => {
 
       <div class="mb-6">
         <label for="password" class="block text-gray-700 font-semibold mb-2">
-          ip23/OLA
+          Password
         </label>
         <div class="relative">
           <input
