@@ -3,7 +3,6 @@ import { addItem } from '@/utils/fetchUtils'
 import { watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useBoardManager } from '@/stores/BoardManager'
-import { userName } from '@/stores/UserManager'
 
 const deClareemit = defineEmits(['saveDetail', 'cancelDetail', 'errorOccurred'])
 const router = useRouter()
