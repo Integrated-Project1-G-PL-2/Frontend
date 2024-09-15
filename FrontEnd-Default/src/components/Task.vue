@@ -54,10 +54,15 @@ const redPopup = reactive({
 
 const bName = ref()
 onMounted(async () => {
-  taskManager.setTasks(
-    await getItems(
+  const tasksItem = await getItems(
       `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
     )
+    if(tasksItem == 401){
+    router.replace({ name: 'Login' })
+    return
+  } 
+  taskManager.setTasks(
+    tasksItem
   )
   statusManager.setStatuses(
     await getItems(

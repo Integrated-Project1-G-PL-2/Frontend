@@ -26,13 +26,19 @@ const closeProblemAlter = () => {
   error.value = false
 }
 onMounted(async () => {
+  const boards = await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards`)
+  if(boards == 401){
+    router.replace({ name: 'Login' })
+    return
+  } 
   boardManager.setBoards(
-    await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards`)
+    boards
   )
   const storedUserName = localStorage.getItem('userName')
   if (storedUserName) {
     userName.value = storedUserName
   }
+
 })
 
 const showAddNewBoard = ref(false) // Initial value is false

@@ -83,6 +83,11 @@ export function useAuthGuard(router) {
         const decodedToken = decodeJWT(token)
         const currentTime = Math.floor(Date.now() / 1000)
 
+        if (to.meta.requiresAuth && !token) {
+          // If the route requires authentication and no token is present, redirect to Login
+          return next({ name: 'Login' })
+        }
+
         // ตรวจสอบว่า token หมดอายุหรือยัง
         if (decodedToken.payload.exp < currentTime) {
           logout()

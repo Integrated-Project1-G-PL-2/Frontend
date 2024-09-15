@@ -11,7 +11,7 @@ async function getItems(url) {
 
     if (!res.ok) {
       console.error(`Failed to fetch items: ${res.status}`)
-      return null
+      return res.status
     }
     return await res.json()
   } catch (error) {

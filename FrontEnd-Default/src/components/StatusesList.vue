@@ -44,10 +44,15 @@ const redPopup = reactive({
 const showDeleteStatusDetail = ref(false)
 const transferDelList = ref({})
 onMounted(async () => {
-  taskManager.setTasks(
-    await getItems(
+  const taskItems = await getItems(
       `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
     )
+    if(taskItems == 401){
+      router.replace({ name: 'Login' })
+    return
+    }
+  taskManager.setTasks(
+    taskItems
   )
   statusManager.setStatuses(
     await getItems(
