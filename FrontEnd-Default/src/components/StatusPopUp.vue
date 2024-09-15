@@ -88,11 +88,10 @@ const saveClick = async () => {
     const editedStatus = await editItem(
       `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`,
       prop.statusDetail.value.id,
-      status
+      {name: status.name, description:  status.description}
     )
-    console.log(editedStatus)
     if (editedStatus != null) {
-      statusManager.editStatues(editedStatus.id, editedStatus)
+      statusManager.editStatues(prop.statusDetail.value.id,editedStatus.id, editedStatus)
       emits('showStatusGreenPopup', {
         taskStatus: editedStatus.name,
         operate: prop.operate

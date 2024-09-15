@@ -20,9 +20,14 @@ export const useStatusManager = defineStore('statusManager', () => {
   const findIndexById = function (id) {
     return statuses.findIndex((el) => el.id === id)
   }
-  const editStatues = function (id, newStatus) {
+  const editStatues = function (oldId,id, newStatus) {
+    if(oldId == id){
     const index = findIndexById(id)
     statuses[index] = newStatus
+  } else {
+    addStatuses(newStatus)
+    deleteStatuses(oldId)
+  }
   }
   const findStatusByName = function(name){
     return statuses.find(el => el.name === name)
