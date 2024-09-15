@@ -15,7 +15,6 @@ const checkNameLength = () => {
   isNameOverLimit.value = newBoardName.value.length > MAX_LENGTH
   isNameEmpty.value = newBoardName.value.trim() === ''
 }
-import { userName } from '@/stores/UserManager'
 
 let newBoardName = ref(`${userName.value} personal board`)
 
@@ -37,10 +36,9 @@ const newBoard = async (newBoardName) => {
   }
 
   boardManager.addBoard(newBoards)
-  
+
   deClareemit('cancelDetail', true)
   router.replace({ name: 'Task', params: { id: boardsList.at(-1).id } })
-  
 }
 </script>
 
