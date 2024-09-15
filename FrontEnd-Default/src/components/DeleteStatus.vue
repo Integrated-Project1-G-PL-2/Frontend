@@ -86,12 +86,12 @@ const filterStatus = () => {
     <div class="w-[30%] m-[auto] mt-[20%] border border-gray-600 h-[200px]">
       <div class="flex flex-col justify-between bg-white p-4 h-[100px]">
         <div class="itbkk-title w-full h-[70px] mt-1 border-b">
-          <h1 class="text-xl font-bold text-justify">Delete a Task</h1>
+          <h1 class="text-xl font-bold text-justify">Delete a Status</h1>
         </div>
 
         <div class="w-[70%] h-[100%]">
           <div class="itbkk-message pl-4 mt-4">
-            Do you want to delete the task "
+            Do you want to delete the status "
             {{ props.statusId.value.statusName }}" ?
           </div>
         </div>
