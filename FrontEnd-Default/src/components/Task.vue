@@ -26,7 +26,7 @@ import { userName } from '@/stores/UserManager'
 import { logout } from '@/stores/UserManager'
 import boardsList from './../components/BoardList.vue'
 import { useBoardManager } from '@/stores/BoardManager'
-
+import VisibilityChangedPopUp from './../components/VisibilityChangedPopUp.vue'
 const statusManager = useStatusManager()
 const showStatusDetailModal = ref(false)
 const showStatusDetailLimit = ref(false)

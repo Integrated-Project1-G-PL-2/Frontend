@@ -1,27 +1,19 @@
 <script setup>
 import { ref, reactive } from 'vue'
-import { deleteItemById } from '@/utils/fetchUtils'
-import { useTaskManager } from '@/stores/TaskManager'
+
 import { useRoute, useRouter } from 'vue-router'
-const deClareemit = defineEmits(['confirmDetail', 'cancelDetail', 'redAlert'])
-const props = defineProps(['taskId'])
-const router = useRouter()
-const deletedTask = reactive({})
-const route = useRoute()
-const taskManager = useTaskManager()
-const deleteTask = async (deleteId) => {
-  deletedTask.value = await deleteItemById(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
-    deleteId
-  )
-  if (deletedTask.value == '404') {
-    deClareemit('redAlert')
-    deClareemit('cancelDetail', true)
-    return
-  }
-  taskManager.deleteTask(deleteId)
-  deClareemit('confirmDetail', true)
-}
+
+const props = defineProps({
+  message: String,
+  styleType: {
+    type: String,
+    varlidatior(value) {
+      return ['green', 'red'].includes(value)
+    }
+  },
+  operate: String
+})
+defineEmits(['closeVisibilityPopUp'])
 </script>
 
 <template>
@@ -38,22 +30,24 @@ const deleteTask = async (deleteId) => {
 
         <div class="w-[70%] h-[100%]">
           <div class="flex pl-4 mt-5">
-            Do you want to delete the task "{{ props.taskId.value.index }}.
-            {{ props.taskId.value.taskTitle }}" ?
+            {{ message }}
           </div>
         </div>
       </div>
       <div class="flex flex-row w-full justify-end border-t h-[60%]">
         <button
           class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"
-          @click="deleteTask(props.taskId.value.id)"
+          @click=""
         >
           <div class="btn text-center">Confirm</div>
         </button>
         <button
           class="itbkk-button-cancel bg-red-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"
           @click="
-            ;[$emit('cancelDetail', true), $router.replace({ name: 'Task' })]
+            ;[
+              $emit('closeVisibilityPopUp', true),
+              $router.replace({ name: 'Task' })
+            ]
           "
         >
           <div class="btn text-center">Cancel</div>
