@@ -142,10 +142,7 @@ const closeGreenPopup = async function (operate) {
   router.push({ name: 'Task' })
   greenPopup[operate].state = false
 }
-const closeVisibility = function () {
-  router.push({ name: 'Task' })
-  visibilityToggle.value = false
-}
+
 const clearDeletePopUp = async function () {
   router.push({ name: 'Task' })
   showDeleteTaskDetail.value = false
@@ -229,6 +226,14 @@ const isSwitch = ref(false)
 const toggleLabel = computed(() => (isSwitch.value ? 'Public' : 'Private'))
 const openVisibilitySetting = function () {
   visibilityToggle.value = true
+}
+const closeVisibility = function () {
+  // Check if the switch was toggled to Public, revert back to Private
+  if (isSwitch.value) {
+    isSwitch.value = false // Reset to 'Private'
+  }
+  router.push({ name: 'Task' })
+  visibilityToggle.value = false
 }
 </script>
 
