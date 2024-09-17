@@ -142,8 +142,9 @@ const closeGreenPopup = async function (operate) {
   router.push({ name: 'Task' })
   greenPopup[operate].state = false
 }
-const closeVisibilityPopUp = function () {
+const closeVisibility = function () {
   router.push({ name: 'Task' })
+  visibilityToggle.value = false
 }
 const clearDeletePopUp = async function () {
   router.push({ name: 'Task' })
@@ -226,6 +227,9 @@ const isSwitch = ref(false)
 
 // Computed label based on checkbox state
 const toggleLabel = computed(() => (isSwitch.value ? 'Public' : 'Private'))
+const openVisibilitySetting = function () {
+  visibilityToggle.value = true
+}
 </script>
 
 <template>
@@ -322,13 +326,13 @@ const toggleLabel = computed(() => (isSwitch.value ? 'Public' : 'Private'))
       v-if="visibilityToggle"
       message="In public, any one can view the board, task list and task detail of tasks in the board. Do you want to change the visibility to Public?"
       :operate="'public'"
-      @closeVisibilityPopUp="closeVisibilityPopUp"
+      @closeVisibilityPopUp="closeVisibility"
     />
     <VisibilityChangedPopUp
       v-if="se"
       message="In private, only board owner can access/control board. Do you want to change the visibility to Private?"
       :operate="'private'"
-      @closeVisibilityPopUp="closeVisibilityPopUp"
+      @closeVisibilityPopUp="closeVisibility"
     />
     <div class="flex justify-end">
       <div
@@ -386,7 +390,12 @@ const toggleLabel = computed(() => (isSwitch.value ? 'Public' : 'Private'))
       <label
         class="itbkk-board-visibility inline-flex items-center cursor-pointer"
       >
-        <input type="checkbox" v-model="isSwitch" class="sr-only peer" />
+        <input
+          type="checkbox"
+          v-model="isSwitch"
+          class="sr-only peer"
+          @click="openVisibilitySetting"
+        />
         <div
           class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
         ></div>
