@@ -26,7 +26,7 @@ import { userName } from '@/stores/UserManager'
 import { logout } from '@/stores/UserManager'
 import boardsList from './../components/BoardList.vue'
 import { useBoardManager } from '@/stores/BoardManager'
-import VisibilityChangedPopUp from './../components/VisibilityChangedPopUp.vue'
+import VisibilityChangedPopUp from './../components/VisibilityChangedPopUP.vue'
 const statusManager = useStatusManager()
 const showStatusDetailModal = ref(false)
 const showStatusDetailLimit = ref(false)
@@ -313,6 +313,14 @@ const toggleLabel = computed(() => (isSwitch.value ? 'Public' : 'Private'))
       message="Error!!"
       styleType="red"
       :operate="'edit'"
+    />
+    <VisibilityChangedPopUp
+      message="In public, any one can view the board, task list and task detail of tasks in the board. Do you want to change the visibility to Public?"
+      :operate="'public'"
+    />
+    <VisibilityChangedPopUp
+      message="In private, only board owner can access/control board. Do you want to change the visibility to Private?"
+      :operate="'private'"
     />
     <div class="flex justify-end">
       <div

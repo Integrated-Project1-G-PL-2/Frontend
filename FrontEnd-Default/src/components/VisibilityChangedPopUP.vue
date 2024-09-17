@@ -5,12 +5,6 @@ import { useRoute, useRouter } from 'vue-router'
 
 const props = defineProps({
   message: String,
-  styleType: {
-    type: String,
-    varlidatior(value) {
-      return ['green', 'red'].includes(value)
-    }
-  },
   operate: String
 })
 defineEmits(['closeVisibilityPopUp'])
@@ -18,18 +12,18 @@ defineEmits(['closeVisibilityPopUp'])
 
 <template>
   <div
-    class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[10px]"
+    class="itbkk-modal-alert bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[10px]"
   >
     <div class="w-[59%] m-[auto] border border-green-700 mt-[20%]">
       <div class="flex flex-col justify-between bg-white p-4 h-[10%]">
-        <div class="itbkk-title w-full h-[40px] mt-1 border-b">
+        <div class="w-full h-[40px] mt-1 border-b">
           <h1 class="text-xl font-bold text-justify">
             Board visibility changed!
           </h1>
         </div>
 
         <div class="w-[70%] h-[100%]">
-          <div class="flex pl-4 mt-5">
+          <div class="itbkk-message flex pl-4 mt-5">
             {{ message }}
           </div>
         </div>
