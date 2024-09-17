@@ -70,6 +70,13 @@ export async function login(userCredentials, router) {
 export function logout() {
   localStorage.removeItem('jwt')
   localStorage.removeItem('userName')
+
+  // ลบข้อมูลที่เกี่ยวข้องจาก sessionStorage (ถ้ามี)
+  sessionStorage.removeItem('jwt') // ในกรณีที่ token ถูกจัดเก็บใน sessionStorage
+  sessionStorage.removeItem('userName')
+
+  // รีเซตค่า userName และค่า state อื่น ๆ ในแอปที่ต้องการ
+
   userName.value = ''
 }
 
