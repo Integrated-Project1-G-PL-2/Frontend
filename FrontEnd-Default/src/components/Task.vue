@@ -42,6 +42,7 @@ const showDeleteTaskDetail = ref(false)
 const operation = ref('')
 const returnPage = ref(false)
 const collectStatus = reactive([])
+const visibilityToggle = ref(false)
 const greenPopup = reactive({
   add: { state: false, taskTitle: '' },
   edit: { state: false, taskTitle: '' },
@@ -140,6 +141,9 @@ const closeRedPopup = async function (operate) {
 const closeGreenPopup = async function (operate) {
   router.push({ name: 'Task' })
   greenPopup[operate].state = false
+}
+const closeVisibilityPopUp = function () {
+  router.push({ name: 'Task' })
 }
 const clearDeletePopUp = async function () {
   router.push({ name: 'Task' })
@@ -315,12 +319,16 @@ const toggleLabel = computed(() => (isSwitch.value ? 'Public' : 'Private'))
       :operate="'edit'"
     />
     <VisibilityChangedPopUp
+      v-if="visibilityToggle"
       message="In public, any one can view the board, task list and task detail of tasks in the board. Do you want to change the visibility to Public?"
       :operate="'public'"
+      @closeVisibilityPopUp="closeVisibilityPopUp"
     />
     <VisibilityChangedPopUp
+      v-if="se"
       message="In private, only board owner can access/control board. Do you want to change the visibility to Private?"
       :operate="'private'"
+      @closeVisibilityPopUp="closeVisibilityPopUp"
     />
     <div class="flex justify-end">
       <div
