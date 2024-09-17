@@ -229,9 +229,10 @@ const isSwitch = ref(false)
 const toggleLabel = computed(() => (isSwitch.value ? 'Public' : 'Private'))
 const openVisibilitySetting = function () {
   visibilityToggle.public.state = true
-}
-const openVisibilitySetting2 = function () {
-  visibilityToggle.private.state = true
+
+  if (visibilityToggle.private.state) {
+    visibilityToggle.private.state = true
+  }
 }
 
 const closeVisibility = function () {
