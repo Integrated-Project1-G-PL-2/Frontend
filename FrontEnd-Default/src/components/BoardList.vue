@@ -30,7 +30,10 @@ onMounted(async () => {
   if(boards == 401){
     router.replace({ name: 'Login' })
     return
-  } 
+  }
+  if(boards != null){
+    router.replace({ name: 'Task', params: { id: boards[0].board.id } })
+  }
   boardManager.setBoards(
     boards
   )
@@ -138,7 +141,7 @@ const returnLoginPage = () => {
       <div
         v-for="(board, index) in boardsList"
         :key="board.id.boardId"
-        class="bg-white border rounded-lg shadow-md p-4 flex flex-col space-y-2 cursor-pointer hover:bg-gray-100 hover:text-sky-500"
+        class="itbkk-item bg-white border rounded-lg shadow-md p-4 flex flex-col space-y-2 cursor-pointer hover:bg-gray-100 hover:text-sky-500"
         @click="
           ;[
             emits('NameBoard', board.board.name),
