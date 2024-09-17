@@ -42,7 +42,10 @@ const showDeleteTaskDetail = ref(false)
 const operation = ref('')
 const returnPage = ref(false)
 const collectStatus = reactive([])
-const visibilityToggle = ref(false)
+const visibilityToggle = reactive({
+  public: { state: false },
+  private: { state: false }
+})
 const greenPopup = reactive({
   add: { state: false, taskTitle: '' },
   edit: { state: false, taskTitle: '' },
@@ -225,15 +228,23 @@ const isSwitch = ref(false)
 // Computed label based on checkbox state
 const toggleLabel = computed(() => (isSwitch.value ? 'Public' : 'Private'))
 const openVisibilitySetting = function () {
-  visibilityToggle.value = true
+  visibilityToggle.public.state = true
 }
+const openVisibilitySetting2 = function () {
+  visibilityToggle.private.state = true
+}
+
 const closeVisibility = function () {
   // Check if the switch was toggled to Public, revert back to Private
   if (isSwitch.value) {
     isSwitch.value = false // Reset to 'Private'
   }
   router.push({ name: 'Task' })
-  visibilityToggle.value = false
+  visibilityToggle.public.state = false
+}
+const confirmVisibility = function () {
+  router.push({ name: 'Task' })
+  visibilityToggle.public.state = false
 }
 </script>
 
@@ -328,16 +339,18 @@ const closeVisibility = function () {
       :operate="'edit'"
     />
     <VisibilityChangedPopUp
-      v-if="visibilityToggle"
+      v-if="visibilityToggle.public.state"
       message="In public, any one can view the board, task list and task detail of tasks in the board. Do you want to change the visibility to Public?"
       :operate="'public'"
       @closeVisibilityPopUp="closeVisibility"
+      @confirmVisibilityPopUp="confirmVisibility"
     />
     <VisibilityChangedPopUp
-      v-if="se"
+      v-if="visibilityToggle.private.state"
       message="In private, only board owner can access/control board. Do you want to change the visibility to Private?"
       :operate="'private'"
       @closeVisibilityPopUp="closeVisibility"
+      @confirmVisibilityPopUp="confirmVisibility"
     />
     <div class="flex justify-end">
       <div
