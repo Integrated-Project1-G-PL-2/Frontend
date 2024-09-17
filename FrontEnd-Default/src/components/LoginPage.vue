@@ -58,6 +58,9 @@ const checkUserNameLength = () => {
   if (trimmedUsername.value.length > MAX_USERNAME_LENGTH) {
     isUserNameOverLimit.value = true
     username.value = trimmedUsername.value.substring(0, MAX_USERNAME_LENGTH)
+    setTimeout(() => {
+      isUserNameOverLimit.value = false
+    }, 1000)
   } else {
     isUserNameOverLimit.value = false
   }
@@ -67,6 +70,9 @@ const checkPasswordLength = () => {
   if (trimmedPassword.value.length > MAX_PASSWORD_LENGTH) {
     isPasswordOverLimit.value = true
     password.value = trimmedPassword.value.substring(0, MAX_PASSWORD_LENGTH)
+    setTimeout(() => {
+      isPasswordOverLimit.value = false
+    }, 1000)
   } else {
     isPasswordOverLimit.value = false
   }

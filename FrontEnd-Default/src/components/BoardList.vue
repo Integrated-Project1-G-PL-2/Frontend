@@ -27,21 +27,20 @@ const closeProblemAlter = () => {
 }
 onMounted(async () => {
   const boards = await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards`)
-  if(boards == 401){
+  if (boards == 401) {
     router.replace({ name: 'Login' })
     return
   }
-  if(boards != null){
-    router.replace({ name: 'Task', params: { id: boards[0].board.id } })
-  }
-  boardManager.setBoards(
-    boards
-  )
+  // if(boards != null){
+  //   router.replace({ name: 'Task', params: { id: boards[0].board.id } })
+  // }
+  // boardManager.setBoards(
+  //   boards
+  // )
   const storedUserName = localStorage.getItem('userName')
   if (storedUserName) {
     userName.value = storedUserName
   }
-
 })
 
 const showAddNewBoard = ref(false) // Initial value is false
