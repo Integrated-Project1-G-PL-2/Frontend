@@ -523,16 +523,16 @@ const confirmVisibility = function () {
           :key="task.id"
           class="itbkk-item border-b cursor-pointer"
         >
-          <td class="px-4 py-3">
+          <td class="itbkk-button-action px-4 py-3">
             {{ index + 1 }}
             <div
-              class="inline-flex"
+              class="itbkk-button-edit inline-flex"
               @click="showEditTaskDetail(task.id, 'edit')"
             >
               ⚙️
             </div>
             <div
-              class="inline-flex"
+              class="itbkk-button-delete inline-flex"
               @click="
                 showDeletePopUpTaskDetail({
                   id: task.id,
