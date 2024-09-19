@@ -228,9 +228,14 @@ const isSwitch = ref(false)
 // Computed label based on checkbox state
 const toggleLabel = computed(() => (isSwitch.value ? 'Public' : 'Private'))
 const openVisibilitySetting = function () {
-  visibilityToggle.public.state = true
-
-  if (visibilityToggle.private.state) {
+  // ถ้า public เป็น false หรือไม่ถูกตั้งค่า
+  if (!visibilityToggle.public.state) {
+    visibilityToggle.public.state = true
+    visibilityToggle.private.state = false
+  }
+  // ถ้า public เป็น true
+  else {
+    visibilityToggle.public.state = false
     visibilityToggle.private.state = true
   }
 }
@@ -411,7 +416,7 @@ const confirmVisibility = function () {
       >
         <input
           :disabled="
-            visibilityToggle.public.state || visibilityToggle.private.state
+            visibilityToggle.public.state && visibilityToggle.private.state
           "
           type="checkbox"
           v-model="isSwitch"
