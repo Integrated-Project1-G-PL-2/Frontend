@@ -1,6 +1,6 @@
 <script setup>
 import { reactive, ref } from 'vue'
-import { useRouter ,useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useTaskManager } from '@/stores/TaskManager'
 import { addItem, editItem } from '@/utils/fetchUtils'
 import { useStatusManager } from '@/stores/StatusManager'
@@ -43,8 +43,8 @@ if (prop.taskDetail.value) {
   task = reactive({
     createdOn: null,
     id: null,
-    taskAssignees: null,
-    taskDescription: null,
+    taskAssignees: 'Unassigned',
+    taskDescription: 'No Description Provided',
     taskStatus: {},
     taskTitle: null,
     updatedOn: null
@@ -125,7 +125,6 @@ const handleClick = async () => {
     emits('showTaskDetailModal', false)
   }
 }
-
 </script>
 
 <template>
@@ -179,7 +178,6 @@ const handleClick = async () => {
                   isDescriptionOverLimit ? 'border-red-600 text-red-600' : '')
                 "
                 class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
-                placeholder="No Description Provided"
                 @input="checkDescriptionLength"
               ></textarea>
               <div
@@ -217,7 +215,6 @@ const handleClick = async () => {
                     (task.taskAssigneess == null ? 'italic text-gray-500 ' : '',
                     isAssigneesOverLimit ? 'border-red-600 text-red-600' : '')
                   "
-                  placeholder="Unassigned"
                   @input="checkAssigneesLength"
                 ></textarea>
                 <div
