@@ -410,6 +410,9 @@ const confirmVisibility = function () {
         class="itbkk-board-visibility inline-flex items-center cursor-pointer"
       >
         <input
+          :disabled="
+            visibilityToggle.public.state || visibilityToggle.private.state
+          "
           type="checkbox"
           v-model="isSwitch"
           class="sr-only peer"
