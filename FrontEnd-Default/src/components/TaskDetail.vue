@@ -169,17 +169,19 @@ const handleClick = async () => {
         <div class="flex flex-row">
           <div class="w-[70%] h-[50%]">
             <div class="pl-4 mt-4">Description</div>
-            <div class="w-full h-[420px]">
-              <textarea
+            <div class=" w-full h-[420px]">
+              <div
+              class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
                 :disabled="operate == 'show'"
-                v-model="task.taskDescription"
+            
                 :class="
                   (task.taskAssignees == null ? 'italic text-gray-500 ' : '',
                   isDescriptionOverLimit ? 'border-red-600 text-red-600' : '')
                 "
-                class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
+              
                 @input="checkDescriptionLength"
-              ></textarea>
+              >{{ task.taskDescription }}
+            </div>
               <div
                 style="display: flex; align-items: center"
                 v-if="isDescriptionOverLimit"

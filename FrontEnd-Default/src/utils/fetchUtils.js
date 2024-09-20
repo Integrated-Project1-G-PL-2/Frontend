@@ -101,6 +101,7 @@ async function addItem(url, newItem) {
       },
       body: JSON.stringify(newItem)
     }
+
     if (token) {
       options.headers.Authorization = `Bearer ${token}`
     }
