@@ -228,29 +228,40 @@ const isSwitch = ref(false)
 // Computed label based on checkbox state
 const toggleLabel = computed(() => (isSwitch.value ? 'Public' : 'Private'))
 const openVisibilitySetting = function () {
-  // ถ้า public เป็น false หรือไม่ถูกตั้งค่า
-  if (!visibilityToggle.public.state) {
-    visibilityToggle.public.state = true
-    visibilityToggle.private.state = false
-  }
-  // ถ้า public เป็น true
-  else {
+  // If currently showing the public pop-up
+  if (visibilityToggle.public.state) {
     visibilityToggle.public.state = false
-    visibilityToggle.private.state = true
+    visibilityToggle.private.state = true // Show private pop-up
+    isSwitch.value = false // Switch to private
+  }
+  // If currently showing the private pop-up
+  else if (visibilityToggle.private.state) {
+    visibilityToggle.private.state = false
+    visibilityToggle.public.state = true // Show public pop-up
+    isSwitch.value = true // Switch to public
+  }
+  // If neither is visible
+  else {
+    visibilityToggle.public.state = true // Show public pop-up
+    isSwitch.value = true // Switch to public
   }
 }
 
 const closeVisibility = function () {
-  // Check if the switch was toggled to Public, revert back to Private
-  if (isSwitch.value) {
-    isSwitch.value = false // Reset to 'Private'
+  // Reset visibility states
+  if ((isSwitch.value = false)) {
+    return
   }
-  router.push({ name: 'Task' })
   visibilityToggle.public.state = false
+  visibilityToggle.private.state = false
+  router.push({ name: 'Task' })
 }
+
 const confirmVisibility = function () {
+  // Logic for confirming visibility change (e.g., API call)
   router.push({ name: 'Task' })
-  visibilityToggle.public.state = false
+  visibilityToggle.public.state = false // Reset after confirmation
+  visibilityToggle.private.state = false // Reset after confirmation
 }
 </script>
 
@@ -416,7 +427,7 @@ const confirmVisibility = function () {
       >
         <input
           :disabled="
-            visibilityToggle.public.state && visibilityToggle.private.state
+            visibilityToggle.public.state || visibilityToggle.private.state
           "
           type="checkbox"
           v-model="isSwitch"
