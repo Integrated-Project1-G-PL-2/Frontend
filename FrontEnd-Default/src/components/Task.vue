@@ -257,11 +257,20 @@ const closeVisibility = function () {
   router.push({ name: 'Task' })
 }
 
-const confirmVisibility = function () {
+const confirmVisibility = async function (operate) {
+  // Change the message depending on the current visibility
+  if (operate === 'public') {
+    visibilityToggle.public.state = true
+  } else if (operate === 'private') {
+    visibilityToggle.private.state = true
+  }
+
   // Logic for confirming visibility change (e.g., API call)
   router.push({ name: 'Task' })
-  visibilityToggle.public.state = false // Reset after confirmation
-  visibilityToggle.private.state = false // Reset after confirmation
+
+  // Reset visibility toggles after confirmation
+  visibilityToggle.public.state = false
+  visibilityToggle.private.state = false
 }
 </script>
 
