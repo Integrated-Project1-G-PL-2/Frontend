@@ -227,21 +227,20 @@ const isSwitch = ref(false)
 
 // Computed label based on checkbox state
 const toggleLabel = computed(() => (isSwitch.value ? 'Public' : 'Private'))
+let previousState = ref(false) // Store the previous toggle state
+
 const openVisibilitySetting = function () {
-  // If currently showing the public pop-up
+  previousState.value = isSwitch.value // Store the current state before toggling
+
   if (visibilityToggle.public.state) {
     visibilityToggle.public.state = false
     visibilityToggle.private.state = true // Show private pop-up
     isSwitch.value = false // Switch to private
-  }
-  // If currently showing the private pop-up
-  else if (visibilityToggle.private.state) {
+  } else if (visibilityToggle.private.state) {
     visibilityToggle.private.state = false
     visibilityToggle.public.state = true // Show public pop-up
     isSwitch.value = true // Switch to public
-  }
-  // If neither is visible
-  else {
+  } else {
     visibilityToggle.public.state = true // Show public pop-up
     isSwitch.value = true // Switch to public
   }
@@ -249,11 +248,12 @@ const openVisibilitySetting = function () {
 
 const closeVisibility = function () {
   // Reset visibility states
-  if ((isSwitch.value = false)) {
-    return
-  }
   visibilityToggle.public.state = false
   visibilityToggle.private.state = false
+
+  // Reset toggle to previous state
+  isSwitch.value = previousState.value
+
   router.push({ name: 'Task' })
 }
 
