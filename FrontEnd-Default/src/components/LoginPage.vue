@@ -2,7 +2,12 @@
 import { reactive, ref, computed } from 'vue'
 import AlertPopUp from './../components/AlertPopUp.vue'
 import { useRouter } from 'vue-router'
-import { login, decodeJWT, useAuthGuard } from '@/stores/UserManager'
+import {
+  login,
+  decodeJWT,
+  useAuthGuard,
+  refreshToken
+} from '@/stores/UserManager'
 
 const showTaskModal = ref(false)
 const username = ref('')
@@ -44,6 +49,23 @@ const handleLogin = async () => {
       useAuthGuard(router)
       router.replace({ name: 'Board' })
       showTaskModal.value = true
+    } else {
+      // If no access token is present, try refreshing the token
+      const newAccessToken = await refreshToken(router)
+
+      if (newAccessToken) {
+        const decodedToken = decodeJWT(newAccessToken) // ถอดรหัส JWT เพื่อตรวจสอบข้อมูล
+
+        if (decodedToken.payload.sub === trimmedUsername.value) {
+          // เปลี่ยนเส้นทางไปยังหน้า 'Task' และแสดง modal
+          useAuthGuard(router)
+          router.replace({ name: 'Board' })
+          showTaskModal.value = true
+        }
+      } else {
+        // Handle the case where refreshing the token fails
+        error.value = true
+      }
     }
   }
 }
