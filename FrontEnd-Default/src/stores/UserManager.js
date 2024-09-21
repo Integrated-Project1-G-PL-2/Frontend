@@ -51,7 +51,8 @@ export async function login(userCredentials, router) {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ ...userCredentials })
+      body: JSON.stringify({ ...userCredentials }),
+      credentials: 'include'
     },
     router
   )
