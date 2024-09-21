@@ -229,26 +229,29 @@ const isSwitch = ref(false)
 const toggleLabel = computed(() => (isSwitch.value ? 'Public' : 'Private'))
 let previousState = ref(false) // Store the previous toggle state
 
+// Function to open visibility settings (trigger the popup)
 const openVisibilitySetting = function () {
   previousState.value = isSwitch.value
 
   if (isSwitch.value) {
-    // If it's already Public, switch to Private
-    visibilityToggle.private.state = true // Show private popup
+    // If it's already Public, switch to Private and show private popup
+    visibilityToggle.private.state = true
     visibilityToggle.public.state = false
     isSwitch.value = false
   } else {
-    // If it's Private, switch to Public
-    visibilityToggle.public.state = true // Show public popup
+    // If it's Private, switch to Public and show public popup
+    visibilityToggle.public.state = true
     visibilityToggle.private.state = false
     isSwitch.value = true
   }
 
-  // Save the toggle state in localStorage, but not the popup visibility
+  // Save the toggle and popup states in localStorage
   localStorage.setItem(
-    'toggleState',
+    'visibilityData',
     JSON.stringify({
-      switch: isSwitch.value
+      switch: isSwitch.value,
+      publicPopup: visibilityToggle.public.state,
+      privatePopup: visibilityToggle.private.state
     })
   )
 }
@@ -259,11 +262,13 @@ const closeVisibility = function () {
   visibilityToggle.private.state = false
   isSwitch.value = previousState.value
 
-  // Save the current toggle state in localStorage
+  // Save the current states in localStorage
   localStorage.setItem(
-    'toggleState',
+    'visibilityData',
     JSON.stringify({
-      switch: isSwitch.value
+      switch: isSwitch.value,
+      publicPopup: visibilityToggle.public.state,
+      privatePopup: visibilityToggle.private.state
     })
   )
 
@@ -275,23 +280,27 @@ const confirmVisibility = function () {
   visibilityToggle.public.state = false
   visibilityToggle.private.state = false
 
-  // Save the current toggle state in localStorage
+  // Save the final states in localStorage
   localStorage.setItem(
-    'toggleState',
+    'visibilityData',
     JSON.stringify({
-      switch: isSwitch.value
+      switch: isSwitch.value,
+      publicPopup: visibilityToggle.public.state,
+      privatePopup: visibilityToggle.private.state
     })
   )
 
   router.push({ name: 'Task' })
 }
 
-// Load toggle state from localStorage on page load, but don't show the popup
+// Load the saved toggle and popup states from localStorage on page load
 onMounted(() => {
-  const savedState = localStorage.getItem('toggleState')
-  if (savedState) {
-    const state = JSON.parse(savedState)
-    isSwitch.value = state.switch
+  const savedVisibilityData = localStorage.getItem('visibilityData')
+  if (savedVisibilityData) {
+    const data = JSON.parse(savedVisibilityData)
+    isSwitch.value = data.switch
+    visibilityToggle.public.state = data.publicPopup
+    visibilityToggle.private.state = data.privatePopup
   }
 })
 </script>
