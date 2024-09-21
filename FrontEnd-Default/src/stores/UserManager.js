@@ -4,6 +4,7 @@ import { ref } from 'vue'
 export const userName = ref('')
 
 // ฟังก์ชันถอดรหัส JWT
+// ฟังก์ชัน decodeJWT ปรับให้รองรับการตรวจสอบเวลา expiration ของ refresh token
 export function decodeJWT(token) {
   try {
     const [header, payload, signature] = token.split('.')
@@ -21,7 +22,7 @@ export function decodeJWT(token) {
       'email',
       'sub',
       'iat',
-      'exp',
+      'exp', // ตรวจสอบเวลาหมดอายุ (expiration time)
       'iss'
     ]
     for (const field of requiredFields) {
@@ -63,8 +64,15 @@ export async function login(userCredentials, router) {
 
   const data = await response.json()
   const decodedToken = decodeJWT(data.access_token)
+
+  // เก็บ Access Token
   localStorage.setItem('jwt', data.access_token)
-  localStorage.setItem('refresh_token', data.refresh_token) // Save refresh token
+
+  // เก็บ Refresh Token และเวลาหมดอายุ
+  localStorage.setItem('refresh_token', data.refresh_token)
+  const refreshDecoded = decodeJWT(data.refresh_token)
+  localStorage.setItem('refresh_token_exp', refreshDecoded.payload.exp) // เก็บเวลา expired
+
   return data
 }
 
@@ -81,10 +89,20 @@ export function logout() {
   userName.value = ''
 }
 
-// ฟังก์ชัน refreshToken
+// ฟังก์ชัน refreshToken ปรับให้ตรวจสอบการหมดอายุของ refresh token
 export async function refreshToken(router) {
   const refresh_token = localStorage.getItem('refresh_token')
-  if (!refresh_token) {
+  const refresh_token_exp = localStorage.getItem('refresh_token_exp')
+
+  if (!refresh_token || !refresh_token_exp) {
+    logout()
+    router.replace({ name: 'Login' })
+    return
+  }
+
+  const currentTime = Math.floor(Date.now() / 1000)
+  if (currentTime > refresh_token_exp) {
+    // Refresh token หมดอายุ
     logout()
     router.replace({ name: 'Login' })
     return
@@ -95,14 +113,14 @@ export async function refreshToken(router) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${refresh_token}` // Use refresh token in header
+        Authorization: `Bearer ${refresh_token}` // ใช้ refresh token
       },
       credentials: 'include'
     })
 
     if (response.ok) {
       const data = await response.json()
-      localStorage.setItem('jwt', data.access_token) // Store new access token
+      localStorage.setItem('jwt', data.access_token) // เก็บ access token ใหม่
       return data.access_token
     } else if (response.status === 401) {
       logout()
@@ -126,12 +144,12 @@ export function useAuthGuard(router) {
         const currentTime = Math.floor(Date.now() / 1000)
 
         if (decodedToken.payload.exp < currentTime) {
-          // Token expired, try to refresh
+          // Access token หมดอายุ ลองรีเฟรชโทเค็น
           const newToken = await refreshToken(router)
-          if (!newToken) return // If no new token, refreshToken will handle the redirect
+          if (!newToken) return // หากไม่ได้รับโทเค็นใหม่ ให้ไปหน้า Login
         }
 
-        next() // token ถูกต้องและยังไม่หมดอายุ ให้ดำเนินการต่อ
+        next() // Token ถูกต้องและยังไม่หมดอายุ ให้ดำเนินการต่อ
       } catch (error) {
         logout()
         return next({ name: 'Login' })
