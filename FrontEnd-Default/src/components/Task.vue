@@ -230,48 +230,70 @@ const toggleLabel = computed(() => (isSwitch.value ? 'Public' : 'Private'))
 let previousState = ref(false) // Store the previous toggle state
 
 const openVisibilitySetting = function () {
-  previousState.value = isSwitch.value // Store the current state before toggling
+  previousState.value = isSwitch.value
 
-  if (visibilityToggle.public.state) {
+  if (isSwitch.value) {
+    // If it's already Public, switch to Private
+    visibilityToggle.private.state = true // Show private popup
     visibilityToggle.public.state = false
-    visibilityToggle.private.state = true // Show private pop-up
-    isSwitch.value = false // Switch to private
-  } else if (visibilityToggle.private.state) {
-    visibilityToggle.private.state = false
-    visibilityToggle.public.state = true // Show public pop-up
-    isSwitch.value = true // Switch to public
+    isSwitch.value = false
   } else {
-    visibilityToggle.public.state = true // Show public pop-up
-    isSwitch.value = true // Switch to public
+    // If it's Private, switch to Public
+    visibilityToggle.public.state = true // Show public popup
+    visibilityToggle.private.state = false
+    isSwitch.value = true
   }
+
+  // Save the toggle state in localStorage, but not the popup visibility
+  localStorage.setItem(
+    'toggleState',
+    JSON.stringify({
+      switch: isSwitch.value
+    })
+  )
 }
 
+// Function to close visibility pop-up
 const closeVisibility = function () {
-  // Reset visibility states
   visibilityToggle.public.state = false
   visibilityToggle.private.state = false
-
-  // Reset toggle to previous state
   isSwitch.value = previousState.value
 
+  // Save the current toggle state in localStorage
+  localStorage.setItem(
+    'toggleState',
+    JSON.stringify({
+      switch: isSwitch.value
+    })
+  )
+
   router.push({ name: 'Task' })
 }
 
-const confirmVisibility = async function (operate) {
-  // Change the message depending on the current visibility
-  if (operate === 'public') {
-    visibilityToggle.public.state = true
-  } else if (operate === 'private') {
-    visibilityToggle.private.state = true
-  }
-
-  // Logic for confirming visibility change (e.g., API call)
-  router.push({ name: 'Task' })
-
-  // Reset visibility toggles after confirmation
+// Function to confirm visibility change
+const confirmVisibility = function () {
   visibilityToggle.public.state = false
   visibilityToggle.private.state = false
+
+  // Save the current toggle state in localStorage
+  localStorage.setItem(
+    'toggleState',
+    JSON.stringify({
+      switch: isSwitch.value
+    })
+  )
+
+  router.push({ name: 'Task' })
 }
+
+// Load toggle state from localStorage on page load, but don't show the popup
+onMounted(() => {
+  const savedState = localStorage.getItem('toggleState')
+  if (savedState) {
+    const state = JSON.parse(savedState)
+    isSwitch.value = state.switch
+  }
+})
 </script>
 
 <template>
