@@ -189,6 +189,10 @@ const taskGroups = ref(taskManager.getTasks())
 
 const searchStatus = ref('')
 const cloneTaskGroups = ref(statusManager.getStatuses())
+const errorPublic = ref(false)
+const closePublicAlter = function () {
+  errorPublic.value = false
+}
 
 watch(searchStatus, (status) => {
   if (collectStatus.includes(status) || status === null) {
@@ -408,6 +412,13 @@ onMounted(() => {
       :operate="'private'"
       @closeVisibilityPopUp="closeVisibility"
       @confirmVisibilityPopUp="confirmVisibility"
+    />
+    <AlertPopUp
+      v-if="errorPublic"
+      :titles="'You need to be board owner to perform this action.'"
+      @closePopUp="closePublicAlter"
+      message="Error!!"
+      styleType="red"
     />
     <div class="flex justify-end">
       <div
