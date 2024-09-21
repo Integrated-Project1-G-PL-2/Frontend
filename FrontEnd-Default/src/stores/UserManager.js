@@ -96,7 +96,8 @@ export async function refreshToken(router) {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${refresh_token}` // Use refresh token in header
-      }
+      },
+      credentials: 'include'
     })
 
     if (response.ok) {
