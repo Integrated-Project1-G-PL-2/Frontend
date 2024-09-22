@@ -83,11 +83,13 @@ export function logout() {
 
 // ฟังก์ชัน refreshToken
 export async function refreshToken(router) {
-  const refresh_token = localStorage.getItem('refresh_token')
+  const refresh_token = localStorage.getItem('refresh_token');
+  
+  // If no refresh token exists, logout and redirect to login
   if (!refresh_token) {
-    logout()
-    router.replace({ name: 'Login' })
-    return
+    logout();
+    router.replace({ name: 'Login' });
+    return null; // Return null if refresh token is missing
   }
 
   try {
@@ -95,75 +97,103 @@ export async function refreshToken(router) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${refresh_token}` // Use refresh token in header
+        Authorization: `Bearer ${refresh_token}`, // Use refresh token
       },
-      credentials: 'include'
-    })
+      credentials: 'include',
+    });
 
+    // If refresh token request is successful
     if (response.ok) {
-      const data = await response.json()
-      localStorage.setItem('jwt', data.access_token) // Store new access token
-      return data.access_token
-    } else if (response.status === 401) {
-      logout()
-      router.replace({ name: 'Login' })
+      const data = await response.json();
+      localStorage.setItem('jwt', data.access_token); // Store new access token
+      console.log("New access token set:", data.access_token); // Log the new token
+      return data.access_token; // Return the new access token
+    } 
+    // If refresh token is invalid (401 Unauthorized)
+    else if (response.status === 401) {
+      logout();
+      router.replace({ name: 'Login' });
+      return null; // Return null to indicate failure
     } else {
-      alert('There is a problem. Please try again later.')
+      alert('There was a problem refreshing the token. Please try again later.');
+      return null;
     }
   } catch (error) {
-    alert('There is a problem. Please try again later.')
+    alert('Error occurred while refreshing token.');
+    return null;
   }
 }
+
+
 
 // Navigation Guard สำหรับตรวจสอบการยืนยันตัวตน
 export function useAuthGuard(router) {
   router.beforeEach(async (to, from, next) => {
-    const token = localStorage.getItem('jwt')
+    console.log("Auth Guard Triggered");
 
-    if (token) {
-      try {
-        const decodedToken = decodeJWT(token)
-        const currentTime = Math.floor(Date.now() / 1000)
+    const token = localStorage.getItem('jwt');
 
-        if (decodedToken.payload.exp < currentTime) {
-          // Token expired, try to refresh
-          const newToken = await refreshToken(router)
-          if (!newToken) return // If no new token, refreshToken will handle the redirect
-        }
-
-        next() // token ถูกต้องและยังไม่หมดอายุ ให้ดำเนินการต่อ
-      } catch (error) {
-        logout()
-        return next({ name: 'Login' })
-      }
-    } else {
-      if (to.name !== 'Login') {
-        return next({ name: 'Login' })
-      } else {
-        return next()
-      }
+    if (!token) {
+      console.log("No token found, redirecting to login.");
+      return next({ name: 'Login' });
     }
-  })
+
+    console.log("Token found, checking validity...");
+    try {
+      const decodedToken = decodeJWT(token);
+      const currentTime = Math.floor(Date.now() / 1000);
+      console.log("Token expiry time:", decodedToken.payload.exp, "Current time:", currentTime);
+
+      if (decodedToken.payload.exp < currentTime) {
+        console.log("Token expired, attempting to refresh...");
+        const newToken = await refreshToken(router);
+
+        if (newToken) {
+          console.log("New token obtained:", newToken);
+          localStorage.setItem('jwt', newToken); // Ensure the new token is stored
+          return next(); // Allow navigation
+        } else {
+          console.log("Failed to refresh token, redirecting to login.");
+          logout(); // Ensure logout is called if refresh fails
+          return next({ name: 'Login' });
+        }
+      } else {
+        console.log("Token is valid, allowing navigation.");
+        return next(); // Proceed as normal
+      }
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      logout();
+      return next({ name: 'Login' });
+    }
+  });
 }
+
+
+
+
 
 // ฟังก์ชันสำหรับทำ API request พร้อมแนบ token
 export async function apiRequest(url, options = {}, router) {
-  const token = localStorage.getItem('jwt')
+  let token = localStorage.getItem('jwt') // Get access token from localStorage
 
   if (token) {
     options.headers = {
       ...options.headers,
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}` // Attach access token to the request
     }
   }
 
   const response = await fetch(url, options)
 
+  // If access token expired (status 401), attempt to refresh the token
   if (response.status === 401) {
     const newToken = await refreshToken(router) // Try to refresh token
 
     if (newToken) {
-      options.headers.Authorization = `Bearer ${newToken}`
+      // Replace the old token with the new one
+      token = newToken
+      options.headers.Authorization = `Bearer ${newToken}` // Update the request with the new token
       return await fetch(url, options) // Retry request with new token
     } else {
       logout()
