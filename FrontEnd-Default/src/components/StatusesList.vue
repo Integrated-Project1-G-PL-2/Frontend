@@ -45,15 +45,13 @@ const showDeleteStatusDetail = ref(false)
 const transferDelList = ref({})
 onMounted(async () => {
   const taskItems = await getItems(
-      `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
-    )
-    if(taskItems == 401){
-      router.replace({ name: 'Login' })
-    return
-    }
-  taskManager.setTasks(
-    taskItems
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
   )
+  if (taskItems == 401) {
+    router.replace({ name: 'Login' })
+    return
+  }
+  taskManager.setTasks(taskItems)
   statusManager.setStatuses(
     await getItems(
       `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`
@@ -150,6 +148,14 @@ const closeGreenPopup = async function (operate) {
   router.push({ name: 'StatusList' })
   greenPopup[operate].state = false
 }
+const errorPublic = ref(false)
+const accessDenied = ref(false)
+const closePublicAlter = function () {
+  errorPublic.value = false
+}
+const closeAccessAlter = function () {
+  accessDenied.value = false
+}
 </script>
 
 <template>
@@ -239,6 +245,20 @@ const closeGreenPopup = async function (operate) {
       message="Error!!"
       styleType="red"
       :operate="'edit'"
+    />
+    <AlertPopUp
+      v-if="accessDenied"
+      :titles="'Access denied, you do not have permission to view this page.'"
+      @closePopUp="closeAccessAlter"
+      message="Error!!"
+      styleType="red"
+    />
+    <AlertPopUp
+      v-if="errorPublic"
+      :titles="'You need to be board owner to perform this action.'"
+      @closePopUp="closePublicAlter"
+      message="Error!!"
+      styleType="red"
     />
     <div class="flex justify-start">
       <button

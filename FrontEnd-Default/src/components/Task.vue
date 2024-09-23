@@ -189,9 +189,9 @@ const taskGroups = ref(taskManager.getTasks())
 
 const searchStatus = ref('')
 const cloneTaskGroups = ref(statusManager.getStatuses())
-const errorPublic = ref(false)
-const closePublicAlter = function () {
-  errorPublic.value = false
+const permission = ref(false)
+const closePermissionAlter = function () {
+  permission.value = false
 }
 
 watch(searchStatus, (status) => {
@@ -414,9 +414,9 @@ onMounted(() => {
       @confirmVisibilityPopUp="confirmVisibility"
     />
     <AlertPopUp
-      v-if="errorPublic"
-      :titles="'You need to be board owner to perform this action.'"
-      @closePopUp="closePublicAlter"
+      v-if="permission"
+      :titles="'You do not have permission to change board visibility mode.'"
+      @closePopUp="closePermissionAlter"
       message="Error!!"
       styleType="red"
     />
