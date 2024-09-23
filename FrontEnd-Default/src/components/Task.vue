@@ -510,7 +510,9 @@ onMounted(() => {
       >
         <input
           :disabled="
-            visibilityToggle.public.state || visibilityToggle.private.state
+            visibilityToggle.public.state ||
+            visibilityToggle.private.state ||
+            public
           "
           type="checkbox"
           v-model="isSwitch"
@@ -527,6 +529,7 @@ onMounted(() => {
 
       <button
         @click="showAddPopUpTaskDetail('add')"
+        :disabled="public"
         class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
       >
         ✚ Add New Task
@@ -630,6 +633,7 @@ onMounted(() => {
             <div
               class="itbkk-button-edit inline-flex"
               @click="showEditTaskDetail(task.id, 'edit')"
+              :disabled="public"
             >
               ⚙️
             </div>
@@ -642,6 +646,7 @@ onMounted(() => {
                   index: index + 1
                 })
               "
+              :disabled="public"
             >
               🗑️
             </div>

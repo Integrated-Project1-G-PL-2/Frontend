@@ -275,6 +275,7 @@ const closeAccessAlter = function () {
       <div class="flex ml-auto">
         <button
           @click="showAddStatusesModal('add')"
+          :disabled="public"
           class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2 my-3"
         >
           ✚ Add Status
@@ -341,6 +342,7 @@ const closeAccessAlter = function () {
                       id: statuses.id
                     })
                   "
+                  :disabled="public"
                 >
                   Edit
                 </button>
@@ -368,6 +370,7 @@ const closeAccessAlter = function () {
                       index: index + 1
                     })
                   "
+                  :disabled="public"
                 >
                   Delete
                 </button>
