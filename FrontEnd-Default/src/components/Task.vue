@@ -193,6 +193,10 @@ const permission = ref(false)
 const closePermissionAlter = function () {
   permission.value = false
 }
+const error = ref(false)
+const closeProblemAlter = () => {
+  error.value = false
+}
 
 watch(searchStatus, (status) => {
   if (collectStatus.includes(status) || status === null) {
@@ -417,6 +421,13 @@ onMounted(() => {
       v-if="permission"
       :titles="'You do not have permission to change board visibility mode.'"
       @closePopUp="closePermissionAlter"
+      message="Error!!"
+      styleType="red"
+    />
+    <AlertPopUp
+      v-if="error"
+      :titles="'There is a problem. Please try again later.'"
+      @closePopUp="closeProblemAlter"
       message="Error!!"
       styleType="red"
     />
