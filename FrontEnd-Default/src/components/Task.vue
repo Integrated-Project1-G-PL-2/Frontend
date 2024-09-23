@@ -229,7 +229,14 @@ const returnLoginPage = () => {
 const goBackToHomeBoard = () => {
   router.replace({ name: 'Board' })
 }
-
+const errorPublic = ref(false)
+const accessDenied = ref(false)
+const closePublicAlter = function () {
+  errorPublic.value = false
+}
+const closeAccessAlter = function () {
+  accessDenied.value = false
+}
 // Reactive variable to track checkbox state
 const isSwitch = ref(false)
 
@@ -428,6 +435,20 @@ onMounted(() => {
       v-if="error"
       :titles="'There is a problem. Please try again later.'"
       @closePopUp="closeProblemAlter"
+      message="Error!!"
+      styleType="red"
+    />
+    <AlertPopUp
+      v-if="accessDenied"
+      :titles="'Access denied, you do not have permission to view this page.'"
+      @closePopUp="closeAccessAlter"
+      message="Error!!"
+      styleType="red"
+    />
+    <AlertPopUp
+      v-if="errorPublic"
+      :titles="'You need to be board owner to perform this action.'"
+      @closePopUp="closePublicAlter"
       message="Error!!"
       styleType="red"
     />
