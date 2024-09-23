@@ -135,7 +135,7 @@ export function useAuthGuard(router) {
 
     if (!token) {
       console.log("No token found, redirecting to login.");
-      return next({ name: 'Login' });
+      return next();
     }
 
     console.log("Token found, checking validity...");
