@@ -83,13 +83,13 @@ export function logout() {
 
 // ฟังก์ชัน refreshToken
 export async function refreshToken(router) {
-  const refresh_token = localStorage.getItem('refresh_token');
-  
+  const refresh_token = localStorage.getItem('refresh_token')
+
   // If no refresh token exists, logout and redirect to login
   if (!refresh_token) {
-    logout();
-    router.replace({ name: 'Login' });
-    return null; // Return null if refresh token is missing
+    logout()
+    router.replace({ name: 'Login' })
+    return null // Return null if refresh token is missing
   }
 
   try {
@@ -97,81 +97,161 @@ export async function refreshToken(router) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${refresh_token}`, // Use refresh token
+        Authorization: `Bearer ${refresh_token}` // Use refresh token
       },
-      credentials: 'include',
-    });
+      credentials: 'include'
+    })
 
     // If refresh token request is successful
     if (response.ok) {
-      const data = await response.json();
-      localStorage.setItem('jwt', data.access_token); // Store new access token
-      console.log("New access token set:", data.access_token); // Log the new token
-      return data.access_token; // Return the new access token
-    } 
+      const data = await response.json()
+      localStorage.setItem('jwt', data.access_token) // Store new access token
+      console.log('New access token set:', data.access_token) // Log the new token
+      return data.access_token // Return the new access token
+    }
     // If refresh token is invalid (401 Unauthorized)
     else if (response.status === 401) {
-      logout();
-      router.replace({ name: 'Login' });
-      return null; // Return null to indicate failure
+      logout()
+      router.replace({ name: 'Login' })
+      return null // Return null to indicate failure
     } else {
-      alert('There was a problem refreshing the token. Please try again later.');
-      return null;
+      alert('There was a problem refreshing the token. Please try again later.')
+      return null
     }
   } catch (error) {
-    alert('Error occurred while refreshing token.');
-    return null;
+    alert('Error occurred while refreshing token.')
+    return null
   }
 }
 
-
-
-// Navigation Guard สำหรับตรวจสอบการยืนยันตัวตน
+// Navigation Guard for Authentication and Access Control
 export function useAuthGuard(router) {
   router.beforeEach(async (to, from, next) => {
-    console.log("Auth Guard Triggered");
+    console.log('Auth Guard Triggered')
 
-    const token = localStorage.getItem('jwt');
+    const token = localStorage.getItem('jwt')
 
     if (!token) {
-      console.log("No token found, redirecting to login.");
-      return next();
+      console.log('No token found, redirecting to login.')
+      return next({ name: 'Login' })
     }
 
-    console.log("Token found, checking validity...");
+    console.log('Token found, checking validity...')
     try {
-      const decodedToken = decodeJWT(token);
-      const currentTime = Math.floor(Date.now() / 1000);
-      console.log("Token expiry time:", decodedToken.payload.exp, "Current time:", currentTime);
+      const decodedToken = decodeJWT(token)
+      const currentTime = Math.floor(Date.now() / 1000)
+      console.log(
+        'Token expiry time:',
+        decodedToken.payload.exp,
+        'Current time:',
+        currentTime
+      )
 
       if (decodedToken.payload.exp < currentTime) {
-        console.log("Token expired, attempting to refresh...");
-        const newToken = await refreshToken(router);
+        console.log('Token expired, attempting to refresh...')
+        const newToken = await refreshToken(router)
 
         if (newToken) {
-          console.log("New token obtained:", newToken);
-          localStorage.setItem('jwt', newToken); // Ensure the new token is stored
-          return next(); // Allow navigation
+          console.log('New token obtained:', newToken)
+          localStorage.setItem('jwt', newToken) // Ensure the new token is stored
+          return next() // Allow navigation
         } else {
-          console.log("Failed to refresh token, redirecting to login.");
-          logout(); // Ensure logout is called if refresh fails
-          return next({ name: 'Login' });
+          console.log('Failed to refresh token, redirecting to login.')
+          logout() // Ensure logout is called if refresh fails
+          return next({ name: 'Login' })
         }
       } else {
-        console.log("Token is valid, allowing navigation.");
-        return next(); // Proceed as normal
+        console.log('Token is valid, checking permissions.')
+        // Proceed to check for board visibility and ownership here
+        return checkBoardPermissions(to, next)
       }
     } catch (error) {
-      console.error('Error decoding token:', error);
-      logout();
-      return next({ name: 'Login' });
+      console.error('Error decoding token:', error)
+      logout()
+      return next({ name: 'Login' })
     }
-  });
+  })
 }
 
+// Function to check board visibility and user permissions
+async function checkBoardPermissions(to, next) {
+  const boardId = to.params.id
+  const taskId = to.params['task-id'] // If applicable
 
+  try {
+    // Fetch board details (assuming an API that returns board info including ownership and visibility)
+    const response = await fetch(`/boards/${boardId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('jwt')}`
+      }
+    })
 
+    const board = await response.json()
 
+    if (!board) {
+      console.error('Failed to fetch board details.')
+      return next({ name: 'ErrorPage' })
+    }
+
+    const isOwner = board.isOwner // Assuming API returns whether the user is the owner
+    const visibilityMode = board.visibility // 'public' or 'private'
+
+    // Define paths for visibility checks
+    const taskAddEditRoutes = [
+      '/board/:id/task/add',
+      '/board/:id/task/:task-id/edit'
+    ]
+    const generalBoardRoutes = [
+      '/board/:id',
+      '/board/:id/status',
+      '/board/:id/task/:task-id'
+    ]
+
+    // Case 1: Non-owner trying to access private board
+    if (!isOwner && visibilityMode === 'private') {
+      if (generalBoardRoutes.some((route) => to.path.startsWith(route))) {
+        return next({
+          name: 'AccessDenied',
+          query: {
+            message:
+              'Access denied, you do not have permission to view this page.'
+          }
+        })
+      }
+    }
+
+    // Case 2: Non-owner accessing public board but trying to modify tasks
+    if (
+      !isOwner &&
+      visibilityMode === 'public' &&
+      taskAddEditRoutes.some((route) => to.path.startsWith(route))
+    ) {
+      return next({
+        name: 'AccessDenied',
+        query: {
+          message:
+            'Access denied, you do not have permission to modify tasks on this board.'
+        }
+      })
+    }
+
+    // Case 3: Owner can access everything
+    if (isOwner) {
+      return next()
+    }
+
+    // Case 4: Non-owner can access public board
+    if (!isOwner && visibilityMode === 'public') {
+      return next()
+    }
+
+    console.error('Unexpected state in permission check.')
+    return next({ name: 'ErrorPage' })
+  } catch (error) {
+    console.error('Error fetching board details:', error)
+    return next({ name: 'ErrorPage' })
+  }
+}
 
 // ฟังก์ชันสำหรับทำ API request พร้อมแนบ token
 export async function apiRequest(url, options = {}, router) {
