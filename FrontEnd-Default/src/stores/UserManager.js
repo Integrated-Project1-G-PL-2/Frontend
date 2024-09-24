@@ -163,7 +163,7 @@ export function useAuthGuard(router) {
       } else {
         console.log('Token is valid, allowing navigation.')
         // Proceed to check for board visibility and ownership here
-        return checkBoardPermissions(to, next)
+        // return checkBoardPermissions(to, next)
         return next() // Proceed as normal
       }
     } catch (error) {
@@ -176,7 +176,7 @@ export function useAuthGuard(router) {
 
 // Function to check board visibility and user permissions
 async function checkBoardPermissions(to, next) {
-  const boardId = to.params.id
+  const boardId = to.id.boardId
   const taskId = to.params['task-id'] // If applicable
 
   try {
@@ -212,7 +212,7 @@ async function checkBoardPermissions(to, next) {
     if (!isOwner && visibilityMode === 'private') {
       if (generalBoardRoutes.some((route) => to.path.startsWith(route))) {
         return next({
-          name: 'StatusesList',
+          name: 'StatusList',
           query: {
             message:
               'Access denied, you do not have permission to view this page.'
@@ -250,7 +250,7 @@ async function checkBoardPermissions(to, next) {
     return next({ name: 'Task' })
   } catch (error) {
     console.error('Error fetching board details:', error)
-    return next({ name: 'StatusesList' })
+    return next({ name: 'StatusList' })
   }
 }
 

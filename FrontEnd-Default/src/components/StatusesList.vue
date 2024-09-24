@@ -292,6 +292,9 @@ const closeAccessAlter = function () {
         </tr>
       </thead>
       <tbody>
+        <div class="text-center text-xl text-red-600" v-if="private">
+          <h2>Access denied,you do not have permission to view this page.</h2>
+        </div>
         <tr
           v-for="(statuses, index) in statusManager.getStatuses()"
           :key="statuses.id"
