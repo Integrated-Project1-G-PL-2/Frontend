@@ -11,10 +11,10 @@ const route = useRoute()
 defineEmits(['confirmVisibilityPopUp', 'closeVisibilityPopUp'])
 
 const changeVisibility = async function (PublicOrPrivate) {
-  console.log(PublicOrPrivate)
-const visibility = await toggleVisibility(`${import.meta.env.VITE_BASE_URL}/v3/boards/`,
-    `${route.params.id}`,PublicOrPrivate)
-console.log(visibility)
+  
+const visibility = await toggleVisibility(`${import.meta.env.VITE_BASE_URL}/v3/boards`,
+    `${route.params.id}`,PublicOrPrivate.toUpperCase())
+
 }
 
 </script>

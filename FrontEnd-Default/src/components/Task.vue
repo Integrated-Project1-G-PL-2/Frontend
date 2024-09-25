@@ -42,6 +42,7 @@ const showDeleteTaskDetail = ref(false)
 const operation = ref('')
 const returnPage = ref(false)
 const collectStatus = reactive([])
+const boardManager = useBoardManager()
 const visibilityToggle = reactive({
   public: { state: false },
   private: { state: false }
@@ -81,6 +82,9 @@ onMounted(async () => {
     `${route.params.id}`
   )
   bName.value = getBoardName.name
+  const board = boardManager.findByBoardByID(route.params.id)
+
+  console.log(board)
 })
 
 const showTaskDetail = async function (id, operate) {
