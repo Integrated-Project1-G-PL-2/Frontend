@@ -300,7 +300,8 @@ const confirmVisibility = function () {
     JSON.stringify({
       switch: isSwitch.value,
       publicPopup: visibilityToggle.public.state,
-      privatePopup: visibilityToggle.private.state
+      privatePopup: visibilityToggle.private.state,
+      boardVisibility: boardVisibility.value // Add boardVisibility state
     })
   )
 
@@ -315,6 +316,7 @@ onMounted(() => {
     isSwitch.value = data.switch
     visibilityToggle.public.state = data.publicPopup
     visibilityToggle.private.state = data.privatePopup
+    boardVisibility.value = data.boardVisibility // Load boardVisibility state
   }
 })
 </script>
