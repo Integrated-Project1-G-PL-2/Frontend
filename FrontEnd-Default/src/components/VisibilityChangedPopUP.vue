@@ -2,12 +2,21 @@
 import { ref, reactive } from 'vue'
 
 import { useRoute, useRouter } from 'vue-router'
-
+import {toggleVisibility} from '@/utils/fetchUtils'
 const props = defineProps({
   message: String,
   operate: String
 })
+const route = useRoute()
 defineEmits(['confirmVisibilityPopUp', 'closeVisibilityPopUp'])
+
+const changeVisibility = async function (PublicOrPrivate) {
+  console.log(PublicOrPrivate)
+const visibility = await toggleVisibility(`${import.meta.env.VITE_BASE_URL}/v3/boards/`,
+    `${route.params.id}`,PublicOrPrivate)
+console.log(visibility)
+}
+
 </script>
 
 <template>
@@ -34,7 +43,8 @@ defineEmits(['confirmVisibilityPopUp', 'closeVisibilityPopUp'])
           @click="
             ;[
               $emit('confirmVisibilityPopUp', props.operate),
-              $router.replace({ name: 'Task' })
+              $router.replace({ name: 'Task' }),
+              changeVisibility(props.operate)
             ]
           "
         >

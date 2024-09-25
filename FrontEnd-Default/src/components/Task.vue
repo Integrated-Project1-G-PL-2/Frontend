@@ -245,9 +245,8 @@ const toggleLabel = computed(() => (isSwitch.value ? 'Public' : 'Private'))
 let previousState = ref(false) // Store the previous toggle state
 
 // Function to open visibility settings (trigger the popup)
-const openVisibilitySetting = function () {
+const openVisibilitySetting = async function () {
   previousState.value = isSwitch.value
-
   if (isSwitch.value) {
     // If it's already Public, switch to Private and show private popup
     visibilityToggle.private.state = true
@@ -509,11 +508,7 @@ onMounted(() => {
         class="itbkk-board-visibility inline-flex items-center cursor-pointer"
       >
         <input
-          :disabled="
-            visibilityToggle.public.state ||
-            visibilityToggle.private.state ||
-            public
-          "
+          
           type="checkbox"
           v-model="isSwitch"
           class="sr-only peer"
@@ -532,7 +527,7 @@ onMounted(() => {
         data-tooltip-placement="top"
         type="button"
         @click="showAddPopUpTaskDetail('add')"
-        :disabled="public"
+       
         class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
       >
         ✚ Add New Task
@@ -634,7 +629,7 @@ onMounted(() => {
         </tr>
       </thead>
       <tbody>
-        <div class="text-center text-xl text-red-600" v-if="private">
+        <div class="text-center text-xl text-red-600" >
           <h2>Access denied,you do not have permission to view this page.</h2>
         </div>
         <tr
@@ -647,7 +642,7 @@ onMounted(() => {
             <div
               class="itbkk-button-edit inline-flex"
               @click="showEditTaskDetail(task.id, 'edit')"
-              :disabled="public"
+        
             >
               ⚙️
             </div>
@@ -660,7 +655,7 @@ onMounted(() => {
                   index: index + 1
                 })
               "
-              :disabled="public"
+        
             >
               🗑️
             </div>

@@ -152,4 +152,27 @@ async function editItem(url, id, editedItem, router) {
   }
 }
 
-export { getItemById, deleteItemById, addItem, editItem, deleteAndTransferItem }
+async function toggleVisibility(url,id, visibility) {
+  try {
+    const options = {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify( visibility )
+    }
+    console.log(visibility)
+    console.log(url)
+    console.log(id)
+    const res = await fetchWithAuth(`${url}/${id}`, options);
+    if (res.ok) {
+      return await res.json();
+    }
+    return null;
+  } catch (error) {
+    console.error(`Network error: ${error}`);
+    return null;
+  }
+};
+
+export { getItemById, deleteItemById, addItem, editItem, deleteAndTransferItem,toggleVisibility }
