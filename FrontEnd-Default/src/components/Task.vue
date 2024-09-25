@@ -253,19 +253,21 @@ const isSwitch = ref(false)
 const toggleLabel = computed(() => (isSwitch.value ? 'Public' : 'Private'))
 let previousState = ref(false) // Store the previous toggle state
 
+// Reactive variable to track if the popup is visible
+const isPopupVisible = ref(false)
 // Function to open visibility settings (trigger the popup)
-const openVisibilitySetting = async function () {
+const openVisibilitySetting = async function (operate) {
+  operation.value = operate
   previousState.value = isSwitch.value
+  isPopupVisible.value = true // Show the popup
 
   // Update the visibility based on the current state of the boardVisibility
   if (boardVisibility.value === 'PRIVATE') {
-    // If it's currently Private, switch to Public and show the Public popup
     visibilityToggle.public.state = true
     visibilityToggle.private.state = false
     isSwitch.value = true
     boardVisibility.value = 'PUBLIC' // Update the visibility to PUBLIC
   } else {
-    // If it's currently Public, switch to Private and show the Private popup
     visibilityToggle.private.state = true
     visibilityToggle.public.state = false
     isSwitch.value = false
@@ -278,8 +280,9 @@ const closeVisibility = function () {
   visibilityToggle.public.state = false
   visibilityToggle.private.state = false
   isSwitch.value = previousState.value // Restore the previous state
+  isPopupVisible.value = false // Close the popup
 
-  // No need to save anything in localStorage, just update `boardVisibility`
+  // Update `boardVisibility` based on the toggle state
   if (isSwitch.value) {
     boardVisibility.value = 'PUBLIC'
   } else {
@@ -293,6 +296,7 @@ const closeVisibility = function () {
 const confirmVisibility = function () {
   visibilityToggle.public.state = false
   visibilityToggle.private.state = false
+  isPopupVisible.value = false // Close the popup
 
   // Save the final states in localStorage
   localStorage.setItem(
@@ -301,13 +305,12 @@ const confirmVisibility = function () {
       switch: isSwitch.value,
       publicPopup: visibilityToggle.public.state,
       privatePopup: visibilityToggle.private.state,
-      boardVisibility: boardVisibility.value // Add boardVisibility state
+      boardVisibility: boardVisibility.value // Save the boardVisibility state
     })
   )
 
   router.push({ name: 'Task' })
 }
-
 // Load the saved toggle and popup states from localStorage on page load
 onMounted(() => {
   const savedVisibilityData = localStorage.getItem('visibilityData')
@@ -515,10 +518,10 @@ onMounted(() => {
             v-model="isSwitch"
             class="sr-only peer"
             @click="openVisibilitySetting"
+            :disabled="public || isPopupVisible"
           />
 
           <div
-            :disabled="public"
             class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
           ></div>
           <span class="ms-3 text-sm font-medium text-gray-600 mr-3 my-3">
