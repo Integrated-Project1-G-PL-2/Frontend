@@ -25,13 +25,15 @@ export const useBoardManager = defineStore('boardManager', () => {
     }
     const findByBoardByID = function(boardId){
       return currentBoard.find((el) => {
-
-        return el.board.id == boardId})
-      
+        return el.id == boardId})
+    }
+    const setCurrentBoard = function(board){
+      currentBoard = board
     }
   
     
     return {
+      setCurrentBoard,
       getBoards,
       setBoards,
       addBoard,

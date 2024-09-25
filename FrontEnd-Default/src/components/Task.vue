@@ -62,17 +62,20 @@ onMounted(async () => {
   const tasksItem = await getItems(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
   )
+  const currentBoard = await getItemById(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}`
+  )
   if (tasksItem == 401) {
     router.replace({ name: 'Login' })
     return
   }
+  boardManager.setCurrentBoard(currentBoard)
   taskManager.setTasks(tasksItem)
   statusManager.setStatuses(
     await getItems(
       `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`
     )
   )
-
   const storedUserName = localStorage.getItem('userName')
   if (storedUserName) {
     userName.value = storedUserName
@@ -81,10 +84,9 @@ onMounted(async () => {
     `${import.meta.env.VITE_BASE_URL}/v3/boards`,
     `${route.params.id}`
   )
-  bName.value = getBoardName.name
-  const board = boardManager.findByBoardByID(route.params.id)
-
-  console.log(board)
+  const board = boardManager.findByBoardByID(route.params.id);
+  console.log(board);
+  
 })
 
 const showTaskDetail = async function (id, operate) {
