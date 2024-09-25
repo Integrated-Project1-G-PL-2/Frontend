@@ -40,6 +40,7 @@ const taskManager = useTaskManager()
 const taskDetail = reactive({})
 const showDeleteTaskDetail = ref(false)
 const operation = ref('')
+const operationVisibility = ref('')
 const returnPage = ref(false)
 const boardVisibility = ref('')
 const collectStatus = reactive([])
@@ -257,7 +258,7 @@ let previousState = ref(false) // Store the previous toggle state
 const isPopupVisible = ref(false)
 // Function to open visibility settings (trigger the popup)
 const openVisibilitySetting = async function (operate) {
-  operation.value = operate
+  operationVisibility.value = operate
   previousState.value = isSwitch.value
   isPopupVisible.value = true // Show the popup
 
@@ -417,14 +418,14 @@ onMounted(() => {
     <VisibilityChangedPopUp
       v-if="visibilityToggle.public.state"
       message="In public, any one can view the board, task list and task detail of tasks in the board. Do you want to change the visibility to Public?"
-      :operate="'public'"
+      :operate="operationVisibility"
       @closeVisibilityPopUp="closeVisibility"
       @confirmVisibilityPopUp="confirmVisibility"
     />
     <VisibilityChangedPopUp
       v-if="visibilityToggle.private.state"
       message="In private, only board owner can access/control board. Do you want to change the visibility to Private?"
-      :operate="'private'"
+      :operate="operationVisibility"
       @closeVisibilityPopUp="closeVisibility"
       @confirmVisibilityPopUp="confirmVisibility"
     />
