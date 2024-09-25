@@ -34,6 +34,8 @@ onMounted(async () => {
     router.replace({ name: 'Login' })
     return
   }
+console.log(boards)
+
   // if (boards.length > 0) {
   //   router.replace({ name: 'Task', params: { id: boards[0].board.id } })
   // }
