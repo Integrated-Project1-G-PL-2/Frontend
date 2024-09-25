@@ -1,10 +1,10 @@
-import { reactive } from 'vue'
+import { reactive,ref } from 'vue'
 import { defineStore, acceptHMRUpdate } from 'pinia'
 
 
 export const useBoardManager = defineStore('boardManager', () => {
     const boards = reactive([])
-    const currentBoard = reactive({})
+    let currentBoard = reactive({})
     const getBoards = function () {
       return boards
     }
@@ -23,14 +23,13 @@ export const useBoardManager = defineStore('boardManager', () => {
     const findIndexById = function (id) {
       return boards.findIndex((el) => el.id === id)
     }
-    const findByBoardByID = function(boardId){
-      return currentBoard.find((el) => {
-        return el.id == boardId})
-    }
     const setCurrentBoard = function(board){
+      console.log(board)
       currentBoard = board
     }
-  
+  const getCurrentBoard = function(){
+      return currentBoard
+    }
     
     return {
       setCurrentBoard,
@@ -38,7 +37,7 @@ export const useBoardManager = defineStore('boardManager', () => {
       setBoards,
       addBoard,
       findIndexById,
-      findByBoardByID
+      getCurrentBoard
     }
   })
   
