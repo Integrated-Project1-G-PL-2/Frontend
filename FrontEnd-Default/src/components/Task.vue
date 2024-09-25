@@ -41,6 +41,7 @@ const taskDetail = reactive({})
 const showDeleteTaskDetail = ref(false)
 const operation = ref('')
 const returnPage = ref(false)
+const boardVisibility = ref()
 const collectStatus = reactive([])
 const boardManager = useBoardManager()
 const visibilityToggle = reactive({
@@ -62,17 +63,21 @@ onMounted(async () => {
   const tasksItem = await getItems(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
   )
+  const currentBoard = await getItemById(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards`,route.params.id
+  )
+  console.log(currentBoard)
   if (tasksItem == 401) {
     router.replace({ name: 'Login' })
     return
   }
+  boardManager.setCurrentBoard(currentBoard)
   taskManager.setTasks(tasksItem)
   statusManager.setStatuses(
     await getItems(
       `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`
     )
   )
-
   const storedUserName = localStorage.getItem('userName')
   if (storedUserName) {
     userName.value = storedUserName
@@ -82,9 +87,9 @@ onMounted(async () => {
     `${route.params.id}`
   )
   bName.value = getBoardName.name
-  const board = boardManager.findByBoardByID(route.params.id)
-
-  console.log(board)
+  const board = boardManager.getCurrentBoard();
+  boardVisibility.value = board.visibility;
+  
 })
 
 const showTaskDetail = async function (id, operate) {
@@ -251,7 +256,7 @@ let previousState = ref(false) // Store the previous toggle state
 // Function to open visibility settings (trigger the popup)
 const openVisibilitySetting = async function () {
   previousState.value = isSwitch.value
-  if (isSwitch.value) {
+  if (board.visibility == 'PRIVATE') {
     // If it's already Public, switch to Private and show private popup
     visibilityToggle.private.state = true
     visibilityToggle.public.state = false
