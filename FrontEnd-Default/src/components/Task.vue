@@ -41,7 +41,7 @@ const taskDetail = reactive({})
 const showDeleteTaskDetail = ref(false)
 const operation = ref('')
 const returnPage = ref(false)
-const boardVisibility = ref()
+const boardVisibility = ref('')
 const collectStatus = reactive([])
 const boardManager = useBoardManager()
 const visibilityToggle = reactive({
@@ -64,7 +64,8 @@ onMounted(async () => {
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
   )
   const currentBoard = await getItemById(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards`,route.params.id
+    `${import.meta.env.VITE_BASE_URL}/v3/boards`,
+    route.params.id
   )
   console.log(currentBoard)
   if (tasksItem == 401) {
@@ -87,9 +88,8 @@ onMounted(async () => {
     `${route.params.id}`
   )
   bName.value = getBoardName.name
-  const board = boardManager.getCurrentBoard();
-  boardVisibility.value = board.visibility;
-  
+  const board = boardManager.getCurrentBoard()
+  boardVisibility.value = board.visibility
 })
 
 const showTaskDetail = async function (id, operate) {
@@ -256,44 +256,35 @@ let previousState = ref(false) // Store the previous toggle state
 // Function to open visibility settings (trigger the popup)
 const openVisibilitySetting = async function () {
   previousState.value = isSwitch.value
-  if (board.visibility == 'PRIVATE') {
-    // If it's already Public, switch to Private and show private popup
-    visibilityToggle.private.state = true
-    visibilityToggle.public.state = false
-    isSwitch.value = false
-  } else {
-    // If it's Private, switch to Public and show public popup
+
+  // Update the visibility based on the current state of the boardVisibility
+  if (boardVisibility.value === 'PRIVATE') {
+    // If it's currently Private, switch to Public and show the Public popup
     visibilityToggle.public.state = true
     visibilityToggle.private.state = false
     isSwitch.value = true
+    boardVisibility.value = 'PUBLIC' // Update the visibility to PUBLIC
+  } else {
+    // If it's currently Public, switch to Private and show the Private popup
+    visibilityToggle.private.state = true
+    visibilityToggle.public.state = false
+    isSwitch.value = false
+    boardVisibility.value = 'PRIVATE' // Update the visibility to PRIVATE
   }
-
-  // Save the toggle and popup states in localStorage
-  localStorage.setItem(
-    'visibilityData',
-    JSON.stringify({
-      switch: isSwitch.value,
-      publicPopup: visibilityToggle.public.state,
-      privatePopup: visibilityToggle.private.state
-    })
-  )
 }
 
 // Function to close visibility pop-up
 const closeVisibility = function () {
   visibilityToggle.public.state = false
   visibilityToggle.private.state = false
-  isSwitch.value = previousState.value
+  isSwitch.value = previousState.value // Restore the previous state
 
-  // Save the current states in localStorage
-  localStorage.setItem(
-    'visibilityData',
-    JSON.stringify({
-      switch: isSwitch.value,
-      publicPopup: visibilityToggle.public.state,
-      privatePopup: visibilityToggle.private.state
-    })
-  )
+  // No need to save anything in localStorage, just update `boardVisibility`
+  if (isSwitch.value) {
+    boardVisibility.value = 'PUBLIC'
+  } else {
+    boardVisibility.value = 'PRIVATE'
+  }
 
   router.push({ name: 'Task' })
 }
