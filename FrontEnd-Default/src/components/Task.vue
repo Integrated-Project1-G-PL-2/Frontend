@@ -514,7 +514,6 @@ onMounted(() => {
         class="itbkk-board-visibility inline-flex items-center cursor-pointer"
       >
         <input
-          
           type="checkbox"
           v-model="isSwitch"
           class="sr-only peer"
@@ -529,23 +528,11 @@ onMounted(() => {
       </label>
 
       <button
-        data-tooltip-target="tooltip-top"
-        data-tooltip-placement="top"
-        type="button"
         @click="showAddPopUpTaskDetail('add')"
-       
         class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
       >
         ✚ Add New Task
       </button>
-      <div
-        id="tooltip-top"
-        role="tooltip"
-        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
-      >
-        You need to be board owner to perform this action.
-        <div class="tooltip-arrow" data-popper-arrow></div>
-      </div>
       <button
         @click="showStatusesList"
         class="itbkk-manage-status bg-gray-500 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 my-3"
@@ -635,7 +622,7 @@ onMounted(() => {
         </tr>
       </thead>
       <tbody>
-        <div class="text-center text-xl text-red-600" >
+        <div class="text-center text-xl text-red-600">
           <h2>Access denied,you do not have permission to view this page.</h2>
         </div>
         <tr
@@ -648,7 +635,6 @@ onMounted(() => {
             <div
               class="itbkk-button-edit inline-flex"
               @click="showEditTaskDetail(task.id, 'edit')"
-        
             >
               ⚙️
             </div>
@@ -661,7 +647,6 @@ onMounted(() => {
                   index: index + 1
                 })
               "
-        
             >
               🗑️
             </div>
