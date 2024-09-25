@@ -272,7 +272,7 @@ const closeAccessAlter = function () {
       >
         > Task Status
       </div>
-      <div class="flex ml-auto">
+      <div class="flex ml-auto relative group">
         <button
           @click="showAddStatusesModal('add')"
           :disabled="public"
@@ -280,6 +280,12 @@ const closeAccessAlter = function () {
         >
           ✚ Add Status
         </button>
+        <div
+          v-if="public"
+          class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-3"
+        >
+          You need to be board owner to perform this action.
+        </div>
       </div>
     </div>
     <table class="w-full text-sm text-left text-gray-500">
@@ -335,21 +341,28 @@ const closeAccessAlter = function () {
               >
                 Edit
               </button> -->
-
-              <ButtonStyle :bgColor="editColor">
-                <button
-                  class="itbkk-button-edit"
-                  @click="
-                    showEditStatusesModal({
-                      operate: 'edit',
-                      id: statuses.id
-                    })
-                  "
-                  :disabled="public"
-                >
-                  Edit
-                </button>
-              </ButtonStyle>
+              <div class="relative group">
+                <ButtonStyle :bgColor="editColor">
+                  <button
+                    class="itbkk-button-edit"
+                    @click="
+                      showEditStatusesModal({
+                        operate: 'edit',
+                        id: statuses.id
+                      })
+                    "
+                    :disabled="public"
+                  >
+                    Edit
+                  </button>
+                  <div
+                    v-if="public"
+                    class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-3"
+                  >
+                    You need to be board owner to perform this action.
+                  </div>
+                </ButtonStyle>
+              </div>
 
               <!-- <button
                 class="itbkk-button-delete bg-red-400 rounded-[8px] font-sans text-center gap-5 text-gray-100 hover:text-gray-200 w-14 mr-5"
@@ -363,21 +376,29 @@ const closeAccessAlter = function () {
               >
                 Delete
               </button> -->
-              <ButtonStyle :bgColor="deleteColor">
-                <button
-                  class="itbkk-button-delete"
-                  @click="
-                    showDeletePopUpTaskDetail({
-                      id: statuses.id,
-                      statusName: statuses.name,
-                      index: index + 1
-                    })
-                  "
-                  :disabled="public"
-                >
-                  Delete
-                </button>
-              </ButtonStyle>
+              <div class="relative group">
+                <ButtonStyle :bgColor="deleteColor">
+                  <button
+                    class="itbkk-button-delete"
+                    @click="
+                      showDeletePopUpTaskDetail({
+                        id: statuses.id,
+                        statusName: statuses.name,
+                        index: index + 1
+                      })
+                    "
+                    :disabled="public"
+                  >
+                    Delete
+                  </button>
+                  <div
+                    v-if="public"
+                    class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-3"
+                  >
+                    You need to be board owner to perform this action.
+                  </div>
+                </ButtonStyle>
+              </div>
             </div>
           </td>
         </tr>

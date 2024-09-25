@@ -508,29 +508,49 @@ onMounted(() => {
           </svg>
         </div>
       </div>
-      <label
-        class="itbkk-board-visibility inline-flex items-center cursor-pointer"
-      >
-        <input
-          type="checkbox"
-          v-model="isSwitch"
-          class="sr-only peer"
-          @click="openVisibilitySetting"
-        />
-        <div
-          class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
-        ></div>
-        <span class="ms-3 text-sm font-medium text-gray-600 mr-3 my-3">
-          {{ toggleLabel }}
-        </span>
-      </label>
+      <div class="relative group">
+        <label
+          class="itbkk-board-visibility inline-flex items-center cursor-pointer"
+        >
+          <input
+            type="checkbox"
+            v-model="isSwitch"
+            class="sr-only peer"
+            @click="openVisibilitySetting"
+          />
 
-      <button
-        @click="showAddPopUpTaskDetail('add')"
-        class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
-      >
-        ✚ Add New Task
-      </button>
+          <div
+            :disabled="public"
+            class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+          ></div>
+          <span class="ms-3 text-sm font-medium text-gray-600 mr-3 my-3">
+            {{ toggleLabel }}
+          </span>
+        </label>
+        <div
+          v-if="public"
+          class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2"
+        >
+          You need to be board owner to perform this action.
+        </div>
+      </div>
+
+      <div class="relative group">
+        <button
+          :disabled="public"
+          @click="showAddPopUpTaskDetail('add')"
+          class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
+        >
+          ✚ Add New Task
+        </button>
+        <div
+          v-if="public"
+          class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2"
+        >
+          You need to be board owner to perform this action.
+        </div>
+      </div>
+
       <button
         @click="showStatusesList"
         class="itbkk-manage-status bg-gray-500 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 my-3"
@@ -620,7 +640,7 @@ onMounted(() => {
         </tr>
       </thead>
       <tbody>
-        <div class="text-center text-xl text-red-600">
+        <div v-if="private" class="text-center text-xl text-red-600">
           <h2>Access denied,you do not have permission to view this page.</h2>
         </div>
         <tr
@@ -630,23 +650,41 @@ onMounted(() => {
         >
           <td class="itbkk-button-action px-4 py-3">
             {{ index + 1 }}
-            <div
-              class="itbkk-button-edit inline-flex"
-              @click="showEditTaskDetail(task.id, 'edit')"
-            >
-              ⚙️
+            <div class="relative group">
+              <div
+                :disabled="public"
+                class="itbkk-button-edit inline-flex"
+                @click="showEditTaskDetail(task.id, 'edit')"
+              >
+                ⚙️
+              </div>
+              <div
+                v-if="public"
+                class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2"
+              >
+                You need to be board owner to perform this action.
+              </div>
             </div>
-            <div
-              class="itbkk-button-delete inline-flex"
-              @click="
-                showDeletePopUpTaskDetail({
-                  id: task.id,
-                  taskTitle: task.title,
-                  index: index + 1
-                })
-              "
-            >
-              🗑️
+            <div class="relative group">
+              <div
+                :disabled="public"
+                class="itbkk-button-delete inline-flex"
+                @click="
+                  showDeletePopUpTaskDetail({
+                    id: task.id,
+                    taskTitle: task.title,
+                    index: index + 1
+                  })
+                "
+              >
+                🗑️
+              </div>
+              <div
+                v-if="public"
+                class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2"
+              >
+                You need to be board owner to perform this action.
+              </div>
             </div>
           </td>
           <td class="itbkk-title px-4 py-3">
