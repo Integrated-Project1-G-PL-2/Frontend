@@ -162,6 +162,7 @@ async function toggleVisibility(url,id, visibility) {
       body: JSON.stringify( {visibility} )
     }
     const res = await fetchWithAuth(`${url}/${id}`, options);
+    console.log(res)
     if (res.ok) {
       return await res.json();
     }

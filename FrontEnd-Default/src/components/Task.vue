@@ -89,7 +89,7 @@ onMounted(async () => {
   bName.value = getBoardName.name
   const board = boardManager.getCurrentBoard();
   boardVisibility.value = board.visibility;
-  
+
 })
 
 const showTaskDetail = async function (id, operate) {
@@ -247,16 +247,18 @@ const closeAccessAlter = function () {
   accessDenied.value = false
 }
 // Reactive variable to track checkbox state
-const isSwitch = ref(false)
+const isSwitch = ref(boardVisibility.value == 'PUBLIC' ? true:false)
 
 // Computed label based on checkbox state
 const toggleLabel = computed(() => (isSwitch.value ? 'Public' : 'Private'))
 let previousState = ref(false) // Store the previous toggle state
-
+ console.log(isSwitch.value)
+ console.log(boardVisibility.value)
 // Function to open visibility settings (trigger the popup)
 const openVisibilitySetting = async function () {
+ 
   previousState.value = isSwitch.value
-  if (board.visibility == 'PRIVATE') {
+  if (isSwitch.value) {
     // If it's already Public, switch to Private and show private popup
     visibilityToggle.private.state = true
     visibilityToggle.public.state = false
@@ -267,16 +269,7 @@ const openVisibilitySetting = async function () {
     visibilityToggle.private.state = false
     isSwitch.value = true
   }
-
-  // Save the toggle and popup states in localStorage
-  localStorage.setItem(
-    'visibilityData',
-    JSON.stringify({
-      switch: isSwitch.value,
-      publicPopup: visibilityToggle.public.state,
-      privatePopup: visibilityToggle.private.state
-    })
-  )
+ 
 }
 
 // Function to close visibility pop-up
@@ -285,15 +278,6 @@ const closeVisibility = function () {
   visibilityToggle.private.state = false
   isSwitch.value = previousState.value
 
-  // Save the current states in localStorage
-  localStorage.setItem(
-    'visibilityData',
-    JSON.stringify({
-      switch: isSwitch.value,
-      publicPopup: visibilityToggle.public.state,
-      privatePopup: visibilityToggle.private.state
-    })
-  )
 
   router.push({ name: 'Task' })
 }
@@ -303,29 +287,9 @@ const confirmVisibility = function () {
   visibilityToggle.public.state = false
   visibilityToggle.private.state = false
 
-  // Save the final states in localStorage
-  localStorage.setItem(
-    'visibilityData',
-    JSON.stringify({
-      switch: isSwitch.value,
-      publicPopup: visibilityToggle.public.state,
-      privatePopup: visibilityToggle.private.state
-    })
-  )
-
   router.push({ name: 'Task' })
 }
 
-// Load the saved toggle and popup states from localStorage on page load
-onMounted(() => {
-  const savedVisibilityData = localStorage.getItem('visibilityData')
-  if (savedVisibilityData) {
-    const data = JSON.parse(savedVisibilityData)
-    isSwitch.value = data.switch
-    visibilityToggle.public.state = data.publicPopup
-    visibilityToggle.private.state = data.privatePopup
-  }
-})
 </script>
 
 <template>
