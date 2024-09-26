@@ -282,7 +282,7 @@ const closeAccessAlter = function () {
             ✚ Add Status
           </button>
           <div
-            class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2"
+            class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-3"
           >
             You need to be board owner to perform this action.
           </div>
@@ -299,7 +299,7 @@ const closeAccessAlter = function () {
         </tr>
       </thead>
       <tbody>
-        <div class="text-center text-xl text-red-600" v-if="private">
+        <div class="text-center text-xl text-red-600">
           <h2>Access denied,you do not have permission to view this page.</h2>
         </div>
         <tr
@@ -358,7 +358,7 @@ const closeAccessAlter = function () {
                   </button>
                 </ButtonStyle>
                 <div
-                  class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2"
+                  class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
                 >
                   You need to be board owner to perform this action.
                 </div>
@@ -393,7 +393,7 @@ const closeAccessAlter = function () {
                   </button>
                 </ButtonStyle>
                 <div
-                  class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2"
+                  class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
                 >
                   You need to be board owner to perform this action.
                 </div>

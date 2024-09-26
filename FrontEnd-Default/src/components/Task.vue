@@ -493,7 +493,7 @@ const confirmVisibility = function () {
           </span>
         </label>
         <div
-          class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2"
+          class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
         >
           You need to be board owner to perform this action.
         </div>
@@ -506,7 +506,7 @@ const confirmVisibility = function () {
           ✚ Add New Task
         </button>
         <div
-          class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2"
+          class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
         >
           You need to be board owner to perform this action.
         </div>
@@ -619,7 +619,7 @@ const confirmVisibility = function () {
                 ⚙️
               </div>
               <div
-                class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2"
+                class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
               >
                 You need to be board owner to perform this action.
               </div>
@@ -638,7 +638,7 @@ const confirmVisibility = function () {
                 🗑️
               </div>
               <div
-                class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2"
+                class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
               >
                 You need to be board owner to perform this action.
               </div>
