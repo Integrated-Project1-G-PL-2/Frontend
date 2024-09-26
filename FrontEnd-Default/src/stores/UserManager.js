@@ -209,7 +209,7 @@ async function checkBoardPermissions(to, next) {
     ]
 
     // Case 1: Non-owner trying to access private board
-    if (!isOwner && visibilityMode === 'private') {
+    if (!isOwner && visibilityMode === 'PRIVATE') {
       if (generalBoardRoutes.some((route) => to.path.startsWith(route))) {
         return next({
           name: 'StatusList',
@@ -224,7 +224,7 @@ async function checkBoardPermissions(to, next) {
     // Case 2: Non-owner accessing public board but trying to modify tasks
     if (
       !isOwner &&
-      visibilityMode === 'public' &&
+      visibilityMode === 'PUBLIC' &&
       taskAddEditRoutes.some((route) => to.path.startsWith(route))
     ) {
       return next({
@@ -242,7 +242,7 @@ async function checkBoardPermissions(to, next) {
     }
 
     // Case 4: Non-owner can access public board
-    if (!isOwner && visibilityMode === 'public') {
+    if (!isOwner && visibilityMode === 'PUBLIC') {
       return next()
     }
 
