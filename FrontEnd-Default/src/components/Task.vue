@@ -65,7 +65,8 @@ onMounted(async () => {
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
   )
   const currentBoard = await getItemById(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards`,route.params.id
+    `${import.meta.env.VITE_BASE_URL}/v3/boards`,
+    route.params.id
   )
 
   if (tasksItem == 401) {
@@ -88,9 +89,8 @@ onMounted(async () => {
     `${route.params.id}`
   )
   bName.value = getBoardName.name
-  const board = boardManager.getCurrentBoard();
-  boardVisibility.value = board.visibility;
-
+  const board = boardManager.getCurrentBoard()
+  boardVisibility.value = board.visibility
 })
 
 const showTaskDetail = async function (id, operate) {
@@ -249,9 +249,8 @@ const closeAccessAlter = function () {
 }
 // Reactive variable to track checkbox state
 watch(boardVisibility, (newVisibility) => {
-  isSwitch.value = newVisibility === 'PUBLIC'; 
-
-});
+  isSwitch.value = newVisibility === 'PUBLIC'
+})
 
 // Computed label based on checkbox state
 const toggleLabel = computed(() => (isSwitch.value ? 'Public' : 'Private'))
@@ -259,7 +258,6 @@ let previousState = ref(false) // Store the previous toggle state
 
 // Function to open visibility settings (trigger the popup)
 const openVisibilitySetting = async function () {
- 
   previousState.value = isSwitch.value
   if (isSwitch.value) {
     // If it's already Public, switch to Private and show private popup
@@ -272,7 +270,6 @@ const openVisibilitySetting = async function () {
     visibilityToggle.private.state = false
     isSwitch.value = true
   }
- 
 }
 
 // Function to close visibility pop-up
@@ -280,7 +277,6 @@ const closeVisibility = function () {
   visibilityToggle.public.state = false
   visibilityToggle.private.state = false
   isSwitch.value = previousState.value
-
 
   router.push({ name: 'Task' })
 }
@@ -292,7 +288,6 @@ const confirmVisibility = function () {
 
   router.push({ name: 'Task' })
 }
-
 </script>
 
 <template>
@@ -480,29 +475,43 @@ const confirmVisibility = function () {
           </svg>
         </div>
       </div>
-      <label
-        class="itbkk-board-visibility inline-flex items-center cursor-pointer"
-      >
-        <input
-          type="checkbox"
-          v-model="isSwitch"
-          class="sr-only peer"
-          @click="openVisibilitySetting"
-        />
+      <div class="relative group">
+        <label
+          class="itbkk-board-visibility inline-flex items-center cursor-pointer"
+        >
+          <input
+            type="checkbox"
+            v-model="isSwitch"
+            class="sr-only peer"
+            @click="openVisibilitySetting"
+          />
+          <div
+            class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+          ></div>
+          <span class="ms-3 text-sm font-medium text-gray-600 mr-3 my-3">
+            {{ toggleLabel }}
+          </span>
+        </label>
         <div
-          class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
-        ></div>
-        <span class="ms-3 text-sm font-medium text-gray-600 mr-3 my-3">
-          {{ toggleLabel }}
-        </span>
-      </label>
+          class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2"
+        >
+          You need to be board owner to perform this action.
+        </div>
+      </div>
+      <div class="relative group">
+        <button
+          @click="showAddPopUpTaskDetail('add')"
+          class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
+        >
+          ✚ Add New Task
+        </button>
+        <div
+          class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2"
+        >
+          You need to be board owner to perform this action.
+        </div>
+      </div>
 
-      <button
-        @click="showAddPopUpTaskDetail('add')"
-        class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
-      >
-        ✚ Add New Task
-      </button>
       <button
         @click="showStatusesList"
         class="itbkk-manage-status bg-gray-500 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 my-3"
@@ -602,23 +611,37 @@ const confirmVisibility = function () {
         >
           <td class="itbkk-button-action px-4 py-3">
             {{ index + 1 }}
-            <div
-              class="itbkk-button-edit inline-flex"
-              @click="showEditTaskDetail(task.id, 'edit')"
-            >
-              ⚙️
+            <div class="relative group">
+              <div
+                class="itbkk-button-edit inline-flex"
+                @click="showEditTaskDetail(task.id, 'edit')"
+              >
+                ⚙️
+              </div>
+              <div
+                class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2"
+              >
+                You need to be board owner to perform this action.
+              </div>
             </div>
-            <div
-              class="itbkk-button-delete inline-flex"
-              @click="
-                showDeletePopUpTaskDetail({
-                  id: task.id,
-                  taskTitle: task.title,
-                  index: index + 1
-                })
-              "
-            >
-              🗑️
+            <div class="relative group">
+              <div
+                class="itbkk-button-delete inline-flex"
+                @click="
+                  showDeletePopUpTaskDetail({
+                    id: task.id,
+                    taskTitle: task.title,
+                    index: index + 1
+                  })
+                "
+              >
+                🗑️
+              </div>
+              <div
+                class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2"
+              >
+                You need to be board owner to perform this action.
+              </div>
             </div>
           </td>
           <td class="itbkk-title px-4 py-3">
