@@ -665,6 +665,7 @@ const confirmVisibility = function () {
           </td>
           <td class="itbkk-title px-4 py-3">
             <div
+              :disabled="boardVisibility === 'PRIVATE'"
               class="hover:text-sky-500 cursor-default"
               @click="showTaskDetail(task.id, 'show')"
             >
