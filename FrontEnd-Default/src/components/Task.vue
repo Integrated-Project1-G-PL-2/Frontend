@@ -609,7 +609,10 @@ const confirmVisibility = function () {
         </tr>
       </thead>
       <tbody>
-        <div class="text-center text-xl text-red-600">
+        <div
+          v-if="boardVisibility === 'PRIVATE'"
+          class="text-center text-xl text-red-600"
+        >
           <h2>Access denied,you do not have permission to view this page.</h2>
         </div>
         <tr
