@@ -480,6 +480,9 @@ const confirmVisibility = function () {
           class="itbkk-board-visibility inline-flex items-center cursor-pointer"
         >
           <input
+            :disabled="
+              boardVisibility === 'PRIVATE' || boardVisibility === 'PUBLIC'
+            "
             type="checkbox"
             v-model="isSwitch"
             class="sr-only peer"
@@ -493,6 +496,7 @@ const confirmVisibility = function () {
           </span>
         </label>
         <div
+          v-if="boardVisibility === 'PUBLIC'"
           class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
         >
           You need to be board owner to perform this action.
@@ -500,12 +504,16 @@ const confirmVisibility = function () {
       </div>
       <div class="relative group">
         <button
+          :disabled="
+            boardVisibility === 'PRIVATE' || boardVisibility === 'PUBLIC'
+          "
           @click="showAddPopUpTaskDetail('add')"
           class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
         >
           ✚ Add New Task
         </button>
         <div
+          v-if="boardVisibility === 'PUBLIC'"
           class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
         >
           You need to be board owner to perform this action.
@@ -613,12 +621,16 @@ const confirmVisibility = function () {
             {{ index + 1 }}
             <div class="relative group">
               <div
+                :disabled="
+                  boardVisibility === 'PRIVATE' || boardVisibility === 'PUBLIC'
+                "
                 class="itbkk-button-edit inline-flex"
                 @click="showEditTaskDetail(task.id, 'edit')"
               >
                 ⚙️
               </div>
               <div
+                v-if="boardVisibility === 'PUBLIC'"
                 class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
               >
                 You need to be board owner to perform this action.
@@ -626,6 +638,9 @@ const confirmVisibility = function () {
             </div>
             <div class="relative group">
               <div
+                :disabled="
+                  boardVisibility === 'PRIVATE' || boardVisibility === 'PUBLIC'
+                "
                 class="itbkk-button-delete inline-flex"
                 @click="
                   showDeletePopUpTaskDetail({
@@ -638,6 +653,7 @@ const confirmVisibility = function () {
                 🗑️
               </div>
               <div
+                v-if="boardVisibility === 'PUBLIC'"
                 class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
               >
                 You need to be board owner to perform this action.
