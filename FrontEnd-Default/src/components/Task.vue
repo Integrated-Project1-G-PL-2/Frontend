@@ -42,6 +42,7 @@ const showDeleteTaskDetail = ref(false)
 const operation = ref('')
 const returnPage = ref(false)
 const boardVisibility = ref()
+const isSwitch = ref(false)
 const collectStatus = reactive([])
 const boardManager = useBoardManager()
 const visibilityToggle = reactive({
@@ -66,7 +67,7 @@ onMounted(async () => {
   const currentBoard = await getItemById(
     `${import.meta.env.VITE_BASE_URL}/v3/boards`,route.params.id
   )
-  console.log(currentBoard)
+
   if (tasksItem == 401) {
     router.replace({ name: 'Login' })
     return
@@ -247,13 +248,15 @@ const closeAccessAlter = function () {
   accessDenied.value = false
 }
 // Reactive variable to track checkbox state
-const isSwitch = ref(boardVisibility.value == 'PUBLIC' ? true:false)
+watch(boardVisibility, (newVisibility) => {
+  isSwitch.value = newVisibility === 'PUBLIC'; 
+
+});
 
 // Computed label based on checkbox state
 const toggleLabel = computed(() => (isSwitch.value ? 'Public' : 'Private'))
 let previousState = ref(false) // Store the previous toggle state
- console.log(isSwitch.value)
- console.log(boardVisibility.value)
+
 // Function to open visibility settings (trigger the popup)
 const openVisibilitySetting = async function () {
  
