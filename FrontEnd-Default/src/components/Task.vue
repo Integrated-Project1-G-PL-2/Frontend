@@ -178,7 +178,7 @@ const showStatusesList = function () {
 const error = ref(false)
 
 const openErrorVisibility = () => {
-  console.log('test')
+  router.push({ name: 'Task' })
   error.value = true
 }
 

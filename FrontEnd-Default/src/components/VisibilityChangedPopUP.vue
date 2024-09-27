@@ -8,7 +8,7 @@ const props = defineProps({
   operate: String
 })
 const route = useRoute()
-const deClareEmit = defineEmits([
+const deClareemit = defineEmits([
   'confirmVisibilityPopUp',
   'closeVisibilityPopUp',
   'visibilityError'
@@ -21,9 +21,7 @@ const changeVisibility = async function (PublicOrPrivate) {
     PublicOrPrivate.toUpperCase()
   )
 
-  if (visibility == 400 || 401) {
-    deClareEmit('visibilityError')
-  }
+  deClareemit('visibilityError', true)
 }
 </script>
 

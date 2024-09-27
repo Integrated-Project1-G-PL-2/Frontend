@@ -168,75 +168,69 @@ export function useAuthGuard(router) {
   })
 }
 
-// Function to check board visibility and user permissions
 async function checkBoardPermissions(to, next) {
-  const boardId = to.id.boardId
+  const boardId = to.params.id // Adjusted to match your parameter structure
   const taskId = to.params['task-id'] // If applicable
 
   try {
-    // Fetch board details (assuming an API that returns board info including ownership and visibility)
+    // Fetch board details
     const response = await fetch(`/boards/${boardId}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('jwt')}`
       }
     })
 
-    const board = await response.json()
-
-    if (!board) {
+    if (!response.ok) {
       console.error('Failed to fetch board details.')
       return next({ name: 'Task' })
     }
 
-    const isOwner = board.isOwner // Assuming API returns whether the user is the owner
-    const visibilityMode = board.visibility // 'public' or 'private'
+    const board = await response.json()
+    const isOwner = board.isOwner // Assuming the backend returns ownership status
+    const visibility = board.visibility // 'PRIVATE' or 'PUBLIC'
 
-    // Define paths for visibility checks
     const taskAddEditRoutes = [
-      '/board/:id/task/add',
-      '/board/:id/task/:task-id/edit'
-    ]
-    const generalBoardRoutes = [
-      '/board/:id',
-      '/board/:id/status',
-      '/board/:id/task/:task-id'
+      `/board/${boardId}/task/add`,
+      `/board/${boardId}/task/${taskId}/edit`
     ]
 
-    // Case 1: Non-owner trying to access private board
-    if (!isOwner && visibilityMode === 'private') {
+    const generalBoardRoutes = [
+      `/board/${boardId}`,
+      `/board/${boardId}/status`,
+      `/board/${boardId}/task/${taskId}`
+    ]
+
+    // Case 1: Non-owner trying to access a private board
+    if (!isOwner && visibility === 'PRIVATE') {
       if (generalBoardRoutes.some((route) => to.path.startsWith(route))) {
         return next({
           name: 'StatusList',
-          query: {
-            message:
-              'Access denied, you do not have permission to view this page.'
-          }
+          query: { message: 'Access denied, this board is private.' }
         })
       }
     }
 
-    // Case 2: Non-owner accessing public board but trying to modify tasks
+    // Case 2: Non-owner attempting to modify tasks on a public board
     if (
       !isOwner &&
-      visibilityMode === 'public' &&
+      visibility === 'PUBLIC' &&
       taskAddEditRoutes.some((route) => to.path.startsWith(route))
     ) {
       return next({
         name: 'Task',
         query: {
-          message:
-            'Access denied, you do not have permission to modify tasks on this board.'
+          message: 'Access denied, you do not have permission to modify tasks.'
         }
       })
     }
 
-    // Case 3: Owner can access everything
+    // Case 3: Owner has full access
     if (isOwner) {
       return next()
     }
 
-    // Case 4: Non-owner can access public board
-    if (!isOwner && visibilityMode === 'public') {
+    // Case 4: Non-owner can view public board content
+    if (!isOwner && visibility === 'PUBLIC') {
       return next()
     }
 
