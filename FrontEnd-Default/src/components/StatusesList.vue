@@ -157,6 +157,10 @@ const closePublicAlter = function () {
 const closeAccessAlter = function () {
   accessDenied.value = false
 }
+// Reactive variable to track checkbox state
+watch(boardVisibility, (newVisibility) => {
+  isSwitch.value = newVisibility === 'PUBLIC'
+})
 </script>
 
 <template>
@@ -278,14 +282,14 @@ const closeAccessAlter = function () {
           <button
             @click="showAddStatusesModal('add')"
             :disabled="
-              boardVisibility === 'PRIVATE' || boardVisibility === 'PUBLIC'
+              newVisibility === 'PRIVATE' || newVisibility === 'PUBLIC'
             "
             class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2 my-3"
           >
             ✚ Add Status
           </button>
           <div
-            v-if="boardVisibility === 'PUBLIC'"
+            v-if="newVisibility === 'PUBLIC'"
             class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-3"
           >
             You need to be board owner to perform this action.
@@ -304,7 +308,7 @@ const closeAccessAlter = function () {
       </thead>
       <tbody>
         <div
-          v-if="boardVisibility === 'PRIVATE'"
+          v-if="newVisibility === 'PRIVATE'"
           class="text-center text-xl text-red-600"
         >
           <h2>Access denied,you do not have permission to view this page.</h2>
@@ -360,15 +364,14 @@ const closeAccessAlter = function () {
                       })
                     "
                     :disabled="
-                      boardVisibility === 'PRIVATE' ||
-                      boardVisibility === 'PUBLIC'
+                      newVisibility === 'PRIVATE' || newVisibility === 'PUBLIC'
                     "
                   >
                     Edit
                   </button>
                 </ButtonStyle>
                 <div
-                  v-if="boardVisibility === 'PUBLIC'"
+                  v-if="newVisibility === 'PUBLIC'"
                   class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
                 >
                   You need to be board owner to perform this action.
@@ -399,15 +402,14 @@ const closeAccessAlter = function () {
                       })
                     "
                     :disabled="
-                      boardVisibility === 'PRIVATE' ||
-                      boardVisibility === 'PUBLIC'
+                      newVisibility === 'PRIVATE' || newVisibility === 'PUBLIC'
                     "
                   >
                     Delete
                   </button>
                 </ButtonStyle>
                 <div
-                  v-if="boardVisibility === 'PUBLIC'"
+                  v-if="newVisibility === 'PUBLIC'"
                   class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
                 >
                   You need to be board owner to perform this action.
