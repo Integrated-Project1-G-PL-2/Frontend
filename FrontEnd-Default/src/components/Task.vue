@@ -181,7 +181,10 @@ const openErrorVisibility = () => {
   router.push({ name: 'Task' })
   error.value = true
 }
-
+const openPermissionVisibility = () => {
+  router.push({ name: 'Task' })
+  permission.value = true
+}
 const showStatusesLimit = function () {
   showStatusDetailLimit.value = true
 }
@@ -393,6 +396,7 @@ const confirmVisibility = function () {
       @closeVisibilityPopUp="closeVisibility"
       @confirmVisibilityPopUp="confirmVisibility"
       @visibilityError="openErrorVisibility"
+      @visibilityPermission="openPermissionVisibility"
     />
     <VisibilityChangedPopUp
       v-if="visibilityToggle.private.state"
@@ -401,6 +405,7 @@ const confirmVisibility = function () {
       @closeVisibilityPopUp="closeVisibility"
       @confirmVisibilityPopUp="confirmVisibility"
       @visibilityError="openErrorVisibility"
+      @visibilityPermission="openPermissionVisibility"
     />
     <AlertPopUp
       v-if="permission"
@@ -417,7 +422,7 @@ const confirmVisibility = function () {
       message="Error!!"
       styleType="red"
     />
-
+    <!-- 
     <AlertPopUp
       v-if="accessDenied"
       :titles="'Access denied, you do not have permission to view this page.'"
@@ -431,7 +436,7 @@ const confirmVisibility = function () {
       @closePopUp="closePublicAlter"
       message="Error!!"
       styleType="red"
-    />
+    /> -->
     <div class="flex justify-end">
       <div
         class="itbkk-status-filter flex items-center space-x-2 mr-auto ml-4 my-3 border"
