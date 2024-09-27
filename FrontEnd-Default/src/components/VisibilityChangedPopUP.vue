@@ -27,6 +27,7 @@ const changeVisibility = async function (PublicOrPrivate) {
     router.push({ name: 'Login' })
   } else if (visibility == 403) {
     deClareemit('visibilityError', true)
+    error.value = true
   } else {
     deClareemit('visibilityPermission', true)
   }
