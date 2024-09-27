@@ -151,6 +151,7 @@ const closeRedPopup = async function (operate) {
   redPopup[operate].state = false
 }
 
+
 const closeGreenPopup = async function (operate) {
   router.push({ name: 'Task' })
   greenPopup[operate].state = false
@@ -174,6 +175,11 @@ const showDelComplete = async function () {
 const showStatusesList = function () {
   router.replace({ name: 'StatusList' })
   showStatusDetailModal.value = true
+}
+
+const openErrorVisibility = () => {
+  console.log('test')
+  error.value = true
 }
 
 const showStatusesLimit = function () {
@@ -204,6 +210,8 @@ const closePermissionAlter = function () {
   permission.value = false
 }
 const error = ref(false)
+
+
 const closeProblemAlter = () => {
   error.value = false
 }
@@ -391,6 +399,7 @@ const confirmVisibility = function () {
       :operate="'public'"
       @closeVisibilityPopUp="closeVisibility"
       @confirmVisibilityPopUp="confirmVisibility"
+      @visibilityError="openErrorVisibility"
     />
     <VisibilityChangedPopUp
       v-if="visibilityToggle.private.state"
@@ -398,6 +407,7 @@ const confirmVisibility = function () {
       :operate="'private'"
       @closeVisibilityPopUp="closeVisibility"
       @confirmVisibilityPopUp="confirmVisibility"
+      @visibilityError="openErrorVisibility"
     />
     <AlertPopUp
       v-if="permission"
@@ -406,6 +416,7 @@ const confirmVisibility = function () {
       message="Error!!"
       styleType="red"
     />
+
     <AlertPopUp
       v-if="error"
       :titles="'There is a problem. Please try again later.'"
@@ -413,6 +424,7 @@ const confirmVisibility = function () {
       message="Error!!"
       styleType="red"
     />
+
     <AlertPopUp
       v-if="accessDenied"
       :titles="'Access denied, you do not have permission to view this page.'"
@@ -682,5 +694,7 @@ const confirmVisibility = function () {
       @clearLimitPopUp="clearLimitStatusPopUp"
     ></StatusLimitSetting>
   </Teleport>
+ 
+
 </template>
 <style scoped></style>
