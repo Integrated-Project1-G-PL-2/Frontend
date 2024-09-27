@@ -9,7 +9,7 @@ const props = defineProps({
 })
 const route = useRoute()
 const router = useRouter()
-const deClareEmit = defineEmits([
+const deClareemit = defineEmits([
   'confirmVisibilityPopUp',
   'closeVisibilityPopUp',
   'visibilityError',
@@ -25,9 +25,9 @@ const changeVisibility = async function (PublicOrPrivate) {
   if (visibility == 401) {
     router.push({ name: 'Login' })
   } else if (visibility == 403) {
-    deClareEmit('visibilityError', true)
+    deClareemit('visibilityError', true)
   } else {
-    deClareEmit('visibilityPermission', true)
+    deClareemit('visibilityPermission', true)
   }
 }
 </script>
