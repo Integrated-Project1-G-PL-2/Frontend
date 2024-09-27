@@ -29,6 +29,7 @@ const editColor = ref('editColor')
 const deleteColor = ref('deleteColor')
 const route = useRoute()
 const bName = ref()
+const boardVisibility = ref()
 const greenPopup = reactive({
   add: { state: false, taskStatus: '' },
   edit: { state: false, taskStatus: '' },
@@ -273,13 +274,23 @@ const closeAccessAlter = function () {
         > Task Status
       </div>
       <div class="flex ml-auto">
-        <button
-          @click="showAddStatusesModal('add')"
-          :disabled="public"
-          class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2 my-3"
-        >
-          ✚ Add Status
-        </button>
+        <div class="relative group">
+          <button
+            @click="showAddStatusesModal('add')"
+            :disabled="
+              boardVisibility === 'PRIVATE' || boardVisibility === 'PUBLIC'
+            "
+            class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2 my-3"
+          >
+            ✚ Add Status
+          </button>
+          <div
+            v-if="boardVisibility === 'PUBLIC'"
+            class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-3"
+          >
+            You need to be board owner to perform this action.
+          </div>
+        </div>
       </div>
     </div>
     <table class="w-full text-sm text-left text-gray-500">
@@ -292,7 +303,10 @@ const closeAccessAlter = function () {
         </tr>
       </thead>
       <tbody>
-        <div class="text-center text-xl text-red-600" v-if="private">
+        <div
+          v-if="boardVisibility === 'PRIVATE'"
+          class="text-center text-xl text-red-600"
+        >
           <h2>Access denied,you do not have permission to view this page.</h2>
         </div>
         <tr
@@ -335,21 +349,31 @@ const closeAccessAlter = function () {
               >
                 Edit
               </button> -->
-
-              <ButtonStyle :bgColor="editColor">
-                <button
-                  class="itbkk-button-edit"
-                  @click="
-                    showEditStatusesModal({
-                      operate: 'edit',
-                      id: statuses.id
-                    })
-                  "
-                  :disabled="public"
+              <div class="relative group">
+                <ButtonStyle :bgColor="editColor">
+                  <button
+                    class="itbkk-button-edit"
+                    @click="
+                      showEditStatusesModal({
+                        operate: 'edit',
+                        id: statuses.id
+                      })
+                    "
+                    :disabled="
+                      boardVisibility === 'PRIVATE' ||
+                      boardVisibility === 'PUBLIC'
+                    "
+                  >
+                    Edit
+                  </button>
+                </ButtonStyle>
+                <div
+                  v-if="boardVisibility === 'PUBLIC'"
+                  class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
                 >
-                  Edit
-                </button>
-              </ButtonStyle>
+                  You need to be board owner to perform this action.
+                </div>
+              </div>
 
               <!-- <button
                 class="itbkk-button-delete bg-red-400 rounded-[8px] font-sans text-center gap-5 text-gray-100 hover:text-gray-200 w-14 mr-5"
@@ -363,21 +387,32 @@ const closeAccessAlter = function () {
               >
                 Delete
               </button> -->
-              <ButtonStyle :bgColor="deleteColor">
-                <button
-                  class="itbkk-button-delete"
-                  @click="
-                    showDeletePopUpTaskDetail({
-                      id: statuses.id,
-                      statusName: statuses.name,
-                      index: index + 1
-                    })
-                  "
-                  :disabled="public"
+              <div class="relative group">
+                <ButtonStyle :bgColor="deleteColor">
+                  <button
+                    class="itbkk-button-delete"
+                    @click="
+                      showDeletePopUpTaskDetail({
+                        id: statuses.id,
+                        statusName: statuses.name,
+                        index: index + 1
+                      })
+                    "
+                    :disabled="
+                      boardVisibility === 'PRIVATE' ||
+                      boardVisibility === 'PUBLIC'
+                    "
+                  >
+                    Delete
+                  </button>
+                </ButtonStyle>
+                <div
+                  v-if="boardVisibility === 'PUBLIC'"
+                  class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
                 >
-                  Delete
-                </button>
-              </ButtonStyle>
+                  You need to be board owner to perform this action.
+                </div>
+              </div>
             </div>
           </td>
         </tr>
