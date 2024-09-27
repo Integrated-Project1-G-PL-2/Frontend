@@ -175,6 +175,7 @@ const showStatusesList = function () {
   router.replace({ name: 'StatusList' })
   showStatusDetailModal.value = true
 }
+const error = ref(false)
 
 const openErrorVisibility = () => {
   console.log('test')
@@ -208,7 +209,6 @@ const permission = ref(false)
 const closePermissionAlter = function () {
   permission.value = false
 }
-const error = ref(false)
 
 const closeProblemAlter = () => {
   error.value = false
@@ -491,7 +491,7 @@ const confirmVisibility = function () {
         >
           <input
             :disabled="
-              boardVisibility === 'PRIVATE' || boardVisibility === 'PUBLIC'
+              newVisibility === 'PRIVATE' || newVisibility === 'PUBLIC'
             "
             type="checkbox"
             v-model="isSwitch"
@@ -514,9 +514,7 @@ const confirmVisibility = function () {
       </div>
       <div class="relative group">
         <button
-          :disabled="
-            boardVisibility === 'PRIVATE' || boardVisibility === 'PUBLIC'
-          "
+          :disabled="newVisibility === 'PRIVATE' || newVisibility === 'PUBLIC'"
           @click="showAddPopUpTaskDetail('add')"
           class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
         >
@@ -624,7 +622,7 @@ const confirmVisibility = function () {
         >
           <h2>Access denied,you do not have permission to view this page.</h2>
         </div>
-        
+
         <tr
           v-for="(task, index) in taskGroups"
           :key="task.id"

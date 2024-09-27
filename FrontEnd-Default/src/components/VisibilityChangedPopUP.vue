@@ -2,25 +2,29 @@
 import { ref, reactive } from 'vue'
 
 import { useRoute, useRouter } from 'vue-router'
-import {toggleVisibility} from '@/utils/fetchUtils'
+import { toggleVisibility } from '@/utils/fetchUtils'
 const props = defineProps({
   message: String,
   operate: String
 })
 const route = useRoute()
-const deClareEmit = defineEmits(['confirmVisibilityPopUp', 'closeVisibilityPopUp','visibilityError'])
+const deClareEmit = defineEmits([
+  'confirmVisibilityPopUp',
+  'closeVisibilityPopUp',
+  'visibilityError'
+])
 
 const changeVisibility = async function (PublicOrPrivate) {
-const visibility = await toggleVisibility(`${import.meta.env.VITE_BASE_URL}/v3/boards`,
-    `${route.params.id}`,PublicOrPrivate.toUpperCase())
-   
-if (visibility == 400 || 401){
-  deClareEmit('visibilityError');
+  const visibility = await toggleVisibility(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards`,
+    `${route.params.id}`,
+    PublicOrPrivate.toUpperCase()
+  )
+
+  if (visibility == 400 || 401) {
+    deClareEmit('visibilityError')
+  }
 }
-
-
-}
-
 </script>
 
 <template>
