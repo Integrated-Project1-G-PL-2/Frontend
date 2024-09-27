@@ -140,12 +140,6 @@ export function useAuthGuard(router) {
     try {
       const decodedToken = decodeJWT(token)
       const currentTime = Math.floor(Date.now() / 1000)
-      console.log(
-        'Token expiry time:',
-        decodedToken.payload.exp,
-        'Current time:',
-        currentTime
-      )
 
       if (decodedToken.payload.exp < currentTime) {
         console.log('Token expired, attempting to refresh...')

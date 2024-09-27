@@ -24,7 +24,6 @@ export const useBoardManager = defineStore('boardManager', () => {
       return boards.findIndex((el) => el.id === id)
     }
     const setCurrentBoard = function(board){
-      console.log(board)
       currentBoard = board
     }
   const getCurrentBoard = function(){
