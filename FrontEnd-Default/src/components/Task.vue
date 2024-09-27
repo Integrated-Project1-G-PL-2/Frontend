@@ -289,6 +289,7 @@ const closeVisibility = function () {
   isSwitch.value = previousState.value
 
   router.push({ name: 'Task' })
+  isPopupOpen.value = false
 }
 
 // Function to confirm visibility change
@@ -297,6 +298,7 @@ const confirmVisibility = function () {
   visibilityToggle.private.state = false
 
   router.push({ name: 'Task' })
+  isPopupOpen.value = false
 }
 </script>
 
