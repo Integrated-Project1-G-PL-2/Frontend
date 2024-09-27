@@ -23,12 +23,14 @@ const changeVisibility = async function (PublicOrPrivate) {
     PublicOrPrivate.toUpperCase()
   )
   if (visibility == 401) {
+    visibility.value = 'PRIVATE'
     router.push({ name: 'Login' })
   } else if (visibility == 403) {
     deClareemit('visibilityError', true)
   } else {
     deClareemit('visibilityPermission', true)
   }
+  deClareemit('visibilityError', true)
 }
 </script>
 
