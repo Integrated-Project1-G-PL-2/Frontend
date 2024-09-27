@@ -264,10 +264,11 @@ watch(boardVisibility, (newVisibility) => {
 // Computed label based on checkbox state
 const toggleLabel = computed(() => (isSwitch.value ? 'Public' : 'Private'))
 let previousState = ref(false) // Store the previous toggle state
-
+const isPopupOpen = ref(false)
 // Function to open visibility settings (trigger the popup)
 const openVisibilitySetting = async function () {
   previousState.value = isSwitch.value
+  isPopupOpen.value = true
   if (isSwitch.value) {
     // If it's already Public, switch to Private and show private popup
     visibilityToggle.private.state = true
@@ -496,7 +497,9 @@ const confirmVisibility = function () {
         >
           <input
             :disabled="
-              newVisibility === 'PRIVATE' || newVisibility === 'PUBLIC'
+              newVisibility === 'PRIVATE' ||
+              newVisibility === 'PUBLIC' ||
+              isPopupOpen
             "
             type="checkbox"
             v-model="isSwitch"
