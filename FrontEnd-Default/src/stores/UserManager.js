@@ -2,7 +2,7 @@ import { ref } from 'vue'
 
 // เก็บค่า userName ใน ref
 export const userName = ref('')
-
+const route = useRoute()
 // ฟังก์ชันถอดรหัส JWT
 export function decodeJWT(token) {
   try {
