@@ -647,9 +647,7 @@ const confirmVisibility = function () {
             {{ index + 1 }}
             <div class="relative group">
               <div
-                :disabled="
-                  visibilityValue === 'PRIVATE' || visibilityValue === 'PUBLIC'
-                "
+                :disabled="privateTask === null || visibilityValue === 'PUBLIC'"
                 class="itbkk-button-edit inline-flex"
                 @click="showEditTaskDetail(task.id, 'edit')"
               >
@@ -664,9 +662,7 @@ const confirmVisibility = function () {
             </div>
             <div class="relative group">
               <div
-                :disabled="
-                  visibilityValue === 'PRIVATE' || visibilityValue === 'PUBLIC'
-                "
+                :disabled="privateTask === null || visibilityValue === 'PUBLIC'"
                 class="itbkk-button-delete inline-flex"
                 @click="
                   showDeletePopUpTaskDetail({
