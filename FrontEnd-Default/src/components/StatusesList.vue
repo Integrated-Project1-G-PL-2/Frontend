@@ -63,6 +63,7 @@ onMounted(async () => {
     router.replace({ name: 'Login' })
     return
   }
+  boardManager.setCurrentBoard(currentBoard)
   taskManager.setTasks(taskItems)
   statusManager.setStatuses(
     await getItems(
@@ -80,19 +81,19 @@ onMounted(async () => {
   bName.value = getBoardName.name
   const board = boardManager.getCurrentBoard()
   boardVisibility.value = board.visibility
-
+console.log(board)
   boardOwner.value = currentBoard.owner.name
 
   thisUser.value = storedUserName
 })
-watch([boardOwner, thisUser], ([newBoardOwner, newThisUser]) => {
+watch([boardOwner, thisUser,boardVisibility], ([newBoardOwner, newThisUser,newVisibility]) => {
   boardOwner.value = newBoardOwner
   thisUser.value = newThisUser
+  isSwitch.value = newVisibility == 'PUBLIC'
 })
-// Reactive variable to track checkbox state
-watch(boardVisibility, (newVisibility) => {
-  isSwitch.value = newVisibility === 'PUBLIC'
-})
+
+
+
 const goBackToHomePage = function () {
   router.replace({ name: 'Task' })
 }
@@ -185,10 +186,7 @@ const closePublicAlter = function () {
 const closeAccessAlter = function () {
   accessDenied.value = false
 }
-// Reactive variable to track checkbox state
-watch(boardVisibility, (newVisibility) => {
-  isSwitch.value = newVisibility === 'PUBLIC'
-})
+
 </script>
 
 <template>
