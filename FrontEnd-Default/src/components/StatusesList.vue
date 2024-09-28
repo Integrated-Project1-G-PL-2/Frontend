@@ -19,6 +19,7 @@ import { useTaskManager } from '@/stores/TaskManager'
 import ButtonStyle from './ButtonStyle.vue'
 import { useBoardManager } from '@/stores/BoardManager'
 const boardManager = useBoardManager()
+const isSwitch = ref(false)
 const taskManager = useTaskManager()
 const deClareemit = defineEmits(['editStatus'])
 const router = useRouter()
