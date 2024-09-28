@@ -258,9 +258,11 @@ const closePublicAlter = function () {
 const closeAccessAlter = function () {
   accessDenied.value = false
 }
+const visibilityValue = ref()
 // Reactive variable to track checkbox state
 watch(boardVisibility, (newVisibility) => {
   isSwitch.value = newVisibility === 'PUBLIC'
+  visibilityValue.value = newVisibility
 })
 
 // Computed label based on checkbox state
@@ -501,8 +503,8 @@ const confirmVisibility = function () {
         >
           <input
             :disabled="
-              newVisibility === 'PRIVATE' ||
-              newVisibility === 'PUBLIC' ||
+              visibilityValue === 'PRIVATE' ||
+              visibilityValue === 'PUBLIC' ||
               isPopupOpen
             "
             type="checkbox"
