@@ -1,8 +1,9 @@
 import { ref } from 'vue'
-
+import { useRoute, useRouter } from 'vue-router'
 // เก็บค่า userName ใน ref
 export const userName = ref('')
-
+const router = useRouter()
+const route = useRoute()
 // ฟังก์ชันถอดรหัส JWT
 export function decodeJWT(token) {
   try {
@@ -157,7 +158,7 @@ export function useAuthGuard(router) {
       } else {
         console.log('Token is valid, allowing navigation.')
         // Proceed to check for board visibility and ownership here
-        // return checkBoardPermissions(to, next)
+        return checkBoardPermissions(to, next)
         return next() // Proceed as normal
       }
     } catch (error) {
@@ -169,13 +170,22 @@ export function useAuthGuard(router) {
 }
 
 async function checkBoardPermissions(to, next) {
-  const boardId = to.params.id
-  const taskId = to.params['task-id'] || null
+  const boardId = to.params.id // ตรวจสอบการดึง boardId จาก to.params.id
+  const taskId = to.params['task-id'] || null // ถ้าไม่มี task-id ให้กำหนดเป็น null
+
+  // ถ้าไม่มี boardId ให้ redirect พร้อมแสดง error message
+  if (!boardId) {
+    console.error('Missing boardId in route parameters.')
+    return next({
+      name: 'Task',
+      query: { message: 'Missing board id.' }
+    })
+  }
 
   try {
-    // Fetch board details
+    // ดึงข้อมูลของบอร์ดจาก API โดยใช้ boardId จาก to.params.id
     const response = await fetch(
-      `${import.meta.env.VITE_BASE_URL}/v3/boards/${boardId}`,
+      `${import.meta.env.VITE_BASE_URL}/v3/boards/${boardId}`, // ใช้ to.params.id ที่ส่งมา
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('jwt')}`
@@ -183,6 +193,7 @@ async function checkBoardPermissions(to, next) {
       }
     )
 
+    // ถ้าการดึงข้อมูลไม่สำเร็จ ให้แสดงข้อความ error
     if (!response.ok) {
       console.error('Failed to fetch board details.')
       return next({
@@ -194,36 +205,18 @@ async function checkBoardPermissions(to, next) {
     const board = await response.json()
     const { isOwner, visibility } = board
 
-    // สร้าง URL เส้นทางสำหรับตรวจสอบ
-    const addTaskRoute = `${
-      import.meta.env.VITE_BASE_URL
-    }/v3/boards/${boardId}/tasks/add`
-    const editTaskRoute = `${
-      import.meta.env.VITE_BASE_URL
-    }/v3/boards/${boardId}/tasks/${taskId}/edit`
-    const boardRoute = `${import.meta.env.VITE_BASE_URL}/v3/boards/${boardId}`
-    const statusRoute = `${
-      import.meta.env.VITE_BASE_URL
-    }/v3/boards/${boardId}/status`
-    const taskRoute = `${
-      import.meta.env.VITE_BASE_URL
-    }/v3/boards/${boardId}/tasks/${taskId}`
+    // ตรวจสอบการเข้าถึงบอร์ดตามกรณีต่าง ๆ
 
-    const isTaskAddEditRoute =
-      to.path === addTaskRoute || to.path === editTaskRoute
-    const isGeneralBoardRoute =
-      to.path === boardRoute || to.path === statusRoute || to.path === taskRoute
-
-    // Case 1: Non-owner trying to access a private board
-    if (!isOwner && visibility === 'PRIVATE' && isGeneralBoardRoute) {
+    // Case 1: ผู้ใช้ที่ไม่ใช่เจ้าของพยายามเข้าถึงบอร์ดที่เป็น private
+    if (!isOwner && visibility === 'PRIVATE') {
       return next({
         name: 'StatusList',
         query: { message: 'Access denied, this board is private.' }
       })
     }
 
-    // Case 2: Non-owner attempting to modify tasks on a public board
-    if (!isOwner && visibility === 'PUBLIC' && isTaskAddEditRoute) {
+    // Case 2: ผู้ใช้ที่ไม่ใช่เจ้าของพยายามแก้ไข task ในบอร์ดที่เป็น public
+    if (!isOwner && visibility === 'PUBLIC') {
       return next({
         name: 'Task',
         query: {
@@ -232,12 +225,12 @@ async function checkBoardPermissions(to, next) {
       })
     }
 
-    // Case 3: Owner has full access
+    // Case 3: ถ้าเป็นเจ้าของบอร์ด ให้เข้าถึงได้ทุกกรณี
     if (isOwner) {
       return next()
     }
 
-    // Case 4: Non-owner can view public board content
+    // Case 4: ผู้ใช้ที่ไม่ใช่เจ้าของสามารถดูบอร์ดที่เป็น public ได้
     if (!isOwner && visibility === 'PUBLIC') {
       return next()
     }
