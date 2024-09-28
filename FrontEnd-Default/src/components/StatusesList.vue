@@ -55,7 +55,7 @@ onMounted(async () => {
     `${import.meta.env.VITE_BASE_URL}/v3/boards`,
     route.params.id
   )
-  privateTask.value = tasksItem
+  privateTask.value = taskItems
   if (taskItems == 401) {
     router.replace({ name: 'Login' })
     return
