@@ -170,10 +170,9 @@ export function useAuthGuard(router) {
 }
 
 async function checkBoardPermissions(to, next) {
-  const boardId = to.params.id // ตรวจสอบการดึง boardId จาก to.params.id
-  const taskId = to.params['task-id'] || null // ถ้าไม่มี task-id ให้กำหนดเป็น null
+  const boardId = to.params.id // ดึง id ของบอร์ดจากพารามิเตอร์
+  const taskId = to.params['task-id'] || null // ดึง task-id ถ้ามี
 
-  // ถ้าไม่มี boardId ให้ redirect พร้อมแสดง error message
   if (!boardId) {
     console.error('Missing boardId in route parameters.')
     return next({
@@ -183,9 +182,9 @@ async function checkBoardPermissions(to, next) {
   }
 
   try {
-    // ดึงข้อมูลของบอร์ดจาก API โดยใช้ boardId จาก to.params.id
+    // เรียกข้อมูลบอร์ดจาก API
     const response = await fetch(
-      `${import.meta.env.VITE_BASE_URL}/v3/boards/${boardId}`, // ใช้ to.params.id ที่ส่งมา
+      `${import.meta.env.VITE_BASE_URL}/v3/boards/${boardId}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('jwt')}`
@@ -193,7 +192,6 @@ async function checkBoardPermissions(to, next) {
       }
     )
 
-    // ถ้าการดึงข้อมูลไม่สำเร็จ ให้แสดงข้อความ error
     if (!response.ok) {
       console.error('Failed to fetch board details.')
       return next({
@@ -205,18 +203,38 @@ async function checkBoardPermissions(to, next) {
     const board = await response.json()
     const { isOwner, visibility } = board
 
-    // ตรวจสอบการเข้าถึงบอร์ดตามกรณีต่าง ๆ
+    // กำหนด route ต่าง ๆ สำหรับตรวจสอบ
+    const isTaskAddRoute = to.path === `/board/${boardId}/task/add`
+    const isTaskEditRoute = to.path === `/board/${boardId}/task/${taskId}/edit`
+    const isBoardRoute = to.path === `/board/${boardId}`
+    const isTaskRoute = to.path === `/board/${boardId}/task/${taskId}`
+    const isStatusRoute = to.path === `/board/${boardId}/status`
 
-    // Case 1: ผู้ใช้ที่ไม่ใช่เจ้าของพยายามเข้าถึงบอร์ดที่เป็น private
-    if (!isOwner && visibility === 'PRIVATE') {
+    const isTaskAddEditRoute = isTaskAddRoute || isTaskEditRoute
+    const isGeneralBoardRoute = isBoardRoute || isTaskRoute || isStatusRoute
+
+    // ตรวจสอบสิทธิ์การเข้าถึงตามสถานะของบอร์ดและผู้ใช้
+
+    // **Case 1: เจ้าของสามารถเข้าถึงได้ทุกเส้นทาง**
+    if (isOwner) {
+      return next() // อนุญาตให้เข้าถึง
+    }
+
+    // **Case 2: ผู้ใช้ทั่วไปพยายามเข้าถึงบอร์ดส่วนตัว**
+    if (!isOwner && visibility === 'PRIVATE' && isGeneralBoardRoute) {
+      // แสดงข้อความปฏิเสธการเข้าถึงบอร์ดส่วนตัว
       return next({
-        name: 'StatusList',
-        query: { message: 'Access denied, this board is private.' }
+        name: 'Task',
+        query: {
+          message:
+            'Access denied, you do not have permission to view this page.'
+        }
       })
     }
 
-    // Case 2: ผู้ใช้ที่ไม่ใช่เจ้าของพยายามแก้ไข task ในบอร์ดที่เป็น public
-    if (!isOwner && visibility === 'PUBLIC') {
+    // **Case 3: ผู้ใช้ทั่วไปพยายามแก้ไข task บนบอร์ดที่เป็นสาธารณะ**
+    if (!isOwner && visibility === 'PUBLIC' && isTaskAddEditRoute) {
+      // ปฏิเสธการแก้ไข task
       return next({
         name: 'Task',
         query: {
@@ -225,14 +243,9 @@ async function checkBoardPermissions(to, next) {
       })
     }
 
-    // Case 3: ถ้าเป็นเจ้าของบอร์ด ให้เข้าถึงได้ทุกกรณี
-    if (isOwner) {
-      return next()
-    }
-
-    // Case 4: ผู้ใช้ที่ไม่ใช่เจ้าของสามารถดูบอร์ดที่เป็น public ได้
-    if (!isOwner && visibility === 'PUBLIC') {
-      return next()
+    // **Case 4: ผู้ใช้ทั่วไปสามารถดูบอร์ดสาธารณะได้**
+    if (!isOwner && visibility === 'PUBLIC' && isGeneralBoardRoute) {
+      return next() // อนุญาตให้เข้าถึง
     }
 
     console.error('Unexpected state in permission check.')
