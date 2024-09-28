@@ -61,6 +61,9 @@ const redPopup = reactive({
 
 const privateTask = ref()
 const bName = ref()
+const boardOwner = ref()
+const thisUser = ref()
+
 onMounted(async () => {
   const tasksItem = await getItems(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
@@ -69,7 +72,7 @@ onMounted(async () => {
     `${import.meta.env.VITE_BASE_URL}/v3/boards`,
     route.params.id
   )
-  console.log(tasksItem)
+
   privateTask.value = tasksItem
   if (tasksItem == 401) {
     router.replace({ name: 'Login' })
@@ -91,11 +94,20 @@ onMounted(async () => {
     `${route.params.id}`
   )
   bName.value = getBoardName.name
+
   const board = boardManager.getCurrentBoard()
   boardVisibility.value = board.visibility
+
+  boardOwner.value = currentBoard.owner.name
+
+  thisUser.value = storedUserName
+
+})
+watch([boardOwner,thisUser], ([newBoardOwner,newThisUser]) => {
+  boardOwner.value = newBoardOwner
+  thisUser.value = newThisUser
 })
 
-console.log(privateTask.value)
 const showTaskDetail = async function (id, operate) {
   router.push({ name: 'DetailTask', params: { tid: id } })
   operation.value = operate
@@ -261,11 +273,10 @@ const closePublicAlter = function () {
 const closeAccessAlter = function () {
   accessDenied.value = false
 }
-const visibilityValue = ref()
+
 // Reactive variable to track checkbox state
 watch(boardVisibility, (newVisibility) => {
   isSwitch.value = newVisibility === 'PUBLIC'
-  visibilityValue.value = newVisibility
 })
 
 // Computed label based on checkbox state
@@ -505,7 +516,7 @@ const confirmVisibility = function () {
           class="itbkk-board-visibility inline-flex items-center cursor-pointer"
         >
           <input
-            :disabled="privateTask == null || isPopupOpen"
+            :disabled="boardOwner !== thisUser && isSwitch"
             type="checkbox"
             v-model="isSwitch"
             class="sr-only peer"
@@ -519,7 +530,7 @@ const confirmVisibility = function () {
           </span>
         </label>
         <div
-          v-if="visibilityValue === 'PUBLIC'"
+          v-if="boardOwner !== thisUser && isSwitch"
           class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
         >
           You need to be board owner to perform this action.
@@ -528,7 +539,7 @@ const confirmVisibility = function () {
       <div class="relative group">
         <button
           :disabled="
-            visibilityValue === 'PRIVATE' || visibilityValue === 'PUBLIC'
+            boardOwner !== thisUser && isSwitch
           "
           @click="showAddPopUpTaskDetail('add')"
           class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
@@ -536,7 +547,7 @@ const confirmVisibility = function () {
           ✚ Add New Task
         </button>
         <div
-          v-if="visibilityValue === 'PUBLIC'"
+          v-if="boardOwner !== thisUser && isSwitch"
           class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
         >
           You need to be board owner to perform this action.
@@ -647,22 +658,22 @@ const confirmVisibility = function () {
             {{ index + 1 }}
             <div class="relative group">
               <div
-                :disabled="privateTask === null || visibilityValue === 'PUBLIC'"
+                :disabled="boardOwner !== thisUser && isSwitch"
                 class="itbkk-button-edit inline-flex"
                 @click="showEditTaskDetail(task.id, 'edit')"
               >
                 ⚙️
               </div>
               <div
-                v-if="visibilityValue === 'PUBLIC'"
+                v-if="boardOwner !== thisUser && isSwitch"
                 class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
               >
                 You need to be board owner to perform this action.
               </div>
             </div>
             <div class="relative group">
-              <div
-                :disabled="privateTask === null || visibilityValue === 'PUBLIC'"
+              <button
+                :disabled="boardOwner !== thisUser"
                 class="itbkk-button-delete inline-flex"
                 @click="
                   showDeletePopUpTaskDetail({
@@ -673,9 +684,9 @@ const confirmVisibility = function () {
                 "
               >
                 🗑️
-              </div>
+              </button>
               <div
-                v-if="visibilityValue === 'PUBLIC'"
+                v-if="boardOwner !== thisUser && isSwitch" 
                 class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
               >
                 You need to be board owner to perform this action.
