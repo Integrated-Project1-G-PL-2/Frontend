@@ -3,6 +3,7 @@ import { ref, reactive } from 'vue'
 
 import { useRoute, useRouter } from 'vue-router'
 import { toggleVisibility } from '@/utils/fetchUtils'
+const visibility = reactive({})
 const props = defineProps({
   message: String,
   operate: String
@@ -16,21 +17,26 @@ const deClareemit = defineEmits([
   'visibilityPermission'
 ])
 
-const changeVisibility = async function (PublicOrPrivate) {
-  const visibility = await toggleVisibility(
+const changeVisibility = async (PublicOrPrivate) => {
+  visibility.value = await toggleVisibility(
     `${import.meta.env.VITE_BASE_URL}/v3/boards`,
     `${route.params.id}`,
     PublicOrPrivate.toUpperCase()
   )
-  if (visibility == 401) {
+  if (visibility.value == 401) {
     visibility.value = 'PRIVATE'
     router.push({ name: 'Login' })
-  } else if (visibility == 403) {
+    return
+  } else if (visibility.value == 403) {
     deClareemit('visibilityError', true)
     error.value = true
+    return
   } else {
+    console.log('sss')
     deClareemit('visibilityPermission', true)
+    deClareemit('visibilityError', true)
   }
+  console.log('sss')
   deClareemit('visibilityError', true)
 }
 </script>

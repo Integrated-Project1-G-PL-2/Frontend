@@ -178,6 +178,7 @@ const showStatusesList = function () {
 const error = ref(false)
 const permission = ref(false)
 const openErrorVisibility = () => {
+  console.log('Error visibility triggered') // ตรวจสอบการทำงานของฟังก์ชัน
   router.push({ name: 'Task' })
   error.value = true
 }
@@ -232,6 +233,7 @@ watch(collectStatus, async () => {
     )
   )
 })
+
 // onMounted(() => {
 //   const storedUserName = localStorage.getItem('userName')
 //   if (storedUserName) {
