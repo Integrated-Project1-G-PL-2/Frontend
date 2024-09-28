@@ -1,4 +1,5 @@
 import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 // เก็บค่า userName ใน ref
 export const userName = ref('')
@@ -169,53 +170,61 @@ export function useAuthGuard(router) {
 }
 
 async function checkBoardPermissions(to, next) {
-  const boardId = to.params.id // Adjusted to match your parameter structure
-  const taskId = to.params['task-id'] // If applicable
+  const boardId = to.params.id
+  const taskId = to.params['task-id'] || null
 
   try {
     // Fetch board details
-    const response = await fetch(`/boards/${boardId}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('jwt')}`
+    const response = await fetch(
+      `${import.meta.env.VITE_BASE_URL}/v3/boards/${boardId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('jwt')}`
+        }
       }
-    })
+    )
 
     if (!response.ok) {
       console.error('Failed to fetch board details.')
-      return next({ name: 'Task' })
+      return next({
+        name: 'Task',
+        query: { message: 'Board not found or access denied.' }
+      })
     }
 
     const board = await response.json()
-    const isOwner = board.isOwner // Assuming the backend returns ownership status
-    const visibility = board.visibility // 'PRIVATE' or 'PUBLIC'
+    const { isOwner, visibility } = board
 
-    const taskAddEditRoutes = [
-      `/board/${boardId}/task/add`,
-      `/board/${boardId}/task/${taskId}/edit`
-    ]
+    // สร้าง URL เส้นทางสำหรับตรวจสอบ
+    const addTaskRoute = `${
+      import.meta.env.VITE_BASE_URL
+    }/v3/boards/${boardId}/tasks/add`
+    const editTaskRoute = `${
+      import.meta.env.VITE_BASE_URL
+    }/v3/boards/${boardId}/tasks/${taskId}/edit`
+    const boardRoute = `${import.meta.env.VITE_BASE_URL}/v3/boards/${boardId}`
+    const statusRoute = `${
+      import.meta.env.VITE_BASE_URL
+    }/v3/boards/${boardId}/status`
+    const taskRoute = `${
+      import.meta.env.VITE_BASE_URL
+    }/v3/boards/${boardId}/tasks/${taskId}`
 
-    const generalBoardRoutes = [
-      `/board/${boardId}`,
-      `/board/${boardId}/status`,
-      `/board/${boardId}/task/${taskId}`
-    ]
+    const isTaskAddEditRoute =
+      to.path === addTaskRoute || to.path === editTaskRoute
+    const isGeneralBoardRoute =
+      to.path === boardRoute || to.path === statusRoute || to.path === taskRoute
 
     // Case 1: Non-owner trying to access a private board
-    if (!isOwner && visibility === 'PRIVATE') {
-      if (generalBoardRoutes.some((route) => to.path.startsWith(route))) {
-        return next({
-          name: 'StatusList',
-          query: { message: 'Access denied, this board is private.' }
-        })
-      }
+    if (!isOwner && visibility === 'PRIVATE' && isGeneralBoardRoute) {
+      return next({
+        name: 'StatusList',
+        query: { message: 'Access denied, this board is private.' }
+      })
     }
 
     // Case 2: Non-owner attempting to modify tasks on a public board
-    if (
-      !isOwner &&
-      visibility === 'PUBLIC' &&
-      taskAddEditRoutes.some((route) => to.path.startsWith(route))
-    ) {
+    if (!isOwner && visibility === 'PUBLIC' && isTaskAddEditRoute) {
       return next({
         name: 'Task',
         query: {
@@ -238,7 +247,10 @@ async function checkBoardPermissions(to, next) {
     return next({ name: 'Task' })
   } catch (error) {
     console.error('Error fetching board details:', error)
-    return next({ name: 'StatusList' })
+    return next({
+      name: 'StatusList',
+      query: { message: 'Error fetching board details.' }
+    })
   }
 }
 
