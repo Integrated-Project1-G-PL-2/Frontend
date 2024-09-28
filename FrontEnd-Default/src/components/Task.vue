@@ -176,7 +176,7 @@ const showStatusesList = function () {
   showStatusDetailModal.value = true
 }
 const error = ref(false)
-
+const permission = ref(false)
 const openErrorVisibility = () => {
   router.push({ name: 'Task' })
   error.value = true
@@ -208,7 +208,7 @@ const taskGroups = ref(taskManager.getTasks())
 
 const searchStatus = ref('')
 const cloneTaskGroups = ref(statusManager.getStatuses())
-const permission = ref(false)
+
 const closePermissionAlter = function () {
   permission.value = false
 }
