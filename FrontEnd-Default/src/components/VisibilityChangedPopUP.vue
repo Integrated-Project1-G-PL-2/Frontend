@@ -24,20 +24,24 @@ const changeVisibility = async (PublicOrPrivate) => {
     PublicOrPrivate.toUpperCase()
   )
   if (visibility.value == 401) {
-    visibility.value = 'PRIVATE'
+    deClareemit('confirmVisibilityPopUp', props.operate)
     router.push({ name: 'Login' })
     return
   } else if (visibility.value == 403) {
-    deClareemit('visibilityError', true)
-    error.value = true
+    deClareemit('visibilityPermission', true)
+    deClareemit('confirmVisibilityPopUp', props.operate)
+    return
+  } else if (
+    visibility.value.visibility == 'PRIVATE' ||
+    visibility.value.visibility == 'PUBLIC'
+  ) {
+    deClareemit('confirmVisibilityPopUp', props.operate)
     return
   } else {
-    console.log('sss')
-    deClareemit('visibilityPermission', true)
     deClareemit('visibilityError', true)
+    deClareemit('confirmVisibilityPopUp', props.operate)
+    return
   }
-  console.log('sss')
-  deClareemit('visibilityError', true)
 }
 </script>
 
@@ -64,7 +68,6 @@ const changeVisibility = async (PublicOrPrivate) => {
           class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"
           @click="
             ;[
-              $emit('confirmVisibilityPopUp', props.operate),
               $router.replace({ name: 'Task' }),
               changeVisibility(props.operate)
             ]
