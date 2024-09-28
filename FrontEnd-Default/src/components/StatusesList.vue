@@ -42,12 +42,20 @@ const redPopup = reactive({
   delete: { state: false, taskStatus: '' },
   transfer: { state: false, taskStatus: '' }
 })
+const privateTask = ref()
+const boardOwner = ref()
+const thisUser = ref()
 const showDeleteStatusDetail = ref(false)
 const transferDelList = ref({})
 onMounted(async () => {
   const taskItems = await getItems(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
   )
+  const currentBoard = await getItemById(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards`,
+    route.params.id
+  )
+  privateTask.value = tasksItem
   if (taskItems == 401) {
     router.replace({ name: 'Login' })
     return
@@ -58,13 +66,30 @@ onMounted(async () => {
       `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`
     )
   )
+  const storedUserName = localStorage.getItem('userName')
+  if (storedUserName) {
+    userName.value = storedUserName
+  }
   const getBoardName = await getItemById(
     `${import.meta.env.VITE_BASE_URL}/v3/boards`,
     `${route.params.id}`
   )
   bName.value = getBoardName.name
-})
+  const board = boardManager.getCurrentBoard()
+  boardVisibility.value = board.visibility
 
+  boardOwner.value = currentBoard.owner.name
+
+  thisUser.value = storedUserName
+})
+watch([boardOwner, thisUser], ([newBoardOwner, newThisUser]) => {
+  boardOwner.value = newBoardOwner
+  thisUser.value = newThisUser
+})
+// Reactive variable to track checkbox state
+watch(boardVisibility, (newVisibility) => {
+  isSwitch.value = newVisibility === 'PUBLIC'
+})
 const goBackToHomePage = function () {
   router.replace({ name: 'Task' })
 }
@@ -281,15 +306,13 @@ watch(boardVisibility, (newVisibility) => {
         <div class="relative group">
           <button
             @click="showAddStatusesModal('add')"
-            :disabled="
-              newVisibility === 'PRIVATE' || newVisibility === 'PUBLIC'
-            "
+            :disabled="boardOwner !== thisUser && isSwitch"
             class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2 my-3"
           >
             ✚ Add Status
           </button>
           <div
-            v-if="newVisibility === 'PUBLIC'"
+            v-if="boardOwner !== thisUser && isSwitch"
             class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-3"
           >
             You need to be board owner to perform this action.
@@ -308,7 +331,7 @@ watch(boardVisibility, (newVisibility) => {
       </thead>
       <tbody>
         <div
-          v-if="newVisibility === 'PRIVATE'"
+          v-if="privateTask === null"
           class="text-center text-xl text-red-600"
         >
           <h2>Access denied,you do not have permission to view this page.</h2>
@@ -363,15 +386,13 @@ watch(boardVisibility, (newVisibility) => {
                         id: statuses.id
                       })
                     "
-                    :disabled="
-                      newVisibility === 'PRIVATE' || newVisibility === 'PUBLIC'
-                    "
+                    :disabled="boardOwner !== thisUser && isSwitch"
                   >
                     Edit
                   </button>
                 </ButtonStyle>
                 <div
-                  v-if="newVisibility === 'PUBLIC'"
+                  v-if="boardOwner !== thisUser && isSwitch"
                   class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
                 >
                   You need to be board owner to perform this action.
@@ -401,15 +422,13 @@ watch(boardVisibility, (newVisibility) => {
                         index: index + 1
                       })
                     "
-                    :disabled="
-                      newVisibility === 'PRIVATE' || newVisibility === 'PUBLIC'
-                    "
+                    :disabled="boardOwner !== thisUser"
                   >
                     Delete
                   </button>
                 </ButtonStyle>
                 <div
-                  v-if="newVisibility === 'PUBLIC'"
+                  v-if="boardOwner !== thisUser && isSwitch"
                   class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
                 >
                   You need to be board owner to perform this action.
