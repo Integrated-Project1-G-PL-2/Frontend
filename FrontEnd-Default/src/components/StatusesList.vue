@@ -17,7 +17,8 @@ import StatusPopUp from './StatusPopUp.vue'
 import DeleteStatus from './DeleteStatus.vue'
 import { useTaskManager } from '@/stores/TaskManager'
 import ButtonStyle from './ButtonStyle.vue'
-
+import { useBoardManager } from '@/stores/BoardManager'
+const boardManager = useBoardManager()
 const taskManager = useTaskManager()
 const deClareemit = defineEmits(['editStatus'])
 const router = useRouter()
