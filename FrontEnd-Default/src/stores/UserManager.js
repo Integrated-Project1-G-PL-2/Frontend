@@ -171,7 +171,7 @@ export function useAuthGuard(router) {
 
 async function checkBoardPermissions(to, next) {
   const boardId = to.params.id // ดึง id ของบอร์ดจากพารามิเตอร์
-  const taskId = to.params['task-id'] || null // ดึง task-id ถ้ามี
+  const taskId = to.params.id || null // ดึง task-id ถ้ามี
 
   if (!boardId) {
     console.error('Missing boardId in route parameters.')
