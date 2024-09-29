@@ -1,9 +1,11 @@
 <script setup>
-import { reactive, ref } from 'vue'
-import { useRouter ,useRoute } from 'vue-router'
+import { onMounted,reactive, ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { useTaskManager } from '@/stores/TaskManager'
-import { addItem, editItem } from '@/utils/fetchUtils'
+import { getItems,getItemById,addItem, editItem } from '@/utils/fetchUtils'
 import { useStatusManager } from '@/stores/StatusManager'
+import { useBoardManager } from '@/stores/BoardManager'
+
 const emits = defineEmits([
   'showTaskDetailModal',
   'showRedPopup',
@@ -17,7 +19,7 @@ const prop = defineProps({
   taskDetail: Object,
   operate: String
 })
-
+const boardManager = useBoardManager()
 let task
 if (prop.taskDetail.value) {
   task = reactive({
@@ -43,8 +45,8 @@ if (prop.taskDetail.value) {
   task = reactive({
     createdOn: null,
     id: null,
-    taskAssignees: null,
-    taskDescription: null,
+    taskAssignees: 'Unassigned',
+    taskDescription: 'No Description Provided',
     taskStatus: {},
     taskTitle: null,
     updatedOn: null
@@ -64,6 +66,48 @@ const checkDescriptionLength = () => {
 const checkAssigneesLength = () => {
   isAssigneesOverLimit.value = task.taskAssignees.length > 30
 }
+
+const privateTask = ref()
+const boardOwner = ref()
+const thisUser = ref()
+const userName = ref()
+const boardVisibility = ref()
+
+
+onMounted(async () => {
+  const taskItems = await getItems(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
+  )
+  const currentBoard = await getItemById(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards`,
+    route.params.id
+  )
+  privateTask.value = taskItems
+  if (taskItems == 401) {
+    router.replace({ name: 'Login' })
+    return
+  }
+  boardManager.setCurrentBoard(currentBoard)
+  taskManager.setTasks(taskItems)
+  statusManager.setStatuses(
+    await getItems(
+      `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`
+    )
+  )
+  const storedUserName = localStorage.getItem('userName')
+  if (storedUserName) {
+    userName.value = storedUserName
+  }
+
+  const board = boardManager.getCurrentBoard()
+  boardVisibility.value = board.visibility
+  boardOwner.value = currentBoard.owner.name
+  thisUser.value = storedUserName
+  console.log(thisUser.value)
+  if(boardVisibility.value == 'PUBLIC' && thisUser.value !== boardOwner.value){
+    console.log('test')
+  }
+})
 
 const handleClick = async () => {
   if (prop.operate == 'show') {
@@ -125,7 +169,6 @@ const handleClick = async () => {
     emits('showTaskDetailModal', false)
   }
 }
-
 </script>
 
 <template>
@@ -170,18 +213,19 @@ const handleClick = async () => {
         <div class="flex flex-row">
           <div class="w-[70%] h-[50%]">
             <div class="pl-4 mt-4">Description</div>
-            <div class="w-full h-[420px]">
-              <textarea
+            <div class=" w-full h-[420px]">
+              <div
+              class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
                 :disabled="operate == 'show'"
-                v-model="task.taskDescription"
+            
                 :class="
                   (task.taskAssignees == null ? 'italic text-gray-500 ' : '',
                   isDescriptionOverLimit ? 'border-red-600 text-red-600' : '')
                 "
-                class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
-                placeholder="No Description Provided"
+              
                 @input="checkDescriptionLength"
-              ></textarea>
+              >{{ task.taskDescription }}
+            </div>
               <div
                 style="display: flex; align-items: center"
                 v-if="isDescriptionOverLimit"
@@ -217,7 +261,6 @@ const handleClick = async () => {
                     (task.taskAssigneess == null ? 'italic text-gray-500 ' : '',
                     isAssigneesOverLimit ? 'border-red-600 text-red-600' : '')
                   "
-                  placeholder="Unassigned"
                   @input="checkAssigneesLength"
                 ></textarea>
                 <div

@@ -2,7 +2,7 @@
 import { reactive, ref } from 'vue'
 import { useTaskManager } from '@/stores/TaskManager'
 import { useStatusManager } from '@/stores/StatusManager'
-import { useRouter,useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { onMounted } from 'vue'
 import {
   getItems,
@@ -28,7 +28,9 @@ const title = ref(prop.operate)
 
 onMounted(async () => {
   statusManager.setStatuses(
-    await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`)
+    await getItems(
+      `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`
+    )
   )
 })
 
@@ -88,10 +90,14 @@ const saveClick = async () => {
     const editedStatus = await editItem(
       `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`,
       prop.statusDetail.value.id,
-      {name: status.name, description:  status.description}
+      { name: status.name, description: status.description }
     )
     if (editedStatus != null) {
-      statusManager.editStatues(prop.statusDetail.value.id,editedStatus.id, editedStatus)
+      statusManager.editStatues(
+        prop.statusDetail.value.id,
+        editedStatus.id,
+        editedStatus
+      )
       emits('showStatusGreenPopup', {
         taskStatus: editedStatus.name,
         operate: prop.operate

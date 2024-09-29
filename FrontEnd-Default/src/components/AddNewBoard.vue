@@ -4,41 +4,51 @@ import { watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useBoardManager } from '@/stores/BoardManager'
 import { userName } from '@/stores/UserManager'
+
 const deClareemit = defineEmits(['saveDetail', 'cancelDetail', 'errorOccurred'])
 const router = useRouter()
 const isNameOverLimit = ref(false)
-const isNameEmpty = ref(false)
 const boardManager = useBoardManager()
 const MAX_LENGTH = 120
 const error = ref(false)
-const checkNameLength = () => {
-  isNameOverLimit.value = newBoardName.value.length > MAX_LENGTH
-  isNameEmpty.value = newBoardName.value.trim() === ''
-}
 
+// Define newBoardName with default value
 let newBoardName = ref(`${userName.value} personal board`)
 
-const boardsList = boardManager.getBoards()
+// Check length of the board name and enforce the limit
+const checkNameLength = () => {
+  if (newBoardName.value.length > MAX_LENGTH) {
+    isNameOverLimit.value = true
+    newBoardName.value = newBoardName.value.substring(0, MAX_LENGTH)
+    setTimeout(() => {
+      isNameOverLimit.value = false
+    }, 1000)
+  } else {
+    isNameOverLimit.value = false
+  }
+}
 
-const newBoard = async (newBoardName) => {
+// Handle creating a new board
+const newBoard = async () => {
   const newBoards = await addItem(
     `${import.meta.env.VITE_BASE_URL}/v3/boards`,
     {
-      name: newBoardName
+      name: newBoardName.value // Pass the board name directly
     }
   )
+
   if (newBoards == 401) {
     router.replace({ name: 'Login' })
   }
+
   if (!newBoards.id) {
     deClareemit('errorOccurred', (error.value = true))
     return
   }
 
   boardManager.addBoard(newBoards)
-
   deClareemit('cancelDetail', true)
-  router.replace({ name: 'Task', params: { id: boardsList.at(-1).id } })
+  router.replace({ name: 'Task', params: { id: newBoards.id } }) // Use the new board's ID
 }
 </script>
 
@@ -92,7 +102,7 @@ const newBoard = async (newBoardName) => {
         <button
           class="itbkk-button-ok bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"
           @click="newBoard(newBoardName)"
-          :disabled="isNameOverLimit || newBoardName == ''"
+          :disabled="newBoardName == ''"
         >
           <div class="btn text-center">Confirm</div>
         </button>

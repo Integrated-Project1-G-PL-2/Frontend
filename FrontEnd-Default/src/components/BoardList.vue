@@ -21,28 +21,29 @@ const boardManager = useBoardManager()
 
 const boardsList = boardManager.getBoards()
 const error = ref(false)
-
+const errorPrivate = ref(false)
 const closeProblemAlter = () => {
   error.value = false
 }
+const closePrivateAlter = () => {
+  errorPrivate.value = false
+}
 onMounted(async () => {
   const boards = await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards`)
-  if(boards == 401){
+  if (boards == 401) {
     router.replace({ name: 'Login' })
     return
   }
+console.log(boards)
 
-  if(boards.length > 0){
-    router.replace({ name: 'Task', params: { id: boards[0].board.id } })
-  }
-  boardManager.setBoards(
-    boards
-  )
+  // if (boards.length > 0) {
+  //   router.replace({ name: 'Task', params: { id: boards[0].board.id } })
+  // }
+  boardManager.setBoards(boards)
   const storedUserName = localStorage.getItem('userName')
   if (storedUserName) {
     userName.value = storedUserName
   }
-
 })
 
 const showAddNewBoard = ref(false) // Initial value is false
@@ -124,6 +125,13 @@ const returnLoginPage = () => {
       v-if="error"
       :titles="'There is a problem. Please try again later.'"
       @closePopUp="closeProblemAlter"
+      message="Error!!"
+      styleType="red"
+    />
+    <AlertPopUp
+      v-if="errorPrivate"
+      :titles="'Access denied, you do not have permission to view this page.'"
+      @closePopUp="closePrivateAlter"
       message="Error!!"
       styleType="red"
     />

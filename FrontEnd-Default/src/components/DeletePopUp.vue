@@ -26,7 +26,7 @@ const deleteTask = async (deleteId) => {
 
 <template>
   <div
-    class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[10px]"
+    class="itbkk-message bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[10px]"
   >
     <div class="w-[59%] m-[auto] border border-green-700 mt-[20%]">
       <div class="flex flex-col justify-between bg-white p-4 h-[10%]">
@@ -36,7 +36,7 @@ const deleteTask = async (deleteId) => {
 
         <div class="w-[70%] h-[100%]">
           <div class="flex pl-4 mt-5">
-            Do you want to delete the task "{{ props.taskId.value.index }}.
+            Do you want to delete the task number "{{ props.taskId.value.index }}.
             {{ props.taskId.value.taskTitle }}" ?
           </div>
         </div>

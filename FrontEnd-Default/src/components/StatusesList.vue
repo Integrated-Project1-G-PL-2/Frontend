@@ -8,6 +8,7 @@ import {
   editItem
 } from '../utils/fetchUtils.js'
 import { useStatusManager } from '@/stores/StatusManager'
+import { userName } from '@/stores/UserManager'
 import TaskDetail from './../components/TaskDetail.vue'
 import { useRoute, useRouter } from 'vue-router'
 import DeletePopUp from './../components/DeletePopUp.vue'
@@ -16,7 +17,9 @@ import StatusPopUp from './StatusPopUp.vue'
 import DeleteStatus from './DeleteStatus.vue'
 import { useTaskManager } from '@/stores/TaskManager'
 import ButtonStyle from './ButtonStyle.vue'
-
+import { useBoardManager } from '@/stores/BoardManager'
+const boardManager = useBoardManager()
+const isSwitch = ref(false)
 const taskManager = useTaskManager()
 const deClareemit = defineEmits(['editStatus'])
 const router = useRouter()
@@ -29,6 +32,7 @@ const editColor = ref('editColor')
 const deleteColor = ref('deleteColor')
 const route = useRoute()
 const bName = ref()
+const boardVisibility = ref()
 const greenPopup = reactive({
   add: { state: false, taskStatus: '' },
   edit: { state: false, taskStatus: '' },
@@ -41,30 +45,71 @@ const redPopup = reactive({
   delete: { state: false, taskStatus: '' },
   transfer: { state: false, taskStatus: '' }
 })
+const privateTask = ref()
+const boardOwner = ref()
+const thisUser = ref()
 const showDeleteStatusDetail = ref(false)
 const transferDelList = ref({})
+const thisStatus = ref()
+
 onMounted(async () => {
   const taskItems = await getItems(
-      `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
-    )
-    if(taskItems == 401){
-      router.replace({ name: 'Login' })
-    return
-    }
-  taskManager.setTasks(
-    taskItems
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
   )
+  const currentBoard = await getItemById(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards`,
+    route.params.id
+  )
+  privateTask.value = taskItems
+  if (taskItems == 401) {
+    router.replace({ name: 'Login' })
+    return
+  }
+  boardManager.setCurrentBoard(currentBoard)
+  taskManager.setTasks(taskItems)
   statusManager.setStatuses(
     await getItems(
       `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`
     )
   )
+  const storedUserName = localStorage.getItem('userName')
+  if (storedUserName) {
+    userName.value = storedUserName
+  }
   const getBoardName = await getItemById(
     `${import.meta.env.VITE_BASE_URL}/v3/boards`,
     `${route.params.id}`
   )
   bName.value = getBoardName.name
+  const board = boardManager.getCurrentBoard()
+  boardVisibility.value = board.visibility
+  boardOwner.value = currentBoard.owner.name
+  thisUser.value = storedUserName
+
+  const statusGroups = statusManager.getStatuses()
+  statusGroups.forEach((statusGroup) => {
+    thisStatus.value = statusGroup.id
+  })
+  if (
+    route.fullPath == `/board/${route.params.id}/status/add` ||
+    route.fullPath.match(
+      new RegExp(`/board/${route.params.id}/status/.+/delete`)
+    ) ||
+    route.fullPath.match(new RegExp(`/board/${route.params.id}/.+/edit`))
+  ) {
+    cannotConfig.value = true
+    router.replace({ name: 'StatusList' })
+  }
 })
+
+watch(
+  [boardOwner, thisUser, boardVisibility],
+  ([newBoardOwner, newThisUser, newVisibility]) => {
+    boardOwner.value = newBoardOwner
+    thisUser.value = newThisUser
+    isSwitch.value = newVisibility == 'PUBLIC'
+  }
+)
 
 const goBackToHomePage = function () {
   router.replace({ name: 'Task' })
@@ -108,24 +153,24 @@ const showEditStatusesModal = function (obj) {
   showStatusModal.value = true
 }
 
-const showEditStatusesModalV2 = async function (obj) {
-  const status = await getItemById(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`,
-    obj.id
-  )
+// const showEditStatusesModalV2 = async function (obj) {
+//   const status = await getItemById(
+//     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`,
+//     obj.id
+//   )
 
-  if (status.status == '404' || status.status == '500') {
-    redPopup.edit.state = true
-    return
-  }
-  router.push({ name: 'StatusEdit', params: { sid: obj.id } })
-  statusDetail.value = status
-  operation.value = obj.operate
-  showStatusModal.value = true
-}
-if (route.params.sid) {
-  showEditStatusesModalV2({ id: route.params.sid, operate: 'edit' })
-}
+//   if (status.status == '404' || status.status == '500') {
+//     redPopup.edit.state = true
+//     return
+//   }
+//   router.push({ name: 'StatusEdit', params: { sid: obj.id } })
+//   statusDetail.value = status
+//   operation.value = obj.operate
+//   showStatusModal.value = true
+// }
+// if (route.params.sid) {
+//   showEditStatusesModalV2({ id: route.params.sid, operate: 'edit' })
+// }
 
 const closeDeleteStatusPopup = function () {
   showDeleteStatusDetail.value = false
@@ -150,6 +195,15 @@ const closeGreenPopup = async function (operate) {
   router.push({ name: 'StatusList' })
   greenPopup[operate].state = false
 }
+const errorPublic = ref(false)
+const accessDenied = ref(false)
+const closePublicAlter = function () {
+  errorPublic.value = false
+}
+const closeAccessAlter = function () {
+  accessDenied.value = false
+}
+const cannotConfig = ref(false)
 </script>
 
 <template>
@@ -240,6 +294,20 @@ const closeGreenPopup = async function (operate) {
       styleType="red"
       :operate="'edit'"
     />
+    <AlertPopUp
+      v-if="accessDenied"
+      :titles="'Access denied, you do not have permission to view this page.'"
+      @closePopUp="closeAccessAlter"
+      message="Error!!"
+      styleType="red"
+    />
+    <AlertPopUp
+      v-if="errorPublic"
+      :titles="'You need to be board owner to perform this action.'"
+      @closePopUp="closePublicAlter"
+      message="Error!!"
+      styleType="red"
+    />
     <div class="flex justify-start">
       <button
         @click="goBackToHomePage"
@@ -253,12 +321,21 @@ const closeGreenPopup = async function (operate) {
         > Task Status
       </div>
       <div class="flex ml-auto">
-        <button
-          @click="showAddStatusesModal('add')"
-          class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2 my-3"
-        >
-          ✚ Add Status
-        </button>
+        <div class="relative group">
+          <button
+            @click="showAddStatusesModal('add')"
+            :disabled="boardOwner !== thisUser && isSwitch"
+            class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2 my-3"
+          >
+            ✚ Add Status
+          </button>
+          <div
+            v-if="boardOwner !== thisUser && isSwitch"
+            class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-3"
+          >
+            You need to be board owner to perform this action.
+          </div>
+        </div>
       </div>
     </div>
     <table class="w-full text-sm text-left text-gray-500">
@@ -271,6 +348,28 @@ const closeGreenPopup = async function (operate) {
         </tr>
       </thead>
       <tbody>
+        <div
+          v-if="boardOwner !== thisUser && cannotConfig"
+          class="relative text-center text-xl text-red-600 p-4"
+        >
+          <div class="flex justify-center items-center">
+            <h2>
+              Access denied, you do not have permission to view this page.
+            </h2>
+            <button
+              @click="cannotConfig = false"
+              class="ml-2 text-red-600 hover:text-red-800 font-bold"
+            >
+              &times;
+            </button>
+          </div>
+        </div>
+        <div
+          v-if="privateTask === null"
+          class="text-center text-xl text-red-600"
+        >
+          <h2>Access denied,you do not have permission to view this page.</h2>
+        </div>
         <tr
           v-for="(statuses, index) in statusManager.getStatuses()"
           :key="statuses.id"
@@ -311,20 +410,28 @@ const closeGreenPopup = async function (operate) {
               >
                 Edit
               </button> -->
-
-              <ButtonStyle :bgColor="editColor">
-                <button
-                  class="itbkk-button-edit"
-                  @click="
-                    showEditStatusesModal({
-                      operate: 'edit',
-                      id: statuses.id
-                    })
-                  "
+              <div class="relative group">
+                <ButtonStyle :bgColor="editColor">
+                  <button
+                    class="itbkk-button-edit"
+                    @click="
+                      showEditStatusesModal({
+                        operate: 'edit',
+                        id: statuses.id
+                      })
+                    "
+                    :disabled="boardOwner !== thisUser && isSwitch"
+                  >
+                    Edit
+                  </button>
+                </ButtonStyle>
+                <div
+                  v-if="boardOwner !== thisUser && isSwitch"
+                  class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
                 >
-                  Edit
-                </button>
-              </ButtonStyle>
+                  You need to be board owner to perform this action.
+                </div>
+              </div>
 
               <!-- <button
                 class="itbkk-button-delete bg-red-400 rounded-[8px] font-sans text-center gap-5 text-gray-100 hover:text-gray-200 w-14 mr-5"
@@ -338,20 +445,29 @@ const closeGreenPopup = async function (operate) {
               >
                 Delete
               </button> -->
-              <ButtonStyle :bgColor="deleteColor">
-                <button
-                  class="itbkk-button-delete"
-                  @click="
-                    showDeletePopUpTaskDetail({
-                      id: statuses.id,
-                      statusName: statuses.name,
-                      index: index + 1
-                    })
-                  "
+              <div class="relative group">
+                <ButtonStyle :bgColor="deleteColor">
+                  <button
+                    class="itbkk-button-delete"
+                    @click="
+                      showDeletePopUpTaskDetail({
+                        id: statuses.id,
+                        statusName: statuses.name,
+                        index: index + 1
+                      })
+                    "
+                    :disabled="boardOwner !== thisUser"
+                  >
+                    Delete
+                  </button>
+                </ButtonStyle>
+                <div
+                  v-if="boardOwner !== thisUser && isSwitch"
+                  class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
                 >
-                  Delete
-                </button>
-              </ButtonStyle>
+                  You need to be board owner to perform this action.
+                </div>
+              </div>
             </div>
           </td>
         </tr>

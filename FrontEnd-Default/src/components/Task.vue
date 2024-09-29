@@ -26,7 +26,7 @@ import { userName } from '@/stores/UserManager'
 import { logout } from '@/stores/UserManager'
 import boardsList from './../components/BoardList.vue'
 import { useBoardManager } from '@/stores/BoardManager'
-
+import VisibilityChangedPopUp from './../components/VisibilityChangedPopUP.vue'
 const statusManager = useStatusManager()
 const showStatusDetailModal = ref(false)
 const showStatusDetailLimit = ref(false)
@@ -41,7 +41,14 @@ const taskDetail = reactive({})
 const showDeleteTaskDetail = ref(false)
 const operation = ref('')
 const returnPage = ref(false)
+const boardVisibility = ref()
+const isSwitch = ref(false)
 const collectStatus = reactive([])
+const boardManager = useBoardManager()
+const visibilityToggle = reactive({
+  public: { state: false },
+  private: { state: false }
+})
 const greenPopup = reactive({
   add: { state: false, taskTitle: '' },
   edit: { state: false, taskTitle: '' },
@@ -52,24 +59,33 @@ const redPopup = reactive({
   delete: { state: false, taskTitle: '' }
 })
 
+const privateTask = ref()
 const bName = ref()
+const boardOwner = ref()
+const thisUser = ref()
+const thisTask = ref()
+const cannotConfig = ref(false)
 onMounted(async () => {
   const tasksItem = await getItems(
-      `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
-    )
-    if(tasksItem == 401){
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
+  )
+  const currentBoard = await getItemById(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards`,
+    route.params.id
+  )
+
+  privateTask.value = tasksItem
+  if (tasksItem == 401) {
     router.replace({ name: 'Login' })
     return
-  } 
-  taskManager.setTasks(
-    tasksItem
-  )
+  }
+  boardManager.setCurrentBoard(currentBoard)
+  taskManager.setTasks(tasksItem)
   statusManager.setStatuses(
     await getItems(
       `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`
     )
   )
-
   const storedUserName = localStorage.getItem('userName')
   if (storedUserName) {
     userName.value = storedUserName
@@ -79,6 +95,28 @@ onMounted(async () => {
     `${route.params.id}`
   )
   bName.value = getBoardName.name
+
+  const board = boardManager.getCurrentBoard()
+  boardVisibility.value = board.visibility
+
+  boardOwner.value = currentBoard.owner.name
+
+  thisUser.value = storedUserName
+  taskGroups.value.forEach((taskGroup) => {
+    thisTask.value = taskGroup.id
+  })
+  if (
+  route.fullPath == `/board/${route.params.id}/task/add` ||
+  route.fullPath.match(new RegExp(`/board/${route.params.id}/task/.+/delete`)) ||
+  route.fullPath.match(new RegExp(`/board/${route.params.id}/task/.+/edit`))
+) {
+    cannotConfig.value = true
+    router.replace({ name: 'Task' })
+  }
+})
+watch([boardOwner, thisUser], ([newBoardOwner, newThisUser]) => {
+  boardOwner.value = newBoardOwner
+  thisUser.value = newThisUser
 })
 
 const showTaskDetail = async function (id, operate) {
@@ -143,6 +181,7 @@ const closeGreenPopup = async function (operate) {
   router.push({ name: 'Task' })
   greenPopup[operate].state = false
 }
+
 const clearDeletePopUp = async function () {
   router.push({ name: 'Task' })
   showDeleteTaskDetail.value = false
@@ -162,9 +201,16 @@ const showStatusesList = function () {
   router.replace({ name: 'StatusList' })
   showStatusDetailModal.value = true
 }
-
-const showStatusesLimit = function () {
-  showStatusDetailLimit.value = true
+const error = ref(false)
+const permission = ref(false)
+const openErrorVisibility = () => {
+  console.log('Error visibility triggered') // ตรวจสอบการทำงานของฟังก์ชัน
+  router.push({ name: 'Task' })
+  error.value = true
+}
+const openPermissionVisibility = () => {
+  router.push({ name: 'Task' })
+  permission.value = true
 }
 
 const switchDefault = function () {
@@ -187,6 +233,14 @@ const taskGroups = ref(taskManager.getTasks())
 const searchStatus = ref('')
 const cloneTaskGroups = ref(statusManager.getStatuses())
 
+const closePermissionAlter = function () {
+  permission.value = false
+}
+
+const closeProblemAlter = () => {
+  error.value = false
+}
+
 watch(searchStatus, (status) => {
   if (collectStatus.includes(status) || status === null) {
     return
@@ -202,6 +256,7 @@ watch(collectStatus, async () => {
     )
   )
 })
+
 // onMounted(() => {
 //   const storedUserName = localStorage.getItem('userName')
 //   if (storedUserName) {
@@ -217,6 +272,51 @@ const returnLoginPage = () => {
 
 const goBackToHomeBoard = () => {
   router.replace({ name: 'Board' })
+}
+
+// Reactive variable to track checkbox state
+watch(boardVisibility, (newVisibility) => {
+  isSwitch.value = newVisibility === 'PUBLIC'
+})
+
+// Computed label based on checkbox state
+const toggleLabel = computed(() => (isSwitch.value ? 'Public' : 'Private'))
+let previousState = ref(false) // Store the previous toggle state
+const isPopupOpen = ref(false)
+// Function to open visibility settings (trigger the popup)
+const openVisibilitySetting = async function () {
+  previousState.value = isSwitch.value
+  isPopupOpen.value = true
+  if (isSwitch.value) {
+    // If it's already Public, switch to Private and show private popup
+    visibilityToggle.private.state = true
+    visibilityToggle.public.state = false
+    isSwitch.value = false
+  } else {
+    // If it's Private, switch to Public and show public popup
+    visibilityToggle.public.state = true
+    visibilityToggle.private.state = false
+    isSwitch.value = true
+  }
+}
+
+// Function to close visibility pop-up
+const closeVisibility = function () {
+  visibilityToggle.public.state = false
+  visibilityToggle.private.state = false
+  isSwitch.value = previousState.value
+
+  router.push({ name: 'Task' })
+  isPopupOpen.value = false
+}
+
+// Function to confirm visibility change
+const confirmVisibility = function () {
+  visibilityToggle.public.state = false
+  visibilityToggle.private.state = false
+
+  router.push({ name: 'Task' })
+  isPopupOpen.value = false
 }
 </script>
 
@@ -310,6 +410,54 @@ const goBackToHomeBoard = () => {
       styleType="red"
       :operate="'edit'"
     />
+    <VisibilityChangedPopUp
+      v-if="visibilityToggle.public.state"
+      message="In public, any one can view the board, task list and task detail of tasks in the board. Do you want to change the visibility to Public?"
+      :operate="'public'"
+      @closeVisibilityPopUp="closeVisibility"
+      @confirmVisibilityPopUp="confirmVisibility"
+      @visibilityError="openErrorVisibility"
+      @visibilityPermission="openPermissionVisibility"
+    />
+    <VisibilityChangedPopUp
+      v-if="visibilityToggle.private.state"
+      message="In private, only board owner can access/control board. Do you want to change the visibility to Private?"
+      :operate="'private'"
+      @closeVisibilityPopUp="closeVisibility"
+      @confirmVisibilityPopUp="confirmVisibility"
+      @visibilityError="openErrorVisibility"
+      @visibilityPermission="openPermissionVisibility"
+    />
+    <AlertPopUp
+      v-if="permission"
+      :titles="'You do not have permission to change board visibility mode.'"
+      @closePopUp="closePermissionAlter"
+      message="Error!!"
+      styleType="red"
+    />
+
+    <AlertPopUp
+      v-if="error"
+      :titles="'There is a problem. Please try again later.'"
+      @closePopUp="closeProblemAlter"
+      message="Error!!"
+      styleType="red"
+    />
+    <!-- 
+    <AlertPopUp
+      v-if="accessDenied"
+      :titles="'Access denied, you do not have permission to view this page.'"
+      @closePopUp="closeAccessAlter"
+      message="Error!!"
+      styleType="red"
+    />
+    <AlertPopUp
+      v-if="errorPublic"
+      :titles="'You need to be board owner to perform this action.'"
+      @closePopUp="closePublicAlter"
+      message="Error!!"
+      styleType="red"
+    /> -->
     <div class="flex justify-end">
       <div
         class="itbkk-status-filter flex items-center space-x-2 mr-auto ml-4 my-3 border"
@@ -363,12 +511,46 @@ const goBackToHomeBoard = () => {
           </svg>
         </div>
       </div>
-      <button
-        @click="showAddPopUpTaskDetail('add')"
-        class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
-      >
-        ✚ Add New Task
-      </button>
+      <div class="relative group">
+        <label
+          class="itbkk-board-visibility inline-flex items-center cursor-pointer"
+        >
+          <input
+            :disabled="boardOwner !== thisUser && isSwitch"
+            type="checkbox"
+            v-model="isSwitch"
+            class="sr-only peer"
+            @click="openVisibilitySetting"
+          />
+          <div
+            class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+          ></div>
+          <span class="ms-3 text-sm font-medium text-gray-600 mr-3 my-3">
+            {{ toggleLabel }}
+          </span>
+        </label>
+        <div
+          v-if="boardOwner !== thisUser && isSwitch"
+          class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
+        >
+          You need to be board owner to perform this action.
+        </div>
+      </div>
+      <div class="relative group">
+        <button
+          :disabled="boardOwner !== thisUser && isSwitch"
+          @click="showAddPopUpTaskDetail('add')"
+          class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
+        >
+          ✚ Add New Task
+        </button>
+        <div
+          v-if="boardOwner !== thisUser && isSwitch"
+          class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
+        >
+          You need to be board owner to perform this action.
+        </div>
+      </div>
       <button
         @click="showStatusesList"
         class="itbkk-manage-status bg-gray-500 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 my-3"
@@ -458,6 +640,30 @@ const goBackToHomeBoard = () => {
         </tr>
       </thead>
       <tbody>
+        <div
+          v-if="boardOwner !== thisUser && cannotConfig"
+          class="relative text-center text-xl text-red-600 p-4"
+        >
+          <div class="flex justify-center items-center">
+            <h2>
+              Access denied, you do not have permission to view this page.
+            </h2>
+            <button
+              @click="cannotConfig = false"
+              class="ml-2 text-red-600 hover:text-red-800 font-bold"
+            >
+              &times;
+            </button>
+          </div>
+        </div>
+
+        <div
+          v-if="privateTask === null"
+          class="text-center text-xl text-red-600"
+        >
+          <h2>Access denied,you do not have permission to view this page.</h2>
+        </div>
+
         <tr
           v-for="(task, index) in taskGroups"
           :key="task.id"
@@ -465,23 +671,41 @@ const goBackToHomeBoard = () => {
         >
           <td class="itbkk-button-action px-4 py-3">
             {{ index + 1 }}
-            <div
-              class="itbkk-button-edit inline-flex"
-              @click="showEditTaskDetail(task.id, 'edit')"
-            >
-              ⚙️
+            <div class="relative group">
+              <div
+                :disabled="boardOwner !== thisUser && isSwitch"
+                class="itbkk-button-edit inline-flex"
+                @click="showEditTaskDetail(task.id, 'edit')"
+              >
+                ⚙️
+              </div>
+              <div
+                v-if="boardOwner !== thisUser && isSwitch"
+                class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
+              >
+                You need to be board owner to perform this action.
+              </div>
             </div>
-            <div
-              class="itbkk-button-delete inline-flex"
-              @click="
-                showDeletePopUpTaskDetail({
-                  id: task.id,
-                  taskTitle: task.title,
-                  index: index + 1
-                })
-              "
-            >
-              🗑️
+            <div class="relative group">
+              <button
+                :disabled="boardOwner !== thisUser"
+                class="itbkk-button-delete inline-flex"
+                @click="
+                  showDeletePopUpTaskDetail({
+                    id: task.id,
+                    taskTitle: task.title,
+                    index: index + 1
+                  })
+                "
+              >
+                🗑️
+              </button>
+              <div
+                v-if="boardOwner !== thisUser && isSwitch"
+                class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
+              >
+                You need to be board owner to perform this action.
+              </div>
             </div>
           </td>
           <td class="itbkk-title px-4 py-3">
