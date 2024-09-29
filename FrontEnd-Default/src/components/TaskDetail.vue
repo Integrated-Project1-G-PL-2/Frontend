@@ -1,9 +1,11 @@
 <script setup>
-import { reactive, ref } from 'vue'
+import { onMounted,reactive, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useTaskManager } from '@/stores/TaskManager'
-import { addItem, editItem } from '@/utils/fetchUtils'
+import { getItems,getItemById,addItem, editItem } from '@/utils/fetchUtils'
 import { useStatusManager } from '@/stores/StatusManager'
+import { useBoardManager } from '@/stores/BoardManager'
+
 const emits = defineEmits([
   'showTaskDetailModal',
   'showRedPopup',
@@ -17,7 +19,7 @@ const prop = defineProps({
   taskDetail: Object,
   operate: String
 })
-
+const boardManager = useBoardManager()
 let task
 if (prop.taskDetail.value) {
   task = reactive({
@@ -64,6 +66,48 @@ const checkDescriptionLength = () => {
 const checkAssigneesLength = () => {
   isAssigneesOverLimit.value = task.taskAssignees.length > 30
 }
+
+const privateTask = ref()
+const boardOwner = ref()
+const thisUser = ref()
+const userName = ref()
+const boardVisibility = ref()
+
+
+onMounted(async () => {
+  const taskItems = await getItems(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
+  )
+  const currentBoard = await getItemById(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards`,
+    route.params.id
+  )
+  privateTask.value = taskItems
+  if (taskItems == 401) {
+    router.replace({ name: 'Login' })
+    return
+  }
+  boardManager.setCurrentBoard(currentBoard)
+  taskManager.setTasks(taskItems)
+  statusManager.setStatuses(
+    await getItems(
+      `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`
+    )
+  )
+  const storedUserName = localStorage.getItem('userName')
+  if (storedUserName) {
+    userName.value = storedUserName
+  }
+
+  const board = boardManager.getCurrentBoard()
+  boardVisibility.value = board.visibility
+  boardOwner.value = currentBoard.owner.name
+  thisUser.value = storedUserName
+  console.log(thisUser.value)
+  if(boardVisibility.value == 'PUBLIC' && thisUser.value !== boardOwner.value){
+    console.log('test')
+  }
+})
 
 const handleClick = async () => {
   if (prop.operate == 'show') {

@@ -63,7 +63,7 @@ const privateTask = ref()
 const bName = ref()
 const boardOwner = ref()
 const thisUser = ref()
-
+const thisTask = ref()
 onMounted(async () => {
   const tasksItem = await getItems(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
@@ -101,12 +101,20 @@ onMounted(async () => {
   boardOwner.value = currentBoard.owner.name
 
   thisUser.value = storedUserName
-
+  taskGroups.value.forEach(taskGroup => {
+ thisTask.value = taskGroup.id
+});
+  if(route.fullPath == `/board/${route.params.id}/task/add` ||`/board/${route.params.id}/task/${thisTask}/delete` || `/board/${route.params.id}/task/${thisTask}/edit` ){
+    
+    router.replace({ name: 'Task' })
+  }
+  
 })
 watch([boardOwner,thisUser], ([newBoardOwner,newThisUser]) => {
   boardOwner.value = newBoardOwner
   thisUser.value = newThisUser
 })
+
 
 const showTaskDetail = async function (id, operate) {
   router.push({ name: 'DetailTask', params: { tid: id } })
@@ -201,9 +209,6 @@ const openPermissionVisibility = () => {
   router.push({ name: 'Task' })
   permission.value = true
 }
-const showStatusesLimit = function () {
-  showStatusDetailLimit.value = true
-}
 
 const switchDefault = function () {
   switchDate.value = true
@@ -264,14 +269,6 @@ const returnLoginPage = () => {
 
 const goBackToHomeBoard = () => {
   router.replace({ name: 'Board' })
-}
-const errorPublic = ref(false)
-const accessDenied = ref(false)
-const closePublicAlter = function () {
-  errorPublic.value = false
-}
-const closeAccessAlter = function () {
-  accessDenied.value = false
 }
 
 // Reactive variable to track checkbox state
