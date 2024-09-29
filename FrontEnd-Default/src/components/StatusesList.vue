@@ -91,13 +91,14 @@ onMounted(async () => {
     thisStatus.value = statusGroup.id
   })
   if (
-  route.fullPath == `/board/${route.params.id}/status/add` ||
-  route.fullPath.match(new RegExp(`/board/${route.params.id}/status/.+/delete`)) ||
-  route.fullPath.match(new RegExp(`/board/${route.params.id}/.+/edit`))
-) {
+    route.fullPath == `/board/${route.params.id}/status/add` ||
+    route.fullPath.match(
+      new RegExp(`/board/${route.params.id}/status/.+/delete`)
+    ) ||
+    route.fullPath.match(new RegExp(`/board/${route.params.id}/.+/edit`))
+  ) {
     cannotConfig.value = true
     router.replace({ name: 'StatusList' })
-    
   }
 })
 
@@ -202,7 +203,7 @@ const closePublicAlter = function () {
 const closeAccessAlter = function () {
   accessDenied.value = false
 }
-const cannotConfig = ref()
+const cannotConfig = ref(false)
 </script>
 
 <template>
