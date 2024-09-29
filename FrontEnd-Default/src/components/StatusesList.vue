@@ -50,6 +50,8 @@ const boardOwner = ref()
 const thisUser = ref()
 const showDeleteStatusDetail = ref(false)
 const transferDelList = ref({})
+const thisStatus = ref()
+
 onMounted(async () => {
   const taskItems = await getItems(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
@@ -82,9 +84,23 @@ onMounted(async () => {
   const board = boardManager.getCurrentBoard()
   boardVisibility.value = board.visibility
   boardOwner.value = currentBoard.owner.name
-
   thisUser.value = storedUserName
+
+  const statusGroups = statusManager.getStatuses()
+  statusGroups.forEach((statusGroup) => {
+    thisStatus.value = statusGroup.id
+  })
+  if (
+    route.fullPath == `/board/${route.params.id}/status/add` ||
+    `/board/${route.params.id}/status/${thisStatus}/delete` ||
+    `/board/${route.params.id}/${thisStatus}/edit`
+  ) {
+    router.replace({ name: 'StatusList' })
+    console.log('dd')
+  }
+  console.log(showStatusModal.value)
 })
+
 watch([boardOwner, thisUser,boardVisibility], ([newBoardOwner, newThisUser,newVisibility]) => {
   boardOwner.value = newBoardOwner
   thisUser.value = newThisUser
@@ -135,24 +151,24 @@ const showEditStatusesModal = function (obj) {
   showStatusModal.value = true
 }
 
-const showEditStatusesModalV2 = async function (obj) {
-  const status = await getItemById(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`,
-    obj.id
-  )
+// const showEditStatusesModalV2 = async function (obj) {
+//   const status = await getItemById(
+//     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`,
+//     obj.id
+//   )
 
-  if (status.status == '404' || status.status == '500') {
-    redPopup.edit.state = true
-    return
-  }
-  router.push({ name: 'StatusEdit', params: { sid: obj.id } })
-  statusDetail.value = status
-  operation.value = obj.operate
-  showStatusModal.value = true
-}
-if (route.params.sid) {
-  showEditStatusesModalV2({ id: route.params.sid, operate: 'edit' })
-}
+//   if (status.status == '404' || status.status == '500') {
+//     redPopup.edit.state = true
+//     return
+//   }
+//   router.push({ name: 'StatusEdit', params: { sid: obj.id } })
+//   statusDetail.value = status
+//   operation.value = obj.operate
+//   showStatusModal.value = true
+// }
+// if (route.params.sid) {
+//   showEditStatusesModalV2({ id: route.params.sid, operate: 'edit' })
+// }
 
 const closeDeleteStatusPopup = function () {
   showDeleteStatusDetail.value = false
