@@ -102,20 +102,22 @@ onMounted(async () => {
   boardOwner.value = currentBoard.owner.name
 
   thisUser.value = storedUserName
-  taskGroups.value.forEach(taskGroup => {
- thisTask.value = taskGroup.id
-});
-  if(route.fullPath == `/board/${route.params.id}/task/add` ||`/board/${route.params.id}/task/${thisTask}/delete` || `/board/${route.params.id}/task/${thisTask}/edit` ){
+  taskGroups.value.forEach((taskGroup) => {
+    thisTask.value = taskGroup.id
+  })
+  if (
+    route.fullPath == `/board/${route.params.id}/task/add` ||
+    `/board/${route.params.id}/task/${thisTask}/delete` ||
+    `/board/${route.params.id}/task/${thisTask}/edit`
+  ) {
     cannotConfig.value = true
     router.replace({ name: 'Task' })
   }
-  
 })
-watch([boardOwner,thisUser], ([newBoardOwner,newThisUser]) => {
+watch([boardOwner, thisUser], ([newBoardOwner, newThisUser]) => {
   boardOwner.value = newBoardOwner
   thisUser.value = newThisUser
 })
-
 
 const showTaskDetail = async function (id, operate) {
   router.push({ name: 'DetailTask', params: { tid: id } })
@@ -319,7 +321,6 @@ const confirmVisibility = function () {
 </script>
 
 <template>
-  <div v-if="boardOwner !== thisUser && cannotConfig" @click="cannotConfig= false">test</div> 
   <div class="bg-white relative border rounded-lg overflow-auto">
     <h1 class="font-bold text-center cursor-default text-xl">
       {{ bName }}
@@ -537,9 +538,7 @@ const confirmVisibility = function () {
       </div>
       <div class="relative group">
         <button
-          :disabled="
-            boardOwner !== thisUser && isSwitch
-          "
+          :disabled="boardOwner !== thisUser && isSwitch"
           @click="showAddPopUpTaskDetail('add')"
           class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
         >
@@ -642,6 +641,23 @@ const confirmVisibility = function () {
       </thead>
       <tbody>
         <div
+          v-if="boardOwner !== thisUser && cannotConfig"
+          class="relative text-center text-xl text-red-600 p-4"
+        >
+          <div class="flex justify-center items-center">
+            <h2>
+              Access denied, you do not have permission to view this page.
+            </h2>
+            <button
+              @click="cannotConfig = false"
+              class="ml-2 text-red-600 hover:text-red-800 font-bold"
+            >
+              &times;
+            </button>
+          </div>
+        </div>
+
+        <div
           v-if="privateTask === null"
           class="text-center text-xl text-red-600"
         >
@@ -685,7 +701,7 @@ const confirmVisibility = function () {
                 🗑️
               </button>
               <div
-                v-if="boardOwner !== thisUser && isSwitch" 
+                v-if="boardOwner !== thisUser && isSwitch"
                 class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
               >
                 You need to be board owner to perform this action.

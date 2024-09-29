@@ -95,19 +95,19 @@ onMounted(async () => {
     `/board/${route.params.id}/status/${thisStatus}/delete` ||
     `/board/${route.params.id}/${thisStatus}/edit`
   ) {
+    cannotConfig.value = true
     router.replace({ name: 'StatusList' })
-    console.log('dd')
   }
-  console.log(showStatusModal.value)
 })
 
-watch([boardOwner, thisUser,boardVisibility], ([newBoardOwner, newThisUser,newVisibility]) => {
-  boardOwner.value = newBoardOwner
-  thisUser.value = newThisUser
-  isSwitch.value = newVisibility == 'PUBLIC'
-})
-
-
+watch(
+  [boardOwner, thisUser, boardVisibility],
+  ([newBoardOwner, newThisUser, newVisibility]) => {
+    boardOwner.value = newBoardOwner
+    thisUser.value = newThisUser
+    isSwitch.value = newVisibility == 'PUBLIC'
+  }
+)
 
 const goBackToHomePage = function () {
   router.replace({ name: 'Task' })
@@ -201,7 +201,7 @@ const closePublicAlter = function () {
 const closeAccessAlter = function () {
   accessDenied.value = false
 }
-
+const cannotConfig = ref()
 </script>
 
 <template>
@@ -346,6 +346,22 @@ const closeAccessAlter = function () {
         </tr>
       </thead>
       <tbody>
+        <div
+          v-if="boardOwner !== thisUser && cannotConfig"
+          class="relative text-center text-xl text-red-600 p-4"
+        >
+          <div class="flex justify-center items-center">
+            <h2>
+              Access denied, you do not have permission to view this page.
+            </h2>
+            <button
+              @click="cannotConfig = false"
+              class="ml-2 text-red-600 hover:text-red-800 font-bold"
+            >
+              &times;
+            </button>
+          </div>
+        </div>
         <div
           v-if="privateTask === null"
           class="text-center text-xl text-red-600"
