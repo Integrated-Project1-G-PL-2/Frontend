@@ -641,7 +641,7 @@ const confirmVisibility = function () {
       </thead>
       <tbody>
         <div
-          v-if="cannotConfig"
+          v-if="boardOwner !== thisUser && cannotConfig"
           class="relative text-center text-xl text-red-600 p-4"
         >
           <div class="flex justify-center items-center">
