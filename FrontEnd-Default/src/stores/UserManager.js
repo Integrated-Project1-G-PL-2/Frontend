@@ -156,8 +156,6 @@ export function useAuthGuard(router) {
         }
       } else {
         console.log('Token is valid, allowing navigation.')
-        // Proceed to check for board visibility and ownership here
-        // return checkBoardPermissions(to, next)
         return next() // Proceed as normal
       }
     } catch (error) {
@@ -166,91 +164,6 @@ export function useAuthGuard(router) {
       return next({ name: 'Login' })
     }
   })
-}
-
-async function checkBoardPermissions(to, next) {
-  const boardId = to.params.id
-  const taskId = to.params['task-id'] || null
-
-  try {
-    // Fetch board details
-    const response = await fetch(
-      `${import.meta.env.VITE_BASE_URL}/v3/boards/${boardId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('jwt')}`
-        }
-      }
-    )
-
-    if (!response.ok) {
-      console.error('Failed to fetch board details.')
-      return next({
-        name: 'Task',
-        query: { message: 'Board not found or access denied.' }
-      })
-    }
-
-    const board = await response.json()
-    const { isOwner, visibility } = board
-
-    // สร้าง URL เส้นทางสำหรับตรวจสอบ
-    const addTaskRoute = `${
-      import.meta.env.VITE_BASE_URL
-    }/v3/boards/${boardId}/tasks/add`
-    const editTaskRoute = `${
-      import.meta.env.VITE_BASE_URL
-    }/v3/boards/${boardId}/tasks/${taskId}/edit`
-    const boardRoute = `${import.meta.env.VITE_BASE_URL}/v3/boards/${boardId}`
-    const statusRoute = `${
-      import.meta.env.VITE_BASE_URL
-    }/v3/boards/${boardId}/status`
-    const taskRoute = `${
-      import.meta.env.VITE_BASE_URL
-    }/v3/boards/${boardId}/tasks/${taskId}`
-
-    const isTaskAddEditRoute =
-      to.path === addTaskRoute || to.path === editTaskRoute
-    const isGeneralBoardRoute =
-      to.path === boardRoute || to.path === statusRoute || to.path === taskRoute
-
-    // Case 1: Non-owner trying to access a private board
-    if (!isOwner && visibility === 'PRIVATE' && isGeneralBoardRoute) {
-      return next({
-        name: 'StatusList',
-        query: { message: 'Access denied, this board is private.' }
-      })
-    }
-
-    // Case 2: Non-owner attempting to modify tasks on a public board
-    if (!isOwner && visibility === 'PUBLIC' && isTaskAddEditRoute) {
-      return next({
-        name: 'Task',
-        query: {
-          message: 'Access denied, you do not have permission to modify tasks.'
-        }
-      })
-    }
-
-    // Case 3: Owner has full access
-    if (isOwner) {
-      return next()
-    }
-
-    // Case 4: Non-owner can view public board content
-    if (!isOwner && visibility === 'PUBLIC') {
-      return next()
-    }
-
-    console.error('Unexpected state in permission check.')
-    return next({ name: 'Task' })
-  } catch (error) {
-    console.error('Error fetching board details:', error)
-    return next({
-      name: 'StatusList',
-      query: { message: 'Error fetching board details.' }
-    })
-  }
 }
 
 // ฟังก์ชันสำหรับทำ API request พร้อมแนบ token
