@@ -81,6 +81,7 @@ onMounted(async () => {
   bName.value = getBoardName.name
   const board = boardManager.getCurrentBoard()
   boardVisibility.value = board.visibility
+console.log(board)
   boardOwner.value = currentBoard.owner.name
 
   thisUser.value = storedUserName
