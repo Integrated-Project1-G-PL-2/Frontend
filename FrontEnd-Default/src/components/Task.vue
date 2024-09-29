@@ -64,7 +64,7 @@ const bName = ref()
 const boardOwner = ref()
 const thisUser = ref()
 const thisTask = ref()
-const cannotConfig = ref()
+const cannotConfig = ref(false)
 onMounted(async () => {
   const tasksItem = await getItems(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
@@ -106,10 +106,10 @@ onMounted(async () => {
     thisTask.value = taskGroup.id
   })
   if (
-    route.fullPath == `/board/${route.params.id}/task/add` ||
-    `/board/${route.params.id}/task/${thisTask}/delete` ||
-    `/board/${route.params.id}/task/${thisTask}/edit`
-  ) {
+  route.fullPath == `/board/${route.params.id}/task/add` ||
+  route.fullPath.match(new RegExp(`/board/${route.params.id}/task/.+/delete`)) ||
+  route.fullPath.match(new RegExp(`/board/${route.params.id}/task/.+/edit`))
+) {
     cannotConfig.value = true
     router.replace({ name: 'Task' })
   }
@@ -641,7 +641,7 @@ const confirmVisibility = function () {
       </thead>
       <tbody>
         <div
-          v-if="boardOwner !== thisUser && cannotConfig"
+          v-if="cannotConfig"
           class="relative text-center text-xl text-red-600 p-4"
         >
           <div class="flex justify-center items-center">
