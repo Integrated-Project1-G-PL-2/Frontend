@@ -215,7 +215,7 @@ const handleClick = async () => {
             <div class="pl-4 mt-4">Description</div>
             <div class=" w-full h-[420px]">
               <div
-              class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
+              class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none font-style: italic"
                 :disabled="operate == 'show'"
             
                 :class="
@@ -256,9 +256,9 @@ const handleClick = async () => {
                 <textarea
                   :disabled="operate == 'show'"
                   v-model="task.taskAssignees"
-                  class="itbkk-assignees w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bbg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
+                  class="itbkk-assignees w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bbg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none italic"
                   :class="
-                    (task.taskAssigneess == null ? 'italic text-gray-500 ' : '',
+                    (task.taskAssignees == null ? 'italic text-gray-500 ' : '',
                     isAssigneesOverLimit ? 'border-red-600 text-red-600' : '')
                   "
                   @input="checkAssigneesLength"

@@ -73,9 +73,10 @@ onMounted(async () => {
     `${import.meta.env.VITE_BASE_URL}/v3/boards`,
     route.params.id
   )
-
+console.log(tasksItem)
   privateTask.value = tasksItem
-  if (tasksItem == 401) {
+  if (privateTask.value == null) {
+    console.log('test')
     router.replace({ name: 'Login' })
     return
   }
@@ -111,7 +112,7 @@ onMounted(async () => {
   route.fullPath.match(new RegExp(`/board/${route.params.id}/task/.+/edit`))
 ) {
     cannotConfig.value = true
-    router.replace({ name: 'Task' })
+    router.replace({ name: 'Login' })
   }
 })
 watch([boardOwner, thisUser], ([newBoardOwner, newThisUser]) => {
@@ -280,7 +281,7 @@ watch(boardVisibility, (newVisibility) => {
 })
 
 // Computed label based on checkbox state
-const toggleLabel = computed(() => (isSwitch.value ? 'Public' : 'Private'))
+const toggleLabel = computed(() => (isSwitch.value ? 'public' : 'private'))
 let previousState = ref(false) // Store the previous toggle state
 const isPopupOpen = ref(false)
 // Function to open visibility settings (trigger the popup)
@@ -412,7 +413,7 @@ const confirmVisibility = function () {
     />
     <VisibilityChangedPopUp
       v-if="visibilityToggle.public.state"
-      message="In public, any one can view the board, task list and task detail of tasks in the board. Do you want to change the visibility to Public?"
+      message="Do you want to change board visibility to public?"
       :operate="'public'"
       @closeVisibilityPopUp="closeVisibility"
       @confirmVisibilityPopUp="confirmVisibility"
@@ -421,7 +422,7 @@ const confirmVisibility = function () {
     />
     <VisibilityChangedPopUp
       v-if="visibilityToggle.private.state"
-      message="In private, only board owner can access/control board. Do you want to change the visibility to Private?"
+      message="Do you want to change board visibility to private?"
       :operate="'private'"
       @closeVisibilityPopUp="closeVisibility"
       @confirmVisibilityPopUp="confirmVisibility"
@@ -513,20 +514,21 @@ const confirmVisibility = function () {
       </div>
       <div class="relative group">
         <label
-          class="itbkk-board-visibility inline-flex items-center cursor-pointer"
+          class="inline-flex items-center cursor-pointer"
         >
           <input
+            :class="{disabled:boardOwner !== thisUser && isSwitch}"
             :disabled="boardOwner !== thisUser && isSwitch"
             type="checkbox"
             v-model="isSwitch"
-            class="sr-only peer"
+            class="itbkk-board-visibility sr-only peer"
             @click="openVisibilitySetting"
           />
           <div
             class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
           ></div>
-          <span class="ms-3 text-sm font-medium text-gray-600 mr-3 my-3">
-            {{ toggleLabel }}
+          <span class="visibility ms-3 text-sm font-medium text-gray-600 mr-3 my-3">
+           {{ toggleLabel }}
           </span>
         </label>
         <div
@@ -538,6 +540,7 @@ const confirmVisibility = function () {
       </div>
       <div class="relative group">
         <button
+        :class="{disabled:boardOwner !== thisUser && isSwitch}"
           :disabled="boardOwner !== thisUser && isSwitch"
           @click="showAddPopUpTaskDetail('add')"
           class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
@@ -671,10 +674,11 @@ const confirmVisibility = function () {
         >
           <td class="itbkk-button-action px-4 py-3">
             {{ index + 1 }}
-            <div class="relative group">
+            <div class=" relative group">
               <div
-                :disabled="boardOwner !== thisUser && isSwitch"
                 class="itbkk-button-edit inline-flex"
+                :class="{ disabled: boardOwner !== thisUser && isSwitch }"
+                :disabled="boardOwner !== thisUser && isSwitch" 
                 @click="showEditTaskDetail(task.id, 'edit')"
               >
                 ⚙️
@@ -710,15 +714,16 @@ const confirmVisibility = function () {
           </td>
           <td class="itbkk-title px-4 py-3">
             <div
-              class="hover:text-sky-500 cursor-default"
+              class="itbkk-title hover:text-sky-500 cursor-default "
               @click="showTaskDetail(task.id, 'show')"
             >
+            
               {{ task.title }}
             </div>
           </td>
           <td
             class="itbkk-assignees px-4 py-3 cursor-default"
-            :class="task.assignees == null ? 'italic' : ''"
+            :class="task.assignees == null ? 'italic' : 'italic'"
           >
             {{ task.assignees == null ? 'Unassigned' : task.assignees }}
           </td>

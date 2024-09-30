@@ -73,7 +73,7 @@ const changeVisibility = async (PublicOrPrivate) => {
             ]
           "
         >
-          <div class="btn text-center">Confirm</div>
+          <div class="btn text-center"> {{props.operate}}</div>
         </button>
         <button
           class="itbkk-button-cancel bg-red-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"

@@ -106,7 +106,7 @@ export async function refreshToken(router) {
     if (response.ok) {
       const data = await response.json()
       localStorage.setItem('jwt', data.access_token) // Store new access token
-      console.log('New access token set:', data.access_token) // Log the new token
+  
       return data.access_token // Return the new access token
     }
     // If refresh token is invalid (401 Unauthorized)

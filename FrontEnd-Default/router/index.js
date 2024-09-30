@@ -75,7 +75,7 @@ const routes = [
         name: 'DeleteStatus'
       },
       {
-        path: '/board/:id/:sid/edit',
+        path: '/board/:id/status/:sid/edit',
         component: StatusPopUp,
         name: 'StatusEdit'
       }

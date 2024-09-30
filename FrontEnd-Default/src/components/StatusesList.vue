@@ -61,7 +61,7 @@ onMounted(async () => {
     route.params.id
   )
   privateTask.value = taskItems
-  if (taskItems == 401) {
+  if (taskItems == null) {
     router.replace({ name: 'Login' })
     return
   }
@@ -95,10 +95,10 @@ onMounted(async () => {
     route.fullPath.match(
       new RegExp(`/board/${route.params.id}/status/.+/delete`)
     ) ||
-    route.fullPath.match(new RegExp(`/board/${route.params.id}/.+/edit`))
+    route.fullPath.match(new RegExp(`/board/${route.params.id}/status/.+/edit`))
   ) {
     cannotConfig.value = true
-    router.replace({ name: 'StatusList' })
+    router.replace({ name: 'Login' })
   }
 })
 
