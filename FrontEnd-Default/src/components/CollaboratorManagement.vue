@@ -22,7 +22,8 @@ import { logout } from '@/stores/UserManager'
 import ChangeRemoveLeaveCollab from './../components/ChangeRemoveLeaveCollab.vue'
 
 const router = useRouter()
-
+const remove = ref(false)
+const change = ref(false)
 const showAddNewCollaborator = ref(false)
 const returnLoginPage = () => {
   logout()
@@ -88,6 +89,23 @@ const goBackToHomeBoard = () => {
         </button>
       </div>
     </div>
+    <ChangeRemoveLeaveCollab
+      v-if="Change"
+      :titles="'Change Access Right'"
+      @closePopUp="closeChange"
+      message="Do you want to change access right of"
+      message2="to"
+      message3="?"
+      :operate="'change'"
+    />
+    <ChangeRemoveLeaveCollab
+      v-if="remove"
+      :titles="'Remove Collaborator'"
+      @closePopUp="closeRemove"
+      message="Do you want to remove"
+      message2="from the board?"
+      :operate="'remove'"
+    />
 
     <div class="flex justify-end">
       <div

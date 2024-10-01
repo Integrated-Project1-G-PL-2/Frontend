@@ -18,7 +18,8 @@ const props = defineProps({
   operate: String,
   titles: String,
   message: String,
-  message2: String
+  message2: String,
+  message3: String
 })
 
 const router = useRouter()
@@ -95,7 +96,8 @@ const filterStatus = () => {
         <div class="w-[70%] h-[100%]">
           <div class="itbkk-message pl-4 mt-4">
             {{ message }} " {{ props.statusId.value.statusName }}"
-            {{ message2 }} ?
+            {{ message2 }} " {{ props.statusId.value.statusName }}"
+            {{ message3 }}
           </div>
         </div>
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">

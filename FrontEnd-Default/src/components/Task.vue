@@ -27,6 +27,7 @@ import { logout } from '@/stores/UserManager'
 import boardsList from './../components/BoardList.vue'
 import { useBoardManager } from '@/stores/BoardManager'
 import VisibilityChangedPopUp from './../components/VisibilityChangedPopUP.vue'
+import ChangeRemoveLeaveCollab from './../components/ChangeRemoveLeaveCollab.vue'
 const statusManager = useStatusManager()
 const showStatusDetailModal = ref(false)
 const showCollabDetailModal = ref(false)
@@ -66,6 +67,7 @@ const boardOwner = ref()
 const thisUser = ref()
 const thisTask = ref()
 const cannotConfig = ref(false)
+const leave = ref(false)
 onMounted(async () => {
   const tasksItem = await getItems(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
@@ -449,6 +451,14 @@ const confirmVisibility = function () {
       @closePopUp="closeProblemAlter"
       message="Error!!"
       styleType="red"
+    />
+    <ChangeRemoveLeaveCollab
+      v-if="leave"
+      :titles="'Leave Board'"
+      @closePopUp="closeLeave"
+      message="Do you want to leave this"
+      message2="board?"
+      :operate="'leave'"
     />
     <!-- 
     <AlertPopUp
