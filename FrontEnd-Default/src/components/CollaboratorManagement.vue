@@ -333,61 +333,11 @@ const goBackToPersonalBoard = () => {
     <table class="w-full text-sm text-left text-gray-500">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50">
         <tr>
-          <th class="px-4 py-3 cursor-default"></th>
-          <th class="px-4 py-3 cursor-default">Title</th>
-          <th class="px-4 py-3 cursor-default">Assignees</th>
-          <th class="px-4 py-3 flex items-center space-x-2 cursor-default">
-            <span>Status </span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="cursor-pointer itbkk-status-sort"
-              width="1.2rem"
-              height="1.2rem"
-              viewBox="0 0 48 48"
-              v-if="!switchDate"
-              @click=";[(switchDefault(), sortByTitle(taskGroups))]"
-            >
-              <path fill="#afacac" d="M38 33V5h-4v28h-6l8 10l8-10z" />
-              <path
-                fill="#afacac"
-                d="M16.8 17.2h-5.3l-1.1 3H6.9L12.6 5h2.9l5.7 15.2H18zm-4.6-2.7H16l-1.9-5.7zm.2 26H20V43H8.4v-1.9L16 30.3H8.4v-2.5h11.4v1.7z"
-              />
-            </svg>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="cursor-pointer itbkk-status-sort"
-              width="1.2rem"
-              height="1.2rem"
-              viewBox="0 0 48 48"
-              v-if="switchSort"
-              @click=";[(switchSortText(), sortByTitleReverse(taskGroups))]"
-            >
-              <path fill="#1e40af" d="M38 33V5h-4v28h-6l8 10l8-10z" />
-              <path
-                fill="#1e40af"
-                d="M16.8 17.2h-5.3l-1.1 3H6.9L12.6 5h2.9l5.7 15.2H18zm-4.6-2.7H16l-1.9-5.7zm.2 26H20V43H8.4v-1.9L16 30.3H8.4v-2.5h11.4v1.7z"
-              />
-            </svg>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="cursor-pointer itbkk-status-sort"
-              width="1.2rem"
-              height="1.2rem"
-              viewBox="0 0 16 16"
-              v-if="switchSort2"
-              @click=";[(switchBack(), sortByTitleDate(taskGroups))]"
-            >
-              <g fill="#1e40af">
-                <path
-                  fill-rule="evenodd"
-                  d="M10.082 5.629L9.664 7H8.598l1.789-5.332h1.234L13.402 7h-1.12l-.419-1.371zm1.57-.785L11 2.687h-.047l-.652 2.157z"
-                />
-                <path
-                  d="M12.96 14H9.028v-.691l2.579-3.72v-.054H9.098v-.867h3.785v.691l-2.567 3.72v.054h2.645zm-8.46-.5a.5.5 0 0 1-1 0V3.707L2.354 4.854a.5.5 0 1 1-.708-.708l2-1.999l.007-.007a.5.5 0 0 1 .7.006l2 2a.5.5 0 1 1-.707.708L4.5 3.707z"
-                />
-              </g>
-            </svg>
-          </th>
+          <th class="px-4 py-3 cursor-default">No</th>
+          <th class="px-4 py-3 cursor-default">Name</th>
+          <th class="px-4 py-3 cursor-default">E-mail</th>
+          <th class="px-4 py-3 cursor-default">Acess Right</th>
+          <th class="px-4 py-3 cursor-default">Action</th>
         </tr>
       </thead>
       <tbody>
