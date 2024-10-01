@@ -1,13 +1,8 @@
 <script setup>
-import { addItem } from '@/utils/fetchUtils'
 import { watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useBoardManager } from '@/stores/BoardManager'
-import { userName } from '@/stores/UserManager'
 
 const deClareemit = defineEmits(['saveCollab', 'cancelCollab', 'errorCollab'])
-
-const isNameOverLimit = ref(false)
 </script>
 
 <template>
@@ -24,15 +19,34 @@ const isNameOverLimit = ref(false)
           </h1>
         </div>
 
-        <div class="w-[70%] h-[100%]">
-          <div class="flex mt-5 my-2">Collaborator e-mail</div>
-          <textarea
-            v-model="newBoardName"
-            class="itbkk-collaborator-email font-bold text-justify w-[143%] breal-all border border-gray-300 rounded-md resize-none"
-            @input="checkNameLength"
-            :class="{ 'border-red-600 text-red-600': isNameOverLimit }"
-          >
-          </textarea>
+        <div class="w-[100%] h-[100%]">
+          <!-- Flex container for email and access right on the same line -->
+          <div class="flex items-center gap-4 mt-5 my-2">
+            <!-- Collaborator e-mail -->
+            <div class="w-[80%]">
+              <label for="collabEmail" class="block mb-1"
+                >Collaborator e-mail</label
+              >
+              <textarea
+                id="collabEmail"
+                v-model="newBoardName"
+                class="itbkk-collaborator-email font-bold text-justify w-full break-all border border-gray-300 rounded-md resize-none"
+              ></textarea>
+            </div>
+
+            <!-- Dropdown for READ/WRITE selection -->
+            <div class="w-[20%]">
+              <label for="accessLevel" class="block mb-1">Access Right:</label>
+              <select
+                v-model="selectedAccessLevel"
+                id="accessLevel"
+                class="itbkk-access-right w-full border border-gray-300 rounded-md p-2"
+              >
+                <option value="READ">READ</option>
+                <option value="WRITE">WRITE</option>
+              </select>
+            </div>
+          </div>
         </div>
       </div>
       <div class="flex flex-row w-full justify-end border-t h-[60%]">
