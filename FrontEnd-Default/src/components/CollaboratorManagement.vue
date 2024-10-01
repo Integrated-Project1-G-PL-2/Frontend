@@ -19,6 +19,7 @@ import {
 import { storeToRefs } from 'pinia'
 import { userName } from '@/stores/UserManager'
 import { logout } from '@/stores/UserManager'
+import ChangeRemoveLeaveCollab from './../components/ChangeRemoveLeaveCollab.vue'
 
 const router = useRouter()
 

@@ -11,18 +11,16 @@ const deClareemit = defineEmits([
   'redAlertTrans',
   'greenAlertTrans'
 ])
-const props = defineProps([
-  'statusId',
-  'isDelete',
-  'isTransfer',
-  'operate',
-  'transferList'
-])
-const props2 = defineProps({
+const props = defineProps({
+  isChange: String,
+  isRemove: String,
+  isLeave: String,
+  operate: String,
   titles: String,
   message: String,
-  operate: String
+  message2: String
 })
+
 const router = useRouter()
 const deletedStatuses = reactive({})
 const statusSelect = ref() //ชั่วคราว
@@ -96,7 +94,8 @@ const filterStatus = () => {
 
         <div class="w-[70%] h-[100%]">
           <div class="itbkk-message pl-4 mt-4">
-            {{ titles }} " {{ props.statusId.value.statusName }}" ?
+            {{ message }} " {{ props.statusId.value.statusName }}"
+            {{ message2 }} ?
           </div>
         </div>
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
