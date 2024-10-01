@@ -8,13 +8,8 @@ import {
   editItem
 } from '../utils/fetchUtils.js'
 import { useTaskManager } from '@/stores/TaskManager'
-import TaskDetail from './../components/TaskDetail.vue'
+import AddNewCollaborator from './../components/AddNewCollaborator.vue'
 import { useRoute, useRouter } from 'vue-router'
-import DeletePopUp from './../components/DeletePopUp.vue'
-import AlertPopUp from './../components/AlertPopUp.vue'
-import StatusesList from './StatusesList.vue'
-import { useStatusManager } from '@/stores/StatusManager'
-import StatusLimitSetting from './StatusLimitSetting.vue'
 import {
   sortByTitle,
   sortByTitleReverse,
@@ -25,230 +20,11 @@ import { storeToRefs } from 'pinia'
 import { userName } from '@/stores/UserManager'
 import { logout } from '@/stores/UserManager'
 import boardsList from './../components/BoardList.vue'
-import { useBoardManager } from '@/stores/BoardManager'
-import VisibilityChangedPopUp from './../components/VisibilityChangedPopUP.vue'
-const statusManager = useStatusManager()
-const showStatusDetailModal = ref(false)
-const showStatusDetailLimit = ref(false)
+
 const router = useRouter()
-const route = useRoute()
-const showTaskDetailModal = ref(false)
-const switchSort = ref(false)
-const switchSort2 = ref(false)
-const switchDate = ref(false)
-const taskManager = useTaskManager()
-const taskDetail = reactive({})
-const showDeleteTaskDetail = ref(false)
-const operation = ref('')
-const returnPage = ref(false)
-const boardVisibility = ref()
-const isSwitch = ref(false)
-const collectStatus = reactive([])
-const boardManager = useBoardManager()
-const visibilityToggle = reactive({
-  public: { state: false },
-  private: { state: false }
-})
-const greenPopup = reactive({
-  add: { state: false, taskTitle: '' },
-  edit: { state: false, taskTitle: '' },
-  delete: { state: false, taskTitle: '' }
-})
-const redPopup = reactive({
-  edit: { state: false, taskTitle: '' },
-  delete: { state: false, taskTitle: '' }
-})
 
-const privateTask = ref()
-const bName = ref()
-const boardOwner = ref()
-const thisUser = ref()
-const thisTask = ref()
-const cannotConfig = ref(false)
-onMounted(async () => {
-  const tasksItem = await getItems(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
-  )
-  const currentBoard = await getItemById(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards`,
-    route.params.id
-  )
+const showAddNewCollaborator = ref(false)
 
-  privateTask.value = tasksItem
-  if (tasksItem == 401) {
-    router.replace({ name: 'Login' })
-    return
-  }
-  boardManager.setCurrentBoard(currentBoard)
-  taskManager.setTasks(tasksItem)
-  statusManager.setStatuses(
-    await getItems(
-      `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`
-    )
-  )
-  const storedUserName = localStorage.getItem('userName')
-  if (storedUserName) {
-    userName.value = storedUserName
-  }
-  const getBoardName = await getItemById(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards`,
-    `${route.params.id}`
-  )
-  bName.value = getBoardName.name
-
-  const board = boardManager.getCurrentBoard()
-  boardVisibility.value = board.visibility
-
-  boardOwner.value = currentBoard.owner.name
-
-  thisUser.value = storedUserName
-  taskGroups.value.forEach((taskGroup) => {
-    thisTask.value = taskGroup.id
-  })
-  if (
-    route.fullPath == `/board/${route.params.id}/task/add` ||
-    route.fullPath.match(
-      new RegExp(`/board/${route.params.id}/task/.+/delete`)
-    ) ||
-    route.fullPath.match(new RegExp(`/board/${route.params.id}/task/.+/edit`))
-  ) {
-    cannotConfig.value = true
-    router.replace({ name: 'Task' })
-  }
-})
-watch([boardOwner, thisUser], ([newBoardOwner, newThisUser]) => {
-  boardOwner.value = newBoardOwner
-  thisUser.value = newThisUser
-})
-
-const showTaskDetail = async function (id, operate) {
-  router.push({ name: 'DetailTask', params: { tid: id } })
-  operation.value = operate
-  taskDetail.value = await getItemById(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
-    id
-  )
-  if (taskDetail.value.status == '404') {
-    alert('The requested task does not exist')
-    router.replace({ name: 'Task' })
-    return
-  }
-  showTaskDetailModal.value = true
-}
-
-const showEditTaskDetail = async function (id, operate) {
-  router.push({ name: 'EditTaskDetail', params: { tid: id } })
-  operation.value = operate
-  taskDetail.value = await getItemById(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
-    id
-  )
-  if (taskDetail.value.status == '404') {
-    alert('The requested task does not exist')
-    router.replace({ name: 'Task' })
-    return
-  }
-  showTaskDetailModal.value = true
-}
-
-const showAddPopUpTaskDetail = function (operate) {
-  router.push({ name: 'AddTaskDetail' })
-  taskDetail.value = null
-  operation.value = operate
-  showTaskDetailModal.value = true
-}
-const showDeletePopUpTaskDetail = function (obj) {
-  router.push({ name: 'DeleteTaskDetail', params: { tid: obj.id } })
-  taskDetail.value = { id: obj.id, taskTitle: obj.taskTitle, index: obj.index }
-  showDeleteTaskDetail.value = true
-}
-
-const openRedPopup = function (obj) {
-  const newObj = obj == undefined ? { operate: 'delete', taskTitle: '' } : obj
-  redPopup[newObj.operate].state = true
-  redPopup[newObj.operate].taskTitle = newObj.taskTitle
-}
-
-const openGreenPopup = function (obj) {
-  greenPopup[obj.operate].state = true
-  greenPopup[obj.operate].taskTitle = obj.taskTitle
-}
-
-const closeRedPopup = async function (operate) {
-  router.push({ name: 'Task' })
-  redPopup[operate].state = false
-}
-
-const closeGreenPopup = async function (operate) {
-  router.push({ name: 'Task' })
-  greenPopup[operate].state = false
-}
-
-const clearDeletePopUp = async function () {
-  router.push({ name: 'Task' })
-  showDeleteTaskDetail.value = false
-}
-const clearLimitStatusPopUp = async function () {
-  router.push({ name: 'Task' })
-  showStatusDetailLimit.value = false
-}
-
-const showDelComplete = async function () {
-  router.push({ name: 'Task' })
-  showDeleteTaskDetail.value = false
-  greenPopup.delete.state = true
-}
-
-const showStatusesList = function () {
-  router.replace({ name: 'StatusList' })
-  showStatusDetailModal.value = true
-}
-const error = ref(false)
-const permission = ref(false)
-const openErrorVisibility = () => {
-  console.log('Error visibility triggered') // ตรวจสอบการทำงานของฟังก์ชัน
-  router.push({ name: 'Task' })
-  error.value = true
-}
-const openPermissionVisibility = () => {
-  router.push({ name: 'Task' })
-  permission.value = true
-}
-
-const switchDefault = function () {
-  switchDate.value = true
-  switchSort.value = true
-}
-
-const switchSortText = function () {
-  switchSort.value = false
-  switchSort2.value = true
-}
-
-const switchBack = function () {
-  switchSort2.value = false
-  switchDate.value = false
-}
-
-const taskGroups = ref(taskManager.getTasks())
-
-const searchStatus = ref('')
-
-watch(searchStatus, (status) => {
-  if (collectStatus.includes(status) || status === null) {
-    return
-  }
-  collectStatus.push(status)
-})
-watch(collectStatus, async () => {
-  taskManager.setTasks(
-    await getItems(
-      `${import.meta.env.VITE_BASE_URL}/v3/boards/${
-        route.params.id
-      }/tasks?filterStatuses=${collectStatus.join()}`
-    )
-  )
-})
 const returnLoginPage = () => {
   logout()
   router.replace({ name: 'Login' })
@@ -257,6 +33,10 @@ const returnLoginPage = () => {
 
 const goBackToPersonalBoard = () => {
   router.replace({ name: 'Task' })
+}
+
+const showAddNewCollaboratorPopUp = function () {
+  showAddNewCollaborator.value = true // Set to true when the button is clicked
 }
 </script>
 
@@ -323,8 +103,7 @@ const goBackToPersonalBoard = () => {
         </div>
       </div>
       <button
-        :disabled="boardOwner !== thisUser && isSwitch"
-        @click="showAddPopUpTaskDetail('add')"
+        @click="showAddNewCollaboratorPopUp"
         class="itbkk-collaborator-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
       >
         ✚ Add Collaborator
@@ -341,30 +120,6 @@ const goBackToPersonalBoard = () => {
         </tr>
       </thead>
       <tbody>
-        <div
-          v-if="boardOwner !== thisUser && cannotConfig"
-          class="relative text-center text-xl text-red-600 p-4"
-        >
-          <div class="flex justify-center items-center">
-            <h2>
-              Access denied, you do not have permission to view this page.
-            </h2>
-            <button
-              @click="cannotConfig = false"
-              class="ml-2 text-red-600 hover:text-red-800 font-bold"
-            >
-              &times;
-            </button>
-          </div>
-        </div>
-
-        <div
-          v-if="privateTask === null"
-          class="text-center text-xl text-red-600"
-        >
-          <h2>Access denied,you do not have permission to view this page.</h2>
-        </div>
-
         <tr
           v-for="(task, index) in taskGroups"
           :key="task.id"
@@ -444,31 +199,8 @@ const goBackToPersonalBoard = () => {
       </tbody>
     </table>
   </div>
-  <teleport to="body" v-if="showTaskDetailModal">
-    <TaskDetail
-      :taskDetail="taskDetail"
-      @showTaskDetailModal="showTaskDetailModal = false"
-      :operate="operation"
-      @showRedPopup="openRedPopup"
-      @showGreenPopup="openGreenPopup"
-    ></TaskDetail>
+  <teleport to="body" v-if="showAddNewCollaborator">
+    <AddNewCollaborator></AddNewCollaborator>
   </teleport>
-  <teleport to="body" v-if="showDeleteTaskDetail">
-    <DeletePopUp
-      @cancelDetail="clearDeletePopUp"
-      @confirmDetail="showDelComplete"
-      @redAlert="openRedPopup"
-      :taskId="taskDetail"
-    >
-    </DeletePopUp>
-  </teleport>
-  <Teleport to="body" v-if="showStatusDetailModal">
-    <StatusesList> </StatusesList>
-  </Teleport>
-  <Teleport to="body" v-if="showStatusDetailLimit">
-    <StatusLimitSetting
-      @clearLimitPopUp="clearLimitStatusPopUp"
-    ></StatusLimitSetting>
-  </Teleport>
 </template>
 <style scoped></style>
