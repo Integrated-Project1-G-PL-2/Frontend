@@ -19,12 +19,10 @@ import {
 import { storeToRefs } from 'pinia'
 import { userName } from '@/stores/UserManager'
 import { logout } from '@/stores/UserManager'
-import boardsList from './../components/BoardList.vue'
 
 const router = useRouter()
 
 const showAddNewCollaborator = ref(false)
-
 const returnLoginPage = () => {
   logout()
   router.replace({ name: 'Login' })
@@ -37,6 +35,9 @@ const goBackToPersonalBoard = () => {
 
 const showAddNewCollaboratorPopUp = function () {
   showAddNewCollaborator.value = true // Set to true when the button is clicked
+}
+const cancelCollabPopUp = function () {
+  showAddNewCollaborator.value = false
 }
 </script>
 
@@ -200,7 +201,7 @@ const showAddNewCollaboratorPopUp = function () {
     </table>
   </div>
   <teleport to="body" v-if="showAddNewCollaborator">
-    <AddNewCollaborator></AddNewCollaborator>
+    <AddNewCollaborator @cancelCollab="cancelCollabPopUp"></AddNewCollaborator>
   </teleport>
 </template>
 <style scoped></style>
