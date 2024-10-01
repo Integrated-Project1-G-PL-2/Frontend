@@ -39,6 +39,9 @@ const showAddNewCollaboratorPopUp = function () {
 const cancelCollabPopUp = function () {
   showAddNewCollaborator.value = false
 }
+const goBackToHomeBoard = () => {
+  router.replace({ name: 'Board' })
+}
 </script>
 
 <template>
@@ -56,7 +59,7 @@ const cancelCollabPopUp = function () {
         🏠 ITB-KK
       </button>
       <div class="flex flex-col items-center space-y-1">
-        <h1 class="itbkk-fullname font-bold font-sans cursor-default text-xs">
+        <h1 class="itbkk-board-name font-bold font-sans cursor-default text-xs">
           {{ userName }}
         </h1>
         <svg
@@ -94,7 +97,7 @@ const cancelCollabPopUp = function () {
             @click="goBackToPersonalBoard"
             class="itbkk-board-name scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 hover:text-blue-500 mr-3 ml-2 mt-2 text-blue-400 my-3"
           >
-            {{ bName }}
+            {{ userName }}
           </button>
           <div
             class="scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 mr-3 mt-2 my-3 font-bold"
