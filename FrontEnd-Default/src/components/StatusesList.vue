@@ -98,7 +98,7 @@ onMounted(async () => {
     route.fullPath.match(new RegExp(`/board/${route.params.id}/status/.+/edit`))
   ) {
     cannotConfig.value = true
-    router.replace({ name: 'Login' })
+    router.replace({ name: 'StatusList' })
   }
 })
 

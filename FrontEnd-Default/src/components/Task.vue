@@ -73,10 +73,8 @@ onMounted(async () => {
     `${import.meta.env.VITE_BASE_URL}/v3/boards`,
     route.params.id
   )
-console.log(tasksItem)
   privateTask.value = tasksItem
   if (privateTask.value == null) {
-    console.log('test')
     router.replace({ name: 'Login' })
     return
   }
@@ -112,7 +110,7 @@ console.log(tasksItem)
   route.fullPath.match(new RegExp(`/board/${route.params.id}/task/.+/edit`))
 ) {
     cannotConfig.value = true
-    router.replace({ name: 'Login' })
+    router.replace({ name: 'Task' })
   }
 })
 watch([boardOwner, thisUser], ([newBoardOwner, newThisUser]) => {
