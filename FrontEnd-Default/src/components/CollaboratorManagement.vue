@@ -29,7 +29,6 @@ import { useBoardManager } from '@/stores/BoardManager'
 import VisibilityChangedPopUp from './../components/VisibilityChangedPopUP.vue'
 const statusManager = useStatusManager()
 const showStatusDetailModal = ref(false)
-const showCollabDetailModal = ref(false)
 const showStatusDetailLimit = ref(false)
 const router = useRouter()
 const route = useRoute()
@@ -204,10 +203,6 @@ const showStatusesList = function () {
   router.replace({ name: 'StatusList' })
   showStatusDetailModal.value = true
 }
-const showCollabManagement = function () {
-  router.replace({ name: 'CollabList' })
-  showCollabDetailModal.value = true
-}
 const error = ref(false)
 const permission = ref(false)
 const openErrorVisibility = () => {
@@ -238,15 +233,6 @@ const switchBack = function () {
 const taskGroups = ref(taskManager.getTasks())
 
 const searchStatus = ref('')
-const cloneTaskGroups = ref(statusManager.getStatuses())
-
-const closePermissionAlter = function () {
-  permission.value = false
-}
-
-const closeProblemAlter = () => {
-  error.value = false
-}
 
 watch(searchStatus, (status) => {
   if (collectStatus.includes(status) || status === null) {
@@ -263,74 +249,21 @@ watch(collectStatus, async () => {
     )
   )
 })
-
-// onMounted(() => {
-//   const storedUserName = localStorage.getItem('userName')
-//   if (storedUserName) {
-//     userName.value = storedUserName
-//   }
-// })
-
 const returnLoginPage = () => {
   logout()
   router.replace({ name: 'Login' })
   returnPage.value = true
 }
 
-const goBackToHomeBoard = () => {
-  router.replace({ name: 'Board' })
-}
-
-// Reactive variable to track checkbox state
-watch(boardVisibility, (newVisibility) => {
-  isSwitch.value = newVisibility === 'PUBLIC'
-})
-
-// Computed label based on checkbox state
-const toggleLabel = computed(() => (isSwitch.value ? 'Public' : 'Private'))
-let previousState = ref(false) // Store the previous toggle state
-const isPopupOpen = ref(false)
-// Function to open visibility settings (trigger the popup)
-const openVisibilitySetting = async function () {
-  previousState.value = isSwitch.value
-  isPopupOpen.value = true
-  if (isSwitch.value) {
-    // If it's already Public, switch to Private and show private popup
-    visibilityToggle.private.state = true
-    visibilityToggle.public.state = false
-    isSwitch.value = false
-  } else {
-    // If it's Private, switch to Public and show public popup
-    visibilityToggle.public.state = true
-    visibilityToggle.private.state = false
-    isSwitch.value = true
-  }
-}
-
-// Function to close visibility pop-up
-const closeVisibility = function () {
-  visibilityToggle.public.state = false
-  visibilityToggle.private.state = false
-  isSwitch.value = previousState.value
-
-  router.push({ name: 'Task' })
-  isPopupOpen.value = false
-}
-
-// Function to confirm visibility change
-const confirmVisibility = function () {
-  visibilityToggle.public.state = false
-  visibilityToggle.private.state = false
-
-  router.push({ name: 'Task' })
-  isPopupOpen.value = false
+const goBackToPersonalBoard = () => {
+  router.replace({ name: 'Task' })
 }
 </script>
 
 <template>
   <div class="bg-white relative border rounded-lg overflow-auto">
     <h1 class="font-bold text-center cursor-default text-xl">
-      {{ bName }}
+      CollaboratorManagement
     </h1>
     <div
       class="flex justify-between items-start w-full font-bold space-y-2 border-b py-2 border-r-slate-500"
@@ -371,228 +304,31 @@ const confirmVisibility = function () {
       </div>
     </div>
 
-    <AlertPopUp
-      v-if="greenPopup.add.state"
-      :titles="
-        'The task ' + greenPopup.add.taskTitle + ' has been successfully added.'
-      "
-      @closePopUp="closeGreenPopup"
-      message="Success!!"
-      styleType="green"
-      :operate="'add'"
-    />
-    <AlertPopUp
-      v-if="redPopup.delete.state"
-      :titles="
-        'An error has occurred, the task ' +
-        redPopup.delete.taskTitle +
-        ' does not exist.'
-      "
-      @closePopUp="closeRedPopup"
-      message="Error!!"
-      styleType="red"
-      :operate="'delete'"
-    />
-    <AlertPopUp
-      v-if="greenPopup.delete.state"
-      :titles="'The task ' + greenPopup.delete.taskTitle + ' has been deleted.'"
-      @closePopUp="closeGreenPopup"
-      message="Success!!"
-      styleType="green"
-      :operate="'delete'"
-    />
-    <AlertPopUp
-      v-if="greenPopup.edit.state"
-      :titles="'The task ' + greenPopup.edit.taskTitle + ' has been updated.'"
-      @closePopUp="closeGreenPopup"
-      message="Success!!"
-      styleType="green"
-      :operate="'edit'"
-    />
-    <AlertPopUp
-      v-if="redPopup.edit.state"
-      :titles="'An error occurred editting the task.' + redPopup.edit.taskTitle"
-      @closePopUp="closeRedPopup"
-      message="Error!!"
-      styleType="red"
-      :operate="'edit'"
-    />
-    <VisibilityChangedPopUp
-      v-if="visibilityToggle.public.state"
-      message="In public, any one can view the board, task list and task detail of tasks in the board. Do you want to change the visibility to Public?"
-      :operate="'public'"
-      @closeVisibilityPopUp="closeVisibility"
-      @confirmVisibilityPopUp="confirmVisibility"
-      @visibilityError="openErrorVisibility"
-      @visibilityPermission="openPermissionVisibility"
-    />
-    <VisibilityChangedPopUp
-      v-if="visibilityToggle.private.state"
-      message="In private, only board owner can access/control board. Do you want to change the visibility to Private?"
-      :operate="'private'"
-      @closeVisibilityPopUp="closeVisibility"
-      @confirmVisibilityPopUp="confirmVisibility"
-      @visibilityError="openErrorVisibility"
-      @visibilityPermission="openPermissionVisibility"
-    />
-    <AlertPopUp
-      v-if="permission"
-      :titles="'You do not have permission to change board visibility mode.'"
-      @closePopUp="closePermissionAlter"
-      message="Error!!"
-      styleType="red"
-    />
-
-    <AlertPopUp
-      v-if="error"
-      :titles="'There is a problem. Please try again later.'"
-      @closePopUp="closeProblemAlter"
-      message="Error!!"
-      styleType="red"
-    />
-    <!-- 
-    <AlertPopUp
-      v-if="accessDenied"
-      :titles="'Access denied, you do not have permission to view this page.'"
-      @closePopUp="closeAccessAlter"
-      message="Error!!"
-      styleType="red"
-    />
-    <AlertPopUp
-      v-if="errorPublic"
-      :titles="'You need to be board owner to perform this action.'"
-      @closePopUp="closePublicAlter"
-      message="Error!!"
-      styleType="red"
-    /> -->
     <div class="flex justify-end">
       <div
-        class="itbkk-status-filter flex items-center space-x-2 mr-auto ml-4 my-3 border"
+        class="flex justify-between items-start w-full font-bold space-y-2 border-b py-2 border-r-slate-500"
       >
-        <select
-          class="text-sm rounded-lg w-[210px] p-2 bg-white"
-          placeholder="Filter by status(es)"
-          required
-          v-model="searchStatus"
-        >
-          <option
-            v-for="(status, index) in cloneTaskGroups"
-            :key="index"
-            class="itbkk-status-choice"
+        <div class="flex justify-start">
+          <button
+            @click="goBackToPersonalBoard"
+            class="itbkk-board-name scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 hover:text-blue-500 mr-3 ml-2 mt-2 text-blue-400 my-3"
           >
-            {{ status.name }}
-          </option>
-        </select>
-
-        <svg
-          class="itbkk-filter-clear fill-current h-6 w-6 text-gray-400 cursor-pointer"
-          role="button"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          @click=";(collectStatus.length = 0), (searchStatus = null)"
-        >
-          <path
-            d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"
-          />
-        </svg>
-      </div>
-      <div
-        class="container p-4 border rounded-lg mr-2 ml-2 my-3 w-[650px] flex overflow-auto gap-2"
-      >
-        <div
-          v-for="(statusName, index) in collectStatus"
-          :key="index"
-          class="flex items-center justify-between space-x-2 border w-auto bg-gray-300"
-        >
-          {{ statusName }}
-          <svg
-            class="itbkk-filter-clear fill-current h-6 w-6 text-gray-500 cursor-pointer ml-auto"
-            role="button"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            @click="collectStatus.splice(index, 1), (searchStatus = null)"
-          >
-            <path
-              d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"
-            />
-          </svg>
-        </div>
-      </div>
-      <div class="relative group">
-        <label
-          class="itbkk-board-visibility inline-flex items-center cursor-pointer"
-        >
-          <input
-            :disabled="boardOwner !== thisUser && isSwitch"
-            type="checkbox"
-            v-model="isSwitch"
-            class="sr-only peer"
-            @click="openVisibilitySetting"
-          />
+            {{ bName }}
+          </button>
           <div
-            class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
-          ></div>
-          <span class="ms-3 text-sm font-medium text-gray-600 mr-3 my-3">
-            {{ toggleLabel }}
-          </span>
-        </label>
-        <div
-          v-if="boardOwner !== thisUser && isSwitch"
-          class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
-        >
-          You need to be board owner to perform this action.
-        </div>
-      </div>
-      <div class="relative group">
-        <button
-          @click="showCollabManagement"
-          class="itbkk-manage-collaborator bg-green-700 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
-        >
-          Manage Collabotator
-        </button>
-      </div>
-      <div class="relative group">
-        <button
-          :disabled="boardOwner !== thisUser && isSwitch"
-          @click="showAddPopUpTaskDetail('add')"
-          class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
-        >
-          ✚ Add New Task
-        </button>
-        <div
-          v-if="boardOwner !== thisUser && isSwitch"
-          class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
-        >
-          You need to be board owner to perform this action.
+            class="scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 mr-3 mt-2 my-3 font-bold"
+          >
+            > Collaborator
+          </div>
         </div>
       </div>
       <button
-        @click="showStatusesList"
-        class="itbkk-manage-status bg-gray-500 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 my-3"
+        :disabled="boardOwner !== thisUser && isSwitch"
+        @click="showAddPopUpTaskDetail('add')"
+        class="itbkk-collaborator-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
       >
-        ⚙️ Manage Status
+        ✚ Add Collaborator
       </button>
-      <!-- <button
-        @click="showStatusesLimit"
-        class="itbkk-manage-status bg-gray-500 w-[80px] flex items-center justify-center text-gray-100 hover:text-gray-200 mr-3 rounded-md my-3"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="1.2rem"
-          height="1.2rem"
-          viewBox="0 0 24 24"
-        >
-          <g fill="none" fill-rule="evenodd">
-            <path
-              d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"
-            />
-            <path
-              fill="currentColor"
-              d="M18 4a1 1 0 1 0-2 0v1H4a1 1 0 0 0 0 2h12v1a1 1 0 1 0 2 0V7h2a1 1 0 1 0 0-2h-2zM4 11a1 1 0 1 0 0 2h2v1a1 1 0 1 0 2 0v-1h12a1 1 0 1 0 0-2H8v-1a1 1 0 0 0-2 0v1zm-1 7a1 1 0 0 1 1-1h12v-1a1 1 0 1 1 2 0v1h2a1 1 0 1 1 0 2h-2v1a1 1 0 1 1-2 0v-1H4a1 1 0 0 1-1-1"
-            />
-          </g>
-        </svg>
-      </button> -->
     </div>
     <table class="w-full text-sm text-left text-gray-500">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50">

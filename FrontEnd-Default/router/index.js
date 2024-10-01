@@ -8,6 +8,7 @@ import DeleteStatus from '@/components/DeleteStatus.vue'
 import LoginPage from '@/components/LoginPage.vue'
 import BoardList from '@/components/BoardList.vue'
 import AddNewBoard from '@/components/AddNewBoard.vue'
+import CollaboratorManagement from '@/components/CollaboratorManagement.vue'
 const history = createWebHistory(import.meta.env.BASE_URL)
 const routes = [
   {
@@ -80,6 +81,11 @@ const routes = [
         name: 'StatusEdit'
       }
     ]
+  },
+  {
+    path: '/board/:id/collab',
+    name: 'CollabList',
+    component: CollaboratorManagement
   }
 ]
 
