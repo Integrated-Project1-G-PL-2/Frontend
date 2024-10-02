@@ -3,14 +3,7 @@ import { ref, reactive } from 'vue'
 import { deleteItemById, deleteAndTransferItem } from '@/utils/fetchUtils'
 import { useStatusManager } from '@/stores/StatusManager'
 import { useRoute, useRouter } from 'vue-router'
-const deClareemit = defineEmits([
-  'cancelPopUp',
-  'confirmStatusDetail',
-  'redAlert',
-  'greenAlert',
-  'redAlertTrans',
-  'greenAlertTrans'
-])
+const deClareemit = defineEmits(['cancelPopUp', 'confirmPopUp'])
 const props = defineProps({
   isChange: String,
   isRemove: String,
@@ -27,65 +20,12 @@ const deletedStatuses = reactive({})
 const statusSelect = ref() //ชั่วคราว
 const statusManager = useStatusManager()
 const route = useRoute()
-const deleteStatus = async (deleteId) => {
-  deletedStatuses.value = await deleteItemById(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`,
-    deleteId
-  )
-  if (deletedStatuses.value == '404' && '500' && '400') {
-    deClareemit('redAlert', {
-      taskStatus: props.statusId.value.statusName,
-      operate: props.operate
-    })
-    deClareemit('cancelStatusDetail', true)
-    router.replace({ name: 'StatusList' })
-    return
-  }
-  statusManager.deleteStatuses(deleteId)
-  router.replace({ name: 'StatusList' })
-  deClareemit('greenAlert', {
-    taskStatus: props.statusId.value.statusName,
-    operate: props.operate
-  })
-  deClareemit('confirmStatusDetail', true)
-}
-
-const transferStatus = async (deleteId, newId) => {
-  deletedStatuses.value = await deleteAndTransferItem(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`,
-    deleteId,
-    newId
-  )
-  if (deletedStatuses.value == '404' && '500' && '400') {
-    deClareemit('redAlertTrans', {
-      taskStatus: props.statusId.value.statusName,
-      operate: props.operate
-    })
-    deClareemit('cancelStatusDetail', true)
-    router.replace({ name: 'StatusList' })
-    return
-  } else {
-    statusManager.deleteStatuses(deleteId)
-    router.replace({ name: 'StatusList' })
-    deClareemit('greenAlertTrans', {
-      taskStatus: props.statusId.value.statusName,
-      operate: props.operate
-    })
-  }
-  deClareemit('confirmStatusDetail', true)
-}
-
-const filterStatus = () => {
-  return props.transferList.filter((element) => {
-    return element.id !== props.statusId.value.id
-  })
-}
 </script>
 
 <template>
   <div
     class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[10px]"
-    v-if="props.isDelete"
+    v-if="props.isLeave"
   >
     <div class="w-[30%] m-[auto] mt-[20%] border border-gray-600 h-[200px]">
       <div class="flex flex-col justify-between bg-white p-4 h-[100px]">
@@ -103,7 +43,7 @@ const filterStatus = () => {
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
           <button
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
-            @click="deleteStatus(props.statusId.value.id)"
+            @click=""
           >
             <div class="btn text-center">Confirm</div>
           </button>

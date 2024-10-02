@@ -273,7 +273,8 @@ const closeLeave = function () {
         @cancelPopUp="closeLeave"
         message="Do you want to leave this"
         message2="board?"
-        :operate="'remove'"
+        :isLeave="!isLeave"
+        :operate="'leave'"
       ></ChangeRemoveLeaveCollab>
     </teleport>
   </div>
