@@ -165,10 +165,10 @@ const returnLoginPage = () => {
       >
         <div class="flex justify-between items-center">
           <span class="font-bold text-lg">No : {{ index + 1 }}</span>
-          <div class="flex space-x-2">
+          <!-- <div class="flex space-x-2">
             <span>⚙️</span>
             <span>🗑️</span>
-          </div>
+          </div> -->
         </div>
         <div class="itbkk-board-name text-xl font-semibold">
           Name :
@@ -207,10 +207,10 @@ const returnLoginPage = () => {
     >
       <div class="flex justify-between items-center">
         <span class="font-bold text-lg">No : {{ index + 1 }}</span>
-        <div class="flex space-x-2">
+        <!-- <div class="flex space-x-2">
           <span>⚙️</span>
           <span>🗑️</span>
-        </div>
+        </div> -->
       </div>
       <div class="itbkk-board-name text-xl font-semibold">
         Name :
