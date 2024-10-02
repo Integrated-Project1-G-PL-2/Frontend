@@ -34,16 +34,16 @@ onMounted(async () => {
     router.replace({ name: 'Login' })
     return
   }
-console.log(boards)
+  console.log(boards)
 
   // if (boards.length > 0) {
   //   router.replace({ name: 'Task', params: { id: boards[0].board.id } })
   // }
-  boardManager.setBoards(boards)
-  const storedUserName = localStorage.getItem('userName')
-  if (storedUserName) {
-    userName.value = storedUserName
-  }
+  // boardManager.setBoards(boards)
+  // const storedUserName = localStorage.getItem('userName')
+  // if (storedUserName) {
+  //   userName.value = storedUserName
+  // }
 })
 
 const showAddNewBoard = ref(false) // Initial value is false
@@ -143,6 +143,11 @@ const returnLoginPage = () => {
         Create personal board
       </button>
     </div>
+    <div class="flex justify-center font-bold">
+      <h1 class="font-bold text-center cursor-default text-3xl py-3">
+        Personal Board
+      </h1>
+    </div>
     <div
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
     >
@@ -150,7 +155,7 @@ const returnLoginPage = () => {
       <div
         v-for="(board, index) in boardsList"
         :key="board.id.boardId"
-        class="itbkk-item bg-white border rounded-lg shadow-md p-4 flex flex-col space-y-2 cursor-pointer hover:bg-gray-100 hover:text-sky-500"
+        class="itbkk-personal-item bg-white border rounded-lg shadow-md p-4 flex flex-col space-y-2 cursor-pointer hover:bg-gray-100 hover:text-sky-500"
         @click="
           ;[
             emits('NameBoard', board.board.name),
@@ -165,17 +170,60 @@ const returnLoginPage = () => {
             <span>🗑️</span>
           </div>
         </div>
-        <div class="text-xl font-semibold">
+        <div class="itbkk-board-name text-xl font-semibold">
           Name :
           {{ board.board?.name == undefined ? board.name : board.board.name }}
         </div>
         <div class="text-sm text-gray-500">
           <p>Action : {{ board.role == undefined ? 'owner' : board.role }}</p>
         </div>
+        <div class="itbkk-board-visibility text-sm text-gray-500">
+          <p>
+            Visibility : {{ board.role == undefined ? 'owner' : board.role }}
+          </p>
+        </div>
       </div>
     </div>
   </div>
-
+  <div class="flex justify-center font-bold">
+    <h1 class="font-bold text-center cursor-default text-3xl py-3">
+      Collab Boards
+    </h1>
+  </div>
+  <div
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+  >
+    <!-- Grid layout for dashboard-like appearance -->
+    <div
+      v-for="(board, index) in boardsList"
+      :key="board.id.boardId"
+      class="itbkk-personal-item bg-white border rounded-lg shadow-md p-4 flex flex-col space-y-2 cursor-pointer hover:bg-gray-100 hover:text-sky-500"
+      @click="
+        ;[
+          emits('NameBoard', board.board.name),
+          router.replace({ name: 'Task', params: { id: board.id.boardId } })
+        ]
+      "
+    >
+      <div class="flex justify-between items-center">
+        <span class="font-bold text-lg">No : {{ index + 1 }}</span>
+        <div class="flex space-x-2">
+          <span>⚙️</span>
+          <span>🗑️</span>
+        </div>
+      </div>
+      <div class="itbkk-board-name text-xl font-semibold">
+        Name :
+        {{ board.board?.name == undefined ? board.name : board.board.name }}
+      </div>
+      <div class="text-sm text-gray-500">
+        <p>Action : {{ board.role == undefined ? 'owner' : board.role }}</p>
+      </div>
+      <div class="itbkk-board-visibility text-sm text-gray-500">
+        <p>Visibility : {{ board.role == undefined ? 'owner' : board.role }}</p>
+      </div>
+    </div>
+  </div>
   <teleport to="body" v-if="showAddNewBoard">
     <AddNewBoard
       @cancelDetail="clearDeletePopUp"
