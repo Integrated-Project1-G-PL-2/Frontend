@@ -274,7 +274,7 @@ const closeLeave = function () {
         message="Do you want to leave this"
         message2="board?"
         :operate="'remove'"
-      />
+      ></ChangeRemoveLeaveCollab>
     </teleport>
   </div>
 </template>
