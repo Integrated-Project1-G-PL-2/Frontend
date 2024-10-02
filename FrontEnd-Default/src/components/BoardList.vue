@@ -147,7 +147,7 @@ const returnLoginPage = () => {
         </div>
         <div class="flex justify-center font-bold">
           <h1 class="font-bold text-center cursor-default text-3xl py-3">
-            Personal Board
+            Personal Boards
           </h1>
         </div>
         <div
@@ -241,7 +241,7 @@ const returnLoginPage = () => {
               <p>
                 Action :
                 <button
-                  class="itbkk-button-create bg-gray-300 text-sm rounded-[6px] font-sans text-gray-700 hover:text-white px-7 py-2 mr-2 my-3"
+                  class="itbkk-button-create bg-gray-300 text-sm rounded-[6px] font-sans text-gray-700 hover:text-white px-4 py-1"
                   @click=""
                 >
                   Leave
