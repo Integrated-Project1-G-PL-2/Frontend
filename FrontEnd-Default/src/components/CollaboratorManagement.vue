@@ -148,75 +148,37 @@ const goBackToHomeBoard = () => {
           :key="task.id"
           class="itbkk-item border-b cursor-pointer"
         >
-          <td class="itbkk-button-action px-4 py-3">
-            {{ index + 1 }}
-            <div class="relative group">
-              <div
-                :disabled="boardOwner !== thisUser && isSwitch"
-                class="itbkk-button-edit inline-flex"
-                @click="showEditTaskDetail(task.id, 'edit')"
-              >
-                ⚙️
-              </div>
-              <div
-                v-if="boardOwner !== thisUser && isSwitch"
-                class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
-              >
-                You need to be board owner to perform this action.
-              </div>
-            </div>
-            <div class="relative group">
-              <button
-                :disabled="boardOwner !== thisUser"
-                class="itbkk-button-delete inline-flex"
-                @click="
-                  showDeletePopUpTaskDetail({
-                    id: task.id,
-                    taskTitle: task.title,
-                    index: index + 1
-                  })
-                "
-              >
-                🗑️
-              </button>
-              <div
-                v-if="boardOwner !== thisUser && isSwitch"
-                class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
-              >
-                You need to be board owner to perform this action.
-              </div>
-            </div>
-          </td>
-          <td class="itbkk-title px-4 py-3">
-            <div
-              class="hover:text-sky-500 cursor-default"
-              @click="showTaskDetail(task.id, 'show')"
-            >
+          <td class="itbkk-button-action px-4 py-3">{{ index + 1 }}</td>
+          <td class="itbkk-name px-4 py-3">
+            <div class="hover:text-sky-500 cursor-default">
               {{ task.title }}
             </div>
           </td>
           <td
-            class="itbkk-assignees px-4 py-3 cursor-default"
+            class="itbkk-email px-4 py-3 cursor-default"
             :class="task.assignees == null ? 'italic' : ''"
           >
             {{ task.assignees == null ? 'Unassigned' : task.assignees }}
           </td>
           <td class="itbkk-status px-4 py-3 cursor-default">
-            <div
-              class="w-full bg-emerald-500 flex justify-center rounded-md"
-              :style="{
-                backgroundColor:
-                  task.status.name === 'To Do'
-                    ? '#FFC0CB'
-                    : task.status.name === 'Doing'
-                    ? '#ffff99'
-                    : task.status.name === 'No Status'
-                    ? 'lightgray'
-                    : '#90EE90'
-              }"
-            >
-              <p>{{ task.status.name }}</p>
+            <div class="w-[20%]">
+              <label for="accessLevel" class="block mb-1">Access Right</label>
+              <select
+                v-model="selectedAccessLevel"
+                id="accessLevel"
+                class="itbkk-access-right w-full border border-gray-300 rounded-md p-2"
+              >
+                <option value="READ">READ</option>
+              </select>
             </div>
+          </td>
+          <td class="itbkk-status px-4 py-3 cursor-default">
+            <button
+              class="itbkk-collab-remove bg-gray-300 text-sm rounded-[6px] font-sans text-gray-700 hover:text-white px-4 py-1"
+              @click=""
+            >
+              Remove
+            </button>
           </td>
         </tr>
       </tbody>
