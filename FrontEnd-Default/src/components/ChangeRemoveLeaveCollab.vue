@@ -4,7 +4,7 @@ import { deleteItemById, deleteAndTransferItem } from '@/utils/fetchUtils'
 import { useStatusManager } from '@/stores/StatusManager'
 import { useRoute, useRouter } from 'vue-router'
 const deClareemit = defineEmits([
-  'cancelStatusDetail',
+  'cancelPopUp',
   'confirmStatusDetail',
   'redAlert',
   'greenAlert',
@@ -112,7 +112,7 @@ const filterStatus = () => {
             class="itbkk-button-cancel bg-red-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
             @click="
               ;[
-                $emit('cancelStatusDetail', true),
+                $emit('cancelPopUp', true),
                 $router.replace({ name: 'StatusList' })
               ]
             "

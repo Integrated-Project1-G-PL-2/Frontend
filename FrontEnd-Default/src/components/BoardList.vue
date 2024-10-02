@@ -19,7 +19,7 @@ const router = useRouter()
 const route = useRoute()
 
 const boardManager = useBoardManager()
-const leaveCollab = ref(false)
+
 const boardsList = boardManager.getBoards()
 const error = ref(false)
 const errorPrivate = ref(false)
@@ -37,16 +37,16 @@ onMounted(async () => {
   }
   console.log(boards)
 
-  if (boards.length > 0) {
-    router.replace({ name: 'Task', params: { id: boards[0].board.id } })
-  }
-  boardManager.setBoards(boards)
-  const storedUserName = localStorage.getItem('userName')
-  if (storedUserName) {
-    userName.value = storedUserName
-  }
+  // if (boards.length > 0) {
+  //   router.replace({ name: 'Task', params: { id: boards[0].board.id } })
+  // }
+  // boardManager.setBoards(boards)
+  // const storedUserName = localStorage.getItem('userName')
+  // if (storedUserName) {
+  //   userName.value = storedUserName
+  // }
 })
-
+const leaveCollab = ref(false)
 const showAddNewBoard = ref(false) // Initial value is false
 const returnPage = ref(false)
 
@@ -143,14 +143,6 @@ const closeLeave = function () {
           @closePopUp="closePrivateAlter"
           message="Error!!"
           styleType="red"
-        />
-        <ChangeRemoveLeaveCollab
-          v-if="leaveCollab"
-          :titles="'Leave Board'"
-          @cancelPopUp="closeLeave"
-          message="Do you want to leave this"
-          message2="board?"
-          :operate="'remove'"
         />
         <div class="flex flex-col items-end pr-4 font-bold space-y-2">
           <button
@@ -274,6 +266,15 @@ const closeLeave = function () {
         @saveDetail="showDelComplete"
         @errorOccurred="showErrorMessage"
       ></AddNewBoard>
+    </teleport>
+    <teleport to="body" v-if="leaveCollab">
+      <ChangeRemoveLeaveCollab
+        :titles="'Leave Board'"
+        @cancelPopUp="closeLeave"
+        message="Do you want to leave this"
+        message2="board?"
+        :operate="'remove'"
+      />
     </teleport>
   </div>
 </template>
