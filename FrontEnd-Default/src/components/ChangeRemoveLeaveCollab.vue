@@ -11,6 +11,27 @@ const deletedStatuses = reactive({})
 const statusSelect = ref() //ชั่วคราว
 const statusManager = useStatusManager()
 const route = useRoute()
+const confirmLeaveCollab = async function () {
+  try {
+    const { boardId, collabOid } = operation.value
+    const response = await deleteItemById(
+      `/boards/${boardId}/collabs/${collabOid}`
+    )
+
+    if (response.status === 200) {
+      router.replace({ name: 'Board' }) // Redirect to the board page after successful delete
+    } else if (response.status === 401) {
+      router.replace({ name: 'Login' }) // Unauthorized, redirect to login
+    } else if (response.status === 403 || response.status === 404) {
+      router.replace({ name: 'Board' }) // Forbidden or Not Found, redirect to board page
+    } else {
+      error.value = true // Show error popup for other issues
+    }
+  } catch (err) {
+    error.value = true // Handle unexpected errors
+  }
+  leaveCollab.value = false // Close the confirmation modal
+}
 </script>
 
 <template>
@@ -32,7 +53,7 @@ const route = useRoute()
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
           <button
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
-            @click=""
+            @click="confirmLeaveCollab"
           >
             <div class="btn text-center">Confirm</div>
           </button>

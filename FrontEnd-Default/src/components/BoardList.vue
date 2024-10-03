@@ -72,12 +72,14 @@ const returnLoginPage = () => {
   router.replace({ name: 'Login' })
   returnPage.value = true
 }
-const openLeaveCollab = function () {
+const openLeaveCollab = function (boardId, collabOid) {
   isLeave.value = true
   leaveCollab.value = true
+  operation.value = { boardId, collabOid }
 }
 const closeLeave = function () {
   leaveCollab.value = false
+  isLeave.value = false
 }
 </script>
 
