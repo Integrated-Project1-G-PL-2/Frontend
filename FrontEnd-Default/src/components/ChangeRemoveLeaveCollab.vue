@@ -40,10 +40,7 @@ const route = useRoute()
           <button
             class="itbkk-button-cancel bg-red-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
             @click="
-              ;[
-                $emit('cancelPopUp', true),
-                $router.replace({ name: 'StatusList' })
-              ]
+              ;[$emit('cancelPopUp', true), $router.replace({ name: 'Board' })]
             "
           >
             <div class="btn text-center">Cancel</div>
@@ -78,10 +75,7 @@ const route = useRoute()
           <button
             class="itbkk-button-cancel bg-red-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
             @click="
-              ;[
-                $emit('cancelPopUp', true),
-                $router.replace({ name: 'StatusList' })
-              ]
+              ;[$emit('cancelPopUp', true), $router.replace({ name: 'Board' })]
             "
           >
             <div class="btn text-center">Cancel</div>
@@ -92,7 +86,7 @@ const route = useRoute()
   </div>
   <div
     class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[10px]"
-    v-if="props.isLeave"
+    v-if="props.isRemove"
   >
     <div class="w-[30%] m-[auto] mt-[20%] border border-gray-600 h-[200px]">
       <div class="flex flex-col justify-between bg-white p-4 h-[100px]">
@@ -116,10 +110,7 @@ const route = useRoute()
           <button
             class="itbkk-button-cancel bg-red-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
             @click="
-              ;[
-                $emit('cancelPopUp', true),
-                $router.replace({ name: 'StatusList' })
-              ]
+              ;[$emit('cancelPopUp', true), $router.replace({ name: 'Board' })]
             "
           >
             <div class="btn text-center">Cancel</div>

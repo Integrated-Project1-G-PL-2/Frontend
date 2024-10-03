@@ -73,6 +73,7 @@ const returnLoginPage = () => {
   returnPage.value = true
 }
 const openLeaveCollab = function () {
+  isLeave.value = true
   leaveCollab.value = true
 }
 const closeLeave = function () {
@@ -163,21 +164,23 @@ const closeLeave = function () {
           <div
             v-for="(board, index) in boardsList"
             :key="board.id.boardId"
-            class="itbkk-personal-item bg-white border rounded-lg shadow-md p-4 flex flex-col space-y-2 cursor-pointer hover:bg-gray-100 hover:text-sky-500"
-            @click="
-              ;[
-                emits('NameBoard', board.board.name),
-                router.replace({
-                  name: 'Task',
-                  params: { id: board.id.boardId }
-                })
-              ]
-            "
+            class="itbkk-personal-item bg-white border rounded-lg shadow-md p-4 flex flex-col space-y-2 hover:bg-gray-100 hover:text-sky-500"
           >
             <div class="flex justify-between items-center">
               <span class="font-bold text-lg">No : {{ index + 1 }}</span>
             </div>
-            <div class="itbkk-board-name text-xl font-semibold">
+            <div
+              class="itbkk-board-name text-xl font-semibold cursor-pointer"
+              @click="
+                ;[
+                  emits('NameBoard', board.board.name),
+                  router.replace({
+                    name: 'Task',
+                    params: { id: board.id.boardId }
+                  })
+                ]
+              "
+            >
               Name :
               {{
                 board.board?.name == undefined ? board.name : board.board.name
@@ -213,12 +216,23 @@ const closeLeave = function () {
           <div
             v-for="(board, index) in boardsList"
             :key="board.id.boardId"
-            class="itbkk-collab-item bg-white border rounded-lg shadow-md p-4 flex flex-col space-y-2 cursor-pointer hover:bg-gray-100 hover:text-sky-500"
+            class="itbkk-collab-item bg-white border rounded-lg shadow-md p-4 flex flex-col space-y-2 hover:bg-gray-100 hover:text-sky-500"
           >
             <div class="flex justify-between items-center">
               <span class="font-bold text-lg">No : {{ index + 1 }}</span>
             </div>
-            <div class="itbkk-board-name text-xl font-semibold">
+            <div
+              class="itbkk-board-name text-xl font-semibold cursor-pointer"
+              @click="
+                ;[
+                  emits('NameBoard', board.board.name),
+                  router.replace({
+                    name: 'Task',
+                    params: { id: board.id.boardId }
+                  })
+                ]
+              "
+            >
               Name :
               {{
                 board.board?.name == undefined ? board.name : board.board.name
