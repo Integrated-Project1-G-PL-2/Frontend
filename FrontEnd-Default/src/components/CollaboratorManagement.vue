@@ -22,8 +22,10 @@ import { logout } from '@/stores/UserManager'
 import ChangeRemoveLeaveCollab from './../components/ChangeRemoveLeaveCollab.vue'
 
 const router = useRouter()
-const remove = ref(false)
-const change = ref(false)
+const removeCollab = ref(false)
+const changeCollab = ref(false)
+const isChange = ref()
+const isRemove = ref()
 const showAddNewCollaborator = ref(false)
 const returnLoginPage = () => {
   logout()
@@ -44,6 +46,21 @@ const cancelCollabPopUp = function () {
 const goBackToHomeBoard = () => {
   router.replace({ name: 'Board' })
 }
+const openChangeCollab = function () {
+  isChange.value = true
+  changeCollab.value = true
+}
+const closeChange = function () {
+  changeCollab.value = false
+}
+const openRemoveCollab = function () {
+  isRemove.value = true
+  removeCollab.value = true
+}
+const closeRemove = function () {
+  removeCollab.value = false
+}
+removeCollab
 </script>
 
 <template>
@@ -147,6 +164,7 @@ const goBackToHomeBoard = () => {
             <div class="w-[20%]">
               <label for="accessLevel" class="block mb-1">Access Right</label>
               <select
+                @click="openChangeCollab"
                 v-model="selectedAccessLevel"
                 id="accessLevel"
                 class="itbkk-access-right w-full border border-gray-300 rounded-md p-2"
@@ -158,7 +176,7 @@ const goBackToHomeBoard = () => {
           <td class="itbkk-status px-4 py-3 cursor-default">
             <button
               class="itbkk-collab-remove bg-gray-300 text-sm rounded-[6px] font-sans text-gray-700 hover:text-white px-4 py-1"
-              @click=""
+              @click="openChangeCollab"
             >
               Remove
             </button>
