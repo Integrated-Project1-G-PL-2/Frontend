@@ -28,6 +28,13 @@ const changeCollab = ref()
 const isChange = ref()
 const isRemove = ref()
 const showAddNewCollaborator = ref(false)
+const closePermission = ref(false)
+const closeUser = ref(false)
+const closeCollaborator = ref(false)
+const closeProblem = ref(false)
+const closeAccessRight = ref(false)
+const closeRemoveRight = ref(false)
+const closeNotCollaborator = ref(false)
 const returnLoginPage = () => {
   logout()
   router.replace({ name: 'Login' })
@@ -61,7 +68,27 @@ const openRemoveCollab = function () {
 const closeRemove = function () {
   removeCollab.value = false
 }
-removeCollab
+const closePermissionAlter = function () {
+  closePermission.value = false
+}
+const closeUserAlter = function () {
+  closeUser.value = false
+}
+const closeCollaboratorAlter = function () {
+  closeCollaborator.value = false
+}
+const closeProblemAlter = function () {
+  closeProblem.value = false
+}
+const closeAccessAlter = function () {
+  closeAccessRight.value = false
+}
+const closeRemoveAlter = function () {
+  closeRemoveRight.value = false
+}
+const closeNotCollabAlter = function () {
+  closeNotCollaborator.value = false
+}
 </script>
 
 <template>
@@ -108,49 +135,49 @@ removeCollab
       </div>
     </div>
     <AlertPopUp
+      v-if="closePermission"
       :titles="'You do not have permission to add board collaborator.'"
       @closePopUp="closePermissionAlter"
       message="Error!!"
       styleType="red"
     />
     <AlertPopUp
+      v-if="closeUser"
       :titles="'The user does not exists.'"
       @closePopUp="closeUserAlter"
       message="Error!!"
       styleType="red"
     />
     <AlertPopUp
+      v-if="closeCollaborator"
       :titles="'The user is already the collaborator of this board.'"
       @closePopUp="closeCollaboratorAlter"
       message="Error!!"
       styleType="red"
     />
     <AlertPopUp
+      v-if="closeAccessRight"
       :titles="'You do not have permission to change collaborator access right.'"
-      @closePopUp="closeCollaboratorAlter"
+      @closePopUp="closeAccessAlter"
       message="Error!!"
       styleType="red"
     />
     <AlertPopUp
+      v-if="closeRemoveRight"
       :titles="'You do not have permission to remove collaborator.'"
-      @closePopUp="closeCollaboratorAlter"
+      @closePopUp="closeRemoveAlter"
       message="Error!!"
       styleType="red"
     />
     <AlertPopUp
+      v-if="closeNotCollaborator"
       :titles="'<<name>> is not a collaborator.'"
-      @closePopUp="closeCollaboratorAlter"
+      @closePopUp="closeNotCollabAlter"
       message="Error!!"
       styleType="red"
     />
     <AlertPopUp
-      :titles="'<<name>> is not a collaborator.'"
-      @closePopUp="closeCollaboratorAlter"
-      message="Error!!"
-      styleType="red"
-    />
-    <AlertPopUp
-      v-if="error"
+      v-if="closeProblem"
       :titles="'There is a problem. Please try again later.'"
       @closePopUp="closeProblemAlter"
       message="Error!!"
