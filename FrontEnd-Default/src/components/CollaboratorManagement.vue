@@ -89,16 +89,6 @@ const goBackToHomeBoard = () => {
         </button>
       </div>
     </div>
-    <ChangeRemoveLeaveCollab
-      v-if="Change"
-      @closePopUp="closeChange"
-      :operate="'change'"
-    />
-    <ChangeRemoveLeaveCollab
-      v-if="remove"
-      @closePopUp="closeRemove"
-      :operate="'remove'"
-    />
 
     <div class="flex justify-end">
       <div
@@ -179,6 +169,20 @@ const goBackToHomeBoard = () => {
   </div>
   <teleport to="body" v-if="showAddNewCollaborator">
     <AddNewCollaborator @cancelCollab="cancelCollabPopUp"></AddNewCollaborator>
+  </teleport>
+  <teleport to="body" v-if="changeCollab">
+    <ChangeRemoveLeaveCollab
+      @cancelPopUp="closeChange"
+      :isChange="isChange"
+      :operate="operation"
+    ></ChangeRemoveLeaveCollab>
+  </teleport>
+  <teleport to="body" v-if="removeCollab">
+    <ChangeRemoveLeaveCollab
+      @cancelPopUp="closeRemove"
+      :isLeave="isRemove"
+      :operate="operation"
+    ></ChangeRemoveLeaveCollab>
   </teleport>
 </template>
 <style scoped></style>
