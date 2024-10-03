@@ -198,7 +198,7 @@ removeCollab
   <teleport to="body" v-if="removeCollab">
     <ChangeRemoveLeaveCollab
       @cancelPopUp="closeRemove"
-      :isLeave="isRemove"
+      :isRemove="isRemove"
       :operate="operation"
     ></ChangeRemoveLeaveCollab>
   </teleport>
