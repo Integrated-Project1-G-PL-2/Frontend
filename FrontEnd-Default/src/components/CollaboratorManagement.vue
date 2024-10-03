@@ -20,6 +20,7 @@ import { storeToRefs } from 'pinia'
 import { userName } from '@/stores/UserManager'
 import { logout } from '@/stores/UserManager'
 import ChangeRemoveLeaveCollab from './../components/ChangeRemoveLeaveCollab.vue'
+import AlertPopUp from './../components/AlertPopUp.vue'
 
 const router = useRouter()
 const removeCollab = ref()
@@ -106,7 +107,31 @@ removeCollab
         </button>
       </div>
     </div>
-
+    <AlertPopUp
+      :titles="'You do not have permission to add board collaborator.'"
+      @closePopUp="closePermissionAlter"
+      message="Error!!"
+      styleType="red"
+    />
+    <AlertPopUp
+      :titles="'The user does not exists.'"
+      @closePopUp="closeUserAlter"
+      message="Error!!"
+      styleType="red"
+    />
+    <AlertPopUp
+      :titles="'The user is already the collaborator of this board.'"
+      @closePopUp="closeCollaboratorAlter"
+      message="Error!!"
+      styleType="red"
+    />
+    <AlertPopUp
+      v-if="error"
+      :titles="'There is a problem. Please try again later.'"
+      @closePopUp="closeProblemAlter"
+      message="Error!!"
+      styleType="red"
+    />
     <div class="flex justify-end">
       <div
         class="flex justify-between items-start w-full font-bold space-y-2 border-b py-2 border-r-slate-500"
