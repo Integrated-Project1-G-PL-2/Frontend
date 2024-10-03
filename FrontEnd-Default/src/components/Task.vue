@@ -453,21 +453,27 @@ const confirmVisibility = function () {
       styleType="red"
     />
 
-    <!-- 
-    <AlertPopUp
+    <!-- <AlertPopUp
       v-if="accessDenied"
       :titles="'Access denied, you do not have permission to view this page.'"
       @closePopUp="closeAccessAlter"
       message="Error!!"
       styleType="red"
-    />
+    /> -->
     <AlertPopUp
       v-if="errorPublic"
       :titles="'You need to be board owner to perform this action.'"
       @closePopUp="closePublicAlter"
       message="Error!!"
       styleType="red"
-    /> -->
+    />
+    <AlertPopUp
+      v-if="errorPublic"
+      :titles="'You need to be board owner or has write access to perform this action.'"
+      @closePopUp="closePublicAlter"
+      message="Error!!"
+      styleType="red"
+    />
     <div class="flex justify-end">
       <div
         class="itbkk-status-filter flex items-center space-x-2 mr-auto ml-4 my-3 border"

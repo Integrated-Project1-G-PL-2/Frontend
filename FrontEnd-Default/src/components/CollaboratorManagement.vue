@@ -126,6 +126,30 @@ removeCollab
       styleType="red"
     />
     <AlertPopUp
+      :titles="'You do not have permission to change collaborator access right.'"
+      @closePopUp="closeCollaboratorAlter"
+      message="Error!!"
+      styleType="red"
+    />
+    <AlertPopUp
+      :titles="'You do not have permission to remove collaborator.'"
+      @closePopUp="closeCollaboratorAlter"
+      message="Error!!"
+      styleType="red"
+    />
+    <AlertPopUp
+      :titles="'<<name>> is not a collaborator.'"
+      @closePopUp="closeCollaboratorAlter"
+      message="Error!!"
+      styleType="red"
+    />
+    <AlertPopUp
+      :titles="'<<name>> is not a collaborator.'"
+      @closePopUp="closeCollaboratorAlter"
+      message="Error!!"
+      styleType="red"
+    />
+    <AlertPopUp
       v-if="error"
       :titles="'There is a problem. Please try again later.'"
       @closePopUp="closeProblemAlter"

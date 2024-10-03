@@ -308,6 +308,13 @@ const cannotConfig = ref(false)
       message="Error!!"
       styleType="red"
     />
+    <AlertPopUp
+      v-if="errorOwner"
+      :titles="'You need to be board owner or has write access to perform this action.'"
+      @closePopUp="closeOwnerAlter"
+      message="Error!!"
+      styleType="red"
+    />
     <div class="flex justify-start">
       <button
         @click="goBackToHomePage"
