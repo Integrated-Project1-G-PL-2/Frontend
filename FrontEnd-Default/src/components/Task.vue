@@ -98,7 +98,7 @@ onMounted(async () => {
     `${route.params.id}`
   )
   bName.value = getBoardName.name
-
+  const closeOwner = ref(false)
   const board = boardManager.getCurrentBoard()
   boardVisibility.value = board.visibility
 
@@ -210,6 +210,8 @@ const showCollabManagement = function () {
   router.replace({ name: 'CollabList' })
   showCollabDetailModal.value = true
 }
+const closeWrite = ref(false)
+const closeOwner = ref(false)
 const error = ref(false)
 const permission = ref(false)
 const openErrorVisibility = () => {
@@ -326,6 +328,12 @@ const confirmVisibility = function () {
 
   router.push({ name: 'Task' })
   isPopupOpen.value = false
+}
+const closeOwnerAlter = function () {
+  closeOwner.value = false
+}
+const closeWriteAlter = function () {
+  closeWrite.value = false
 }
 </script>
 
@@ -461,16 +469,16 @@ const confirmVisibility = function () {
       styleType="red"
     /> -->
     <AlertPopUp
-      v-if="errorPublic"
+      v-if="closeOwner"
       :titles="'You need to be board owner to perform this action.'"
-      @closePopUp="closePublicAlter"
+      @closePopUp="closeOwnerAlter"
       message="Error!!"
       styleType="red"
     />
     <AlertPopUp
-      v-if="errorPublic"
+      v-if="closeWrite"
       :titles="'You need to be board owner or has write access to perform this action.'"
-      @closePopUp="closePublicAlter"
+      @closePopUp="closeWriteAlter"
       message="Error!!"
       styleType="red"
     />

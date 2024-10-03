@@ -197,6 +197,7 @@ const closeGreenPopup = async function (operate) {
 }
 const errorPublic = ref(false)
 const accessDenied = ref(false)
+const closeOwner = ref(false)
 const closePublicAlter = function () {
   errorPublic.value = false
 }
@@ -204,6 +205,9 @@ const closeAccessAlter = function () {
   accessDenied.value = false
 }
 const cannotConfig = ref(false)
+const closeOwnerAlter = function () {
+  closeOwner.value = false
+}
 </script>
 
 <template>
@@ -309,7 +313,7 @@ const cannotConfig = ref(false)
       styleType="red"
     />
     <AlertPopUp
-      v-if="errorOwner"
+      v-if="closeOwner"
       :titles="'You need to be board owner or has write access to perform this action.'"
       @closePopUp="closeOwnerAlter"
       message="Error!!"
