@@ -22,8 +22,8 @@ import { logout } from '@/stores/UserManager'
 import ChangeRemoveLeaveCollab from './../components/ChangeRemoveLeaveCollab.vue'
 
 const router = useRouter()
-const removeCollab = ref(false)
-const changeCollab = ref(false)
+const removeCollab = ref()
+const changeCollab = ref()
 const isChange = ref()
 const isRemove = ref()
 const showAddNewCollaborator = ref(false)
@@ -176,7 +176,7 @@ removeCollab
           <td class="itbkk-status px-4 py-3 cursor-default">
             <button
               class="itbkk-collab-remove bg-gray-300 text-sm rounded-[6px] font-sans text-gray-700 hover:text-white px-4 py-1"
-              @click="openChangeCollab"
+              @click="openRemoveCollab"
             >
               Remove
             </button>
