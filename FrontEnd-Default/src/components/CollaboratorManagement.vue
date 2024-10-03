@@ -91,19 +91,12 @@ const goBackToHomeBoard = () => {
     </div>
     <ChangeRemoveLeaveCollab
       v-if="Change"
-      :titles="'Change Access Right'"
       @closePopUp="closeChange"
-      message="Do you want to change access right of"
-      message2="to"
-      message3="?"
       :operate="'change'"
     />
     <ChangeRemoveLeaveCollab
       v-if="remove"
-      :titles="'Remove Collaborator'"
       @closePopUp="closeRemove"
-      message="Do you want to remove"
-      message2="from the board?"
       :operate="'remove'"
     />
 

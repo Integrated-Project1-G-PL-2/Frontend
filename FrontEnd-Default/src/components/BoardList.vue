@@ -269,10 +269,7 @@ const closeLeave = function () {
     </teleport>
     <teleport to="body" v-if="leaveCollab">
       <ChangeRemoveLeaveCollab
-        :titles="'Leave Board'"
         @cancelPopUp="closeLeave"
-        message="Do you want to leave this"
-        message2="board?"
         :isLeave="!isLeave"
         :operate="'leave'"
       ></ChangeRemoveLeaveCollab>

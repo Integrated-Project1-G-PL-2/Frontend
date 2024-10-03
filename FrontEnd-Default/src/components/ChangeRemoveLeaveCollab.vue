@@ -4,16 +4,7 @@ import { deleteItemById, deleteAndTransferItem } from '@/utils/fetchUtils'
 import { useStatusManager } from '@/stores/StatusManager'
 import { useRoute, useRouter } from 'vue-router'
 const deClareemit = defineEmits(['cancelPopUp', 'confirmPopUp'])
-const props = defineProps({
-  isChange: String,
-  isRemove: String,
-  isLeave: String,
-  operate: String,
-  titles: String,
-  message: String,
-  message2: String,
-  message3: String
-})
+const props = defineProps(['isChange', 'isRemove', 'isLeave', 'operate'])
 
 const router = useRouter()
 const deletedStatuses = reactive({})
@@ -30,14 +21,13 @@ const route = useRoute()
     <div class="w-[30%] m-[auto] mt-[20%] border border-gray-600 h-[200px]">
       <div class="flex flex-col justify-between bg-white p-4 h-[100px]">
         <div class="itbkk-title w-full h-[70px] mt-1 border-b">
-          <h1 class="text-xl font-bold text-justify">{{ titles }}</h1>
+          <h1 class="text-xl font-bold text-justify">Leave Board</h1>
         </div>
 
         <div class="w-[70%] h-[100%]">
           <div class="itbkk-message pl-4 mt-4">
-            {{ message }} " {{ props.statusId.value.statusName }}"
-            {{ message2 }} " {{ props.statusId.value.statusName }}"
-            {{ message3 }}
+            Do you want to leave this {{ props.statusId.value.statusName }}"
+            board?
           </div>
         </div>
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
@@ -65,42 +55,64 @@ const route = useRoute()
   </div>
   <div
     class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[10px]"
-    v-if="props.isTransfer"
+    v-if="props.isChange"
   >
-    <div
-      class="max-w-[500px] mx-auto mt-[20%] border border-gray-600 h-[200px]"
-    >
+    <div class="w-[30%] m-[auto] mt-[20%] border border-gray-600 h-[200px]">
       <div class="flex flex-col justify-between bg-white p-4 h-[100px]">
         <div class="itbkk-title w-full h-[70px] mt-1 border-b">
-          <h1 class="text-xl font-bold text-justify">Transfer a Status</h1>
+          <h1 class="text-xl font-bold text-justify">Change Access Right</h1>
         </div>
 
-        <div
-          class="flex flex-row items-center justify-between w-[70%] h-[100%]"
-        >
+        <div class="w-[70%] h-[100%]">
           <div class="itbkk-message pl-4 mt-4">
-            There is some task associated with the "{{
+            Do you want to change access right of "{{
               props.statusId.value.statusName
-            }}" status. Transfer to
-            <select
-              v-model="statusSelect"
-              class="itbkk-status mt-1 ml-4 select select-bordered w-[150px] h-[30px] px-2 py-1 bg-inherit border-2 border-gray-200 text-gray-400 rounded-md text-sm text-justify"
-            >
-              <option
-                v-for="del in filterStatus()"
-                :key="del.id"
-                :value="del.id"
-              >
-                {{ del.name }}
-              </option>
-            </select>
+            }}" to "{{ props.statusId.value.statusName }}"
           </div>
         </div>
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
           <button
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
-            @click="transferStatus(props.statusId.value.id, statusSelect)"
-            :disabled="statusSelect === undefined"
+            @click=""
+          >
+            <div class="btn text-center">Confirm</div>
+          </button>
+
+          <button
+            class="itbkk-button-cancel bg-red-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
+            @click="
+              ;[
+                $emit('cancelPopUp', true),
+                $router.replace({ name: 'StatusList' })
+              ]
+            "
+          >
+            <div class="btn text-center">Cancel</div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[10px]"
+    v-if="props.isLeave"
+  >
+    <div class="w-[30%] m-[auto] mt-[20%] border border-gray-600 h-[200px]">
+      <div class="flex flex-col justify-between bg-white p-4 h-[100px]">
+        <div class="itbkk-title w-full h-[70px] mt-1 border-b">
+          <h1 class="text-xl font-bold text-justify">Remove Collaborator</h1>
+        </div>
+
+        <div class="w-[70%] h-[100%]">
+          <div class="itbkk-message pl-4 mt-4">
+            Do you want to remove {{ props.statusId.value.statusName }}" from
+            the board?
+          </div>
+        </div>
+        <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
+          <button
+            class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
+            @click=""
           >
             <div class="btn text-center">Confirm</div>
           </button>

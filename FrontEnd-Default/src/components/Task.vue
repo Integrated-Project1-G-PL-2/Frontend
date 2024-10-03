@@ -452,14 +452,7 @@ const confirmVisibility = function () {
       message="Error!!"
       styleType="red"
     />
-    <ChangeRemoveLeaveCollab
-      v-if="leave"
-      :titles="'Leave Board'"
-      @closePopUp="closeLeave"
-      message="Do you want to leave this"
-      message2="board?"
-      :operate="'leave'"
-    />
+
     <!-- 
     <AlertPopUp
       v-if="accessDenied"
