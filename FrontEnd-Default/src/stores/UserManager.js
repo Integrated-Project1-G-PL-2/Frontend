@@ -2,6 +2,7 @@ import { ref } from 'vue'
 
 // เก็บค่า userName ใน ref
 export const userName = ref('')
+export const userOid = ref('')
 
 // ฟังก์ชันถอดรหัส JWT
 export function decodeJWT(token) {
@@ -32,11 +33,15 @@ export function decodeJWT(token) {
 
     userName.value = decodedPayload.name
     localStorage.setItem('userName', decodedPayload.name)
+    userOid.value = decodedPayload.oid
+    localStorage.setItem('userOid', decodedPayload.oid)
     return {
       header: decodedHeader,
       payload: decodedPayload,
       signature: signature
     }
+    
+   
   } catch (error) {
     throw new Error('Invalid JWT Token: ' + error.message)
   }
