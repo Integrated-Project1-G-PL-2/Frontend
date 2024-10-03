@@ -17,9 +17,9 @@ import ChangeRemoveLeaveCollab from './../components/ChangeRemoveLeaveCollab.vue
 const emits = defineEmits(['NameBoard', 'errorOccurred'])
 const router = useRouter()
 const route = useRoute()
-
+const isLeave = ref()
 const boardManager = useBoardManager()
-
+const operation = ref('')
 const boardsList = boardManager.getBoards()
 const error = ref(false)
 const errorPrivate = ref(false)
@@ -214,15 +214,6 @@ const closeLeave = function () {
             v-for="(board, index) in boardsList"
             :key="board.id.boardId"
             class="itbkk-collab-item bg-white border rounded-lg shadow-md p-4 flex flex-col space-y-2 cursor-pointer hover:bg-gray-100 hover:text-sky-500"
-            @click="
-              ;[
-                emits('NameBoard', board.board.name),
-                router.replace({
-                  name: 'Task',
-                  params: { id: board.id.boardId }
-                })
-              ]
-            "
           >
             <div class="flex justify-between items-center">
               <span class="font-bold text-lg">No : {{ index + 1 }}</span>
@@ -259,6 +250,13 @@ const closeLeave = function () {
         </div>
       </div>
     </div>
+    <teleport to="body" v-if="leaveCollab">
+      <ChangeRemoveLeaveCollab
+        @cancelPopUp="closeLeave"
+        :isLeave="isLeave"
+        :operate="operation"
+      ></ChangeRemoveLeaveCollab>
+    </teleport>
 
     <teleport to="body" v-if="showAddNewBoard">
       <AddNewBoard
@@ -266,13 +264,6 @@ const closeLeave = function () {
         @saveDetail="showDelComplete"
         @errorOccurred="showErrorMessage"
       ></AddNewBoard>
-    </teleport>
-    <teleport to="body" v-if="leaveCollab">
-      <ChangeRemoveLeaveCollab
-        @cancelPopUp="closeLeave"
-        :isLeave="!isLeave"
-        :operate="'leave'"
-      ></ChangeRemoveLeaveCollab>
     </teleport>
   </div>
 </template>

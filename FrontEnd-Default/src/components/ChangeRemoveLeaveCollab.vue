@@ -26,8 +26,7 @@ const route = useRoute()
 
         <div class="w-[70%] h-[100%]">
           <div class="itbkk-message pl-4 mt-4">
-            Do you want to leave this {{ props.statusId.value.statusName }}"
-            board?
+            Do you want to leave this "" board?
           </div>
         </div>
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
@@ -65,9 +64,7 @@ const route = useRoute()
 
         <div class="w-[70%] h-[100%]">
           <div class="itbkk-message pl-4 mt-4">
-            Do you want to change access right of "{{
-              props.statusId.value.statusName
-            }}" to "{{ props.statusId.value.statusName }}"
+            Do you want to change access right of " " to ""
           </div>
         </div>
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
@@ -105,8 +102,7 @@ const route = useRoute()
 
         <div class="w-[70%] h-[100%]">
           <div class="itbkk-message pl-4 mt-4">
-            Do you want to remove {{ props.statusId.value.statusName }}" from
-            the board?
+            Do you want to remove "" from the board?
           </div>
         </div>
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
