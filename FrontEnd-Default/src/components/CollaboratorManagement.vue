@@ -35,6 +35,7 @@ const closeProblem = ref(false)
 const closeAccessRight = ref(false)
 const closeRemoveRight = ref(false)
 const closeNotCollaborator = ref(false)
+const boardCollabList = collaboratorManager.getCollaborators()
 const returnLoginPage = () => {
   logout()
   router.replace({ name: 'Login' })
