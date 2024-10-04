@@ -8,14 +8,14 @@ const isNameOverLimit = ref(false)
 const MAX_LENGTH = 50
 // Initialize selectedAccessLevel with "READ"
 const selectedAccessLevel = ref('READ')
-// Define newBoardName with default value
-let newBoardName = ref('')
+// Define newCollabEmailName with default value
+let newCollabEmailName = ref('')
 
 // Check length of the board name and enforce the limit
 const checkNameLength = () => {
-  if (newBoardName.value.length > MAX_LENGTH) {
+  if (newCollabEmailName.value.length > MAX_LENGTH) {
     isNameOverLimit.value = true
-    newBoardName.value = newBoardName.value.substring(0, MAX_LENGTH)
+    newCollabEmailName.value = newCollabEmailName.value.substring(0, MAX_LENGTH)
     setTimeout(() => {
       isNameOverLimit.value = false
     }, 1000)
@@ -95,6 +95,7 @@ const checkNameLength = () => {
       <div class="flex flex-row w-full justify-end border-t h-[60%]">
         <button
           class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"
+          :disabled="newCollabEmailName == '' || isNameOverLimit"
           @click="
             ;[
               $emit('cancelCollab', true),
