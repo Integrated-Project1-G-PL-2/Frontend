@@ -21,7 +21,7 @@ import { userName } from '@/stores/UserManager'
 import { logout } from '@/stores/UserManager'
 import ChangeRemoveLeaveCollab from './../components/ChangeRemoveLeaveCollab.vue'
 import AlertPopUp from './../components/AlertPopUp.vue'
-
+import { useCollaboratorManager } from '@/stores/CollaboratorManager'
 const router = useRouter()
 const removeCollab = ref()
 const changeCollab = ref()

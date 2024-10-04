@@ -5,6 +5,7 @@ import { userName } from '@/stores/UserManager'
 import { logout } from '@/stores/UserManager'
 import { useRoute, useRouter } from 'vue-router'
 import { useBoardManager } from '@/stores/BoardManager'
+import { useCollaboratorManager } from '@/stores/CollaboratorManager'
 import AlertPopUp from './../components/AlertPopUp.vue'
 import {
   getItems,
@@ -21,6 +22,7 @@ const isLeave = ref()
 const boardManager = useBoardManager()
 const operation = ref('')
 const boardsList = boardManager.getBoards()
+const boardCollabList = collaboratorManager.getCollaborators()
 const error = ref(false)
 const errorPrivate = ref(false)
 const closeProblemAlter = () => {
@@ -216,8 +218,8 @@ const closeLeave = function () {
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
         >
           <div
-            v-for="(board, index) in boardsList"
-            :key="board.id.boardId"
+            v-for="(collab, index) in boardCollabList"
+            :key="collab.id.collabId"
             class="itbkk-collab-item bg-white border rounded-lg shadow-md p-4 flex flex-col space-y-2 hover:bg-gray-100 hover:text-sky-500"
           >
             <div class="flex justify-between items-center">
@@ -227,28 +229,30 @@ const closeLeave = function () {
               class="itbkk-board-name text-xl font-semibold cursor-pointer"
               @click="
                 ;[
-                  emits('NameBoard', board.board.name),
+                  emits('NameCollabBoard', collab.collab.name),
                   router.replace({
                     name: 'Task',
-                    params: { id: board.id.boardId }
+                    params: { id: collab.id.collabId }
                   })
                 ]
               "
             >
               Name :
               {{
-                board.board?.name == undefined ? board.name : board.board.name
+                collab.collab?.name == undefined
+                  ? collab.name
+                  : collab.collab.name
               }}
             </div>
             <div class="itbkk-owner-name text-sm text-gray-500">
               <p>
-                Owner : {{ board.role == undefined ? 'owner' : board.role }}
+                Owner : {{ collab.role == undefined ? 'owner' : collab.role }}
               </p>
             </div>
             <div class="itbkk-access-right text-sm text-gray-500">
               <p>
                 Access Right :
-                {{ board.role == undefined ? 'owner' : board.role }}
+                {{ collab.role == undefined ? 'owner' : collab.role }}
               </p>
             </div>
             <div class="itbkk-leave-board text-sm text-gray-500">
