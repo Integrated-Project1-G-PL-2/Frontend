@@ -7,6 +7,7 @@ const deClareemit = defineEmits(['saveCollab', 'cancelCollab', 'errorCollab'])
 const isNameOverLimit = ref(false)
 const collaboratorManager = useCollaboratorManager()
 const MAX_LENGTH = 50
+const errorCollab = ref(false)
 // Initialize selectedAccessLevel with "READ"
 const selectedAccessLevel = ref('READ')
 // Define newCollabEmailName with default value
@@ -38,12 +39,12 @@ const newCollab = async () => {
   }
 
   if (!newCollabBoards.id) {
-    deClareemit('errorOccurred', (error.value = true))
+    deClareemit('errorCollab', (errorCollab.value = true))
     return
   }
 
   collaboratorManager.addCollaborator(newCollabBoards)
-  deClareemit('cancelDetail', true)
+  deClareemit('cancelCollab', true)
   router.replace({ name: 'Task', params: { id: newCollabBoards.id } }) // Use the new board's ID
 }
 </script>
