@@ -53,6 +53,15 @@ const newCollab = async () => {
   if (newCollabBoards == 401) {
     router.replace({ name: 'Login' })
   }
+  if (newCollabBoards == 403) {
+    router.replace({ name: 'Login' })
+  }
+  if (newCollabBoards == 404) {
+    router.replace({ name: 'Login' })
+  }
+  if (newCollabBoards == 409) {
+    router.replace({ name: 'Login' })
+  }
 
   if (!newCollabBoards.id) {
     deClareemit('errorCollab', (errorCollab.value = true))
