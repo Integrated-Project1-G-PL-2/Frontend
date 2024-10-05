@@ -1,8 +1,9 @@
 <script setup>
 import { addItem } from '@/utils/fetchUtils'
-import { watch, ref } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCollaboratorManager } from '@/stores/CollaboratorManager'
+
 const deClareemit = defineEmits(['saveCollab', 'cancelCollab', 'errorCollab'])
 const isNameOverLimit = ref(false)
 const collaboratorManager = useCollaboratorManager()
@@ -12,8 +13,22 @@ const errorCollab = ref(false)
 const selectedAccessLevel = ref('READ')
 // Define newCollabEmailName with default value
 let newCollabEmailName = ref('')
+// Owner email (replace with actual owner email)
+const ownerEmail = ref('owner@example.com')
+// Invalid email flag
+const isInvalidEmail = ref(false)
 
-// Check length of the board name and enforce the limit
+// Email validation regex
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+// Check if the input is a valid email and not the owner's email
+const validateEmail = () => {
+  isInvalidEmail.value =
+    !emailRegex.test(newCollabEmailName.value) ||
+    newCollabEmailName.value === ownerEmail.value
+}
+
+// Check length of the collaborator email and enforce the limit
 const checkNameLength = () => {
   if (newCollabEmailName.value.length > MAX_LENGTH) {
     isNameOverLimit.value = true
@@ -25,12 +40,13 @@ const checkNameLength = () => {
     isNameOverLimit.value = false
   }
 }
-// Handle creating a new board
+
+// Handle creating a new collaborator
 const newCollab = async () => {
   const newCollabBoards = await addItem(
     `${import.meta.env.VITE_BASE_URL}/v3/boards`,
     {
-      name: newCollabEmailName.value // Pass the board name directly
+      name: newCollabEmailName.value // Pass the collaborator's email
     }
   )
 
@@ -74,8 +90,16 @@ const newCollab = async () => {
               <textarea
                 id="collabEmail"
                 v-model="newCollabEmailName"
-                @input="checkNameLength"
-                :class="{ 'border-red-600 text-red-600': isNameOverLimit }"
+                @input="
+                  () => {
+                    checkNameLength()
+                    validateEmail()
+                  }
+                "
+                :class="{
+                  'border-red-600 text-red-600':
+                    isNameOverLimit || isInvalidEmail
+                }"
                 class="itbkk-collaborator-email font-bold text-justify w-full break-all border border-gray-300 rounded-md resize-none"
               ></textarea>
               <div
@@ -86,18 +110,20 @@ const newCollab = async () => {
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="currentColor"
-                  className="-mt-px h-4 w-[20rem]"
                   class="w-[15px] text-red-600"
                 >
                   <path
-                    fillRule="evenodd"
+                    fill-rule="evenodd"
                     d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 01.67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 11-.671-1.34l.041-.022zM12 9a.75.75 0 100-1.5.75.75 0 000 1.5z"
-                    clipRule="evenodd"
+                    clip-rule="evenodd"
                   />
                 </svg>
                 <div class="text-sm text-red-600">
                   Limit text to 50 characters or less.
                 </div>
+              </div>
+              <div v-if="isInvalidEmail" class="text-sm text-red-600 mt-1">
+                Invalid email or cannot be owner's email.
               </div>
             </div>
 
@@ -119,7 +145,9 @@ const newCollab = async () => {
       <div class="flex flex-row w-full justify-end border-t h-[60%]">
         <button
           class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"
-          :disabled="newCollabEmailName == '' || isNameOverLimit"
+          :disabled="
+            newCollabEmailName == '' || isNameOverLimit || isInvalidEmail
+          "
           @click="newCollab(newCollabEmailName)"
         >
           <div class="btn text-center">Add</div>
