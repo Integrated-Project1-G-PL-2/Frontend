@@ -35,6 +35,7 @@ const closeProblem = ref(false)
 const closeAccessRight = ref(false)
 const closeRemoveRight = ref(false)
 const closeNotCollaborator = ref(false)
+const errorCollab = ref(false)
 const boardCollabList = collaboratorManager.getCollaborators()
 const returnLoginPage = () => {
   logout()
@@ -81,6 +82,9 @@ const closeCollaboratorAlter = function () {
 const closeProblemAlter = function () {
   closeProblem.value = false
 }
+const closeProblemCollabAlter = function () {
+  errorCollab.value = false
+}
 const closeAccessAlter = function () {
   closeAccessRight.value = false
 }
@@ -89,6 +93,10 @@ const closeRemoveAlter = function () {
 }
 const closeNotCollabAlter = function () {
   closeNotCollaborator.value = false
+}
+const showErrorMessage = function () {
+  errorCollab.value = true
+  showAddNewCollaborator.value = false
 }
 </script>
 
@@ -184,6 +192,13 @@ const closeNotCollabAlter = function () {
       message="Error!!"
       styleType="red"
     />
+    <AlertPopUp
+      v-if="errorCollab"
+      :titles="'There is a problem. Please try again later.'"
+      @closePopUp="closeProblemCollabAlter"
+      message="Error!!"
+      styleType="red"
+    />
     <div class="flex justify-end">
       <div
         class="flex justify-between items-start w-full font-bold space-y-2 border-b py-2 border-r-slate-500"
@@ -263,7 +278,10 @@ const closeNotCollabAlter = function () {
     </table>
   </div>
   <teleport to="body" v-if="showAddNewCollaborator">
-    <AddNewCollaborator @cancelCollab="cancelCollabPopUp"></AddNewCollaborator>
+    <AddNewCollaborator
+      @cancelCollab="cancelCollabPopUp"
+      @errorCollab="showErrorMessage"
+    ></AddNewCollaborator>
   </teleport>
   <teleport to="body" v-if="changeCollab">
     <ChangeRemoveLeaveCollab
