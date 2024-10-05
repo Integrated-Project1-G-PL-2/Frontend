@@ -1,10 +1,11 @@
 <script setup>
+import { addItem } from '@/utils/fetchUtils'
 import { watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
-
+import { useCollaboratorManager } from '@/stores/CollaboratorManager'
 const deClareemit = defineEmits(['saveCollab', 'cancelCollab', 'errorCollab'])
 const isNameOverLimit = ref(false)
-
+const collaboratorManager = useCollaboratorManager()
 const MAX_LENGTH = 50
 // Initialize selectedAccessLevel with "READ"
 const selectedAccessLevel = ref('READ')
@@ -22,6 +23,28 @@ const checkNameLength = () => {
   } else {
     isNameOverLimit.value = false
   }
+}
+// Handle creating a new board
+const newCollab = async () => {
+  const newCollabBoards = await addItem(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards`,
+    {
+      name: newCollabEmailName.value // Pass the board name directly
+    }
+  )
+
+  if (newCollabBoards == 401) {
+    router.replace({ name: 'Login' })
+  }
+
+  if (!newCollabBoards.id) {
+    deClareemit('errorOccurred', (error.value = true))
+    return
+  }
+
+  collaboratorManager.addCollaborator(newCollabBoards)
+  deClareemit('cancelDetail', true)
+  router.replace({ name: 'Task', params: { id: newCollabBoards.id } }) // Use the new board's ID
 }
 </script>
 
@@ -96,12 +119,7 @@ const checkNameLength = () => {
         <button
           class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"
           :disabled="newCollabEmailName == '' || isNameOverLimit"
-          @click="
-            ;[
-              $emit('cancelCollab', true),
-              $router.replace({ name: 'CollabList' })
-            ]
-          "
+          @click="newCollab(newCollabEmailName)"
         >
           <div class="btn text-center">Add</div>
         </button>
