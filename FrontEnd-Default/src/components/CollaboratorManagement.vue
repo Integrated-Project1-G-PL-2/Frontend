@@ -36,6 +36,8 @@ const closeAccessRight = ref(false)
 const closeRemoveRight = ref(false)
 const closeNotCollaborator = ref(false)
 const errorCollab = ref(false)
+const returnPage = ref(false)
+const collaboratorManager = useCollaboratorManager()
 const boardCollabList = collaboratorManager.getCollaborators()
 const returnLoginPage = () => {
   logout()
@@ -236,21 +238,21 @@ const showErrorMessage = function () {
       </thead>
       <tbody>
         <tr
-          v-for="(task, index) in taskGroups"
-          :key="task.id"
+          v-for="(collab, index) in boardCollabList"
+          :key="collab.id"
           class="itbkk-item border-b cursor-pointer"
         >
           <td class="itbkk-button-action px-4 py-3">{{ index + 1 }}</td>
           <td class="itbkk-name px-4 py-3">
             <div class="hover:text-sky-500 cursor-default">
-              {{ task.title }}
+              {{ collab.name }}
             </div>
           </td>
           <td
             class="itbkk-email px-4 py-3 cursor-default"
-            :class="task.assignees == null ? 'italic' : ''"
+            :class="collab.email == null ? 'italic' : ''"
           >
-            {{ task.assignees == null ? 'Unassigned' : task.assignees }}
+            {{ collab.email == null ? 'Unassigned' : collab.email }}
           </td>
           <td class="itbkk-status px-4 py-3 cursor-default">
             <div class="w-[20%]">

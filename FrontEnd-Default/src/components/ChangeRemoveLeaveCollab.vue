@@ -5,7 +5,7 @@ import { useStatusManager } from '@/stores/StatusManager'
 import { useRoute, useRouter } from 'vue-router'
 const deClareemit = defineEmits(['cancelPopUp', 'confirmPopUp'])
 const props = defineProps(['isChange', 'isRemove', 'isLeave', 'operate'])
-
+const error = ref(false)
 const router = useRouter()
 const deletedStatuses = reactive({})
 const statusSelect = ref() //ชั่วคราว
@@ -31,57 +31,6 @@ const confirmLeaveCollab = async function () {
     error.value = true // Handle unexpected errors
   }
   leaveCollab.value = false // Close the confirmation modal
-}
-const saveClick = async () => {
-  if (isNameOverLimit.value || isDescriptionOverLimit.value) {
-    return
-  }
-  if (prop.operate === 'change') {
-    const addedStatus = await addItem(
-      `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`,
-      status
-    )
-    if (addedStatus != null) {
-      statusManager.addStatuses(addedStatus)
-      emits('showStatusGreenPopup', {
-        taskStatus: addedStatus.name,
-        operate: prop.operate
-      })
-    } else {
-      emits('showStatusRedPopup', {
-        taskStatus: status.name,
-        operate: prop.operate
-      })
-    }
-  } else if (prop.operate === 'delete') {
-    status.description =
-      status.description == null
-        ? status.description
-        : status.description.trim()
-    const editedStatus = await editItem(
-      `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`,
-      prop.statusDetail.value.id,
-      { name: status.name, description: status.description }
-    )
-    if (editedStatus != null) {
-      statusManager.editStatues(
-        prop.statusDetail.value.id,
-        editedStatus.id,
-        editedStatus
-      )
-      emits('showStatusGreenPopup', {
-        taskStatus: editedStatus.name,
-        operate: prop.operate
-      })
-    } else {
-      emits('showStatusRedPopup', {
-        taskStatus: '',
-        operate: prop.operate
-      })
-    }
-  }
-  router.replace({ name: 'StatusList' })
-  emits('showStatusDetailModal')
 }
 </script>
 
