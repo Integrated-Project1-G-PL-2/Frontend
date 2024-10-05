@@ -3,19 +3,18 @@ import { ref, reactive } from 'vue'
 import { deleteItemById, deleteAndTransferItem } from '@/utils/fetchUtils'
 import { useStatusManager } from '@/stores/StatusManager'
 import { useRoute, useRouter } from 'vue-router'
+import { useCollaboratorManager } from '@/stores/CollaboratorManager'
 const deClareemit = defineEmits(['cancelPopUp', 'confirmPopUp'])
 const props = defineProps(['isChange', 'isRemove', 'isLeave', 'operate'])
 const error = ref(false)
 const router = useRouter()
-const deletedStatuses = reactive({})
-const statusSelect = ref() //ชั่วคราว
-const statusManager = useStatusManager()
+const collaboratorManager = useCollaboratorManager()
 const route = useRoute()
+const collaborators = collaboratorManager.changeCollaboratorAccessRight()
 const confirmLeaveCollab = async function () {
   try {
-    const { boardId, collabOid } = operation.value
     const response = await deleteItemById(
-      `/boards/${boardId}/collabs/${collabOid}`
+      `/v3/boards/${route.params.id}/collabs`
     )
 
     if (response.status === 200) {
@@ -30,7 +29,26 @@ const confirmLeaveCollab = async function () {
   } catch (err) {
     error.value = true // Handle unexpected errors
   }
-  leaveCollab.value = false // Close the confirmation modal
+  deClareemit('confirmPopUp', true)
+}
+const removeCollaborator = async (collabOid) => {
+  deletedCollab.value = await deleteCollaborator(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collab`,
+    deleteId
+  )
+  if (deletedCollab.value == '404') {
+    deClareemit('cancelDetail', true)
+    return
+  }
+  collaboratorManager.deleteTask(collabOid)
+  deClareemit('confirmPopUp', true)
+}
+const updateCollaboratorAccessRight = (collabOid, newRight) => {
+  // Assuming you have a reactive `collaborators` array
+  const collaborator = collaborators.find((collab) => collab.id === collabOid)
+  if (collaborator) {
+    collaborator.accessRight = newRight // Update the access right in the array
+  }
 }
 </script>
 
@@ -86,7 +104,7 @@ const confirmLeaveCollab = async function () {
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
           <button
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
-            @click=""
+            @click="updateCollaboratorAccessRight"
           >
             <div class="btn text-center">Confirm</div>
           </button>
@@ -119,7 +137,7 @@ const confirmLeaveCollab = async function () {
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
           <button
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
-            @click=""
+            @click="removeCollaborator"
           >
             <div class="btn text-center">Confirm</div>
           </button>

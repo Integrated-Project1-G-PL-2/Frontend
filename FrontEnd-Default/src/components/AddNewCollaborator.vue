@@ -44,7 +44,7 @@ const checkNameLength = () => {
 // Handle creating a new collaborator
 const newCollab = async () => {
   const newCollabBoards = await addItem(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards`,
+    `${import.meta.env.VITE_BASE_URL}}/v3/boards/${route.params.id}/collab`,
     {
       name: newCollabEmailName.value // Pass the collaborator's email
     }
