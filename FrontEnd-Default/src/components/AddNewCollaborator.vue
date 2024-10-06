@@ -11,16 +11,12 @@ const route = useRoute()
 const router = useRouter()
 const errorCollab = ref(false)
 const collabManager = useCollaboratorManager()
-
 // Initialize selectedAccessLevel with "READ"
 const selectedAccessLevel = ref('READ')
-
 // Define newCollabEmailName with default value
 let newCollabEmailName = ref('')
-
 // Owner email (replace with actual owner email)
-const ownerEmail = ref('owner@example.com') // Replace with actual owner email
-
+const ownerEmail = ref()
 // Invalid email flag
 const isInvalidEmail = ref(false)
 
@@ -50,35 +46,32 @@ const checkNameLength = () => {
   }
 }
 
-// Handle adding a new collaborator
 const newCollab = async () => {
-  if (
-    !isInvalidEmail.value &&
-    !isNameOverLimit.value &&
-    newCollabEmailName.value
-  ) {
-    // Convert selectedAccessLevel to uppercase before sending
-    const newCollabBoards = await addItem(
-      `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`,
-      {
-        email: newCollabEmailName.value,
-        access_right: selectedAccessLevel.value.toUpperCase() // Ensure it's uppercase
-      }
-    )
+  console.log(selectedAccessLevel.value)
 
-    if (
-      newCollabBoards == 401 ||
-      newCollabBoards == 403 ||
-      newCollabBoards == 404 ||
-      newCollabBoards == 409
-    ) {
-      router.replace({ name: 'Login' })
-      return
+  // Convert selectedAccessLevel to uppercase before sending
+  const newCollabBoards = await addItem(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`,
+    {
+      email: newCollabEmailName.value,
+      access_right: selectedAccessLevel.value.toUpperCase() // Ensure it's uppercase
     }
+  )
 
-    collabManager.addCollaborator(newCollabBoards)
-    deClareemit('saveCollab', true) // Emit save event
+  if (
+    newCollabBoards == 401 ||
+    newCollabBoards == 403 ||
+    newCollabBoards == 404 ||
+    newCollabBoards == 409
+  ) {
+    router.replace({ name: 'Login' })
+    return
   }
+
+  collabManager.addCollaborator(newCollabBoards)
+  console.log(collabManager.getCollaborators())
+  deClareemit('cancelCollab', true)
+  console.log(newCollabBoards)
 }
 </script>
 
@@ -97,6 +90,7 @@ const newCollab = async () => {
         </div>
 
         <div class="w-[100%] h-[100%]">
+          <!-- Flex container for email and access right on the same line -->
           <div class="flex items-center gap-4 mt-5 my-2">
             <!-- Collaborator e-mail -->
             <div class="w-[80%]">
@@ -118,7 +112,10 @@ const newCollab = async () => {
                 }"
                 class="itbkk-collaborator-email font-bold text-justify w-full break-all border border-gray-300 rounded-md resize-none"
               ></textarea>
-              <div v-if="isNameOverLimit" class="flex items-center">
+              <div
+                style="display: flex; align-items: center"
+                v-if="isNameOverLimit"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -157,24 +154,24 @@ const newCollab = async () => {
       </div>
       <div class="flex flex-row w-full justify-end border-t h-[60%]">
         <button
-          class="itbkk-button-confirm bg-green-400 text-center flex items-center justify-center hover:text-gray-200 mr-3 mt-4 mb-2"
+          class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"
           :disabled="
             newCollabEmailName == '' || isNameOverLimit || isInvalidEmail
           "
-          @click="newCollab"
+          @click="newCollab(newCollabEmailName)"
         >
-          Add
+          <div class="btn text-center">Add</div>
         </button>
         <button
-          class="itbkk-button-cancel bg-red-400 text-center flex items-center justify-center hover:text-gray-200 mr-3 mt-4 mb-2"
+          class="itbkk-button-cancel bg-red-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"
           @click="
-            () => {
-              deClareemit('cancelCollab', true)
-              router.replace({ name: 'CollabList' })
-            }
+            ;[
+              $emit('cancelCollab', true),
+              $router.replace({ name: 'CollabList' })
+            ]
           "
         >
-          Cancel
+          <div class="btn text-center">Cancel</div>
         </button>
       </div>
     </div>
