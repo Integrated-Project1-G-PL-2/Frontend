@@ -65,7 +65,7 @@ const privateTask = ref()
 const bName = ref()
 const boardOwner = ref()
 const thisUser = ref()
-const thisTask = ref()
+
 const cannotConfig = ref(false)
 const leave = ref(false)
 onMounted(async () => {
@@ -77,11 +77,12 @@ onMounted(async () => {
     route.params.id
   )
 
-  privateTask.value = tasksItem
+  privateTask.value = tasksItem.status
   if (tasksItem == 401) {
     router.replace({ name: 'Login' })
     return
   }
+
   boardManager.setCurrentBoard(currentBoard)
   taskManager.setTasks(tasksItem)
   statusManager.setStatuses(
@@ -105,9 +106,7 @@ onMounted(async () => {
   boardOwner.value = currentBoard.owner.name
 
   thisUser.value = storedUserName
-  taskGroups.value.forEach((taskGroup) => {
-    thisTask.value = taskGroup.id
-  })
+
   if (
     route.fullPath == `/board/${route.params.id}/task/add` ||
     route.fullPath.match(
@@ -118,6 +117,11 @@ onMounted(async () => {
     cannotConfig.value = true
     router.replace({ name: 'Task' })
   }
+
+  console.log(boardVisibility.value )
+  console.log(boardOwner.value)
+  console.log(thisUser.value)
+
 })
 watch([boardOwner, thisUser], ([newBoardOwner, newThisUser]) => {
   boardOwner.value = newBoardOwner
@@ -690,7 +694,7 @@ const closeWriteAlter = function () {
         </div>
 
         <div
-          v-if="privateTask === null"
+          v-if="privateTask == 403"
           class="text-center text-xl text-red-600"
         >
           <h2>Access denied,you do not have permission to view this page.</h2>
@@ -720,7 +724,7 @@ const closeWriteAlter = function () {
             </div>
             <div class="relative group">
               <button
-                :disabled="boardOwner !== thisUser"
+                :disabled="boardOwner !== thisUser && isSwitch"
                 class="itbkk-button-delete inline-flex"
                 @click="
                   showDeletePopUpTaskDetail({

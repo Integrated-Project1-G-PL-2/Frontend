@@ -40,9 +40,9 @@ onMounted(async () => {
   }
   console.log(boards)
 
-  if (boards.length > 0) {
-    router.replace({ name: 'Task', params: { id: boards[0].board.id } })
-  }
+  // if (boards.length > 0) {
+  //   router.replace({ name: 'Task', params: { id: boards[0].board.id } })
+  // }
   boardManager.setBoards(boards)
   const storedUserName = localStorage.getItem('userName')
   if (storedUserName) {

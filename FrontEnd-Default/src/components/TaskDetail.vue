@@ -135,6 +135,7 @@ const handleClick = async () => {
       `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
       addOrUpdateTaskDetail
     )
+
     router.replace({ name: 'Task' })
     if (newTask.status != '500') {
       taskManager.addTask(newTask)
@@ -147,7 +148,7 @@ const handleClick = async () => {
   } else if (prop.operate == 'edit') {
     addOrUpdateTaskDetail.status = statusManager.findStatusByName(
       task.taskStatus
-    )
+    ).id
     const editTask = await editItem(
       `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
       task.id,

@@ -60,7 +60,7 @@ onMounted(async () => {
     `${import.meta.env.VITE_BASE_URL}/v3/boards`,
     route.params.id
   )
-  privateTask.value = taskItems
+  privateTask.value = taskItems.status
   if (taskItems == 401) {
     router.replace({ name: 'Login' })
     return
@@ -376,7 +376,7 @@ const closeOwnerAlter = function () {
           </div>
         </div>
         <div
-          v-if="privateTask === null"
+          v-if="privateTask == 403"
           class="text-center text-xl text-red-600"
         >
           <h2>Access denied,you do not have permission to view this page.</h2>
