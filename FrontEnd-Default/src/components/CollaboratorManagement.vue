@@ -165,6 +165,7 @@ onMounted(async () => {
       @closePopUp="closePermissionAlter"
       message="Error!!"
       styleType="red"
+      @errorAddCollab="showErrorAddCollabMessage"
     />
     <AlertPopUp
       v-if="closeUser"

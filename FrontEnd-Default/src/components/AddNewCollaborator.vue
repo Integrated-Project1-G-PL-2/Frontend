@@ -4,7 +4,13 @@ import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCollaboratorManager } from '@/stores/CollaboratorManager'
 
-const deClareemit = defineEmits(['saveCollab', 'cancelCollab', 'errorCollab'])
+const deClareemit = defineEmits([
+  'saveCollab',
+  'cancelCollab',
+  'errorCollab',
+  'errorNotExitCollab',
+  'errorAddCollab'
+])
 const isNameOverLimit = ref(false)
 const MAX_LENGTH = 50
 const route = useRoute()
@@ -57,21 +63,29 @@ const newCollab = async () => {
       access_right: selectedAccessLevel.value.toUpperCase() // Ensure it's uppercase
     }
   )
-
-  if (
-    newCollabBoards == 401 ||
-    newCollabBoards == 403 ||
-    newCollabBoards == 404 ||
-    newCollabBoards == 409
-  ) {
+  if (newCollabBoards == 401) {
+    deClareemit('cancelCollab', true)
     router.replace({ name: 'Login' })
     return
   }
-
-  collabManager.addCollaborator(newCollabBoards)
-  console.log(collabManager.getCollaborators())
-  deClareemit('cancelCollab', true)
-  console.log(newCollabBoards)
+  if (newCollabBoards == 403) {
+    deClareemit('errorAddCollab', true)
+    deClareemit('cancelCollab', true)
+    return
+  } else if (newCollabBoards == 404) {
+    deClareemit('errorNotExitCollab', true)
+    deClareemit('cancelCollab', true)
+    return
+  } else if (newCollabBoards == 409) {
+    deClareemit('errorExitCollab', true)
+    deClareemit('cancelCollab', true)
+    return
+  } else {
+    collabManager.addCollaborator(newCollabBoards)
+    console.log(collabManager.getCollaborators())
+    deClareemit('cancelCollab', true)
+    console.log(newCollabBoards)
+  }
 }
 </script>
 
