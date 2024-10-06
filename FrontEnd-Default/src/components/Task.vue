@@ -119,10 +119,9 @@ onMounted(async () => {
     router.replace({ name: 'Task' })
   }
 
-  console.log(boardVisibility.value )
+  console.log(boardVisibility.value)
   console.log(boardOwner.value)
   console.log(thisUser.value)
-
 })
 watch([boardOwner, thisUser], ([newBoardOwner, newThisUser]) => {
   boardOwner.value = newBoardOwner
@@ -559,7 +558,7 @@ const closeWriteAlter = function () {
           </span>
         </label>
         <div
-          v-if="boardOwner !== thisUser && isSwitch"
+          v-if="boardOwner !== thisUser && isSwitch && writeAccess"
           class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
         >
           You need to be board owner to perform this action.
@@ -586,6 +585,12 @@ const closeWriteAlter = function () {
           class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
         >
           You need to be board owner to perform this action.
+        </div>
+        <div
+          v-if="(boardOwner !== thisUser && isSwitch) || writeAccess"
+          class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
+        >
+          You need to be board owner or has write access to perform this action.
         </div>
       </div>
       <button
@@ -694,10 +699,7 @@ const closeWriteAlter = function () {
           </div>
         </div>
 
-        <div
-          v-if="privateTask == 403"
-          class="text-center text-xl text-red-600"
-        >
+        <div v-if="privateTask == 403" class="text-center text-xl text-red-600">
           <h2>Access denied,you do not have permission to view this page.</h2>
         </div>
 
@@ -722,6 +724,13 @@ const closeWriteAlter = function () {
               >
                 You need to be board owner to perform this action.
               </div>
+              <div
+                v-if="(boardOwner !== thisUser && isSwitch) || writeAccess"
+                class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
+              >
+                You need to be board owner or has write access to perform this
+                action.
+              </div>
             </div>
             <div class="relative group">
               <button
@@ -742,6 +751,13 @@ const closeWriteAlter = function () {
                 class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
               >
                 You need to be board owner to perform this action.
+              </div>
+              <div
+                v-if="(boardOwner !== thisUser && isSwitch) || writeAccess"
+                class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
+              >
+                You need to be board owner or has write access to perform this
+                action.
               </div>
             </div>
           </td>

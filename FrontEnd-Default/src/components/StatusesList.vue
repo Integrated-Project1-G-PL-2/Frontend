@@ -346,6 +346,13 @@ const closeOwnerAlter = function () {
           >
             You need to be board owner to perform this action.
           </div>
+          <div
+            v-if="(boardOwner !== thisUser && isSwitch) || writeAccess"
+            class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
+          >
+            You need to be board owner or has write access to perform this
+            action.
+          </div>
         </div>
       </div>
     </div>
@@ -375,10 +382,7 @@ const closeOwnerAlter = function () {
             </button>
           </div>
         </div>
-        <div
-          v-if="privateTask == 403"
-          class="text-center text-xl text-red-600"
-        >
+        <div v-if="privateTask == 403" class="text-center text-xl text-red-600">
           <h2>Access denied,you do not have permission to view this page.</h2>
         </div>
         <tr
@@ -442,6 +446,13 @@ const closeOwnerAlter = function () {
                 >
                   You need to be board owner to perform this action.
                 </div>
+                <div
+                  v-if="(boardOwner !== thisUser && isSwitch) || writeAccess"
+                  class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
+                >
+                  You need to be board owner or has write access to perform this
+                  action.
+                </div>
               </div>
 
               <!-- <button
@@ -477,6 +488,13 @@ const closeOwnerAlter = function () {
                   class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
                 >
                   You need to be board owner to perform this action.
+                </div>
+                <div
+                  v-if="(boardOwner !== thisUser && isSwitch) || writeAccess"
+                  class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
+                >
+                  You need to be board owner or has write access to perform this
+                  action.
                 </div>
               </div>
             </div>
