@@ -40,6 +40,7 @@ const returnPage = ref(false)
 const route = useRoute()
 const collaboratorManager = useCollaboratorManager()
 const boardCollabList = ref(collaboratorManager.getCollaborators())
+let newName = ref(`${userName.value}`)
 // const boardCollabList = ref()
 const selectedAccessLevel = ref('VISITOR')
 const returnLoginPage = () => {
@@ -224,7 +225,7 @@ onMounted(async () => {
             @click="goBackToPersonalBoard"
             class="itbkk-board-name scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 hover:text-blue-500 mr-3 ml-2 mt-2 text-blue-400 my-3"
           >
-            {{ userName }}
+            {{ newName }}
           </button>
           <div
             class="scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 mr-3 mt-2 my-3 font-bold"
