@@ -1,14 +1,17 @@
 <script setup>
 import { addItem } from '@/utils/fetchUtils'
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useCollaboratorManager } from '@/stores/CollaboratorManager'
 
 const deClareemit = defineEmits(['saveCollab', 'cancelCollab', 'errorCollab'])
 const isNameOverLimit = ref(false)
 const collaboratorManager = useCollaboratorManager()
 const MAX_LENGTH = 50
+const route = useRoute()
+const router = useRouter()
 const errorCollab = ref(false)
+const collabManager = useCollaboratorManager()
 // Initialize selectedAccessLevel with "READ"
 const selectedAccessLevel = ref('READ')
 // Define newCollabEmailName with default value
@@ -43,12 +46,15 @@ const checkNameLength = () => {
 
 // Handle creating a new collaborator
 const newCollab = async () => {
+  console.log(selectedAccessLevel.value)
   const newCollabBoards = await addItem(
-    `${import.meta.env.VITE_BASE_URL}}/v3/boards/${route.params.id}/collab`,
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`,
     {
-      name: newCollabEmailName.value // Pass the collaborator's email
+      email: newCollabEmailName.value,
+      access_right:selectedAccessLevel.value
     }
   )
+  console.log(newCollabBoards)
 
   if (newCollabBoards == 401) {
     router.replace({ name: 'Login' })
@@ -67,10 +73,13 @@ const newCollab = async () => {
     deClareemit('errorCollab', (errorCollab.value = true))
     return
   }
-
-  collaboratorManager.addCollaborator(newCollabBoards)
+  collabManager.addCollaborator(newCollabBoards)
+  console.log(collabManager.getCollaborators())
+  // router.replace({ name: 'CollabList' })
+  // collaboratorManager.addCollaborator(newCollabBoards)
   deClareemit('cancelCollab', true)
-  router.replace({ name: 'Task', params: { id: newCollabBoards.id } }) // Use the new board's ID
+  
+  // router.replace({ name: 'Task', params: { id: newCollabBoards.id } }) // Use the new board's ID
 }
 </script>
 

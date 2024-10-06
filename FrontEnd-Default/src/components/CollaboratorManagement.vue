@@ -37,8 +37,11 @@ const closeRemoveRight = ref(false)
 const closeNotCollaborator = ref(false)
 const errorCollab = ref(false)
 const returnPage = ref(false)
+const route = useRoute()
 const collaboratorManager = useCollaboratorManager()
-const boardCollabList = collaboratorManager.getCollaborators()
+const boardCollabList = ref(collaboratorManager.getCollaborators())
+// const boardCollabList = ref()
+const selectedAccessLevel = ref('VISITOR')
 const returnLoginPage = () => {
   logout()
   router.replace({ name: 'Login' })
@@ -100,6 +103,13 @@ const showErrorMessage = function () {
   errorCollab.value = true
   showAddNewCollaborator.value = false
 }
+
+onMounted(async () => {
+  const collab = await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`)
+  boardCollabList.value = collab
+  collaboratorManager.setCollaborators(collab)
+ console.log(collaboratorManager.getCollaborators())
+})
 </script>
 
 <template>
@@ -245,14 +255,14 @@ const showErrorMessage = function () {
           <td class="itbkk-button-action px-4 py-3">{{ index + 1 }}</td>
           <td class="itbkk-name px-4 py-3">
             <div class="hover:text-sky-500 cursor-default">
-              {{ collab.name }}
+              {{ collab.localUser.name }}
             </div>
           </td>
           <td
             class="itbkk-email px-4 py-3 cursor-default"
             :class="collab.email == null ? 'italic' : ''"
           >
-            {{ collab.email == null ? 'Unassigned' : collab.email }}
+            {{ collab.localUser.email == null ? 'Unassigned' : collab.localUser.email }}
           </td>
           <td class="itbkk-status px-4 py-3 cursor-default">
             <div class="w-[20%]">
@@ -263,7 +273,7 @@ const showErrorMessage = function () {
                 id="accessLevel"
                 class="itbkk-access-right w-full border border-gray-300 rounded-md p-2"
               >
-                <option value="READ">READ</option>
+                <option value="VISITOR">{{collab.role}}</option>
               </select>
             </div>
           </td>
