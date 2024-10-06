@@ -4,7 +4,8 @@ import { deleteItemById, deleteAndTransferItem } from '@/utils/fetchUtils'
 import { useStatusManager } from '@/stores/StatusManager'
 import { useRoute, useRouter } from 'vue-router'
 import { useCollaboratorManager } from '@/stores/CollaboratorManager'
-const deClareemit = defineEmits(['cancelPopUp', 'confirmPopUp'])
+const deClareemit = defineEmits(['cancelPopUp', 'confirmPopUp','NameCollabBoard'])
+
 const props = defineProps(['isChange', 'isRemove', 'isLeave', 'operate'])
 const error = ref(false)
 const router = useRouter()

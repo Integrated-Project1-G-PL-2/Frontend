@@ -15,7 +15,7 @@ import {
   editItem
 } from '../utils/fetchUtils.js'
 import ChangeRemoveLeaveCollab from './../components/ChangeRemoveLeaveCollab.vue'
-const emits = defineEmits(['NameBoard', 'errorOccurred'])
+const emits = defineEmits(['NameBoard', 'errorOccurred','NameCollabBoard'])
 const router = useRouter()
 const route = useRoute()
 const isLeave = ref()
@@ -26,6 +26,7 @@ const boardsList = boardManager.getBoards()
 const boardCollabList = collaboratorManager.getCollaborators()
 const error = ref(false)
 const errorPrivate = ref(false)
+
 const closeProblemAlter = () => {
   error.value = false
 }
@@ -230,10 +231,10 @@ const closeLeave = function () {
               class="itbkk-board-name text-xl font-semibold cursor-pointer"
               @click="
                 ;[
-                  emits('NameCollabBoard', collab.collab.name),
+                emits('NameCollabBoard', collab.board.name),
                   router.replace({
                     name: 'Task',
-                    params: { id: collab.id.collabId }
+                    params: { id: collab.id.boardId }
                   })
                 ]
               "
@@ -247,7 +248,7 @@ const closeLeave = function () {
             </div>
             <div class="itbkk-owner-name text-sm text-gray-500">
               <p>
-                Owner : ไม่ได้ถุยชื่อเจ้าของมา
+                Owner : {{ collab.localUser.username}}
               </p>
             </div>
             <div class="itbkk-access-right text-sm text-gray-500">
@@ -274,6 +275,7 @@ const closeLeave = function () {
     <teleport to="body" v-if="leaveCollab">
       <ChangeRemoveLeaveCollab
         @cancelPopUp="closeLeave"
+        :NameCollabBoard="NameCollabBoard"
         :isLeave="isLeave"
         :operate="operation"
       ></ChangeRemoveLeaveCollab>
