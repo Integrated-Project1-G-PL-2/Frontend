@@ -83,7 +83,6 @@ const newCollab = async () => {
     deClareemit('cancelCollab', true)
     return
   } else {
-    deClareemit('errorExitCollab', true)
     collabManager.addCollaborator(newCollabBoards)
     console.log(collabManager.getCollaborators())
     // router.replace({ name: 'CollabList' })
