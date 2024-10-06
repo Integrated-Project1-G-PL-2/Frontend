@@ -113,9 +113,6 @@ const showNotExitCollabMessage = function () {
 const showExitCollabMessage = function () {
   closeCollaborator.value = true
 }
-const showErrorCollabMessage = function () {
-  errorCollab.value = true
-}
 
 onMounted(async () => {
   const collab = await getItems(
@@ -177,12 +174,10 @@ onMounted(async () => {
       @closePopUp="closePermissionAlter"
       message="Error!!"
       styleType="red"
-      @errorAddCollab="showErrorAddCollabMessage"
     />
     <AlertPopUp
       v-if="closeUser"
       :titles="'The user does not exists.'"
-      @errorNotExitCollab="showNotExitCollabMessage"
       @closePopUp="closeUserAlter"
       message="Error!!"
       styleType="red"
@@ -190,7 +185,6 @@ onMounted(async () => {
     <AlertPopUp
       v-if="closeCollaborator"
       :titles="'The user is already the collaborator of this board.'"
-      @errorExitCollab="showExitCollabMessage"
       @closePopUp="closeCollaboratorAlter"
       message="Error!!"
       styleType="red"
@@ -226,7 +220,6 @@ onMounted(async () => {
     <AlertPopUp
       v-if="errorCollab"
       :titles="'There is a problem. Please try again later.'"
-      @errorCollab="showErrorCollabMessage"
       @closePopUp="closeProblemCollabAlter"
       message="Error!!"
       styleType="red"
@@ -310,6 +303,9 @@ onMounted(async () => {
   </div>
   <teleport to="body" v-if="showAddNewCollaborator">
     <AddNewCollaborator
+      @errorAddCollab="showErrorAddCollabMessage"
+      @errorNotExitCollab="showNotExitCollabMessage"
+      @errorExitCollab="showExitCollabMessage"
       @cancelCollab="cancelCollabPopUp"
       @errorCollab="showErrorMessage"
     ></AddNewCollaborator>

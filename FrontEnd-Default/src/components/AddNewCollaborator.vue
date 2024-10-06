@@ -7,7 +7,7 @@ import { userEmail } from '@/stores/UserManager'
 const deClareemit = defineEmits([
   'saveCollab',
   'cancelCollab',
-  'errorCollab',
+  'errorCollabs',
   'errorAddCollab',
   'errorNotExitCollab',
   'errorExitCollab'
@@ -83,6 +83,7 @@ const newCollab = async () => {
     deClareemit('cancelCollab', true)
     return
   } else {
+    deClareemit('errorExitCollab', true)
     collabManager.addCollaborator(newCollabBoards)
     console.log(collabManager.getCollaborators())
     // router.replace({ name: 'CollabList' })
