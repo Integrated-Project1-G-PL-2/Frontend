@@ -6,7 +6,6 @@ import { useCollaboratorManager } from '@/stores/CollaboratorManager'
 
 const deClareemit = defineEmits(['saveCollab', 'cancelCollab', 'errorCollab'])
 const isNameOverLimit = ref(false)
-const collaboratorManager = useCollaboratorManager()
 const MAX_LENGTH = 50
 const route = useRoute()
 const router = useRouter()
@@ -47,42 +46,37 @@ const checkNameLength = () => {
   }
 }
 
-// Handle creating a new collaborator
 const newCollab = async () => {
   console.log(selectedAccessLevel.value)
+
+  // Convert selectedAccessLevel to uppercase before sending
   const newCollabBoards = await addItem(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`,
     {
       email: newCollabEmailName.value,
-      access_right: selectedAccessLevel.value
+      access_right: selectedAccessLevel.value.toUpperCase() // Ensure it's uppercase
     }
   )
   console.log(newCollabBoards)
 
-  if (newCollabBoards == 401) {
+  if (
+    newCollabBoards == 401 ||
+    newCollabBoards == 403 ||
+    newCollabBoards == 404 ||
+    newCollabBoards == 409
+  ) {
     router.replace({ name: 'Login' })
-  }
-  if (newCollabBoards == 403) {
-    router.replace({ name: 'Login' })
-  }
-  if (newCollabBoards == 404) {
-    router.replace({ name: 'Login' })
-  }
-  if (newCollabBoards == 409) {
-    router.replace({ name: 'Login' })
+    return
   }
 
   if (!newCollabBoards.id) {
     deClareemit('errorCollab', (errorCollab.value = true))
     return
   }
+
   collabManager.addCollaborator(newCollabBoards)
   console.log(collabManager.getCollaborators())
-  // router.replace({ name: 'CollabList' })
-  // collaboratorManager.addCollaborator(newCollabBoards)
   deClareemit('cancelCollab', true)
-
-  // router.replace({ name: 'Task', params: { id: newCollabBoards.id } }) // Use the new board's ID
 }
 </script>
 
