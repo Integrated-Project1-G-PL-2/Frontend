@@ -4,7 +4,11 @@ import { deleteItemById, deleteAndTransferItem } from '@/utils/fetchUtils'
 import { useStatusManager } from '@/stores/StatusManager'
 import { useRoute, useRouter } from 'vue-router'
 import { useCollaboratorManager } from '@/stores/CollaboratorManager'
-const deClareemit = defineEmits(['cancelPopUp', 'confirmPopUp','NameCollabBoard'])
+const deClareemit = defineEmits([
+  'cancelPopUp',
+  'confirmPopUp',
+  'NameCollabBoard'
+])
 
 const props = defineProps(['isChange', 'isRemove', 'isLeave', 'operate'])
 const error = ref(false)
@@ -66,7 +70,7 @@ const updateCollaboratorAccessRight = (collabOid, newRight) => {
 
         <div class="w-[70%] h-[100%]">
           <div class="itbkk-message pl-4 mt-4">
-            Do you want to leave this "" board?
+            Do you want to leave this board?
           </div>
         </div>
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">

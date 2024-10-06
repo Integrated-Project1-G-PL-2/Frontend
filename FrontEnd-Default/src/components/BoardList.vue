@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, reactive } from 'vue'
 import AddNewBoard from './../components/AddNewBoard.vue'
 import { userName } from '@/stores/UserManager'
 import { logout } from '@/stores/UserManager'
@@ -15,7 +15,7 @@ import {
   editItem
 } from '../utils/fetchUtils.js'
 import ChangeRemoveLeaveCollab from './../components/ChangeRemoveLeaveCollab.vue'
-const emits = defineEmits(['NameBoard', 'errorOccurred','NameCollabBoard'])
+const emits = defineEmits(['NameBoard', 'errorOccurred', 'NameCollabBoard'])
 const router = useRouter()
 const route = useRoute()
 const isLeave = ref()
@@ -25,6 +25,7 @@ const operation = ref('')
 const boardsList = boardManager.getBoards()
 const boardCollabList = collaboratorManager.getCollaborators()
 const error = ref(false)
+const collabDetail = reactive({})
 const errorPrivate = ref(false)
 
 const closeProblemAlter = () => {
@@ -168,7 +169,9 @@ const closeLeave = function () {
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
         >
           <div
-           v-for="(board, index) in boardsList.filter(board => board.role == 'OWNER')"
+            v-for="(board, index) in boardsList.filter(
+              (board) => board.role == 'OWNER'
+            )"
             :key="board.id.boardId"
             class="itbkk-personal-item bg-white border rounded-lg shadow-md p-4 flex flex-col space-y-2 hover:bg-gray-100 hover:text-sky-500"
           >
@@ -220,7 +223,9 @@ const closeLeave = function () {
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
         >
           <div
-            v-for="(collab, index) in boardsList.filter(board => board.role != 'OWNER')"
+            v-for="(collab, index) in boardsList.filter(
+              (board) => board.role != 'OWNER'
+            )"
             :key="collab.id.collabId"
             class="itbkk-collab-item bg-white border rounded-lg shadow-md p-4 flex flex-col space-y-2 hover:bg-gray-100 hover:text-sky-500"
           >
@@ -231,7 +236,7 @@ const closeLeave = function () {
               class="itbkk-board-name text-xl font-semibold cursor-pointer"
               @click="
                 ;[
-                emits('NameCollabBoard', collab.board.name),
+                  emits('NameCollabBoard', collab.board.name),
                   router.replace({
                     name: 'Task',
                     params: { id: collab.id.boardId }
@@ -247,9 +252,7 @@ const closeLeave = function () {
               }}
             </div>
             <div class="itbkk-owner-name text-sm text-gray-500">
-              <p>
-                Owner : {{ collab.localUser.username}}
-              </p>
+              <p>Owner : {{ collab.localUser.username }}</p>
             </div>
             <div class="itbkk-access-right text-sm text-gray-500">
               <p>
@@ -274,6 +277,7 @@ const closeLeave = function () {
     </div>
     <teleport to="body" v-if="leaveCollab">
       <ChangeRemoveLeaveCollab
+        :collabId="collabDetail"
         @cancelPopUp="closeLeave"
         :NameCollabBoard="NameCollabBoard"
         :isLeave="isLeave"
