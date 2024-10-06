@@ -26,9 +26,12 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 // Check if the input is a valid email and not the owner's email
 const validateEmail = () => {
+  const email = newCollabEmailName.value
+
+  // Allow if the email is valid and does not match the owner's email, OR if it has the @ad.sit.kmutt.ac.th domain
   isInvalidEmail.value =
-    !emailRegex.test(newCollabEmailName.value) ||
-    newCollabEmailName.value === ownerEmail.value
+    (!emailRegex.test(email) || email === ownerEmail.value) &&
+    !email.includes('@ad.sit.kmutt.ac.th')
 }
 
 // Check length of the collaborator email and enforce the limit
@@ -51,7 +54,7 @@ const newCollab = async () => {
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`,
     {
       email: newCollabEmailName.value,
-      access_right:selectedAccessLevel.value
+      access_right: selectedAccessLevel.value
     }
   )
   console.log(newCollabBoards)
@@ -78,7 +81,7 @@ const newCollab = async () => {
   // router.replace({ name: 'CollabList' })
   // collaboratorManager.addCollaborator(newCollabBoards)
   deClareemit('cancelCollab', true)
-  
+
   // router.replace({ name: 'Task', params: { id: newCollabBoards.id } }) // Use the new board's ID
 }
 </script>
