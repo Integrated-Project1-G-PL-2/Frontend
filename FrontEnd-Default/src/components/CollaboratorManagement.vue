@@ -105,11 +105,13 @@ const showErrorMessage = function () {
 }
 
 onMounted(async () => {
-  const collab = await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`)
+  const collab = await getItems(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`
+  )
   // boardCollabList.value = collab
 
   collaboratorManager.setCollaborators(collab)
- console.log(collaboratorManager.getCollaborators())
+  console.log(collaboratorManager.getCollaborators())
 })
 </script>
 
@@ -162,6 +164,7 @@ onMounted(async () => {
       @closePopUp="closePermissionAlter"
       message="Error!!"
       styleType="red"
+      @errorAddCollab="showErrorAddCollabMessage"
     />
     <AlertPopUp
       v-if="closeUser"
@@ -274,7 +277,7 @@ onMounted(async () => {
                 id="accessLevel"
                 class="itbkk-access-right w-full border border-gray-300 rounded-md p-2"
               >
-                <option value="VISITOR">{{collab.access_right}}</option>
+                <option value="VISITOR">{{ collab.access_right }}</option>
               </select>
             </div>
           </td>

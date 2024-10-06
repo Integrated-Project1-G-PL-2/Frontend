@@ -51,34 +51,44 @@ const newCollab = async () => {
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`,
     {
       email: newCollabEmailName.value,
-      access_right:selectedAccessLevel.value
+      access_right: selectedAccessLevel.value
     }
   )
   console.log(newCollabBoards)
 
   if (newCollabBoards == 401) {
+    deClareemit('cancelCollab', true)
     router.replace({ name: 'Login' })
+    return
   }
   if (newCollabBoards == 403) {
-    router.replace({ name: 'Login' })
-  }
-  if (newCollabBoards == 404) {
-    router.replace({ name: 'Login' })
-  }
-  if (newCollabBoards == 409) {
-    router.replace({ name: 'Login' })
+    deClareemit('errorAddCollab', true)
+    deClareemit('cancelCollab', true)
+    return
+  } else if (newCollabBoards == 404) {
+    deClareemit('errorNotExitCollab', true)
+    deClareemit('cancelCollab', true)
+    return
+  } else if (newCollabBoards == 409) {
+    deClareemit('errorExitCollab', true)
+    deClareemit('cancelCollab', true)
+    return
+  } else {
+    collabManager.addCollaborator(newCollabBoards)
+    console.log(collabManager.getCollaborators())
+    // router.replace({ name: 'CollabList' })
+    // collaboratorManager.addCollaborator(newCollabBoards)
+    deClareemit('cancelCollab', true)
   }
 
   // if (!newCollabBoards.id) {
   //   deClareemit('errorCollab', (errorCollab.value = true))
   //   return
   // }
-  collabManager.addCollaborator(newCollabBoards)
-  console.log(collabManager.getCollaborators())
+
   // router.replace({ name: 'CollabList' })
   // collaboratorManager.addCollaborator(newCollabBoards)
-  deClareemit('cancelCollab', true)
-  
+
   // router.replace({ name: 'Task', params: { id: newCollabBoards.id } }) // Use the new board's ID
 }
 </script>

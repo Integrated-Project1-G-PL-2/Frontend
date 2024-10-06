@@ -7,7 +7,8 @@ import { useCollaboratorManager } from '@/stores/CollaboratorManager'
 const deClareemit = defineEmits([
   'cancelPopUp',
   'confirmPopUp',
-  'NameCollabBoard'
+  'NameCollabBoard',
+  'collabId'
 ])
 
 const props = defineProps(['isChange', 'isRemove', 'isLeave', 'operate'])
@@ -70,7 +71,7 @@ const updateCollaboratorAccessRight = (collabOid, newRight) => {
 
         <div class="w-[70%] h-[100%]">
           <div class="itbkk-message pl-4 mt-4">
-            Do you want to leave this board?
+            Do you want to leave this "{{ props.collabId }}" board?
           </div>
         </div>
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
