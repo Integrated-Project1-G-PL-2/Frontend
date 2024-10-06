@@ -38,8 +38,10 @@ const closeNotCollaborator = ref(false)
 const errorCollab = ref(false)
 const returnPage = ref(false)
 const route = useRoute()
+
 const collaboratorManager = useCollaboratorManager()
 const boardCollabList = ref(collaboratorManager.getCollaborators())
+let newName = ref(`${userName.value}`)
 // const boardCollabList = ref()
 const selectedAccessLevel = ref('VISITOR')
 const returnLoginPage = () => {
@@ -105,10 +107,12 @@ const showErrorMessage = function () {
 }
 
 onMounted(async () => {
-  const collab = await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`)
+  const collab = await getItems(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`
+  )
   boardCollabList.value = collab
   collaboratorManager.setCollaborators(collab)
- console.log(collaboratorManager.getCollaborators())
+  console.log(collaboratorManager.getCollaborators())
 })
 </script>
 
@@ -220,7 +224,7 @@ onMounted(async () => {
             @click="goBackToPersonalBoard"
             class="itbkk-board-name scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 hover:text-blue-500 mr-3 ml-2 mt-2 text-blue-400 my-3"
           >
-            {{ userName }}
+            {{ newName }}
           </button>
           <div
             class="scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 mr-3 mt-2 my-3 font-bold"
@@ -262,7 +266,11 @@ onMounted(async () => {
             class="itbkk-email px-4 py-3 cursor-default"
             :class="collab.email == null ? 'italic' : ''"
           >
-            {{ collab.localUser.email == null ? 'Unassigned' : collab.localUser.email }}
+            {{
+              collab.localUser.email == null
+                ? 'Unassigned'
+                : collab.localUser.email
+            }}
           </td>
           <td class="itbkk-status px-4 py-3 cursor-default">
             <div class="w-[20%]">
@@ -273,7 +281,7 @@ onMounted(async () => {
                 id="accessLevel"
                 class="itbkk-access-right w-full border border-gray-300 rounded-md p-2"
               >
-                <option value="VISITOR">{{collab.role}}</option>
+                <option value="VISITOR">{{ collab.role }}</option>
               </select>
             </div>
           </td>
