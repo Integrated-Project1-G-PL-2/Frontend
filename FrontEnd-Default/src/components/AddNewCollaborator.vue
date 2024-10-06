@@ -4,7 +4,14 @@ import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCollaboratorManager } from '@/stores/CollaboratorManager'
 import { userEmail } from '@/stores/UserManager'
-const deClareemit = defineEmits(['saveCollab', 'cancelCollab', 'errorCollab'])
+const deClareemit = defineEmits([
+  'saveCollab',
+  'cancelCollab',
+  'errorCollab',
+  'errorAddCollab',
+  'errorNotExitCollab',
+  'errorExitCollab'
+])
 const isNameOverLimit = ref(false)
 const collaboratorManager = useCollaboratorManager()
 const MAX_LENGTH = 50
@@ -17,7 +24,7 @@ const selectedAccessLevel = ref('READ')
 // Define newCollabEmailName with default value
 let newCollabEmailName = ref('')
 // Owner email (replace with actual owner email)
-const ownerEmail = ref('@ad.sit.kmutt.ac.th')
+const ownerEmail = ref('')
 // Invalid email flag
 const isInvalidEmail = ref(false)
 
@@ -31,21 +38,6 @@ const validateEmail = () => {
     newCollabEmailName.value === ownerEmail.value
   if (!newCollabEmailName.value) {
     isInvalidEmail.value = false
-
-    return
-  }
-
-  // ตรวจสอบว่า userEmail เป็น null หรือว่าง
-  if (userEmail) {
-    isInvalidEmail.value = true
-    return
-  }
-
-  // ตรวจสอบว่าอีเมลมี '@ad.sit.kmutt.ac.th'
-  if (newCollabEmailName.value.includes('@ad.sit.kmutt.ac.th')) {
-    isInvalidEmail.value = false // อีเมลนี้ถูกต้อง
-  } else {
-    isInvalidEmail.value = true // อีเมลไม่ถูกต้อง หากไม่พบ @ad.sit.kmutt.ac.th
   }
 }
 
@@ -78,8 +70,7 @@ const newCollab = async () => {
     deClareemit('cancelCollab', true)
     router.replace({ name: 'Login' })
     return
-  }
-  if (newCollabBoards == 403) {
+  } else if (newCollabBoards == 403) {
     deClareemit('errorAddCollab', true)
     deClareemit('cancelCollab', true)
     return
@@ -90,7 +81,6 @@ const newCollab = async () => {
   } else if (newCollabBoards == 409) {
     deClareemit('errorExitCollab', true)
     deClareemit('cancelCollab', true)
-    deClareemit('errorAddCollab', true)
     return
   } else {
     collabManager.addCollaborator(newCollabBoards)
@@ -109,6 +99,8 @@ const newCollab = async () => {
   // collaboratorManager.addCollaborator(newCollabBoards)
 
   // router.replace({ name: 'Task', params: { id: newCollabBoards.id } }) // Use the new board's ID
+  deClareemit('errorAddCollab', true)
+  deClareemit('cancelCollab', true)
 }
 </script>
 
@@ -210,10 +202,7 @@ const newCollab = async () => {
         <button
           class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"
           :disabled="
-            newCollabEmailName == '' ||
-            isNameOverLimit ||
-            isInvalidEmail ||
-            userEmail
+            newCollabEmailName == '' || isNameOverLimit || isInvalidEmail
           "
           @click="newCollab(newCollabEmailName)"
         >
