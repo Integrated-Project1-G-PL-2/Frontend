@@ -85,6 +85,7 @@ onMounted(async () => {
 
   boardManager.setCurrentBoard(currentBoard)
   taskManager.setTasks(tasksItem)
+  console.log(taskManager.getTasks())
   statusManager.setStatuses(
     await getItems(
       `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`

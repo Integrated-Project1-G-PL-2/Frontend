@@ -135,7 +135,7 @@ const handleClick = async () => {
       `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
       addOrUpdateTaskDetail
     )
-
+    console.log(newTask)
     router.replace({ name: 'Task' })
     if (newTask.status != '500') {
       taskManager.addTask(newTask)

@@ -106,7 +106,8 @@ const showErrorMessage = function () {
 
 onMounted(async () => {
   const collab = await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`)
-  boardCollabList.value = collab
+  // boardCollabList.value = collab
+
   collaboratorManager.setCollaborators(collab)
  console.log(collaboratorManager.getCollaborators())
 })
@@ -255,14 +256,14 @@ onMounted(async () => {
           <td class="itbkk-button-action px-4 py-3">{{ index + 1 }}</td>
           <td class="itbkk-name px-4 py-3">
             <div class="hover:text-sky-500 cursor-default">
-              {{ collab.localUser.name }}
+              {{ collab.name }}
             </div>
           </td>
           <td
             class="itbkk-email px-4 py-3 cursor-default"
             :class="collab.email == null ? 'italic' : ''"
           >
-            {{ collab.localUser.email == null ? 'Unassigned' : collab.localUser.email }}
+            {{ collab.email == null ? 'Unassigned' : collab.email }}
           </td>
           <td class="itbkk-status px-4 py-3 cursor-default">
             <div class="w-[20%]">
@@ -273,7 +274,7 @@ onMounted(async () => {
                 id="accessLevel"
                 class="itbkk-access-right w-full border border-gray-300 rounded-md p-2"
               >
-                <option value="VISITOR">{{collab.role}}</option>
+                <option value="VISITOR">{{collab.access_right}}</option>
               </select>
             </div>
           </td>

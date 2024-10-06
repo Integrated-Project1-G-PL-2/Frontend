@@ -69,10 +69,10 @@ const newCollab = async () => {
     router.replace({ name: 'Login' })
   }
 
-  if (!newCollabBoards.id) {
-    deClareemit('errorCollab', (errorCollab.value = true))
-    return
-  }
+  // if (!newCollabBoards.id) {
+  //   deClareemit('errorCollab', (errorCollab.value = true))
+  //   return
+  // }
   collabManager.addCollaborator(newCollabBoards)
   console.log(collabManager.getCollaborators())
   // router.replace({ name: 'CollabList' })
