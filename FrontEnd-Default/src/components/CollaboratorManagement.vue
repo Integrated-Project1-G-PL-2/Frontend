@@ -270,13 +270,12 @@ onMounted(async () => {
             {{ collab.email == null ? 'Unassigned' : collab.email }}
           </td>
           <td class="itbkk-status px-4 py-3 cursor-default">
-            <div class="w-[20%]">
-              <label for="accessLevel" class="block mb-1">Access Right</label>
+            <div class="w-[50%]">
               <select
                 @click="openChangeCollab"
                 v-model="selectedAccessLevel"
                 id="accessLevel"
-                class="itbkk-access-right w-full border border-gray-300 rounded-md p-2"
+                class="itbkk-access-right w-full border border-gray-300 rounded-md p-2 w"
               >
                 <option value="VISITOR">{{ collab.access_right }}</option>
               </select>
