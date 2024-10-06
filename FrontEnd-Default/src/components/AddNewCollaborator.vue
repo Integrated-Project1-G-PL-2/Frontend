@@ -3,7 +3,7 @@ import { addItem } from '@/utils/fetchUtils'
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCollaboratorManager } from '@/stores/CollaboratorManager'
-import { userName } from '@/stores/UserManager'
+import { userEmail } from '@/stores/UserManager'
 const deClareemit = defineEmits(['saveCollab', 'cancelCollab', 'errorCollab'])
 const isNameOverLimit = ref(false)
 const collaboratorManager = useCollaboratorManager()
@@ -17,24 +17,35 @@ const selectedAccessLevel = ref('READ')
 // Define newCollabEmailName with default value
 let newCollabEmailName = ref('')
 // Owner email (replace with actual owner email)
-const ownerEmail = ref('owner@example.com')
+const ownerEmail = ref('@ad.sit.kmutt.ac.th')
 // Invalid email flag
 const isInvalidEmail = ref(false)
 
 // Email validation regex
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-// Check if the input is a valid email and not the owner's email
 const validateEmail = () => {
   // ตรวจสอบ email ด้วย regex และตรวจสอบว่าไม่ซ้ำกับ ownerEmail
   isInvalidEmail.value =
     !emailRegex.test(newCollabEmailName.value) ||
     newCollabEmailName.value === ownerEmail.value
+  if (!newCollabEmailName.value) {
+    isInvalidEmail.value = false
 
-  // ตรวจสอบ userName ว่าเป็น null หรือว่าง
-  if (!userName || userName.trim() === '') {
-    isInvalidEmail.value = false // หาก userName ว่างหรือถูกลบจนเป็น null ให้เป็น false
     return
+  }
+
+  // ตรวจสอบว่า userEmail เป็น null หรือว่าง
+  if (userEmail) {
+    isInvalidEmail.value = true
+    return
+  }
+
+  // ตรวจสอบว่าอีเมลมี '@ad.sit.kmutt.ac.th'
+  if (newCollabEmailName.value.includes('@ad.sit.kmutt.ac.th')) {
+    isInvalidEmail.value = false // อีเมลนี้ถูกต้อง
+  } else {
+    isInvalidEmail.value = true // อีเมลไม่ถูกต้อง หากไม่พบ @ad.sit.kmutt.ac.th
   }
 }
 
@@ -199,7 +210,10 @@ const newCollab = async () => {
         <button
           class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"
           :disabled="
-            newCollabEmailName == '' || isNameOverLimit || isInvalidEmail
+            newCollabEmailName == '' ||
+            isNameOverLimit ||
+            isInvalidEmail ||
+            userEmail
           "
           @click="newCollab(newCollabEmailName)"
         >
