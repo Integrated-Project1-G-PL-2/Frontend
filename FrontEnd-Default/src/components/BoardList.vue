@@ -167,7 +167,9 @@ const closeLeave = function () {
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
         >
           <div
-            v-for="(board, index) in boardsList"
+            v-for="(board, index) in boardsList.filter(
+              (board) => board.role == 'OWNER'
+            )"
             :key="board.id.boardId"
             class="itbkk-personal-item bg-white border rounded-lg shadow-md p-4 flex flex-col space-y-2 hover:bg-gray-100 hover:text-sky-500"
           >
@@ -219,7 +221,9 @@ const closeLeave = function () {
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
         >
           <div
-            v-for="(collab, index) in boardCollabList"
+            v-for="(collab, index) in boardsList.filter(
+              (board) => board.role != 'OWNER'
+            )"
             :key="collab.id.collabId"
             class="itbkk-collab-item bg-white border rounded-lg shadow-md p-4 flex flex-col space-y-2 hover:bg-gray-100 hover:text-sky-500"
           >
@@ -240,15 +244,13 @@ const closeLeave = function () {
             >
               Name :
               {{
-                collab.collab?.name == undefined
+                collab.board?.name == undefined
                   ? collab.name
-                  : collab.collab.name
+                  : collab.board.name
               }}
             </div>
             <div class="itbkk-owner-name text-sm text-gray-500">
-              <p>
-                Owner : {{ collab.role == undefined ? 'owner' : collab.role }}
-              </p>
+              <p>Owner : ไม่ได้ถุยชื่อเจ้าของมา</p>
             </div>
             <div class="itbkk-access-right text-sm text-gray-500">
               <p>
