@@ -104,6 +104,9 @@ const showErrorMessage = function () {
   errorCollab.value = true
   showAddNewCollaborator.value = false
 }
+const showErrorAddCollabMessage = function () {
+  closePermission.value = true
+}
 
 onMounted(async () => {
   const collab = await getItems(

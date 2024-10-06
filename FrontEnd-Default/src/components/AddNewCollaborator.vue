@@ -3,7 +3,7 @@ import { addItem } from '@/utils/fetchUtils'
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCollaboratorManager } from '@/stores/CollaboratorManager'
-
+import { userName } from '@/stores/UserManager'
 const deClareemit = defineEmits(['saveCollab', 'cancelCollab', 'errorCollab'])
 const isNameOverLimit = ref(false)
 const collaboratorManager = useCollaboratorManager()
@@ -26,9 +26,16 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 // Check if the input is a valid email and not the owner's email
 const validateEmail = () => {
+  // ตรวจสอบ email ด้วย regex และตรวจสอบว่าไม่ซ้ำกับ ownerEmail
   isInvalidEmail.value =
     !emailRegex.test(newCollabEmailName.value) ||
     newCollabEmailName.value === ownerEmail.value
+
+  // ตรวจสอบ userName ว่าเป็น null หรือว่าง
+  if (!userName || userName.trim() === '') {
+    isInvalidEmail.value = false // หาก userName ว่างหรือถูกลบจนเป็น null ให้เป็น false
+    return
+  }
 }
 
 // Check length of the collaborator email and enforce the limit
@@ -72,6 +79,7 @@ const newCollab = async () => {
   } else if (newCollabBoards == 409) {
     deClareemit('errorExitCollab', true)
     deClareemit('cancelCollab', true)
+    deClareemit('errorAddCollab', true)
     return
   } else {
     collabManager.addCollaborator(newCollabBoards)
@@ -150,8 +158,25 @@ const newCollab = async () => {
                   Limit text to 50 characters or less.
                 </div>
               </div>
-              <div v-if="isInvalidEmail" class="text-sm text-red-600 mt-1">
-                Invalid email or cannot be owner's email.
+              <div
+                style="display: flex; align-items: center"
+                v-if="isInvalidEmail"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  class="w-[15px] text-red-600"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 01.67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 11-.671-1.34l.041-.022zM12 9a.75.75 0 100-1.5.75.75 0 000 1.5z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                <div class="text-sm text-red-600">
+                  Invalid email or cannot be owner's email.
+                </div>
               </div>
             </div>
 
