@@ -82,7 +82,20 @@ const newCollab = async () => {
     deClareemit('errorExitCollab', true)
     deClareemit('cancelCollab', true)
     return
-  } else {
+  }
+  // else if (
+  //   newCollabBoards.value !== '201' &&
+  //   newCollabBoards.value !== '401' &&
+  //   newCollabBoards.value !== '403' &&
+  //   newCollabBoards.value !== '404' &&
+  //   newCollabBoards.value !== '409'
+  // ) {
+  //   deClareemit('errorCollabs', true)
+  //   deClareemit('cancelCollab', true)
+  //   return
+  // }
+  else {
+    console.log('d')
     collabManager.addCollaborator(newCollabBoards)
     console.log(collabManager.getCollaborators())
     // router.replace({ name: 'CollabList' })
@@ -99,8 +112,6 @@ const newCollab = async () => {
   // collaboratorManager.addCollaborator(newCollabBoards)
 
   // router.replace({ name: 'Task', params: { id: newCollabBoards.id } }) // Use the new board's ID
-  deClareemit('errorAddCollab', true)
-  deClareemit('cancelCollab', true)
 }
 </script>
 
