@@ -14,7 +14,8 @@ const deClareemit = defineEmits([
   'permissionRemovePopUp',
   'errorRemoveCollabs',
   'notCollabPopUp',
-  'confirmLeaveErrorPopUp'
+  'confirmLeaveErrorPopUp',
+  'confirmAccessPopUp'
 ])
 
 const props = defineProps([
@@ -88,12 +89,13 @@ const removeCollaborator = async (deleteId) => {
   }
 }
 
-const updateCollaboratorAccessRight = (collabOid, newRight) => {
-  // Assuming you have a reactive `collaborators` array
+const updateCollaboratorAccessRight = (collabOid) => {
   const collaborator = collaborators.find((collab) => collab.id === collabOid)
   if (collaborator) {
-    collaborator.accessRight = newRight // Update the access right in the array
+    collaborator.accessRight =
+      collaborator.accessRight === 'READ' ? 'WRITE' : 'READ'
   }
+  deClareemit('confirmAccessPopUp', true)
 }
 </script>
 
