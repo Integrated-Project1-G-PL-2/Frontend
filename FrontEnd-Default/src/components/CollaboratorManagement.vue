@@ -37,6 +37,8 @@ const closeRemoveRight = ref(false)
 const closeNotCollaborator = ref(false)
 const errorCollab = ref(false)
 const returnPage = ref(false)
+const errorRemoveCollab = ref(false)
+const errorChangeCollab = ref(false)
 const route = useRoute()
 const collaboratorManager = useCollaboratorManager()
 const boardCollabList = ref(collaboratorManager.getCollaborators())
@@ -135,6 +137,27 @@ onMounted(async () => {
     userName.value = storedUserName
   }
 })
+const openPermissionCollabError = function () {
+  closeRemoveRight.value = true
+}
+const openNotCollabError = function () {
+  closeNotCollaborator.value = true
+}
+const openErrorCollab = function () {
+  errorRemoveCollab.value = true
+}
+const closeProblemErrorRemoveAlter = function () {
+  errorRemoveCollab.value = false
+}
+const openPermissionChangeError = function () {
+  closeAccessRight.value = true
+}
+const openErrorChangeCollab = function () {
+  errorChangeCollab.value = true
+}
+const closeProblemChangeCollabAlter = function () {
+  errorChangeCollab.value = false
+}
 </script>
 
 <template>
@@ -217,7 +240,7 @@ onMounted(async () => {
     />
     <AlertPopUp
       v-if="closeNotCollaborator"
-      :titles="'<<name>> is not a collaborator.'"
+      :titles="collabDetail + ' is not a collaborator.'"
       @closePopUp="closeNotCollabAlter"
       message="Error!!"
       styleType="red"
@@ -233,6 +256,20 @@ onMounted(async () => {
       v-if="errorCollab"
       :titles="'There is a problem. Please try again later.'"
       @closePopUp="closeProblemCollabAlter"
+      message="Error!!"
+      styleType="red"
+    />
+    <AlertPopUp
+      v-if="errorRemoveCollab"
+      :titles="'There is a problem. Please try again later.'"
+      @closePopUp="closeProblemErrorRemoveAlter"
+      message="Error!!"
+      styleType="red"
+    />
+    <AlertPopUp
+      v-if="errorChangeCollab"
+      :titles="'There is a problem. Please try again later.'"
+      @closePopUp="closeProblemChangeCollabAlter"
       message="Error!!"
       styleType="red"
     />
@@ -326,6 +363,8 @@ onMounted(async () => {
     <ChangeRemoveLeaveCollab
       @cancelPopUp="closeChange"
       @confirmChangePopUp="closeChangeCollab"
+      @permissionAccessPopUp="openPermissionChangeError"
+      @errorChangeCollabs="openErrorChangeCollab"
       :isChange="isChange"
       :NameChangeCollabBoard="collabDetail"
       :operate="operation"
@@ -335,6 +374,9 @@ onMounted(async () => {
     <ChangeRemoveLeaveCollab
       @cancelPopUp="closeRemove"
       @confirmDeletePopUp="closeRemoveCollab"
+      @permissionRemovePopUp="openPermissionCollabError"
+      @notCollabPopUp="openNotCollabError"
+      @errorRemoveCollabs="openErrorCollab"
       :isRemove="isRemove"
       :operate="operation"
       :NameRemoveCollabBoard="collabDetail"

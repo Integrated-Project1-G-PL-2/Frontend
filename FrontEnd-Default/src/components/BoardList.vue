@@ -27,7 +27,7 @@ const boardCollabList = collaboratorManager.getCollaborators()
 const error = ref(false)
 const collabDetail = reactive({})
 const errorPrivate = ref(false)
-
+const errorLeave = ref(false)
 const closeProblemAlter = () => {
   error.value = false
 }
@@ -87,6 +87,12 @@ const closeLeaveCollab = function () {
   leaveCollab.value = false
   isLeave.value = false
 }
+const errorLeavePopup = function () {
+  errorLeave.value = true
+}
+const closeProblemLeaveAlter = function () {
+  errorLeave.value = false
+}
 </script>
 
 <template>
@@ -143,6 +149,13 @@ const closeLeaveCollab = function () {
           v-if="error"
           :titles="'There is a problem. Please try again later.'"
           @closePopUp="closeProblemAlter"
+          message="Error!!"
+          styleType="red"
+        />
+        <AlertPopUp
+          v-if="errorLeave"
+          :titles="'There is a problem. Please try again later.'"
+          @closePopUp="closeProblemLeaveAlter"
           message="Error!!"
           styleType="red"
         />
@@ -281,6 +294,7 @@ const closeLeaveCollab = function () {
         :NameLeaveCollabBoard="collabDetail"
         @confirmLeavePopUp="closeLeaveCollab"
         @cancelPopUp="closeLeaveCollab"
+        @errorLeaveCollabs="errorLeavePopup"
         :isLeave="isLeave"
         :operate="operation"
       ></ChangeRemoveLeaveCollab>

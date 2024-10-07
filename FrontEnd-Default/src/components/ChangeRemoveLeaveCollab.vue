@@ -11,7 +11,8 @@ const deClareemit = defineEmits([
   'confirmLeavePopUp',
   'collabId',
   'permissionRemovePopUp',
-  'errorCollabs',
+  'errorRemoveCollabs',
+  'errorChangeCollabs',
   'notCollabPopUp',
   'confirmLeaveErrorPopUp',
   'permissionAccessPopUp'
@@ -49,7 +50,7 @@ const confirmLeaveCollab = async function (leaveId) {
   //   deletedCollab.value !== '403' &&
   //   deletedCollab.value !== '404''
   // ) {
-  //   deClareemit('errorCollabs', true)
+  //   deClareemit('errorLeaveCollabs', true)
   //   deClareemit('confirmDeletePopUp', true)
   //   return
   // }
@@ -82,7 +83,7 @@ const removeCollaborator = async (deleteId) => {
   //   deletedCollab.value !== '403' &&
   //   deletedCollab.value !== '404''
   // ) {
-  //   deClareemit('errorCollabs', true)
+  //   deClareemit('errorRemoveCollabs', true)
   //   deClareemit('confirmDeletePopUp', true)
   //   return
   // }
@@ -105,7 +106,7 @@ const updateCollaboratorAccessRight = (collabOid) => {
     deClareemit('confirmChangePopUp', true)
     return
     // } else if ( collaborator.value !== '200' && collaborator.value !== 200 && collaborator.value !== 401 &&collaborator.value !== 403 ) {
-    //   deClareemit('errorCollabs', true)
+    //   deClareemit('errorChangeCollabs', true)
     //   deClareemit('confirmChangePopUp', true)
     //   return
     //
