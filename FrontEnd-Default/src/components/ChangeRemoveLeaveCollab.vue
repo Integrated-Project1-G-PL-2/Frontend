@@ -12,9 +12,10 @@ const deClareemit = defineEmits([
   'NameCollabBoard',
   'collabId',
   'permissionRemovePopUp',
-  'errorRemoveCollabs',
+  'errorCollabs',
   'notCollabPopUp',
-  'confirmLeaveErrorPopUp'
+  'confirmLeaveErrorPopUp',
+  'permissionAccessPopUp'
 ])
 
 const props = defineProps([
@@ -42,11 +43,12 @@ const confirmLeaveCollab = async function (leaveId) {
     return
   } // else if (
   //   deletedCollab.value !== '200' &&
+  //   deletedCollab.value !== '200' &&
   //   deletedCollab.value !== '401' &&
   //   deletedCollab.value !== '403' &&
   //   deletedCollab.value !== '404''
   // ) {
-  //   deClareemit('errorRemoveCollabs', true)
+  //   deClareemit('errorCollabs', true)
   //   deClareemit('confirmDeletePopUp', true)
   //   return
   // }
@@ -73,12 +75,13 @@ const removeCollaborator = async (deleteId) => {
     deClareemit('confirmDeletePopUp', true)
     return
   } // else if (
+  //   deletedCollab.value !== '200' &&
   //   deletedCollab.value !== '201' &&
   //   deletedCollab.value !== '401' &&
   //   deletedCollab.value !== '403' &&
   //   deletedCollab.value !== '404''
   // ) {
-  //   deClareemit('errorRemoveCollabs', true)
+  //   deClareemit('errorCollabs', true)
   //   deClareemit('confirmDeletePopUp', true)
   //   return
   // }
@@ -92,11 +95,24 @@ const updateCollaboratorAccessRight = (collabOid) => {
   const collaborator = collaborators.findIndexById(
     (collab) => collab.id === collabOid
   )
-  if (collaborator) {
+  if (collaborator.value == 401) {
+    router.replace({ name: 'Login' })
+    deClareemit('confirmChangePopUp', true)
+    return
+  } else if (collaborator.value == 403) {
+    deClareemit('permissionAccessPopUp', true)
+    deClareemit('confirmChangePopUp', true)
+    return
+    // } else if ( collaborator.value !== '200' && collaborator.value !== 200 && collaborator.value !== 401 &&collaborator.value !== 403 ) {
+    //   deClareemit('errorCollabs', true)
+    //   deClareemit('confirmChangePopUp', true)
+    //   return
+    //
+  } else {
     collaborator.accessRight =
       collaborator.accessRight === 'READ' ? 'WRITE' : 'READ'
+    deClareemit('confirmChangePopUp', true)
   }
-  deClareemit('confirmChangePopUp', true)
 }
 </script>
 
