@@ -1,6 +1,6 @@
 <script setup>
 import { ref, reactive } from 'vue'
-import { deleteItemById, deleteAndTransferItem } from '@/utils/fetchUtils'
+import { deleteItemById } from '@/utils/fetchUtils'
 import { useStatusManager } from '@/stores/StatusManager'
 import { useRoute, useRouter } from 'vue-router'
 import { useCollaboratorManager } from '@/stores/CollaboratorManager'
@@ -44,7 +44,7 @@ const confirmLeaveCollab = async function () {
   deClareemit('confirmPopUp', true)
 }
 const removeCollaborator = async (collabOid) => {
-  deletedCollab.value = await deleteCollaborator(
+  deletedCollab.value = await deleteItemById(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collab`,
     deleteId
   )
@@ -52,9 +52,10 @@ const removeCollaborator = async (collabOid) => {
     deClareemit('cancelDetail', true)
     return
   }
-  collaboratorManager.deleteTask(collabOid)
+  collaboratorManager.deleteCollaborator(collabOid)
   deClareemit('confirmPopUp', true)
 }
+
 const updateCollaboratorAccessRight = (collabOid, newRight) => {
   // Assuming you have a reactive `collaborators` array
   const collaborator = collaborators.find((collab) => collab.id === collabOid)
