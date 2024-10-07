@@ -9,7 +9,6 @@ const deClareemit = defineEmits([
   'confirmDeletePopUp',
   'confirmChangePopUp',
   'confirmLeavePopUp',
-  'NameCollabBoard',
   'collabId',
   'permissionRemovePopUp',
   'errorCollabs',
@@ -23,7 +22,9 @@ const props = defineProps([
   'isRemove',
   'isLeave',
   'operate',
-  'NameCollabBoard'
+  'NameLeaveCollabBoard',
+  'NameRemoveCollabBoard',
+  'NameChangeCollabBoard'
 ])
 const error = ref(false)
 const router = useRouter()
@@ -129,7 +130,8 @@ const updateCollaboratorAccessRight = (collabOid) => {
 
         <div class="w-[70%] h-[100%]">
           <div class="itbkk-message pl-4 mt-4">
-            Do you want to leave this "{{ NameCollabBoard }}" board?
+            Do you want to leave this "{{ props.NameLeaveCollabBoard.value }}"
+            board?
           </div>
         </div>
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
@@ -162,7 +164,10 @@ const updateCollaboratorAccessRight = (collabOid) => {
 
         <div class="w-[70%] h-[100%]">
           <div class="itbkk-message pl-4 mt-4">
-            Do you want to change access right of " " to ""
+            Do you want to change access right of "
+            {{ props.NameChangeCollabBoard.value }}" to "{{
+              props.NameChangeCollabBoard.value
+            }}"
           </div>
         </div>
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
@@ -195,7 +200,8 @@ const updateCollaboratorAccessRight = (collabOid) => {
 
         <div class="w-[70%] h-[100%]">
           <div class="itbkk-message pl-4 mt-4">
-            Do you want to remove "" from the board?
+            Do you want to remove "{{ props.NameRemoveCollabBoard.value }}" from
+            the board?
           </div>
         </div>
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">

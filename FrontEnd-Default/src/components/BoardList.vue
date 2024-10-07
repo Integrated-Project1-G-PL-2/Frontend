@@ -77,10 +77,7 @@ const returnLoginPage = () => {
   returnPage.value = true
 }
 const openLeaveCollab = async function (boardId, collabOid) {
-  collabDetail.value = await getItemById(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/boards`,
-    boardId
-  )
+  collabDetail.value = boardsList
   isLeave.value = true
   leaveCollab.value = true
   operation.value = { boardId, collabOid }
@@ -281,8 +278,9 @@ const closeLeaveCollab = function () {
     </div>
     <teleport to="body" v-if="leaveCollab">
       <ChangeRemoveLeaveCollab
-        :NameCollabBoard="'NameCollabBoard'"
+        :NameLeaveCollabBoard="collabDetail"
         @confirmLeavePopUp="closeLeaveCollab"
+        @cancelPopUp="closeLeaveCollab"
         :isLeave="isLeave"
         :operate="operation"
       ></ChangeRemoveLeaveCollab>

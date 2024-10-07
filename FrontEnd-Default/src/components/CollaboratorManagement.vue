@@ -40,6 +40,7 @@ const returnPage = ref(false)
 const route = useRoute()
 const collaboratorManager = useCollaboratorManager()
 const boardCollabList = ref(collaboratorManager.getCollaborators())
+const collabDetail = reactive({})
 let newName = ref(`${userName.value}`)
 // const boardCollabList = ref()
 const selectedAccessLevel = ref('VISITOR')
@@ -62,14 +63,16 @@ const cancelCollabPopUp = function () {
 const goBackToHomeBoard = () => {
   router.replace({ name: 'Board' })
 }
-const openChangeCollab = function () {
+const openChangeCollab = async function () {
+  collabDetail.value = boardCollabList
   isChange.value = true
   changeCollab.value = true
 }
 const closeChange = function () {
   changeCollab.value = false
 }
-const openRemoveCollab = function () {
+const openRemoveCollab = async function () {
+  collabDetail.value = boardCollabList
   isRemove.value = true
   removeCollab.value = true
 }
@@ -324,6 +327,7 @@ onMounted(async () => {
       @cancelPopUp="closeChange"
       @confirmChangePopUp="closeChangeCollab"
       :isChange="isChange"
+      :NameChangeCollabBoard="collabDetail"
       :operate="operation"
     ></ChangeRemoveLeaveCollab>
   </teleport>
@@ -333,6 +337,7 @@ onMounted(async () => {
       @confirmDeletePopUp="closeRemoveCollab"
       :isRemove="isRemove"
       :operate="operation"
+      :NameRemoveCollabBoard="collabDetail"
     ></ChangeRemoveLeaveCollab>
   </teleport>
 </template>
