@@ -95,7 +95,6 @@ const newCollab = async () => {
   //   return
   // }
   else {
-    console.log('d')
     collabManager.addCollaborator(newCollabBoards)
     console.log(collabManager.getCollaborators())
     // router.replace({ name: 'CollabList' })

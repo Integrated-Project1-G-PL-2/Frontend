@@ -12,7 +12,9 @@ const deClareemit = defineEmits([
   'NameCollabBoard',
   'collabId',
   'permissionRemovePopUp',
-  'notCollabPopUp'
+  'errorRemoveCollabs',
+  'notCollabPopUp',
+  'confirmLeaveErrorPopUp'
 ])
 
 const props = defineProps([
@@ -27,30 +29,35 @@ const router = useRouter()
 const collaboratorManager = useCollaboratorManager()
 const route = useRoute()
 const deletedCollab = reactive({})
+const leaveCollab = reactive({})
 const collaborators = collaboratorManager.changeCollaboratorAccessRight()
-const confirmLeaveCollab = async function () {
-  try {
-    const response = await deleteItemById(
-      `/v3/boards/${route.params.id}/collabs`
-    )
-
-    if (response.status === 200) {
-      router.replace({ name: 'Board' }) // Redirect to the board page after successful delete
-    } else if (response.status === 401) {
-      router.replace({ name: 'Login' }) // Unauthorized, redirect to login
-    } else if (response.status === 403 || response.status === 404) {
-      router.replace({ name: 'Board' }) // Forbidden or Not Found, redirect to board page
-    } else {
-      error.value = true // Show error popup for other issues
-    }
-  } catch (err) {
-    error.value = true // Handle unexpected errors
+const confirmLeaveCollab = async function (leaveId) {
+  leaveCollab.value = await deleteItemById(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`,
+    leaveId
+  )
+  if (leaveCollab.value == '401') {
+    router.replace({ name: 'Login' })
+    deClareemit('confirmDeletePopUp', true)
+    return
+  } // else if (
+  //   deletedCollab.value !== '200' &&
+  //   deletedCollab.value !== '401' &&
+  //   deletedCollab.value !== '403' &&
+  //   deletedCollab.value !== '404''
+  // ) {
+  //   deClareemit('errorRemoveCollabs', true)
+  //   deClareemit('confirmDeletePopUp', true)
+  //   return
+  // }
+  else {
+    collaboratorManager.deleteCollaborator(leaveId)
+    deClareemit('confirmDeletePopUp', true)
   }
-  deClareemit('confirmDeletePopUp', true)
 }
 const removeCollaborator = async (deleteId) => {
   deletedCollab.value = await deleteItemById(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collab`,
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`,
     deleteId
   )
   if (deletedCollab.value == '401') {
@@ -65,7 +72,17 @@ const removeCollaborator = async (deleteId) => {
     deClareemit('notCollabPopUp', true)
     deClareemit('confirmDeletePopUp', true)
     return
-  } else {
+  } // else if (
+  //   deletedCollab.value !== '201' &&
+  //   deletedCollab.value !== '401' &&
+  //   deletedCollab.value !== '403' &&
+  //   deletedCollab.value !== '404''
+  // ) {
+  //   deClareemit('errorRemoveCollabs', true)
+  //   deClareemit('confirmDeletePopUp', true)
+  //   return
+  // }
+  else {
     collaboratorManager.deleteCollaborator(deleteId)
     deClareemit('confirmDeletePopUp', true)
   }
@@ -93,14 +110,13 @@ const updateCollaboratorAccessRight = (collabOid, newRight) => {
 
         <div class="w-[70%] h-[100%]">
           <div class="itbkk-message pl-4 mt-4">
-            Do you want to leave this "{{ props.NameCollabBoard.board.value }}"
-            board?
+            Do you want to leave this "{{ NameCollabBoard }}" board?
           </div>
         </div>
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
           <button
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
-            @click="confirmLeaveCollab"
+            @click="confirmLeaveCollab()"
           >
             <div class="btn text-center">Confirm</div>
           </button>
@@ -133,7 +149,7 @@ const updateCollaboratorAccessRight = (collabOid, newRight) => {
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
           <button
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
-            @click="updateCollaboratorAccessRight"
+            @click="updateCollaboratorAccessRight()"
           >
             <div class="btn text-center">Confirm</div>
           </button>
