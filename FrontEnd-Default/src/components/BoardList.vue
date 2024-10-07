@@ -277,9 +277,8 @@ const closeLeave = function () {
     </div>
     <teleport to="body" v-if="leaveCollab">
       <ChangeRemoveLeaveCollab
-        :collabId="collabDetail"
+        :NameCollabBoard="collab.board.name"
         @cancelPopUp="closeLeave"
-        :NameCollabBoard="NameCollabBoard"
         :isLeave="isLeave"
         :operate="operation"
       ></ChangeRemoveLeaveCollab>
