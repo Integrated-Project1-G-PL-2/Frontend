@@ -22,6 +22,7 @@ const error = ref(false)
 const router = useRouter()
 const collaboratorManager = useCollaboratorManager()
 const route = useRoute()
+const deletedCollab = reactive({})
 const collaborators = collaboratorManager.changeCollaboratorAccessRight()
 const confirmLeaveCollab = async function () {
   try {
@@ -43,7 +44,7 @@ const confirmLeaveCollab = async function () {
   }
   deClareemit('confirmPopUp', true)
 }
-const removeCollaborator = async (collabOid) => {
+const removeCollaborator = async (deleteId) => {
   deletedCollab.value = await deleteItemById(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collab`,
     deleteId
@@ -52,8 +53,8 @@ const removeCollaborator = async (collabOid) => {
     deClareemit('cancelDetail', true)
     return
   }
-  collaboratorManager.deleteCollaborator(collabOid)
-  deClareemit('confirmPopUp', true)
+  collaboratorManager.deleteCollaborator(deleteId)
+  deClareemit('cancelDetail', true)
 }
 
 const updateCollaboratorAccessRight = (collabOid, newRight) => {
