@@ -10,7 +10,9 @@ const deClareemit = defineEmits([
   'confirmChangePopUp',
   'confirmLeavePopUp',
   'NameCollabBoard',
-  'collabId'
+  'collabId',
+  'permissionRemovePopUp',
+  'notCollabPopUp'
 ])
 
 const props = defineProps([
@@ -51,12 +53,22 @@ const removeCollaborator = async (deleteId) => {
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collab`,
     deleteId
   )
-  if (deletedCollab.value == '404') {
-    deClareemit('cancelDetail', true)
+  if (deletedCollab.value == '401') {
+    router.replace({ name: 'Login' })
+    deClareemit('confirmDeletePopUp', true)
     return
+  } else if (deletedCollab.value == '403') {
+    deClareemit('permissionRemovePopUp', true)
+    deClareemit('confirmDeletePopUp', true)
+    return
+  } else if (deletedCollab.value == '404') {
+    deClareemit('notCollabPopUp', true)
+    deClareemit('confirmDeletePopUp', true)
+    return
+  } else {
+    collaboratorManager.deleteCollaborator(deleteId)
+    deClareemit('confirmDeletePopUp', true)
   }
-  collaboratorManager.deleteCollaborator(deleteId)
-  deClareemit('cancelDetail', true)
 }
 
 const updateCollaboratorAccessRight = (collabOid, newRight) => {
@@ -154,7 +166,7 @@ const updateCollaboratorAccessRight = (collabOid, newRight) => {
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
           <button
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
-            @click="removeCollaborator(props.isRemove.value.id)"
+            @click="removeCollaborator()"
           >
             <div class="btn text-center">Confirm</div>
           </button>
