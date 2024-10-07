@@ -76,7 +76,11 @@ const returnLoginPage = () => {
   router.replace({ name: 'Login' })
   returnPage.value = true
 }
-const openLeaveCollab = function (boardId, collabOid) {
+const openLeaveCollab = async function (boardId, collabOid) {
+  collabDetail.value = await getItemById(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/boards`,
+    boardId
+  )
   isLeave.value = true
   leaveCollab.value = true
   operation.value = { boardId, collabOid }
