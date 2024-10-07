@@ -81,7 +81,8 @@ const openLeaveCollab = function (boardId, collabOid) {
   leaveCollab.value = true
   operation.value = { boardId, collabOid }
 }
-const closeLeave = function () {
+
+const closeLeaveCollab = function () {
   leaveCollab.value = false
   isLeave.value = false
 }
@@ -277,7 +278,7 @@ const closeLeave = function () {
     <teleport to="body" v-if="leaveCollab">
       <ChangeRemoveLeaveCollab
         :NameCollabBoard="boardCollabList"
-        @cancelPopUp="closeLeave"
+        @confirmLeavePopUp="closeLeaveCollab"
         :isLeave="isLeave"
         :operate="operation"
       ></ChangeRemoveLeaveCollab>

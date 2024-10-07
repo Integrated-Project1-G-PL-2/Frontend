@@ -6,7 +6,9 @@ import { useRoute, useRouter } from 'vue-router'
 import { useCollaboratorManager } from '@/stores/CollaboratorManager'
 const deClareemit = defineEmits([
   'cancelPopUp',
-  'confirmPopUp',
+  'confirmDeletePopUp',
+  'confirmChangePopUp',
+  'confirmLeavePopUp',
   'NameCollabBoard',
   'collabId'
 ])
@@ -42,7 +44,7 @@ const confirmLeaveCollab = async function () {
   } catch (err) {
     error.value = true // Handle unexpected errors
   }
-  deClareemit('confirmPopUp', true)
+  deClareemit('confirmDeletePopUp', true)
 }
 const removeCollaborator = async (deleteId) => {
   deletedCollab.value = await deleteItemById(

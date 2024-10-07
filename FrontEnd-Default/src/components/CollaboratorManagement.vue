@@ -113,7 +113,12 @@ const showNotExitCollabMessage = function () {
 const showExitCollabMessage = function () {
   closeCollaborator.value = true
 }
-
+const closeRemoveCollab = function () {
+  removeCollab.value = false
+}
+const closeChangeCollab = function () {
+  changeCollab.value = false
+}
 onMounted(async () => {
   const collab = await getItems(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`
@@ -317,6 +322,7 @@ onMounted(async () => {
   <teleport to="body" v-if="changeCollab">
     <ChangeRemoveLeaveCollab
       @cancelPopUp="closeChange"
+      @confirmChangePopUp="closeChangeCollab"
       :isChange="isChange"
       :operate="operation"
     ></ChangeRemoveLeaveCollab>
@@ -324,6 +330,7 @@ onMounted(async () => {
   <teleport to="body" v-if="removeCollab">
     <ChangeRemoveLeaveCollab
       @cancelPopUp="closeRemove"
+      @confirmDeletePopUp="closeRemoveCollab"
       :isRemove="isRemove"
       :operate="operation"
     ></ChangeRemoveLeaveCollab>
