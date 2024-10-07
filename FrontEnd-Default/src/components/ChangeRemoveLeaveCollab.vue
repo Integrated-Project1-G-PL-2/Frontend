@@ -11,16 +11,13 @@ const deClareemit = defineEmits([
   'collabId'
 ])
 
-const props = defineProps({
-  isChange: Boolean,
-  isRemove: Boolean,
-  isLeave: Boolean,
-  operate: String,
-  NameCollabBoard: {
-    type: String,
-    required: true
-  }
-})
+const props = defineProps([
+  'isChange',
+  'isRemove',
+  'isLeave',
+  'operate',
+  'NameCollabBoard'
+])
 const error = ref(false)
 const router = useRouter()
 const collaboratorManager = useCollaboratorManager()
@@ -80,7 +77,8 @@ const updateCollaboratorAccessRight = (collabOid, newRight) => {
 
         <div class="w-[70%] h-[100%]">
           <div class="itbkk-message pl-4 mt-4">
-            Do you want to leave this "{{ NameCollabBoard }}" board?
+            Do you want to leave this "{{ props.NameCollabBoard.board.value }}"
+            board?
           </div>
         </div>
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">

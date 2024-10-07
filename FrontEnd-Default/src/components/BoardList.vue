@@ -41,7 +41,6 @@ onMounted(async () => {
     return
   }
   console.log(boards)
-
   // if (boards.length > 0) {
   //   router.replace({ name: 'Task', params: { id: boards[0].board.id } })
   // }
@@ -277,7 +276,7 @@ const closeLeave = function () {
     </div>
     <teleport to="body" v-if="leaveCollab">
       <ChangeRemoveLeaveCollab
-        :NameCollabBoard="collab.board.name"
+        :NameCollabBoard="boardCollabList"
         @cancelPopUp="closeLeave"
         :isLeave="isLeave"
         :operate="operation"
