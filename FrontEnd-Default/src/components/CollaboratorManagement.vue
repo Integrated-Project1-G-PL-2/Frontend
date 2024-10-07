@@ -122,6 +122,10 @@ onMounted(async () => {
 
   collaboratorManager.setCollaborators(collab)
   console.log(collaboratorManager.getCollaborators())
+  const storedUserName = localStorage.getItem('userName')
+  if (storedUserName) {
+    userName.value = storedUserName
+  }
 })
 </script>
 
