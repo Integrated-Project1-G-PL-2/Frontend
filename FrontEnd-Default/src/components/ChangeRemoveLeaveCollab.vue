@@ -14,8 +14,7 @@ const deClareemit = defineEmits([
   'permissionRemovePopUp',
   'errorRemoveCollabs',
   'notCollabPopUp',
-  'confirmLeaveErrorPopUp',
-  'confirmAccessPopUp'
+  'confirmLeaveErrorPopUp'
 ])
 
 const props = defineProps([
@@ -90,12 +89,14 @@ const removeCollaborator = async (deleteId) => {
 }
 
 const updateCollaboratorAccessRight = (collabOid) => {
-  const collaborator = collaborators.find((collab) => collab.id === collabOid)
+  const collaborator = collaborators.findIndexById(
+    (collab) => collab.id === collabOid
+  )
   if (collaborator) {
     collaborator.accessRight =
       collaborator.accessRight === 'READ' ? 'WRITE' : 'READ'
   }
-  deClareemit('confirmAccessPopUp', true)
+  deClareemit('confirmChangePopUp', true)
 }
 </script>
 
