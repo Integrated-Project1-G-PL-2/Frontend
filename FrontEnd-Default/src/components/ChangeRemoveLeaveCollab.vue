@@ -49,12 +49,13 @@ const confirmLeaveCollab = async function (leaveId) {
     router.replace({ name: 'Login' })
     deClareemit('confirmDeletePopUp', true)
     return
-  } // else if (
-  //   deletedCollab.value !== '200' &&
-  //   deletedCollab.value !== '200' &&
-  //   deletedCollab.value !== '401' &&
-  //   deletedCollab.value !== '403' &&
-  //   deletedCollab.value !== '404''
+  }
+  // else if (
+  //   leaveCollab.value !== '200' &&
+  //   leaveCollab.value !== '201' &&
+  //   leaveCollab.value !== '401' &&
+  //   leaveCollab.value !== '403' &&
+  //   leaveCollab.value !== '404'
   // ) {
   //   deClareemit('errorLeaveCollabs', true)
   //   deClareemit('confirmDeletePopUp', true)
