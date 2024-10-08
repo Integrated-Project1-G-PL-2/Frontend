@@ -75,6 +75,7 @@ export function logout() {
   localStorage.removeItem('jwt')
   localStorage.removeItem('refresh_token')
   localStorage.removeItem('userName')
+  sessionStorage.removeItem('userRole')
 
   // ลบข้อมูลที่เกี่ยวข้องจาก sessionStorage (ถ้ามี)
   sessionStorage.removeItem('jwt')
