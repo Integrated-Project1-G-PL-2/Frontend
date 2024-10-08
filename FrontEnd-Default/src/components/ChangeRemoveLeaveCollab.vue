@@ -61,7 +61,7 @@ const confirmLeaveCollab = async function (leaveId) {
   // }
   else {
     boardManager.deleteBoard(leaveId)
-    deClareemit('confirmDeletePopUp', true)
+    deClareemit('confirmLeavePopUp', true)
   }
 }
 const removeCollaborator = async (deleteId) => {
