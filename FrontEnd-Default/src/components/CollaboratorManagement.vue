@@ -79,8 +79,8 @@ const openChangeCollab = async function (nameCollab, oid, readWrite) {
 const closeChange = function () {
   changeCollab.value = false
 }
-const openRemoveCollab = async function (boardName, boardId, localUserId) {
-  collabDetail.value = { name: boardName, id: boardId, userId: localUserId }
+const openRemoveCollab = async function (collabName, collabId) {
+  collabDetail.value = { name: collabName, id: collabId }
   isRemove.value = true
   removeCollab.value = true
 }
@@ -246,7 +246,7 @@ const closeProblemChangeCollabAlter = function () {
     />
     <AlertPopUp
       v-if="closeNotCollaborator"
-      :titles="collabDetail + ' is not a collaborator.'"
+      :titles="collabDetail.value.name + ' is not a collaborator.'"
       @closePopUp="closeNotCollabAlter"
       message="Error!!"
       styleType="red"
@@ -349,7 +349,7 @@ const closeProblemChangeCollabAlter = function () {
           <td class="itbkk-status px-4 py-3 cursor-default">
             <button
               class="itbkk-collab-remove bg-gray-300 text-sm rounded-[6px] font-sans text-gray-700 hover:text-white px-4 py-1"
-              @click="openRemoveCollab"
+              @click="openRemoveCollab(collab.name, collab.oid)"
             >
               Remove
             </button>

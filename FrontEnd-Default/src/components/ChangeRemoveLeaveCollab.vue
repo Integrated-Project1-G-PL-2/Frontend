@@ -64,10 +64,12 @@ const confirmLeaveCollab = async function (leaveId) {
     deClareemit('confirmLeavePopUp', true)
   }
 }
-const removeCollaborator = async (deleteId) => {
+const removeCollaborator = async (removeId) => {
   deletedCollab.value = await deleteItemById(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`,
-    deleteId
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${
+      props.NameRemoveCollabBoard.value.id
+    }/collabs`,
+    removeId
   )
   if (deletedCollab.value == '401') {
     router.replace({ name: 'Login' })
@@ -93,12 +95,26 @@ const removeCollaborator = async (deleteId) => {
   //   return
   // }
   else {
-    collaboratorManager.deleteCollaborator(deleteId)
+    collaboratorManager.deleteCollaborator(removeId)
     deClareemit('confirmDeletePopUp', true)
   }
 }
 
-const updateCollaboratorAccessRight = async function () {}
+const updateCollaboratorAccessRight = async function () {
+  //   if (collaborator.value == 401) {
+  //     router.replace({ name: 'Login' })
+  //     deClareemit('confirmChangePopUp', true)
+  //     return
+  //   } else if (collaborator.value == 403) {
+  //     deClareemit('permissionAccessPopUp', true)
+  //     deClareemit('confirmChangePopUp', true)
+  //     return
+  //     // } else if ( collaborator.value !== '200' && collaborator.value !== 200 && collaborator.value !== 401 &&collaborator.value !== 403 ) {
+  //     //   deClareemit('errorChangeCollabs', true)
+  //     //   deClareemit('confirmChangePopUp', true)
+  //     //   return
+  //     //
+}
 </script>
 
 <template>
@@ -185,14 +201,14 @@ const updateCollaboratorAccessRight = async function () {}
 
         <div class="w-[70%] h-[100%]">
           <div class="itbkk-message pl-4 mt-4">
-            Do you want to remove "{{ props.NameRemoveCollabBoard.value }}" from
-            the board?
+            Do you want to remove "{{ props.NameRemoveCollabBoard.value.name }}"
+            from the board?
           </div>
         </div>
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
           <button
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
-            @click="removeCollaborator()"
+            @click="removeCollaborator(props.NameRemoveCollabBoard.value.id)"
           >
             <div class="btn text-center">Confirm</div>
           </button>
