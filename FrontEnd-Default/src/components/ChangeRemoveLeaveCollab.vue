@@ -80,6 +80,8 @@ const removeCollaborator = async (removeId) => {
   } else if (deletedCollab.value == '404') {
     deClareemit('notCollabPopUp', true)
     deClareemit('confirmDeletePopUp', true)
+    collaboratorManager.deleteCollaborator(removeId)
+    deClareemit('confirmDeletePopUp', true)
     return
   } // else if (
   //   deletedCollab.value !== '200' &&
