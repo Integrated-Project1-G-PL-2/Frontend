@@ -18,6 +18,7 @@ import {
 } from '@/stores/SortManager.js'
 import { storeToRefs } from 'pinia'
 import { userName } from '@/stores/UserManager'
+import { userEmail } from '@/stores/UserManager'
 import { logout } from '@/stores/UserManager'
 import ChangeRemoveLeaveCollab from './../components/ChangeRemoveLeaveCollab.vue'
 import AlertPopUp from './../components/AlertPopUp.vue'
@@ -43,7 +44,9 @@ const route = useRoute()
 const collaboratorManager = useCollaboratorManager()
 const boardCollabList = ref(collaboratorManager.getCollaborators())
 const collabDetail = reactive({})
+const collabEmail = reactive({})
 let newName = ref(`${userName.value}`)
+
 // const boardCollabList = ref()
 const selectedAccessLevel = ref('VISITOR')
 const returnLoginPage = () => {
@@ -57,7 +60,9 @@ const goBackToPersonalBoard = () => {
 }
 
 const showAddNewCollaboratorPopUp = function () {
+  collabEmail.value = userEmail
   showAddNewCollaborator.value = true // Set to true when the button is clicked
+  console.log(userEmail.value)
 }
 const cancelCollabPopUp = function () {
   showAddNewCollaborator.value = false
@@ -365,6 +370,7 @@ const closeProblemChangeCollabAlter = function () {
       @errorExitCollab="showExitCollabMessage"
       @cancelCollab="cancelCollabPopUp"
       @errorCollab="showErrorMessage"
+      :EmailCollabBoard="collabEmail"
     ></AddNewCollaborator>
   </teleport>
   <teleport to="body" v-if="changeCollab">

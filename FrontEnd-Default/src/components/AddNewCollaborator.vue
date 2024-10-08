@@ -12,6 +12,7 @@ const deClareemit = defineEmits([
   'errorNotExitCollab',
   'errorExitCollab'
 ])
+const props = defineProps(['EmailCollabBoard'])
 const isNameOverLimit = ref(false)
 const collaboratorManager = useCollaboratorManager()
 const MAX_LENGTH = 50
@@ -38,6 +39,9 @@ const validateEmail = () => {
     newCollabEmailName.value === ownerEmail.value
   if (!newCollabEmailName.value) {
     isInvalidEmail.value = false
+  }
+  if (newCollabEmailName.value == props.EmailCollabBoard.value) {
+    isInvalidEmail.value = true
   }
 }
 
