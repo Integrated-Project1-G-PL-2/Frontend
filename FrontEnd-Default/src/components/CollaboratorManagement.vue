@@ -65,16 +65,22 @@ const cancelCollabPopUp = function () {
 const goBackToHomeBoard = () => {
   router.replace({ name: 'Board' })
 }
-const openChangeCollab = async function () {
-  collabDetail.value = boardCollabList
+const openChangeCollab = async function (nameCollab, oid, readWrite) {
+  if (readWrite == 'VISITOR') {
+    readWrite = 'WRITE'
+  }
+  if (readWrite == 'COLLABORATOR') {
+    readWrite = 'READ'
+  }
+  collabDetail.value = { name: nameCollab, id: oid, accessChange: readWrite }
   isChange.value = true
   changeCollab.value = true
 }
 const closeChange = function () {
   changeCollab.value = false
 }
-const openRemoveCollab = async function () {
-  collabDetail.value = boardCollabList
+const openRemoveCollab = async function (boardName, boardId, localUserId) {
+  collabDetail.value = { name: boardName, id: boardId, userId: localUserId }
   isRemove.value = true
   removeCollab.value = true
 }
@@ -329,7 +335,9 @@ const closeProblemChangeCollabAlter = function () {
           <td class="itbkk-status px-4 py-3 cursor-default">
             <div class="w-[50%]">
               <select
-                @click="openChangeCollab"
+                @click="
+                  openChangeCollab(collab.name, collab.oid, selectedAccessLevel)
+                "
                 v-model="selectedAccessLevel"
                 id="accessLevel"
                 class="itbkk-access-right w-full border border-gray-300 rounded-md p-2 w"

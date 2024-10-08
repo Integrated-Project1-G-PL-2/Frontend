@@ -76,9 +76,8 @@ const returnLoginPage = () => {
   router.replace({ name: 'Login' })
   returnPage.value = true
 }
-const openLeaveCollab = async function (obj) {
-  console.log(obj)
-  collabDetail.value = obj // Assign the names to collabDetail
+const openLeaveCollab = async function (boardName, boardId, localUserId) {
+  collabDetail.value = { name: boardName, id: boardId, userId: localUserId } // Assign the names to collabDetail
   isLeave.value = true
   leaveCollab.value = true
 }
@@ -279,7 +278,13 @@ const closeProblemLeaveAlter = function () {
                 Action :
                 <button
                   class="itbkk-button-create bg-gray-300 text-sm rounded-[6px] font-sans text-gray-700 hover:text-white px-4 py-1"
-                  @click="openLeaveCollab(collab.board.name)"
+                  @click="
+                    openLeaveCollab(
+                      collab.board.name,
+                      collab.id.boardId,
+                      collab.id.localUserId
+                    )
+                  "
                 >
                   Leave
                 </button>

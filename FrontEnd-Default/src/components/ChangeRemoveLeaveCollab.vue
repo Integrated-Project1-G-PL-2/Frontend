@@ -4,6 +4,7 @@ import { deleteItemById } from '@/utils/fetchUtils'
 import { useStatusManager } from '@/stores/StatusManager'
 import { useRoute, useRouter } from 'vue-router'
 import { useCollaboratorManager } from '@/stores/CollaboratorManager'
+import { useBoardManager } from '@/stores/BoardManager'
 const deClareemit = defineEmits([
   'cancelPopUp',
   'confirmDeletePopUp',
@@ -29,6 +30,7 @@ const props = defineProps([
 ])
 const error = ref(false)
 const router = useRouter()
+const boardManager = useBoardManager()
 const collaboratorManager = useCollaboratorManager()
 const route = useRoute()
 const deletedCollab = reactive({})
@@ -36,9 +38,12 @@ const leaveCollab = reactive({})
 const collaborators = collaboratorManager.changeCollaboratorAccessRight()
 const confirmLeaveCollab = async function (leaveId) {
   leaveCollab.value = await deleteItemById(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`,
-    leaveId
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${
+      props.NameLeaveCollabBoard.value.id
+    }/collabs`,
+    props.NameLeaveCollabBoard.value.userId
   )
+  console.log(leaveCollab.value)
   if (leaveCollab.value == '401') {
     router.replace({ name: 'Login' })
     deClareemit('confirmDeletePopUp', true)
@@ -55,7 +60,7 @@ const confirmLeaveCollab = async function (leaveId) {
   //   return
   // }
   else {
-    collaboratorManager.deleteCollaborator(leaveId)
+    boardManager.deleteBoard(leaveId)
     deClareemit('confirmDeletePopUp', true)
   }
 }
@@ -93,30 +98,7 @@ const removeCollaborator = async (deleteId) => {
   }
 }
 
-const updateCollaboratorAccessRight = (collabOid) => {
-  const collaborator = collaborators.findIndexById(
-    (collab) => collab.id === collabOid
-  )
-  if (collaborator.value == 401) {
-    router.replace({ name: 'Login' })
-    deClareemit('confirmChangePopUp', true)
-    return
-  } else if (collaborator.value == 403) {
-    deClareemit('permissionAccessPopUp', true)
-    deClareemit('confirmChangePopUp', true)
-    return
-    // } else if ( collaborator.value !== '200' && collaborator.value !== 200 && collaborator.value !== 401 &&collaborator.value !== 403 ) {
-    //   deClareemit('errorChangeCollabs', true)
-    //   deClareemit('confirmChangePopUp', true)
-    //   return
-    //
-  } else {
-    collaborator.accessRight =
-      collaborator.accessRight === 'READ' ? 'WRITE' : 'READ'
-    deClareemit('confirmChangePopUp', true)
-  }
-}
-console.log(props.NameLeaveCollabBoard.value)
+const updateCollaboratorAccessRight = async function () {}
 </script>
 
 <template>
@@ -132,14 +114,15 @@ console.log(props.NameLeaveCollabBoard.value)
 
         <div class="w-[70%] h-[100%]">
           <div class="itbkk-message pl-4 mt-4">
-            Do you want to leave this "{{ props.NameLeaveCollabBoard.value }}"
-            board?
+            Do you want to leave this "{{
+              props.NameLeaveCollabBoard.value.name
+            }}" board?
           </div>
         </div>
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
           <button
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
-            @click="confirmLeaveCollab()"
+            @click="confirmLeaveCollab(props.NameLeaveCollabBoard.value.id)"
           >
             <div class="btn text-center">Confirm</div>
           </button>
@@ -167,8 +150,8 @@ console.log(props.NameLeaveCollabBoard.value)
         <div class="w-[70%] h-[100%]">
           <div class="itbkk-message pl-4 mt-4">
             Do you want to change access right of "
-            {{ props.NameChangeCollabBoard.value }}" to "{{
-              props.NameChangeCollabBoard.value
+            {{ props.NameChangeCollabBoard.value.name }}" to "{{
+              props.NameChangeCollabBoard.value.accessChange
             }}"
           </div>
         </div>
