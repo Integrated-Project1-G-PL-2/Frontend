@@ -116,6 +116,7 @@ const updateCollaboratorAccessRight = (collabOid) => {
     deClareemit('confirmChangePopUp', true)
   }
 }
+console.log(props.NameLeaveCollabBoard.value)
 </script>
 
 <template>
