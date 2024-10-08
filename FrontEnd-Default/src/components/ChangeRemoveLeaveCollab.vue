@@ -66,9 +66,7 @@ const confirmLeaveCollab = async function (leaveId) {
 }
 const removeCollaborator = async (removeId) => {
   deletedCollab.value = await deleteItemById(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards/${
-      props.NameRemoveCollabBoard.value.id
-    }/collabs`,
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`,
     removeId
   )
   if (deletedCollab.value == '401') {
