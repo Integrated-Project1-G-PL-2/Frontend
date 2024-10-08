@@ -71,10 +71,12 @@ const goBackToHomeBoard = () => {
   router.replace({ name: 'Board' })
 }
 const openChangeCollab = async function (nameCollab, oid, readWrite) {
-  if (readWrite == 'VISITOR') {
+   console.log(readWrite)
+  if (readWrite == 'READ') {
     readWrite = 'WRITE'
   }
-  if (readWrite == 'COLLABORATOR') {
+ 
+  else {
     readWrite = 'READ'
   }
   collabDetail.value = { name: nameCollab, id: oid, accessChange: readWrite }
@@ -147,6 +149,7 @@ onMounted(async () => {
   if (storedUserName) {
     userName.value = storedUserName
   }
+  
 })
 const openPermissionCollabError = function () {
   closeRemoveRight.value = true
@@ -338,17 +341,11 @@ const closeProblemChangeCollabAlter = function () {
             {{ collab.email == null ? 'Unassigned' : collab.email }}
           </td>
           <td class="itbkk-status px-4 py-3 cursor-default">
-            <div class="w-[50%]">
-              <select
-                @click="
-                  openChangeCollab(collab.name, collab.oid, selectedAccessLevel)
-                "
-                v-model="selectedAccessLevel"
-                id="accessLevel"
-                class="itbkk-access-right w-full border border-gray-300 rounded-md p-2 w"
-              >
-                <option value="VISITOR">{{ collab.access_right }}</option>
-              </select>
+            <div class="w-[50%]"
+            @click="
+                  openChangeCollab(collab.name, collab.oid, collab.access_right)
+                ">
+              {{collab.access_right}}
             </div>
           </td>
           <td class="itbkk-status px-4 py-3 cursor-default">
@@ -381,7 +378,6 @@ const closeProblemChangeCollabAlter = function () {
       @errorChangeCollabs="openErrorChangeCollab"
       :isChange="isChange"
       :NameChangeCollabBoard="collabDetail"
-      :operate="operation"
     ></ChangeRemoveLeaveCollab>
   </teleport>
   <teleport to="body" v-if="removeCollab">

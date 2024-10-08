@@ -47,6 +47,7 @@ const boardVisibility = ref()
 const isSwitch = ref(false)
 const collectStatus = reactive([])
 const boardManager = useBoardManager()
+const storedUserRole = ref()
 const visibilityToggle = reactive({
   public: { state: false },
   private: { state: false }
@@ -69,14 +70,21 @@ const thisUser = ref()
 const cannotConfig = ref(false)
 const leave = ref(false)
 onMounted(async () => {
-  const tasksItem = await getItems(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
-  )
+
   const currentBoard = await getItemById(
     `${import.meta.env.VITE_BASE_URL}/v3/boards`,
     route.params.id
   )
+  console.log(currentBoard)
+  const tasksItem = await getItems(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
+  )
+  const boards = await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards`)
+  boardManager.setBoards(boards)
 
+  
+  
+  
   privateTask.value = tasksItem.status
   if (tasksItem == 401) {
     router.replace({ name: 'Login' })
@@ -84,8 +92,14 @@ onMounted(async () => {
   }
 
   boardManager.setCurrentBoard(currentBoard)
+  console.log(boardManager.getBoards())
+  
+  const userRole = boardManager.getBoards().filter(el => el.id.boardId == route.params.id)[0].role
+  sessionStorage.setItem('userRole', userRole);
+  storedUserRole.value = sessionStorage.getItem('userRole');
+ 
+  
   taskManager.setTasks(tasksItem)
-  console.log(taskManager.getTasks())
   statusManager.setStatuses(
     await getItems(
       `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`
@@ -119,14 +133,9 @@ onMounted(async () => {
     router.replace({ name: 'Task' })
   }
 
-  console.log(boardVisibility.value)
-  console.log(boardOwner.value)
-  console.log(thisUser.value)
 })
-watch([boardOwner, thisUser], ([newBoardOwner, newThisUser]) => {
-  boardOwner.value = newBoardOwner
-  thisUser.value = newThisUser
-})
+
+
 
 const showTaskDetail = async function (id, operate) {
   router.push({ name: 'DetailTask', params: { tid: id } })
@@ -544,7 +553,7 @@ const closeWriteAlter = function () {
           class="itbkk-board-visibility inline-flex items-center cursor-pointer"
         >
           <input
-            :disabled="boardOwner !== thisUser && isSwitch"
+            :disabled="!isSwitch && (storedUserRole == 'VISITOR' ||storedUserRole == null)"
             type="checkbox"
             v-model="isSwitch"
             class="sr-only peer"
@@ -558,7 +567,7 @@ const closeWriteAlter = function () {
           </span>
         </label>
         <div
-          v-if="boardOwner !== thisUser && isSwitch && writeAccess"
+          v-if="!isSwitch && (storedUserRole == 'VISITOR' ||storedUserRole == null)"
           class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
         >
           You need to be board owner to perform this action.
@@ -567,6 +576,7 @@ const closeWriteAlter = function () {
       <div class="relative group">
         <button
           @click="showCollabManagement"
+          :disabled="!isSwitch && (storedUserRole == 'VISITOR' ||storedUserRole == null)"
           class="itbkk-manage-collaborator bg-green-700 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
         >
           Manage Collabotator
@@ -574,20 +584,20 @@ const closeWriteAlter = function () {
       </div>
       <div class="relative group">
         <button
-          :disabled="boardOwner !== thisUser && isSwitch"
+          :disabled="!isSwitch && (storedUserRole == 'VISITOR' ||storedUserRole == null)"
           @click="showAddPopUpTaskDetail('add')"
           class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
         >
           ✚ Add New Task
         </button>
         <div
-          v-if="boardOwner !== thisUser && isSwitch"
+          v-if="!isSwitch && (storedUserRole == 'VISITOR' ||storedUserRole == null)"
           class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
         >
           You need to be board owner to perform this action.
         </div>
         <div
-          v-if="(boardOwner !== thisUser && isSwitch) || writeAccess"
+          v-if="!isSwitch && (storedUserRole == 'VISITOR' ||storedUserRole == null)"
           class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
         >
           You need to be board owner or has write access to perform this action.
@@ -683,7 +693,7 @@ const closeWriteAlter = function () {
       </thead>
       <tbody>
         <div
-          v-if="boardOwner !== thisUser && cannotConfig"
+          v-if="boardOwner !== thisUser && cannotConfig "
           class="relative text-center text-xl text-red-600 p-4"
         >
           <div class="flex justify-center items-center">
@@ -711,21 +721,21 @@ const closeWriteAlter = function () {
           <td class="itbkk-button-action px-4 py-3">
             {{ index + 1 }}
             <div class="relative group">
-              <div
-                :disabled="boardOwner !== thisUser && isSwitch"
+              <button
+                :disabled="!isSwitch && (storedUserRole == 'VISITOR' ||storedUserRole == null)"
                 class="itbkk-button-edit inline-flex"
-                @click="showEditTaskDetail(task.id, 'edit')"
+                @click="showEditTaskDetail(task.id, 'edit') "
               >
                 ⚙️
-              </div>
+              </button>
               <div
-                v-if="boardOwner !== thisUser && isSwitch"
+                v-if="!isSwitch && (storedUserRole == 'VISITOR' ||storedUserRole == null)"
                 class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
               >
                 You need to be board owner to perform this action.
               </div>
               <div
-                v-if="(boardOwner !== thisUser && isSwitch) || writeAccess"
+                v-if="!isSwitch && (storedUserRole == 'VISITOR' ||storedUserRole == null) "
                 class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
               >
                 You need to be board owner or has write access to perform this
@@ -734,7 +744,7 @@ const closeWriteAlter = function () {
             </div>
             <div class="relative group">
               <button
-                :disabled="boardOwner !== thisUser && isSwitch"
+                :disabled="!isSwitch && (storedUserRole == 'VISITOR' ||storedUserRole == null)"
                 class="itbkk-button-delete inline-flex"
                 @click="
                   showDeletePopUpTaskDetail({
@@ -747,13 +757,13 @@ const closeWriteAlter = function () {
                 🗑️
               </button>
               <div
-                v-if="boardOwner !== thisUser && isSwitch"
+                v-if="!isSwitch && (storedUserRole == 'VISITOR' ||storedUserRole == null)"
                 class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
               >
                 You need to be board owner to perform this action.
               </div>
               <div
-                v-if="(boardOwner !== thisUser && isSwitch) || writeAccess"
+                v-if="!isSwitch && (storedUserRole == 'VISITOR' ||storedUserRole == null)"
                 class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
               >
                 You need to be board owner or has write access to perform this

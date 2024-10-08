@@ -1,6 +1,6 @@
 <script setup>
 import { ref, reactive } from 'vue'
-import { deleteItemById } from '@/utils/fetchUtils'
+import { deleteItemById,editReadWrite } from '@/utils/fetchUtils'
 import { useStatusManager } from '@/stores/StatusManager'
 import { useRoute, useRouter } from 'vue-router'
 import { useCollaboratorManager } from '@/stores/CollaboratorManager'
@@ -34,6 +34,7 @@ const boardManager = useBoardManager()
 const collaboratorManager = useCollaboratorManager()
 const route = useRoute()
 const deletedCollab = reactive({})
+const editCollab = reactive({})
 const leaveCollab = reactive({})
 const collaborators = collaboratorManager.changeCollaboratorAccessRight()
 const confirmLeaveCollab = async function (leaveId) {
@@ -43,7 +44,7 @@ const confirmLeaveCollab = async function (leaveId) {
     }/collabs`,
     props.NameLeaveCollabBoard.value.userId
   )
-  console.log(leaveCollab.value)
+
   if (leaveCollab.value == '401') {
     router.replace({ name: 'Login' })
     deClareemit('confirmDeletePopUp', true)
@@ -101,19 +102,22 @@ const removeCollaborator = async (removeId) => {
 }
 
 const updateCollaboratorAccessRight = async function () {
-  //   if (collaborator.value == 401) {
-  //     router.replace({ name: 'Login' })
-  //     deClareemit('confirmChangePopUp', true)
-  //     return
-  //   } else if (collaborator.value == 403) {
-  //     deClareemit('permissionAccessPopUp', true)
-  //     deClareemit('confirmChangePopUp', true)
-  //     return
-  //     // } else if ( collaborator.value !== '200' && collaborator.value !== 200 && collaborator.value !== 401 &&collaborator.value !== 403 ) {
-  //     //   deClareemit('errorChangeCollabs', true)
-  //     //   deClareemit('confirmChangePopUp', true)
-  //     //   return
-  //     //
+
+  editCollab.value = await editReadWrite(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`,
+    props.NameChangeCollabBoard.value.id, props.NameChangeCollabBoard.value.accessChange
+  )
+ 
+  if (editCollab.value == '401') {
+    router.replace({ name: 'Login' })
+    deClareemit('errorChangeCollabs', true)
+    return
+  }
+
+  else {
+    collaboratorManager.editCollaborator(editCollab.value.oid, editCollab.value)
+    deClareemit('confirmChangePopUp', true)
+  }
 }
 </script>
 

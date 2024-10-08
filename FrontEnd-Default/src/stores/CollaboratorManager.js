@@ -18,8 +18,14 @@ export const useCollaboratorManager = defineStore('collaboratorManager', () => {
     collaborators.push(newCollaborator)
   }
   const findIndexById = function (id) {
-    return collaborators.findIndex((el) => el.id === id)
+    return collaborators.findIndex((el) => el.oid === id)
   }
+
+  const editCollaborator = function (id, newCollaborator) {
+    const index = findIndexById(id)
+    collaborators[index] = newCollaborator
+  }
+
   const setCurrentCollaboratorBoard = function (board) {
     collaboratorBoard = board
   }
@@ -44,7 +50,8 @@ export const useCollaboratorManager = defineStore('collaboratorManager', () => {
     deleteCollaborator,
     setCurrentCollaboratorBoard,
     getCurrentCollaboratorBoard,
-    changeCollaboratorAccessRight
+    changeCollaboratorAccessRight,
+    editCollaborator
   }
 })
 
