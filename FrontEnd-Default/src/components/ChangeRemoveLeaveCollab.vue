@@ -1,6 +1,6 @@
 <script setup>
 import { ref, reactive } from 'vue'
-import { deleteItemById,editReadWrite } from '@/utils/fetchUtils'
+import { deleteItemById, editReadWrite } from '@/utils/fetchUtils'
 import { useStatusManager } from '@/stores/StatusManager'
 import { useRoute, useRouter } from 'vue-router'
 import { useCollaboratorManager } from '@/stores/CollaboratorManager'
@@ -102,18 +102,21 @@ const removeCollaborator = async (removeId) => {
 }
 
 const updateCollaboratorAccessRight = async function () {
-
   editCollab.value = await editReadWrite(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`,
-    props.NameChangeCollabBoard.value.id, props.NameChangeCollabBoard.value.accessChange
+    props.NameChangeCollabBoard.value.id,
+    props.NameChangeCollabBoard.value.accessChange
   )
- 
+
   if (editCollab.value == '401') {
     router.replace({ name: 'Login' })
     deClareemit('errorChangeCollabs', true)
     return
   }
-
+  // else if ( editCollab.value !== '200' && editCollab.value !== 201 && editCollab.value !== 401 && editCollab.value !== 403 ) {
+  //     //   deClareemit('errorChangeCollabs', true)
+  //     //   deClareemit('confirmChangePopUp', true)
+  //     //   return
   else {
     collaboratorManager.editCollaborator(editCollab.value.oid, editCollab.value)
     deClareemit('confirmChangePopUp', true)
