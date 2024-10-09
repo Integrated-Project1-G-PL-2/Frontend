@@ -62,6 +62,8 @@ const checkNameLength = () => {
 // Handle creating a new collaborator
 const newCollab = async () => {
   console.log(selectedAccessLevel.value)
+
+  // Attempt to add a new collaborator
   const newCollabBoards = await addItem(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`,
     {
@@ -69,53 +71,41 @@ const newCollab = async () => {
       access_right: selectedAccessLevel.value
     }
   )
+
   console.log(newCollabBoards)
 
-  if (newCollabBoards.value == '401') {
+  // Check for specific error responses
+  if (newCollabBoards.value === '401') {
     deClareemit('cancelCollab', true)
     router.replace({ name: 'Login' })
     return
-  } else if (newCollabBoards.value == '403') {
+  } else if (newCollabBoards.value === '403') {
     deClareemit('errorAddCollab', true)
     deClareemit('cancelCollab', true)
     return
-  } else if (newCollabBoards.value == '404') {
+  } else if (newCollabBoards.value === '404') {
     deClareemit('errorNotExitCollab', true)
     deClareemit('cancelCollab', true)
     return
-  } else if (newCollabBoards.value == '409') {
+  } else if (newCollabBoards.value === '409') {
     deClareemit('errorExitCollab', true)
     deClareemit('cancelCollab', true)
     return
   }
-  // else if (
-  //   newCollabBoards.value !== '201' &&
-  //   newCollabBoards.value !== '401' &&
-  //   newCollabBoards.value !== '403' &&
-  //   newCollabBoards.value !== '404' &&
-  //   newCollabBoards.value !== '409'
-  // ) {
-  //   deClareemit('errorCollabs', true)
-  //   deClareemit('cancelCollab', true)
-  //   return
-  // }
-  else {
+
+  // Handle successful collaborator creation
+  if (newCollabBoards.oid) {
     collabManager.addCollaborator(newCollabBoards)
     console.log(collabManager.getCollaborators())
-    // router.replace({ name: 'CollabList' })
-    // collaboratorManager.addCollaborator(newCollabBoards)
+    deClareemit('cancelCollab', true)
+    // Optionally redirect or perform further actions here
+    // router.replace({ name: 'CollabList' });
+    console.log(newCollabBoards)
+  } else {
+    // Handle unexpected responses
+    deClareemit('errorCollabs', true)
     deClareemit('cancelCollab', true)
   }
-
-  // if (!newCollabBoards.id) {
-  //   deClareemit('errorCollab', (errorCollab.value = true))
-  //   return
-  // }
-
-  // router.replace({ name: 'CollabList' })
-  // collaboratorManager.addCollaborator(newCollabBoards)
-
-  // router.replace({ name: 'Task', params: { id: newCollabBoards.id } }) // Use the new board's ID
 }
 </script>
 
