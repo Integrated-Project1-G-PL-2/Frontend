@@ -42,6 +42,7 @@ onMounted(async () => {
   }
   console.log(boards)
 
+  //Redirects to personal board when there is only one personal board and no collab board ยังไม่ได้
   // Separate personal and collab boards
   const personalBoards = boards.filter((board) => board.role == 'OWNER')
   const collabBoards = boards.filter((board) => board.role != 'OWNER')
@@ -49,6 +50,7 @@ onMounted(async () => {
   //   router.replace({ name: 'Task', params: { id: boards[0].board.id } })
   // }
   boardManager.setBoards(boards)
+
   // Check if there's only one personal board and no collab boards
   if (personalBoards.length === 1 && collabBoards.length === 0) {
     router.replace({ name: 'Task' })
