@@ -41,10 +41,21 @@ onMounted(async () => {
     return
   }
   console.log(boards)
+  // Separate personal and collab boards
+  const personalBoards = boards.filter((board) => board.role == 'OWNER')
+  const collabBoards = boards.filter((board) => board.role != 'OWNER')
   // if (boards.length > 0) {
   //   router.replace({ name: 'Task', params: { id: boards[0].board.id } })
   // }
   boardManager.setBoards(boards)
+  // Check if there's only one personal board and no collab boards
+  if (personalBoards.length === 1 && collabBoards.length === 0) {
+    router.replace({
+      name: 'Task',
+      params: { id: personalBoards[0].id.boardId }
+    })
+  }
+
   const storedUserName = localStorage.getItem('userName')
   if (storedUserName) {
     userName.value = storedUserName
