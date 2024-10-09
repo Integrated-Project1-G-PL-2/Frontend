@@ -114,7 +114,6 @@ onMounted(async () => {
     `${route.params.id}`
   )
   bName.value = getBoardName.name
-  const closeOwner = ref(false)
   const board = boardManager.getCurrentBoard()
   boardVisibility.value = board.visibility
 
@@ -123,11 +122,9 @@ onMounted(async () => {
   thisUser.value = storedUserName
 
   if (
-    route.fullPath == `/board/${route.params.id}/task/add` ||
-    route.fullPath.match(
-      new RegExp(`/board/${route.params.id}/task/.+/delete`)
-    ) ||
-    route.fullPath.match(new RegExp(`/board/${route.params.id}/task/.+/edit`))
+    (storedUserRole.value == 'VISITOR' ||storedUserRole.value == null)&&(route.fullPath == `/board/${route.params.id}/task/add` || 
+    route.fullPath.match(new RegExp(`/board/${route.params.id}/task/.+/delete`)) ||
+    route.fullPath.match(new RegExp(`/board/${route.params.id}/task/.+/edit`)))
   ) {
     cannotConfig.value = true
     router.replace({ name: 'Task' })

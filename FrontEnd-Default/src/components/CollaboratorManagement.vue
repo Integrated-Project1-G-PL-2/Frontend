@@ -45,6 +45,7 @@ const collaboratorManager = useCollaboratorManager()
 const boardCollabList = ref(collaboratorManager.getCollaborators())
 const collabDetail = reactive({})
 const collabEmail = reactive({})
+const role = sessionStorage.getItem('userRole')
 let newName = ref(`${userName.value}`)
 
 // const boardCollabList = ref()
@@ -148,6 +149,12 @@ onMounted(async () => {
   const storedUserName = localStorage.getItem('userName')
   if (storedUserName) {
     userName.value = storedUserName
+  }
+
+  if (
+    route.fullPath == `/board/${route.params.id}/collab` && role !== 'OWNER'
+  ) {
+    router.replace({ name: 'Task' })
   }
   
 })
