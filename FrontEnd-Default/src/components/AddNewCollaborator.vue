@@ -39,6 +39,7 @@ const validateEmail = () => {
     newCollabEmailName.value === ownerEmail.value
   if (!newCollabEmailName.value) {
     isInvalidEmail.value = false
+    return
   }
   if (newCollabEmailName.value == props.EmailCollabBoard.value) {
     isInvalidEmail.value = true
