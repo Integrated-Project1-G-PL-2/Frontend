@@ -45,59 +45,49 @@ const confirmLeaveCollab = async function (leaveId) {
     props.NameLeaveCollabBoard.value.userId
   )
 
-  if (leaveCollab.value == '401') {
+  if (leaveCollab.value === '401') {
     router.replace({ name: 'Login' })
     deClareemit('confirmDeletePopUp', true)
     return
   }
-  // else if (
-  //   leaveCollab.value !== '200' &&
-  //   leaveCollab.value !== '201' &&
-  //   leaveCollab.value !== '401' &&
-  //   leaveCollab.value !== '403' &&
-  //   leaveCollab.value !== '404'
-  // ) {
-  //   deClareemit('errorLeaveCollabs', true)
-  //   deClareemit('confirmDeletePopUp', true)
-  //   return
-  // }
-  else {
+
+  // Check if the leaveCollab has a successful structure instead of specific codes
+  if (leaveId) {
     boardManager.deleteBoard(leaveId)
     deClareemit('confirmLeavePopUp', true)
+  } else {
+    deClareemit('errorLeaveCollabs', true)
+    deClareemit('confirmDeletePopUp', true)
   }
 }
+
 const removeCollaborator = async (removeId) => {
   deletedCollab.value = await deleteItemById(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`,
     removeId
   )
-  if (deletedCollab.value == '401') {
+
+  if (deletedCollab.value === '401') {
     router.replace({ name: 'Login' })
     deClareemit('confirmDeletePopUp', true)
     return
-  } else if (deletedCollab.value == '403') {
+  } else if (deletedCollab.value === '403') {
     deClareemit('permissionRemovePopUp', true)
     deClareemit('confirmDeletePopUp', true)
     return
-  } else if (deletedCollab.value == '404') {
+  } else if (deletedCollab.value === '404') {
     deClareemit('notCollabPopUp', true)
-    deClareemit('confirmDeletePopUp', true)
     collaboratorManager.deleteCollaborator(removeId)
     deClareemit('confirmDeletePopUp', true)
     return
-  } // else if (
-  //   deletedCollab.value !== '200' &&
-  //   deletedCollab.value !== '201' &&
-  //   deletedCollab.value !== '401' &&
-  //   deletedCollab.value !== '403' &&
-  //   deletedCollab.value !== '404''
-  // ) {
-  //   deClareemit('errorRemoveCollabs', true)
-  //   deClareemit('confirmDeletePopUp', true)
-  //   return
-  // }
-  else {
+  }
+
+  // Check for successful response
+  if (removeId) {
     collaboratorManager.deleteCollaborator(removeId)
+    deClareemit('confirmDeletePopUp', true)
+  } else {
+    deClareemit('errorRemoveCollabs', true)
     deClareemit('confirmDeletePopUp', true)
   }
 }
@@ -109,17 +99,18 @@ const updateCollaboratorAccessRight = async function () {
     props.NameChangeCollabBoard.value.accessChange
   )
 
-  if (editCollab.value == '401') {
+  if (editCollab.value === '401') {
     router.replace({ name: 'Login' })
     deClareemit('errorChangeCollabs', true)
     return
   }
-  // else if ( editCollab.value !== '200' && editCollab.value !== 201 && editCollab.value !== 401 && editCollab.value !== 403 ) {
-  //     //   deClareemit('errorChangeCollabs', true)
-  //     //   deClareemit('confirmChangePopUp', true)
-  //     //   return
-  else {
+
+  // Check if the editCollab has a successful structure instead of specific codes
+  if (editCollab.value.oid) {
     collaboratorManager.editCollaborator(editCollab.value.oid, editCollab.value)
+    deClareemit('confirmChangePopUp', true)
+  } else {
+    deClareemit('errorChangeCollabs', true)
     deClareemit('confirmChangePopUp', true)
   }
 }
