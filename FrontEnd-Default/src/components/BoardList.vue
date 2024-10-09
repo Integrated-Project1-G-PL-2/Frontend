@@ -114,7 +114,7 @@ const closeProblemLeaveAlter = function () {
     >
       <div class="flex justify-between items-start w-full">
         <button
-          class="itbkk-button-home scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 mr-3 ml-2 mt-2 text-blue-400 my-3 cursor-default"
+          class="itbkk-home scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 mr-3 ml-2 mt-2 text-blue-400 my-3 cursor-default"
         >
           🏠 ITB-KK
         </button>
@@ -186,7 +186,7 @@ const closeProblemLeaveAlter = function () {
             Create personal board
           </button>
         </div>
-        <div class="flex justify-center font-bold">
+        <div class="itbkk-personal-board flex justify-center font-bold">
           <h1 class="font-bold text-center cursor-default text-3xl py-3">
             Personal Boards
           </h1>
@@ -240,7 +240,7 @@ const closeProblemLeaveAlter = function () {
       <div
         class="bg-white relative border rounded-lg overflow-auto max-h-[calc(100vh-10rem)] p-4"
       >
-        <div class="flex justify-center font-bold">
+        <div class="itbkk-collab-board flex justify-center font-bold">
           <h1 class="font-bold text-center cursor-default text-3xl py-3">
             Collab Boards
           </h1>

@@ -72,12 +72,10 @@ const goBackToHomeBoard = () => {
   router.replace({ name: 'Board' })
 }
 const openChangeCollab = async function (nameCollab, oid, readWrite) {
-   console.log(readWrite)
+  console.log(readWrite)
   if (readWrite == 'READ') {
     readWrite = 'WRITE'
-  }
- 
-  else {
+  } else {
     readWrite = 'READ'
   }
   collabDetail.value = { name: nameCollab, id: oid, accessChange: readWrite }
@@ -152,11 +150,11 @@ onMounted(async () => {
   }
 
   if (
-    route.fullPath == `/board/${route.params.id}/collab` && role !== 'OWNER'
+    route.fullPath == `/board/${route.params.id}/collab` &&
+    role !== 'OWNER'
   ) {
     router.replace({ name: 'Task' })
   }
-  
 })
 const openPermissionCollabError = function () {
   closeRemoveRight.value = true
@@ -191,7 +189,7 @@ const closeProblemChangeCollabAlter = function () {
     >
       <button
         @click="goBackToHomeBoard"
-        class="itbkk-button-home scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 hover:text-blue-500 mr-3 ml-2 mt-2 text-blue-400 my-3"
+        class="itbkk-home scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 hover:text-blue-500 mr-3 ml-2 mt-2 text-blue-400 my-3"
       >
         🏠 ITB-KK
       </button>
@@ -335,9 +333,9 @@ const closeProblemChangeCollabAlter = function () {
           :key="collab.id"
           class="itbkk-item border-b cursor-pointer"
         >
-          <td class="itbkk-button-action px-4 py-3">{{ index + 1 }}</td>
-          <td class="itbkk-name px-4 py-3">
-            <div class="hover:text-sky-500 cursor-default">
+          <td class="px-4 py-3">{{ index + 1 }}</td>
+          <td class="px-4 py-3">
+            <div class="itbkk-name hover:text-sky-500 cursor-default">
               {{ collab.name }}
             </div>
           </td>
@@ -347,15 +345,17 @@ const closeProblemChangeCollabAlter = function () {
           >
             {{ collab.email == null ? 'Unassigned' : collab.email }}
           </td>
-          <td class="itbkk-status px-4 py-3 cursor-default">
-            <div class="w-[50%]"
-            @click="
-                  openChangeCollab(collab.name, collab.oid, collab.access_right)
-                ">
-              {{collab.access_right}}
+          <td class="px-4 py-3 cursor-default">
+            <div
+              class="itbkk-access-right w-[50%]"
+              @click="
+                openChangeCollab(collab.name, collab.oid, collab.access_right)
+              "
+            >
+              {{ collab.access_right }}
             </div>
           </td>
-          <td class="itbkk-status px-4 py-3 cursor-default">
+          <td class="px-4 py-3 cursor-default">
             <button
               class="itbkk-collab-remove bg-gray-300 text-sm rounded-[6px] font-sans text-gray-700 hover:text-white px-4 py-1"
               @click="openRemoveCollab(collab.name, collab.oid)"
