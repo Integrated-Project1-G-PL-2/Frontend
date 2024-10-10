@@ -578,12 +578,21 @@ const closeWriteAlter = function () {
         <button
           @click="showCollabManagement"
           :disabled="
-            !isSwitch && (storedUserRole == 'VISITOR' || storedUserRole == null)
+          storedUserRole !== 'OWNER' 
           "
           class="itbkk-manage-collaborator bg-green-700 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
         >
           Manage Collabotator
         </button>
+        <div
+                v-if="
+                 
+                  storedUserRole !== 'OWNER' 
+                "
+                class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
+              >
+                You need to be board owner to perform this action.
+              </div>
       </div>
       <div class="relative group">
         <button
