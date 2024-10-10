@@ -53,7 +53,7 @@ onMounted(async () => {
     userName.value = storedUserName
   }
 
-  //Redirects to personal board when there is only one personal board and no collab board ยังไม่ได้
+  //Redirects to personal board when there is only one personal board and no collab board
   // Separate personal and collaboration boards
   const personalBoards = boards.filter((board) => board.role === 'OWNER')
   const collabBoards = boards.filter((board) => board.role !== 'OWNER')
