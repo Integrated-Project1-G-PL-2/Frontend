@@ -27,8 +27,10 @@ import { logout } from '@/stores/UserManager'
 import boardsList from './../components/BoardList.vue'
 import { useBoardManager } from '@/stores/BoardManager'
 import VisibilityChangedPopUp from './../components/VisibilityChangedPopUP.vue'
+import ChangeRemoveLeaveCollab from './../components/ChangeRemoveLeaveCollab.vue'
 const statusManager = useStatusManager()
 const showStatusDetailModal = ref(false)
+const showCollabDetailModal = ref(false)
 const showStatusDetailLimit = ref(false)
 const router = useRouter()
 const route = useRoute()
@@ -45,6 +47,7 @@ const boardVisibility = ref()
 const isSwitch = ref(false)
 const collectStatus = reactive([])
 const boardManager = useBoardManager()
+const storedUserRole = ref()
 const visibilityToggle = reactive({
   public: { state: false },
   private: { state: false }
@@ -63,22 +66,36 @@ const privateTask = ref()
 const bName = ref()
 const boardOwner = ref()
 const thisUser = ref()
-const thisTask = ref()
+
 const cannotConfig = ref(false)
+const leave = ref(false)
 onMounted(async () => {
-  const tasksItem = await getItems(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
-  )
   const currentBoard = await getItemById(
     `${import.meta.env.VITE_BASE_URL}/v3/boards`,
     route.params.id
   )
-  privateTask.value = tasksItem
-  if (privateTask.value == null) {
+  console.log(currentBoard)
+  const tasksItem = await getItems(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
+  )
+  const boards = await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards`)
+  boardManager.setBoards(boards)
+
+  privateTask.value = tasksItem.status
+  if (tasksItem == 401) {
     router.replace({ name: 'Login' })
     return
   }
+
   boardManager.setCurrentBoard(currentBoard)
+  console.log(boardManager.getBoards())
+
+  const userRole = boardManager
+    .getBoards()
+    .filter((el) => el.id.boardId == route.params.id)[0].role
+  sessionStorage.setItem('userRole', userRole)
+  storedUserRole.value = sessionStorage.getItem('userRole')
+
   taskManager.setTasks(tasksItem)
   statusManager.setStatuses(
     await getItems(
@@ -94,27 +111,25 @@ onMounted(async () => {
     `${route.params.id}`
   )
   bName.value = getBoardName.name
-
   const board = boardManager.getCurrentBoard()
   boardVisibility.value = board.visibility
   boardOwner.value = currentBoard.owner.name
 
   thisUser.value = storedUserName
-  taskGroups.value.forEach((taskGroup) => {
-    thisTask.value = taskGroup.id
-  })
+
   if (
-  route.fullPath == `/board/${route.params.id}/task/add` ||
-  route.fullPath.match(new RegExp(`/board/${route.params.id}/task/.+/delete`)) ||
-  route.fullPath.match(new RegExp(`/board/${route.params.id}/task/.+/edit`))
-) {
+    (storedUserRole.value == 'VISITOR' || storedUserRole.value == null) &&
+    (route.fullPath == `/board/${route.params.id}/task/add` ||
+      route.fullPath.match(
+        new RegExp(`/board/${route.params.id}/task/.+/delete`)
+      ) ||
+      route.fullPath.match(
+        new RegExp(`/board/${route.params.id}/task/.+/edit`)
+      ))
+  ) {
     cannotConfig.value = true
     router.replace({ name: 'Task' })
   }
-})
-watch([boardOwner, thisUser], ([newBoardOwner, newThisUser]) => {
-  boardOwner.value = newBoardOwner
-  thisUser.value = newThisUser
 })
 
 const showTaskDetail = async function (id, operate) {
@@ -199,6 +214,12 @@ const showStatusesList = function () {
   router.replace({ name: 'StatusList' })
   showStatusDetailModal.value = true
 }
+const showCollabManagement = function () {
+  router.replace({ name: 'CollabList' })
+  showCollabDetailModal.value = true
+}
+const closeWrite = ref(false)
+const closeOwner = ref(false)
 const error = ref(false)
 const permission = ref(false)
 const openErrorVisibility = () => {
@@ -316,11 +337,17 @@ const confirmVisibility = function () {
   router.push({ name: 'Task' })
   isPopupOpen.value = false
 }
+const closeOwnerAlter = function () {
+  closeOwner.value = false
+}
+const closeWriteAlter = function () {
+  closeWrite.value = false
+}
 </script>
 
 <template>
   <div class="bg-white relative border rounded-lg overflow-auto">
-    <h1 class="font-bold text-center cursor-default text-xl">
+    <h1 class="itbkk-board-name font-bold text-center cursor-default text-xl">
       {{ bName }}
     </h1>
     <div
@@ -328,7 +355,7 @@ const confirmVisibility = function () {
     >
       <button
         @click="goBackToHomeBoard"
-        class="itbkk-button-home scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 hover:text-blue-500 mr-3 ml-2 mt-2 text-blue-400 my-3"
+        class="itbkk-home scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 hover:text-blue-500 mr-3 ml-2 mt-2 text-blue-400 my-3"
       >
         🏠 ITB-KK
       </button>
@@ -441,21 +468,28 @@ const confirmVisibility = function () {
       message="Error!!"
       styleType="red"
     />
-    <!-- 
-    <AlertPopUp
+
+    <!-- <AlertPopUp
       v-if="accessDenied"
       :titles="'Access denied, you do not have permission to view this page.'"
       @closePopUp="closeAccessAlter"
       message="Error!!"
       styleType="red"
-    />
+    /> -->
     <AlertPopUp
-      v-if="errorPublic"
+      v-if="closeOwner"
       :titles="'You need to be board owner to perform this action.'"
-      @closePopUp="closePublicAlter"
+      @closePopUp="closeOwnerAlter"
       message="Error!!"
       styleType="red"
-    /> -->
+    />
+    <AlertPopUp
+      v-if="closeWrite"
+      :titles="'You need to be board owner or has write access to perform this action.'"
+      @closePopUp="closeWriteAlter"
+      message="Error!!"
+      styleType="red"
+    />
     <div class="flex justify-end">
       <div
         class="itbkk-status-filter flex items-center space-x-2 mr-auto ml-4 my-3 border"
@@ -514,8 +548,10 @@ const confirmVisibility = function () {
           class="inline-flex items-center cursor-pointer"
         >
           <input
-            :class="{disabled:boardOwner !== thisUser && isSwitch}"
-            :disabled="boardOwner !== thisUser && isSwitch"
+            :disabled="
+              !isSwitch &&
+              (storedUserRole == 'VISITOR' || storedUserRole == null)
+            "
             type="checkbox"
             v-model="isSwitch"
             class="itbkk-board-visibility sr-only peer"
@@ -529,7 +565,9 @@ const confirmVisibility = function () {
           </span>
         </label>
         <div
-          v-if="boardOwner !== thisUser && isSwitch"
+          v-if="
+            !isSwitch && (storedUserRole == 'VISITOR' || storedUserRole == null)
+          "
           class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
         >
           You need to be board owner to perform this action.
@@ -537,18 +575,49 @@ const confirmVisibility = function () {
       </div>
       <div class="relative group">
         <button
-        :class="{disabled:boardOwner !== thisUser && isSwitch}"
-          :disabled="boardOwner !== thisUser && isSwitch"
+          @click="showCollabManagement"
+          :disabled="
+          storedUserRole !== 'OWNER' 
+          "
+          class="itbkk-manage-collaborator bg-green-700 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
+        >
+          Manage Collabotator
+        </button>
+        <div
+                v-if="
+                 
+                  storedUserRole !== 'OWNER' 
+                "
+                class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
+              >
+                You need to be board owner to perform this action.
+              </div>
+      </div>
+      <div class="relative group">
+        <button
+          :disabled="
+            !isSwitch && (storedUserRole == 'VISITOR' || storedUserRole == null)
+          "
           @click="showAddPopUpTaskDetail('add')"
           class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
         >
           ✚ Add New Task
         </button>
         <div
-          v-if="boardOwner !== thisUser && isSwitch"
+          v-if="
+            !isSwitch && (storedUserRole == 'VISITOR' || storedUserRole == null)
+          "
           class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
         >
           You need to be board owner to perform this action.
+        </div>
+        <div
+          v-if="
+            !isSwitch && (storedUserRole == 'VISITOR' || storedUserRole == null)
+          "
+          class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
+        >
+          You need to be board owner or has write access to perform this action.
         </div>
       </div>
       <button
@@ -657,10 +726,7 @@ const confirmVisibility = function () {
           </div>
         </div>
 
-        <div
-          v-if="privateTask === null"
-          class="text-center text-xl text-red-600"
-        >
+        <div v-if="privateTask == 403" class="text-center text-xl text-red-600">
           <h2>Access denied,you do not have permission to view this page.</h2>
         </div>
 
@@ -671,25 +737,45 @@ const confirmVisibility = function () {
         >
           <td class="itbkk-button-action px-4 py-3">
             {{ index + 1 }}
-            <div class=" relative group">
-              <div
+            <div class="relative group">
+              <button
+                :disabled="
+                  !isSwitch &&
+                  (storedUserRole == 'VISITOR' || storedUserRole == null)
+                "
                 class="itbkk-button-edit inline-flex"
                 :class="{ disabled: boardOwner !== thisUser && isSwitch }"
                 :disabled="boardOwner !== thisUser && isSwitch" 
                 @click="showEditTaskDetail(task.id, 'edit')"
               >
                 ⚙️
-              </div>
+              </button>
               <div
-                v-if="boardOwner !== thisUser && isSwitch"
+                v-if="
+                  !isSwitch &&
+                  (storedUserRole == 'VISITOR' || storedUserRole == null)
+                "
                 class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
               >
                 You need to be board owner to perform this action.
               </div>
+              <div
+                v-if="
+                  !isSwitch &&
+                  (storedUserRole == 'VISITOR' || storedUserRole == null)
+                "
+                class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
+              >
+                You need to be board owner or has write access to perform this
+                action.
+              </div>
             </div>
             <div class="relative group">
               <button
-                :disabled="boardOwner !== thisUser"
+                :disabled="
+                  !isSwitch &&
+                  (storedUserRole == 'VISITOR' || storedUserRole == null)
+                "
                 class="itbkk-button-delete inline-flex"
                 @click="
                   showDeletePopUpTaskDetail({
@@ -702,10 +788,23 @@ const confirmVisibility = function () {
                 🗑️
               </button>
               <div
-                v-if="boardOwner !== thisUser && isSwitch"
+                v-if="
+                  !isSwitch &&
+                  (storedUserRole == 'VISITOR' || storedUserRole == null)
+                "
                 class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
               >
                 You need to be board owner to perform this action.
+              </div>
+              <div
+                v-if="
+                  !isSwitch &&
+                  (storedUserRole == 'VISITOR' || storedUserRole == null)
+                "
+                class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
+              >
+                You need to be board owner or has write access to perform this
+                action.
               </div>
             </div>
           </td>
