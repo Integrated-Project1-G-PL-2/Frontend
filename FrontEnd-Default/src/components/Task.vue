@@ -745,7 +745,7 @@ const closeWriteAlter = function () {
                 "
                 class="itbkk-button-edit inline-flex"
                 :class="{ disabled: boardOwner !== thisUser && isSwitch }"
-                :disabled="boardOwner !== thisUser && isSwitch" 
+          
                 @click="showEditTaskDetail(task.id, 'edit')"
               >
                 ⚙️
