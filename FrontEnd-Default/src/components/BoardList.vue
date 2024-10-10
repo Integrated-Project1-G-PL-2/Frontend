@@ -54,13 +54,16 @@ onMounted(async () => {
   }
 
   //Redirects to personal board when there is only one personal board and no collab board ยังไม่ได้
-  // Separate personal and collab boards
-  const personalBoards = boards.filter((board) => board.role == 'OWNER')
-  const collabBoards = boards.filter((board) => board.role != 'OWNER')
+  // Separate personal and collaboration boards
+  const personalBoards = boards.filter((board) => board.role === 'OWNER')
+  const collabBoards = boards.filter((board) => board.role !== 'OWNER')
 
-  // Check if there's only one personal board and no collab boards
+  // Redirect to 'Task' page if there's only one personal board and no collab boards
   if (personalBoards.length === 1 && collabBoards.length === 0) {
-    router.replace({ name: 'Task' })
+    router.replace({
+      name: 'Task',
+      params: { id: personalBoards[0].board.id } // Redirect to the specific board
+    })
   }
 })
 const leaveCollab = ref(false)
