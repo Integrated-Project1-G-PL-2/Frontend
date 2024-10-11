@@ -101,7 +101,11 @@ const updateCollaboratorAccessRight = async function () {
 
   if (editCollab.value === '401') {
     router.replace({ name: 'Login' })
-    deClareemit('errorChangeCollabs', true)
+    return
+  }
+  if (editCollab.value === '403') {
+    deClareemit('permissionAccessPopUp', true)
+    deClareemit('confirmChangePopUp', true)
     return
   }
 
