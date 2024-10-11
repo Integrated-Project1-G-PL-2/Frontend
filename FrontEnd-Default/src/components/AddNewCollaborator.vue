@@ -4,6 +4,7 @@ import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCollaboratorManager } from '@/stores/CollaboratorManager'
 import { userEmail } from '@/stores/UserManager'
+import { onMounted } from 'vue'
 const deClareemit = defineEmits([
   'saveCollab',
   'cancelCollab',
@@ -107,6 +108,12 @@ const newCollab = async () => {
     deClareemit('cancelCollab', true)
   }
 }
+onMounted(async () => {
+  const storedEmail = localStorage.getItem('userEmail')
+  if (storedEmail) {
+    userEmail.value = storedEmail
+  }
+})
 </script>
 
 <template>
