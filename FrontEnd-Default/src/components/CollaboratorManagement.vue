@@ -223,7 +223,7 @@ const closeProblemChangeCollabAlter = function () {
       </div>
     </div>
     <AlertPopUp
-      v-if=" errorChangeCollab"
+      v-if="errorChangeCollab"
       :titles="'You do not have permission to add board collaborator.'"
       @closePopUp="closePermissionAlter"
       message="Error!!"
