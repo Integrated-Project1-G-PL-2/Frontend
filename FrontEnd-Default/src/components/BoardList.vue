@@ -59,12 +59,12 @@ onMounted(async () => {
   const collabBoards = boards.filter((board) => board.role !== 'OWNER')
 
   // Redirect to 'Task' page if there's only one personal board and no collab boards
-  if (personalBoards.length === 1 && collabBoards.length === 0) {
-    router.replace({
-      name: 'Task',
-      params: { id: personalBoards[0].board.id } // Redirect to the specific board
-    })
-  }
+  // if (personalBoards.length === 1 && collabBoards.length === 0) {
+  //   router.replace({
+  //     name: 'Task',
+  //     params: { id: personalBoards[0].board.id } // Redirect to the specific board
+  //   })
+  // }
 })
 const leaveCollab = ref(false)
 const showAddNewBoard = ref(false) // Initial value is false
@@ -232,7 +232,7 @@ const closeProblemLeaveAlter = function () {
             <div class="itbkk-board-visibility text-sm text-gray-500">
               <p>
                 Visibility :
-                {{ board.role == undefined ? 'owner' : board.role }}
+                {{ board.board.visibility == undefined ? 'Private' : board.board.visibility }}
               </p>
             </div>
           </div>

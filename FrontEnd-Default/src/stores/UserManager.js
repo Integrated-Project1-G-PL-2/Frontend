@@ -34,8 +34,6 @@ export function decodeJWT(token) {
     localStorage.setItem('userEmail', decodedPayload.email)
     userName.value = decodedPayload.name
     localStorage.setItem('userName', decodedPayload.name)
-    userOid.value = decodedPayload.oid
-    localStorage.setItem('userOid', decodedPayload.oid)
     return {
       header: decodedHeader,
       payload: decodedPayload,

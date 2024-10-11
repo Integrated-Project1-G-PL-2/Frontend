@@ -50,6 +50,9 @@ const confirmLeaveCollab = async function (leaveId) {
     deClareemit('confirmDeletePopUp', true)
     return
   }
+  //403 404 กลับหน้า board ปิด popup
+  //500 ขึ้น There is a problem. Please try again later.
+
 
   // Check if the leaveCollab has a successful structure instead of specific codes
   if (leaveId) {
@@ -104,6 +107,9 @@ const updateCollaboratorAccessRight = async function () {
     deClareemit('errorChangeCollabs', true)
     return
   }
+  // 403 You do not have permission to remove collaborator.
+  // 404 ITBKK PICHET is not a collaborator.
+  // 500 There is a problem. Please try again later.
 
   // Check if the editCollab has a successful structure instead of specific codes
   if (editCollab.value.oid) {
