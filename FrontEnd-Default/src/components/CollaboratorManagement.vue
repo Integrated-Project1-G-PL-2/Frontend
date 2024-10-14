@@ -349,10 +349,10 @@ const closeProblemChangeCollabAlter = function () {
             <div
               class="itbkk-access-right w-[50%]"
               @click="
-                openChangeCollab(collab.name, collab.oid, collab.access_right)
+                openChangeCollab(collab.name, collab.oid, collab.accessRight)
               "
             >
-              {{ collab.access_right }}
+              {{ collab.accessRight }}
             </div>
           </td>
           <td class="px-4 py-3 cursor-default">

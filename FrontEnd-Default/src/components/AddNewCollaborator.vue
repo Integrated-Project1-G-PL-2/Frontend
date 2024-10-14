@@ -68,7 +68,7 @@ const newCollab = async () => {
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`,
     {
       email: newCollabEmailName.value,
-      access_right: selectedAccessLevel.value
+      accessRight: selectedAccessLevel.value
     }
   )
 
