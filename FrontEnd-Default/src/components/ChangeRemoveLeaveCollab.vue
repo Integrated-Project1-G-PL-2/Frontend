@@ -108,14 +108,20 @@ const updateCollaboratorAccessRight = async function () {
     deClareemit('errorChangeCollabs', true)
     return
   }
-  // 403 You do not have permission to remove collaborator.
-  // 404 ITBKK PICHET is not a collaborator.
-  // 500 There is a problem. Please try again later.
+  // 403 You do not have permission to change collaborator access right.
+  if (editCollab.value === '403') {
+    router.replace({ name: 'Login' })
+    deClareemit(' permissionAccessPopUp', true)
+    return
+  }
+  
+ 
 
   // Check if the editCollab has a successful structure instead of specific codes
   if (editCollab.value.oid) {
     collaboratorManager.editCollaborator(editCollab.value.oid, editCollab.value)
     deClareemit('confirmChangePopUp', true)
+     // 500 There is a problem. Please try again later.
   } else {
     deClareemit('errorChangeCollabs', true)
     deClareemit('confirmChangePopUp', true)
