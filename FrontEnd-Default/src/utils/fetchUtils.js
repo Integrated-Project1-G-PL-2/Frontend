@@ -180,7 +180,7 @@ async function editReadWrite(url, id,readWrite) {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ access_right: readWrite })
+      body: JSON.stringify({ accessRight: readWrite })
     }
     const res = await fetchWithAuth(`${url}/${id}`, options)
     console.log(res)

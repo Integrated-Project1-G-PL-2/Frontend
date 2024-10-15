@@ -101,6 +101,7 @@ const updateCollaboratorAccessRight = async function () {
     props.NameChangeCollabBoard.value.id,
     props.NameChangeCollabBoard.value.accessChange
   )
+  console.log(props.NameChangeCollabBoard.value.accessChange)
 
   if (editCollab.value === '401') {
     router.replace({ name: 'Login' })
