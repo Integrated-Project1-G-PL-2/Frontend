@@ -45,8 +45,8 @@ const confirmLeaveCollab = async function (leaveId) {
     }/collabs`,
     props.NameLeaveCollabBoard.value.userId
   )
-
-  if (leaveCollab.value === '401') {
+  console.log(leaveCollab.value)
+  if (leaveCollab.value == '401') {
     refreshToken(router)
     deClareemit('confirmDeletePopUp', true)
     return
@@ -69,16 +69,16 @@ const removeCollaborator = async (removeId) => {
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`,
     removeId
   )
-
-  if (deletedCollab.value === '401') {
+  console.log(deletedCollab.value)
+  if (deletedCollab.value == '401') {
     refreshToken(router)
     deClareemit('confirmDeletePopUp', true)
     return
-  } else if (deletedCollab.value === '403') {
+  } else if (deletedCollab.value == '403') {
     deClareemit('permissionRemovePopUp', true)
     deClareemit('confirmDeletePopUp', true)
     return
-  } else if (deletedCollab.value === '404') {
+  } else if (deletedCollab.value == '404') {
     deClareemit('notCollabPopUp', true)
     collaboratorManager.deleteCollaborator(removeId)
     deClareemit('confirmDeletePopUp', true)
@@ -101,15 +101,15 @@ const updateCollaboratorAccessRight = async function () {
     props.NameChangeCollabBoard.value.id,
     props.NameChangeCollabBoard.value.accessChange
   )
-  console.log(props.NameChangeCollabBoard.value.accessChange)
+  console.log(editCollab.value)
 
-  if (editCollab.value === '401') {
+  if (editCollab.value == '401') {
     refreshToken(router)
     deClareemit('confirmChangePopUp', true)
     return
   }
   // 403 You do not have permission to change collaborator access right.
-  if (editCollab.value === '403') {
+  if (editCollab.value == '403') {
     router.replace({ name: 'Login' })
     deClareemit(' permissionAccessPopUp', true)
     deClareemit('confirmChangePopUp', true)
