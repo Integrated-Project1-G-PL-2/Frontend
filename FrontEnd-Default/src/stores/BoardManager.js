@@ -10,11 +10,12 @@ export const useBoardManager = defineStore('boardManager', () => {
   const setBoards = function (boardsList = []) {
     boards.length = 0
     if (boardsList != null) {
-      boardsList.forEach((board) => {
-        boards.push(board)
-      })
+      boards.push(...boardsList.collab);  // Push all items from the collab array
+        boards.push(...boardsList.personal);  // Push all items from the personal array
+        console.log(boards)
+      }
     }
-  }
+  
   const addBoard = function (newBoard) {
     boards.push(newBoard)
   }

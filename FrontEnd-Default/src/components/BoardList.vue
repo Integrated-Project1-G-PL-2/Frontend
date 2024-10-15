@@ -47,7 +47,7 @@ onMounted(async () => {
   // }
 
   boardManager.setBoards(boards)
-
+console.log(boardsList)
   const storedUserName = localStorage.getItem('userName')
   if (storedUserName) {
     userName.value = storedUserName
@@ -55,8 +55,7 @@ onMounted(async () => {
 
   //Redirects to personal board when there is only one personal board and no collab board
   // Separate personal and collaboration boards
-  const personalBoards = boards.filter((board) => board.role === 'OWNER')
-  const collabBoards = boards.filter((board) => board.role !== 'OWNER')
+
 
   // Redirect to 'Task' page if there's only one personal board and no collab boards
   // if (personalBoards.length === 1 && collabBoards.length === 0) {
