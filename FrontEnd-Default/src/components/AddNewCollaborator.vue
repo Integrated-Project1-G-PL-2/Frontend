@@ -4,6 +4,8 @@ import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCollaboratorManager } from '@/stores/CollaboratorManager'
 import { userEmail } from '@/stores/UserManager'
+import { refreshToken } from '@/stores/UserManager'
+
 const deClareemit = defineEmits([
   'saveCollab',
   'cancelCollab',
@@ -77,7 +79,7 @@ const newCollab = async () => {
   // Check for specific error responses
   if (newCollabBoards.value === '401') {
     deClareemit('cancelCollab', true)
-    router.replace({ name: 'Login' })
+    refreshToken(router)
     return
   } else if (newCollabBoards.value === '403') {
     deClareemit('errorAddCollab', true)
