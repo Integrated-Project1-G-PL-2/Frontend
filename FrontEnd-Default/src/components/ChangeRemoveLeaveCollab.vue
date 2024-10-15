@@ -3,6 +3,7 @@ import { ref, reactive } from 'vue'
 import { deleteItemById, editReadWrite } from '@/utils/fetchUtils'
 import { useStatusManager } from '@/stores/StatusManager'
 import { useRoute, useRouter } from 'vue-router'
+import { refreshToken } from '@/stores/UserManager'
 import { useCollaboratorManager } from '@/stores/CollaboratorManager'
 import { useBoardManager } from '@/stores/BoardManager'
 const deClareemit = defineEmits([
@@ -46,13 +47,12 @@ const confirmLeaveCollab = async function (leaveId) {
   )
 
   if (leaveCollab.value === '401') {
-    router.replace({ name: 'Login' })
+    refreshToken(router)
     deClareemit('confirmDeletePopUp', true)
     return
   }
   //403 404 กลับหน้า board ปิด popup
   //500 ขึ้น There is a problem. Please try again later.
-
 
   // Check if the leaveCollab has a successful structure instead of specific codes
   if (leaveId) {
@@ -71,7 +71,7 @@ const removeCollaborator = async (removeId) => {
   )
 
   if (deletedCollab.value === '401') {
-    router.replace({ name: 'Login' })
+    refreshToken(router)
     deClareemit('confirmDeletePopUp', true)
     return
   } else if (deletedCollab.value === '403') {
@@ -104,24 +104,23 @@ const updateCollaboratorAccessRight = async function () {
   console.log(props.NameChangeCollabBoard.value.accessChange)
 
   if (editCollab.value === '401') {
-    router.replace({ name: 'Login' })
-    deClareemit('errorChangeCollabs', true)
+    refreshToken(router)
+    deClareemit('confirmChangePopUp', true)
     return
   }
   // 403 You do not have permission to change collaborator access right.
   if (editCollab.value === '403') {
     router.replace({ name: 'Login' })
     deClareemit(' permissionAccessPopUp', true)
+    deClareemit('confirmChangePopUp', true)
     return
   }
-  
- 
 
   // Check if the editCollab has a successful structure instead of specific codes
   if (editCollab.value.oid) {
     collaboratorManager.editCollaborator(editCollab.value.oid, editCollab.value)
     deClareemit('confirmChangePopUp', true)
-     // 500 There is a problem. Please try again later.
+    // 500 There is a problem. Please try again later.
   } else {
     deClareemit('errorChangeCollabs', true)
     deClareemit('confirmChangePopUp', true)
