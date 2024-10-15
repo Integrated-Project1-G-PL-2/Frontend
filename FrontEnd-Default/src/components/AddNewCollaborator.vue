@@ -77,19 +77,19 @@ const newCollab = async () => {
   console.log(newCollabBoards)
 
   // Check for specific error responses
-  if (newCollabBoards.value === '401') {
+  if (newCollabBoards == 401) {
     deClareemit('cancelCollab', true)
     refreshToken(router)
     return
-  } else if (newCollabBoards.value === '403') {
+  } else if (newCollabBoards == 403) {
     deClareemit('errorAddCollab', true)
     deClareemit('cancelCollab', true)
     return
-  } else if (newCollabBoards.value === '404') {
+  } else if (newCollabBoards == 404) {
     deClareemit('errorNotExitCollab', true)
     deClareemit('cancelCollab', true)
     return
-  } else if (newCollabBoards.value === '409') {
+  } else if (newCollabBoards == 409) {
     deClareemit('errorExitCollab', true)
     deClareemit('cancelCollab', true)
     return

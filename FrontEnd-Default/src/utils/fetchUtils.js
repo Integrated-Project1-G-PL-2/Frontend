@@ -121,10 +121,10 @@ async function addItem(url, newItem, router) {
     }
 
     const res = await fetchWithAuth(url, options, router)
-    if (res) {
+    if (res.ok) {
       return await res.json()
     }
-    return null
+    return res.status
   } catch (error) {
     console.error(`Network error: ${error}`)
     return null
@@ -173,7 +173,7 @@ async function toggleVisibility(url, id, visibility) {
   }
 }
 
-async function editReadWrite(url, id,readWrite) {
+async function editReadWrite(url, id, readWrite) {
   try {
     const options = {
       method: 'PATCH',
