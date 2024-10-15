@@ -105,13 +105,14 @@ const updateCollaboratorAccessRight = async function () {
 
   if (editCollab.value === '401') {
     refreshToken(router)
-    deClareemit('errorChangeCollabs', true)
+    deClareemit('confirmChangePopUp', true)
     return
   }
   // 403 You do not have permission to change collaborator access right.
   if (editCollab.value === '403') {
     router.replace({ name: 'Login' })
     deClareemit(' permissionAccessPopUp', true)
+    deClareemit('confirmChangePopUp', true)
     return
   }
 
