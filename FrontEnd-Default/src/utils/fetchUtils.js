@@ -82,7 +82,7 @@ async function deleteItemById(url, id, router) {
     }
 
     const res = await fetchWithAuth(`${url}/${id}`, options, router)
-    if (res) {
+    if (res.ok) {
       return res.status
     }
     return null

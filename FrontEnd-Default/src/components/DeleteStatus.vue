@@ -28,6 +28,7 @@ const deleteStatus = async (deleteId) => {
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`,
     deleteId
   )
+  console.log(deletedStatuses.value)
   if (deletedStatuses.value == '404' && '500' && '400') {
     deClareemit('redAlert', {
       taskStatus: props.statusId.value.statusName,
