@@ -7,48 +7,25 @@ import {
   addItem,
   editItem
 } from '../utils/fetchUtils.js'
-import { useTaskManager } from '@/stores/TaskManager'
-import AddNewCollaborator from './../components/AddNewCollaborator.vue'
+
 import { useRoute, useRouter } from 'vue-router'
-import {
-  sortByTitle,
-  sortByTitleReverse,
-  sortByTitleDate,
-  searchByStatus
-} from '@/stores/SortManager.js'
 import { storeToRefs } from 'pinia'
 import { userName } from '@/stores/UserManager'
-import { userEmail } from '@/stores/UserManager'
+
 import { logout } from '@/stores/UserManager'
-import ChangeRemoveLeaveCollab from './../components/ChangeRemoveLeaveCollab.vue'
-import AlertPopUp from './../components/AlertPopUp.vue'
+
 import { useCollaboratorManager } from '@/stores/CollaboratorManager'
 const router = useRouter()
-const removeCollab = ref()
-const changeCollab = ref()
-const isChange = ref()
-const isRemove = ref()
-const showAddNewCollaborator = ref(false)
-const closePermission = ref(false)
-const closeUser = ref(false)
-const closeCollaborator = ref(false)
-const closeProblem = ref(false)
-const closeAccessRight = ref(false)
-const closeRemoveRight = ref(false)
-const closeNotCollaborator = ref(false)
-const errorCollab = ref(false)
+
 const returnPage = ref(false)
-const errorRemoveCollab = ref(false)
-const errorChangeCollab = ref(false)
+
 const route = useRoute()
 const collaboratorManager = useCollaboratorManager()
 const boardCollabList = ref(collaboratorManager.getCollaborators())
-const collabDetail = reactive({})
-const collabEmail = reactive({})
-const role = sessionStorage.getItem('userRole')
 
+const notInvitation = ref(false)
 // const boardCollabList = ref()
-const selectedAccessLevel = ref('VISITOR')
+
 const returnLoginPage = () => {
   logout()
   router.replace({ name: 'Login' })
@@ -59,82 +36,10 @@ const goBackToPersonalBoard = () => {
   router.replace({ name: 'Task' })
 }
 
-const showAddNewCollaboratorPopUp = function () {
-  collabEmail.value = userEmail
-  showAddNewCollaborator.value = true // Set to true when the button is clicked
-  console.log(userEmail.value)
-}
-const cancelCollabPopUp = function () {
-  showAddNewCollaborator.value = false
-}
 const goBackToHomeBoard = () => {
   router.replace({ name: 'Board' })
 }
-const openChangeCollab = async function (nameCollab, oid, readWrite) {
-  console.log(readWrite)
-  if (readWrite == 'READ') {
-    readWrite = 'WRITE'
-  } else {
-    readWrite = 'READ'
-  }
-  collabDetail.value = { name: nameCollab, id: oid, accessChange: readWrite }
-  isChange.value = true
-  changeCollab.value = true
-}
-const closeChange = function () {
-  changeCollab.value = false
-}
-const openRemoveCollab = async function (collabName, collabId) {
-  collabDetail.value = { name: collabName, id: collabId }
-  isRemove.value = true
-  removeCollab.value = true
-}
-const closeRemove = function () {
-  removeCollab.value = false
-}
-const closePermissionAlter = function () {
-  closePermission.value = false
-}
-const closeUserAlter = function () {
-  closeUser.value = false
-}
-const closeCollaboratorAlter = function () {
-  closeCollaborator.value = false
-}
-const closeProblemAlter = function () {
-  closeProblem.value = false
-}
-const closeProblemCollabAlter = function () {
-  errorCollab.value = false
-}
-const closeAccessAlter = function () {
-  closeAccessRight.value = false
-}
-const closeRemoveAlter = function () {
-  closeRemoveRight.value = false
-}
-const closeNotCollabAlter = function () {
-  closeNotCollaborator.value = false
-}
-const showErrorMessage = function () {
-  errorCollab.value = true
-  showAddNewCollaborator.value = false
-}
-const showErrorAddCollabMessage = function () {
-  closePermission.value = true
-}
-const showNotExitCollabMessage = function () {
-  closeUser.value = true
-}
-const showExitCollabMessage = function () {
-  closeCollaborator.value = true
-}
-const closeRemoveCollab = function () {
-  removeCollab.value = false
-}
-const closeChangeCollab = function () {
-  changeCollab.value = false
-}
+
 onMounted(async () => {
   const collab = await getItems(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`
@@ -155,27 +60,6 @@ onMounted(async () => {
     router.replace({ name: 'Task' })
   }
 })
-const openPermissionCollabError = function () {
-  closeRemoveRight.value = true
-}
-const openNotCollabError = function () {
-  closeNotCollaborator.value = true
-}
-const openErrorCollab = function () {
-  errorRemoveCollab.value = true
-}
-const closeProblemErrorRemoveAlter = function () {
-  errorRemoveCollab.value = false
-}
-const openPermissionChangeError = function () {
-  closeAccessRight.value = true
-}
-const openErrorChangeCollab = function () {
-  errorChangeCollab.value = true
-}
-const closeProblemChangeCollabAlter = function () {
-  errorChangeCollab.value = false
-}
 </script>
 
 <template>
@@ -221,76 +105,7 @@ const closeProblemChangeCollabAlter = function () {
         </button>
       </div>
     </div>
-    <AlertPopUp
-      v-if="closePermission"
-      :titles="'You do not have permission to add board collaborator.'"
-      @closePopUp="closePermissionAlter"
-      message="Error!!"
-      styleType="red"
-    />
-    <AlertPopUp
-      v-if="closeUser"
-      :titles="'The user does not exists.'"
-      @closePopUp="closeUserAlter"
-      message="Error!!"
-      styleType="red"
-    />
-    <AlertPopUp
-      v-if="closeCollaborator"
-      :titles="'The user is already the collaborator of this board.'"
-      @closePopUp="closeCollaboratorAlter"
-      message="Error!!"
-      styleType="red"
-    />
-    <AlertPopUp
-      v-if="closeAccessRight"
-      :titles="'You do not have permission to change collaborator access right.'"
-      @closePopUp="closeAccessAlter"
-      message="Error!!"
-      styleType="red"
-    />
-    <AlertPopUp
-      v-if="closeRemoveRight"
-      :titles="'You do not have permission to remove collaborator.'"
-      @closePopUp="closeRemoveAlter"
-      message="Error!!"
-      styleType="red"
-    />
-    <AlertPopUp
-      v-if="closeNotCollaborator"
-      :titles="collabDetail.value.name + ' is not a collaborator.'"
-      @closePopUp="closeNotCollabAlter"
-      message="Error!!"
-      styleType="red"
-    />
-    <AlertPopUp
-      v-if="closeProblem"
-      :titles="'There is a problem. Please try again later.'"
-      @closePopUp="closeProblemAlter"
-      message="Error!!"
-      styleType="red"
-    />
-    <AlertPopUp
-      v-if="errorCollab"
-      :titles="'There is a problem. Please try again later.'"
-      @closePopUp="closeProblemCollabAlter"
-      message="Error!!"
-      styleType="red"
-    />
-    <AlertPopUp
-      v-if="errorRemoveCollab"
-      :titles="'There is a problem. Please try again later.'"
-      @closePopUp="closeProblemErrorRemoveAlter"
-      message="Error!!"
-      styleType="red"
-    />
-    <AlertPopUp
-      v-if="errorChangeCollab"
-      :titles="'There is a problem. Please try again later.'"
-      @closePopUp="closeProblemChangeCollabAlter"
-      message="Error!!"
-      styleType="red"
-    />
+
     <div class="flex justify-end">
       <div
         class="flex justify-between items-start w-full font-bold space-y-2 border-b py-2 border-r-slate-500"
@@ -318,6 +133,21 @@ const closeProblemChangeCollabAlter = function () {
         </tr>
       </thead>
       <tbody>
+        <div
+          v-if="notInvitation"
+          class="relative text-center text-xl text-red-600 p-4"
+        >
+          <div class="flex justify-center items-center">
+            <h2>Sorry, we couldn't find the invitation to this board.</h2>
+            <button
+              @click="notInvitation = false"
+              class="ml-2 text-red-600 hover:text-red-800 font-bold"
+            >
+              &times;
+            </button>
+          </div>
+        </div>
+
         <tr
           v-for="(collab, index) in boardCollabList"
           :key="collab.id"
