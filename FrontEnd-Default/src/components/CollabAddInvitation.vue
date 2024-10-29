@@ -11,14 +11,14 @@ import {
 import { useRoute, useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { userName } from '@/stores/UserManager'
-
+import AlertPopUp from './../components/AlertPopUp.vue'
 import { logout } from '@/stores/UserManager'
 
 import { useCollaboratorManager } from '@/stores/CollaboratorManager'
 const router = useRouter()
 
 const returnPage = ref(false)
-
+const closeNotLogin = ref(false)
 const route = useRoute()
 const collaboratorManager = useCollaboratorManager()
 const boardCollabList = ref(collaboratorManager.getCollaborators())
@@ -60,6 +60,9 @@ onMounted(async () => {
     router.replace({ name: 'Task' })
   }
 })
+const closeNotLoginAlter = function () {
+  closeNotLogin.value = false
+}
 </script>
 
 <template>
@@ -125,6 +128,13 @@ onMounted(async () => {
         </div>
       </div>
     </div>
+    <AlertPopUp
+      v-if="closeNotLogin"
+      :titles="'User should sign-in first. '"
+      @closePopUp="closeNotLoginAlter"
+      message="Error!!"
+      styleType="red"
+    />
     <table class="w-full text-sm text-left text-gray-500">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50">
         <tr>
