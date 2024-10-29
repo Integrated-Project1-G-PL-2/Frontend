@@ -9,7 +9,7 @@ import LoginPage from '@/components/LoginPage.vue'
 import BoardList from '@/components/BoardList.vue'
 import AddNewBoard from '@/components/AddNewBoard.vue'
 import CollaboratorManagement from '@/components/CollaboratorManagement.vue'
-
+import CollabAddInvitation from '@/components/CollabAddInvitation.vue'
 const history = createWebHistory(import.meta.env.BASE_URL)
 const routes = [
   {
@@ -86,7 +86,14 @@ const routes = [
   {
     path: '/board/:id/collab',
     name: 'CollabList',
-    component: CollaboratorManagement
+    component: CollaboratorManagement,
+    children: [
+      {
+        path: '/board/:id/collab/invitations',
+        component: CollabAddInvitation,
+        name: 'AddInvitation'
+      }
+    ]
   }
 ]
 
