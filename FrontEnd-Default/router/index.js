@@ -94,6 +94,11 @@ const routes = [
         name: 'AddInvitation'
       }
     ]
+  },
+  {
+    path: '/board/:id/collab/invitations',
+    component: CollabAddInvitation,
+    name: 'AddInvitation'
   }
 ]
 
