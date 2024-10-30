@@ -23,8 +23,10 @@ import { logout } from '@/stores/UserManager'
 import ChangeRemoveLeaveCollab from './../components/ChangeRemoveLeaveCollab.vue'
 import AlertPopUp from './../components/AlertPopUp.vue'
 import { useCollaboratorManager } from '@/stores/CollaboratorManager'
+import CancelInvitation from './../components/CancelInvitation.vue'
 const router = useRouter()
 const removeCollab = ref()
+const cancelInvitationCollab = ref(false)
 const changeCollab = ref()
 const isChange = ref()
 const isRemove = ref()
@@ -92,8 +94,15 @@ const openRemoveCollab = async function (collabName, collabId) {
   isRemove.value = true
   removeCollab.value = true
 }
+const openCancelInvitationCollab = async function () {
+  cancelInvitationCollab.value = true
+}
+
 const closeRemove = function () {
   removeCollab.value = false
+}
+const closeCancelInvitation = function () {
+  cancelInvitationCollab.value = false
 }
 const closePermissionAlter = function () {
   closePermission.value = false
@@ -370,10 +379,18 @@ const closeInviteCollabAlter = function () {
           </td>
           <td class="px-4 py-3 cursor-default">
             <button
+              v-if="!invited"
               class="itbkk-collab-remove bg-gray-300 text-sm rounded-[6px] font-sans text-gray-700 hover:text-white px-4 py-1"
               @click="openRemoveCollab(collab.name, collab.oid)"
             >
               Remove
+            </button>
+            <button
+              @click="openCancelInvitationCollab()"
+              v-if="invited"
+              class="bg-gray-300 text-sm rounded-[6px] font-sans text-gray-700 hover:text-white px-4 py-1"
+            >
+              Cancel
             </button>
           </td>
         </tr>
@@ -411,6 +428,9 @@ const closeInviteCollabAlter = function () {
       :operate="operation"
       :NameRemoveCollabBoard="collabDetail"
     ></ChangeRemoveLeaveCollab>
+  </teleport>
+  <teleport to="body" v-if="cancelInvitationCollab">
+    <CancelInvitation @cancelDetail="closeCancelInvitation"></CancelInvitation>
   </teleport>
 </template>
 <style scoped></style>
