@@ -34,6 +34,7 @@ const closeProblemAlter = () => {
 const closePrivateAlter = () => {
   errorPrivate.value = false
 }
+const invited = ref(false)
 onMounted(async () => {
   const boards = await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards`)
   if (boards == 401) {
@@ -47,7 +48,7 @@ onMounted(async () => {
   // }
 
   boardManager.setBoards(boards)
-console.log(boardsList)
+  console.log(boardsList)
   const storedUserName = localStorage.getItem('userName')
   if (storedUserName) {
     userName.value = storedUserName
@@ -55,7 +56,6 @@ console.log(boardsList)
 
   //Redirects to personal board when there is only one personal board and no collab board
   // Separate personal and collaboration boards
-
 
   // Redirect to 'Task' page if there's only one personal board and no collab boards
   // if (personalBoards.length === 1 && collabBoards.length === 0) {
@@ -231,7 +231,11 @@ const closeProblemLeaveAlter = function () {
             <div class="itbkk-board-visibility text-sm text-gray-500">
               <p>
                 Visibility :
-                {{ board.board.visibility == undefined ? 'Private' : board.board.visibility }}
+                {{
+                  board.board.visibility == undefined
+                    ? 'Private'
+                    : board.board.visibility
+                }}
               </p>
             </div>
           </div>
@@ -278,6 +282,7 @@ const closeProblemLeaveAlter = function () {
                   ? collab.name
                   : collab.board.name
               }}
+              <h1 v-if="invited">Pending Invite</h1>
             </div>
             <div class="itbkk-owner-name text-sm text-gray-500">
               <p>Owner : {{ collab.localUser.username }}</p>
@@ -292,6 +297,7 @@ const closeProblemLeaveAlter = function () {
               <p>
                 Action :
                 <button
+                  v-if="!invited"
                   class="itbkk-button-create bg-gray-300 text-sm rounded-[6px] font-sans text-gray-700 hover:text-white px-4 py-1"
                   @click="
                     openLeaveCollab(
@@ -302,6 +308,19 @@ const closeProblemLeaveAlter = function () {
                   "
                 >
                   Leave
+                </button>
+                <button
+                  v-if="invited"
+                  class="ml-2 px-3 py-1 text-white bg-green-500 hover:bg-green-600 rounded-md"
+                >
+                  Accept
+                </button>
+                or
+                <button
+                  v-if="invited"
+                  class="ml-2 px-3 py-1 text-white bg-red-500 hover:bg-red-600 rounded-md"
+                >
+                  Decline
                 </button>
               </p>
             </div>

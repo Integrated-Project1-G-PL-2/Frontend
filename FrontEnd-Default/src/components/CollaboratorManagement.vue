@@ -40,12 +40,14 @@ const errorCollab = ref(false)
 const returnPage = ref(false)
 const errorRemoveCollab = ref(false)
 const errorChangeCollab = ref(false)
+const inviteCollab = ref(false)
 const route = useRoute()
 const collaboratorManager = useCollaboratorManager()
 const boardCollabList = ref(collaboratorManager.getCollaborators())
 const collabDetail = reactive({})
 const collabEmail = reactive({})
 const role = sessionStorage.getItem('userRole')
+const invited = ref(false)
 let newName = ref(`${userName.value}`)
 
 // const boardCollabList = ref()
@@ -177,6 +179,9 @@ const openErrorChangeCollab = function () {
 const closeProblemChangeCollabAlter = function () {
   errorChangeCollab.value = false
 }
+const closeInviteCollabAlter = function () {
+  inviteCollabCollab.value = false
+}
 </script>
 
 <template>
@@ -292,6 +297,13 @@ const closeProblemChangeCollabAlter = function () {
       message="Error!!"
       styleType="red"
     />
+    <AlertPopUp
+      v-if="inviteCollab"
+      :titles="'<<inviter name>> has invited you to collaborate with <<access-right given>> access right on <<board name>> board.'"
+      @closePopUp="closeInviteCollabAlter"
+      message="Error!!"
+      styleType="green"
+    />
     <div class="flex justify-end">
       <div
         class="flex justify-between items-start w-full font-bold space-y-2 border-b py-2 border-r-slate-500"
@@ -337,6 +349,7 @@ const closeProblemChangeCollabAlter = function () {
           <td class="px-4 py-3">
             <div class="itbkk-name hover:text-sky-500 cursor-default">
               {{ collab.name }}
+              <h1 v-if="invited">Pending Invite</h1>
             </div>
           </td>
           <td
