@@ -167,8 +167,19 @@ const closeNotLoginAlter = function () {
           <td class="px-4 py-3">
             <div class="itbkk-name hover:text-sky-500 cursor-default">
               {{ collab.name }} has invited you to collaborate with
-              {{ collab.accessRight }} access right on {{ collab.name }} board",
-              with Accept invitation and Decline
+              {{ collab.accessRight }} access right on {{ collab.name }} board,
+              with
+              <button
+                class="ml-2 px-3 py-1 text-white bg-green-500 hover:bg-green-600 rounded-md"
+              >
+                Accept invitation
+              </button>
+              or
+              <button
+                class="ml-2 px-3 py-1 text-white bg-red-500 hover:bg-red-600 rounded-md"
+              >
+                Decline
+              </button>
             </div>
           </td>
         </tr>
