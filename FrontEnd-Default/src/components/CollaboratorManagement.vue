@@ -50,6 +50,7 @@ const collabDetail = reactive({})
 const collabEmail = reactive({})
 const role = sessionStorage.getItem('userRole')
 const invited = ref(false)
+const existPending = ref(false)
 let newName = ref(`${userName.value}`)
 
 // const boardCollabList = ref()
@@ -189,7 +190,10 @@ const closeProblemChangeCollabAlter = function () {
   errorChangeCollab.value = false
 }
 const closeInviteCollabAlter = function () {
-  inviteCollabCollab.value = false
+  inviteCollab.value = false
+}
+const closeExistPendingAlter = function () {
+  existPending.value = false
 }
 </script>
 
@@ -312,6 +316,13 @@ const closeInviteCollabAlter = function () {
       @closePopUp="closeInviteCollabAlter"
       message="Error!!"
       styleType="green"
+    />
+    <AlertPopUp
+      v-if="existPending"
+      :titles="'The user is already the collaborator or pending collaborator of this board , the access right is not updated. '"
+      @closePopUp="closeExistPendingAlter"
+      message="Error!!"
+      styleType="red"
     />
     <div class="flex justify-end">
       <div
