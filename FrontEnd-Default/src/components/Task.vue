@@ -48,6 +48,9 @@ const isSwitch = ref(false)
 const collectStatus = reactive([])
 const boardManager = useBoardManager()
 const storedUserRole = ref()
+const limitFiles = ref(false)
+const largeFiles = ref(false)
+const mostLargeFiles = ref(false)
 const visibilityToggle = reactive({
   public: { state: false },
   private: { state: false }
@@ -343,6 +346,15 @@ const closeOwnerAlter = function () {
 const closeWriteAlter = function () {
   closeWrite.value = false
 }
+const closeLimitFilesAlter = function () {
+  limitFiles.value = false
+}
+const closeLargeFilesAlter = function () {
+  largeFiles.value = false
+}
+const closeMostLargeFilesAlter = function () {
+  mostLargeFiles.value = false
+}
 </script>
 
 <template>
@@ -490,6 +502,29 @@ const closeWriteAlter = function () {
       message="Error!!"
       styleType="red"
     />
+    <AlertPopUp
+      v-if="limitFiles"
+      :titles="'Each task can have at most $MAX_FILES files.'"
+      @closePopUp="closeLimitFilesAlter"
+      message="Error!!"
+      styleType="red"
+    />
+    <AlertPopUp
+      v-if="largeFiles"
+      :titles="'Each file cannot be larger than $MAX_FILE_SIZE MB. The following files are not added: '"
+      @closePopUp="closeLargeFilesAlter"
+      message="Error!!"
+      styleType="red"
+    />
+    />
+    <AlertPopUp
+      v-if="mostLargeFiles"
+      :titles="'Each task can have at most $MAX_FILES files and each file cannot be larger than $MAX_FILE_SIZE MB. The following files are not added: '"
+      @closePopUp="closeMostLargeFilesAlter"
+      message="Error!!"
+      styleType="red"
+    />
+
     <div class="flex justify-end">
       <div
         class="itbkk-status-filter flex items-center space-x-2 mr-auto ml-4 my-3 border"
@@ -544,9 +579,7 @@ const closeWriteAlter = function () {
         </div>
       </div>
       <div class="relative group">
-        <label
-          class="inline-flex items-center cursor-pointer"
-        >
+        <label class="inline-flex items-center cursor-pointer">
           <input
             :disabled="
               !isSwitch &&
@@ -560,8 +593,10 @@ const closeWriteAlter = function () {
           <div
             class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
           ></div>
-          <span class="visibility ms-3 text-sm font-medium text-gray-600 mr-3 my-3">
-           {{ toggleLabel }}
+          <span
+            class="visibility ms-3 text-sm font-medium text-gray-600 mr-3 my-3"
+          >
+            {{ toggleLabel }}
           </span>
         </label>
         <div
@@ -576,22 +611,17 @@ const closeWriteAlter = function () {
       <div class="relative group">
         <button
           @click="showCollabManagement"
-          :disabled="
-          storedUserRole !== 'OWNER' 
-          "
+          :disabled="storedUserRole !== 'OWNER'"
           class="itbkk-manage-collaborator bg-green-700 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
         >
           Manage Collabotator
         </button>
         <div
-                v-if="
-                 
-                  storedUserRole !== 'OWNER' 
-                "
-                class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
-              >
-                You need to be board owner to perform this action.
-              </div>
+          v-if="storedUserRole !== 'OWNER'"
+          class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
+        >
+          You need to be board owner to perform this action.
+        </div>
       </div>
       <div class="relative group">
         <button
@@ -745,7 +775,6 @@ const closeWriteAlter = function () {
                 "
                 class="itbkk-button-edit inline-flex"
                 :class="{ disabled: boardOwner !== thisUser && isSwitch }"
-          
                 @click="showEditTaskDetail(task.id, 'edit')"
               >
                 ⚙️
@@ -810,10 +839,9 @@ const closeWriteAlter = function () {
           </td>
           <td class="itbkk-title px-4 py-3">
             <div
-              class="itbkk-title hover:text-sky-500 cursor-default "
+              class="itbkk-title hover:text-sky-500 cursor-default"
               @click="showTaskDetail(task.id, 'show')"
             >
-            
               {{ task.title }}
             </div>
           </td>
