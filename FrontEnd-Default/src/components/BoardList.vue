@@ -15,7 +15,6 @@ import {
   editItem
 } from '../utils/fetchUtils.js'
 import ChangeRemoveLeaveCollab from './../components/ChangeRemoveLeaveCollab.vue'
-import CollabAddInvitation from './CollabAddInvitation.vue'
 
 const emits = defineEmits(['NameBoard', 'errorOccurred', 'NameCollabBoard'])
 const router = useRouter()
@@ -70,13 +69,12 @@ onMounted(async () => {
 const leaveCollab = ref(false)
 const showAddNewBoard = ref(false) // Initial value is false
 const returnPage = ref(false)
-const collabInvitation = ref(false)
+
 const showAddNewBoardPopUp = function () {
   showAddNewBoard.value = true // Set to true when the button is clicked
   router.push({ name: 'AddNewBoard' })
 }
 const showRequestInvitationListPopUp = () => {
-  collabInvitation.value = true
   router.replace({ name: 'AddInvitation' })
 }
 
