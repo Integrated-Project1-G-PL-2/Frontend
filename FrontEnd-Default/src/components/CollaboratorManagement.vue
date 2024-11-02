@@ -408,6 +408,40 @@ const closeExistPendingAlter = function () {
       </tbody>
     </table>
   </div>
+  <!-- Invitation Collab Board Section -->
+  <div
+    class="bg-white relative border rounded-lg overflow-auto max-h-[calc(100vh-10rem)] p-4"
+  >
+    <div class="itbkk-collab-board flex justify-center font-bold">
+      <h1 class="font-bold text-center cursor-default text-3xl py-3">
+        Invitation Collab Boards
+      </h1>
+    </div>
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+    >
+      <div
+        class="itbkk-collab-item bg-white border rounded-lg shadow-md p-4 flex flex-col space-y-2 hover:bg-gray-100 hover:text-sky-500"
+      >
+        <div class="flex justify-between items-center">
+          <span class="font-bold text-lg">No : {{ index + 1 }}</span>
+        </div>
+        <div
+          class="itbkk-board-name text-xl font-semibold cursor-pointer"
+          @click=""
+        >
+          Name :
+        </div>
+        <div class="itbkk-owner-name text-sm text-gray-500">
+          <p>Owner :</p>
+        </div>
+        <div class="itbkk-access-right text-sm text-gray-500">
+          <p>Access Right :</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <teleport to="body" v-if="showAddNewCollaborator">
     <AddNewCollaborator
       @errorAddCollab="showErrorAddCollabMessage"
