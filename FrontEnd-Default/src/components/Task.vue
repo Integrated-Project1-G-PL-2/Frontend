@@ -516,7 +516,7 @@ const closeMostLargeFilesAlter = function () {
       message="Error!!"
       styleType="red"
     />
-    />
+
     <AlertPopUp
       v-if="mostLargeFiles"
       :titles="'Each task can have at most $MAX_FILES files and each file cannot be larger than $MAX_FILE_SIZE MB. The following files are not added: '"
