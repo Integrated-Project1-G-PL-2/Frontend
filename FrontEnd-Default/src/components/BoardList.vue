@@ -184,19 +184,23 @@ const closeProblemLeaveAlter = function () {
           message="Error!!"
           styleType="red"
         />
-        <div class="flex flex-col items-end pr-4 font-bold space-y-2">
-          <button
-            class="itbkk-button-create bg-gray-300 text-sm rounded-[6px] font-sans text-gray-700 hover:text-white px-7 py-2 mr-2 my-3"
-            @click="showAddNewBoardPopUp"
+        <div class="flex justify-end">
+          <div
+            class="flex flex-row items-center pr-4 font-bold space-x-2 ml-auto"
           >
-            Create personal board
-          </button>
-          <button
-            class="itbkk-button-create bg-blue-500 text-sm rounded-[6px] font-sans text-white hover:text-gray-400 px-7 py-2 mr-2 my-3"
-            @click="showRequestInvitationListPopUp"
-          >
-            Request Invitation
-          </button>
+            <button
+              class="itbkk-button-create bg-gray-300 text-sm rounded-[6px] font-sans text-gray-700 hover:text-white px-7 py-2"
+              @click="showAddNewBoardPopUp"
+            >
+              Create personal board
+            </button>
+            <button
+              class="bg-blue-500 text-sm rounded-[6px] font-sans text-white hover:text-gray-400 px-7 py-2"
+              @click="showRequestInvitationListPopUp"
+            >
+              Request Invitation
+            </button>
+          </div>
         </div>
         <div class="itbkk-personal-board flex justify-center font-bold">
           <h1 class="font-bold text-center cursor-default text-3xl py-3">
