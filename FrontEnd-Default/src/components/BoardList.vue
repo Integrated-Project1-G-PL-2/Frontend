@@ -361,7 +361,7 @@ const closeDeclineInvitationCollab = function () {
             </div>
           </div>
         </div>
-        <div
+        <!-- <div
           v-if="invited"
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4"
         >
@@ -425,7 +425,7 @@ const closeDeclineInvitationCollab = function () {
               </p>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <teleport to="body" v-if="leaveCollab">
