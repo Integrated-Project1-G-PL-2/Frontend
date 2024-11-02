@@ -315,7 +315,7 @@ const closeProblemLeaveAlter = function () {
                 >
                   Accept
                 </button>
-                or
+
                 <button
                   v-if="invited"
                   class="ml-2 px-3 py-1 text-white bg-red-500 hover:bg-red-600 rounded-md"
