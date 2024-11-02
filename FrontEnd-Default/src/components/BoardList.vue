@@ -32,7 +32,7 @@ const errorLeave = ref(false)
 const acceptInvitation = ref(false)
 const declineInvitation = ref(false)
 const isAccept = ref()
-const isRemove = ref()
+const isDecline = ref()
 const closeProblemAlter = () => {
   error.value = false
 }
@@ -120,7 +120,7 @@ const openAcceptPopUp = function () {
   acceptInvitation.value = true
 }
 const openDeclinePopUp = function () {
-  isRemove.value = true
+  isDecline.value = true
   declineInvitation.value = true
 }
 const closeAcceptInvitationCollab = function () {
@@ -344,12 +344,14 @@ const closeDeclineInvitationCollab = function () {
                   Leave
                 </button>
                 <button
+                  v-if="invited"
                   @click="openAcceptPopUp"
                   class="ml-2 px-3 py-1 text-white bg-green-500 hover:bg-green-600 rounded-md"
                 >
                   Accept
                 </button>
                 <button
+                  v-if="invited"
                   @click="openDeclinePopUp"
                   class="ml-2 px-3 py-1 text-white bg-red-500 hover:bg-red-600 rounded-md"
                 >

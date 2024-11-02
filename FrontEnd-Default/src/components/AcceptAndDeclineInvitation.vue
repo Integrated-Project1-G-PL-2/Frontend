@@ -7,7 +7,7 @@ const deClareemit = defineEmits([
   'openDecline'
 ])
 
-const props = defineProps(['isRemove', 'isAccept', 'operate'])
+const props = defineProps(['isDecline', 'isAccept', 'operate'])
 const confirmAcceptInvatationCollab = async function () {}
 const confirmRemoveInvatationCollab = async function () {}
 </script>
@@ -50,7 +50,7 @@ const confirmRemoveInvatationCollab = async function () {}
   </div>
   <div
     class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[10px]"
-    v-if="props.isRemove"
+    v-if="props.isDecline"
   >
     <div
       class="itbkk-modal-alert w-[30%] m-[auto] mt-[20%] border border-gray-600 h-[200px]"
