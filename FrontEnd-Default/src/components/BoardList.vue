@@ -248,7 +248,7 @@ const closeProblemLeaveAlter = function () {
       >
         <div class="itbkk-collab-board flex justify-center font-bold">
           <h1 class="font-bold text-center cursor-default text-3xl py-3">
-            Collab Boards
+            Collab Boards + Collab Pending Invitation Boards
           </h1>
         </div>
         <div

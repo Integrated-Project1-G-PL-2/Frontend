@@ -369,7 +369,6 @@ const closeExistPendingAlter = function () {
           <td class="px-4 py-3">
             <div class="itbkk-name hover:text-sky-500 cursor-default">
               {{ collab.name }}
-              <h1 v-if="invited">Pending Invite</h1>
             </div>
           </td>
           <td
@@ -390,18 +389,10 @@ const closeExistPendingAlter = function () {
           </td>
           <td class="px-4 py-3 cursor-default">
             <button
-              v-if="!invited"
               class="itbkk-collab-remove bg-gray-300 text-sm rounded-[6px] font-sans text-gray-700 hover:text-white px-4 py-1"
               @click="openRemoveCollab(collab.name, collab.oid)"
             >
               Remove
-            </button>
-            <button
-              @click="openCancelInvitationCollab()"
-              v-if="invited"
-              class="bg-gray-300 text-sm rounded-[6px] font-sans text-gray-700 hover:text-white px-4 py-1"
-            >
-              Cancel
             </button>
           </td>
         </tr>
@@ -409,38 +400,66 @@ const closeExistPendingAlter = function () {
     </table>
   </div>
   <!-- Invitation Collab Board Section -->
-  <div
-    class="bg-white relative border rounded-lg overflow-auto max-h-[calc(100vh-10rem)] p-4"
-  >
-    <div class="itbkk-collab-board flex justify-center font-bold">
-      <h1 class="font-bold text-center cursor-default text-3xl py-3">
-        Invitation Collab Boards
-      </h1>
-    </div>
-    <div
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
-    >
-      <div
-        class="itbkk-collab-item bg-white border rounded-lg shadow-md p-4 flex flex-col space-y-2 hover:bg-gray-100 hover:text-sky-500"
-      >
-        <div class="flex justify-between items-center">
-          <span class="font-bold text-lg">No : {{ index + 1 }}</span>
-        </div>
-        <div
-          class="itbkk-board-name text-xl font-semibold cursor-pointer"
-          @click=""
-        >
-          Name :
-        </div>
-        <div class="itbkk-owner-name text-sm text-gray-500">
-          <p>Owner :</p>
-        </div>
-        <div class="itbkk-access-right text-sm text-gray-500">
-          <p>Access Right :</p>
-        </div>
-      </div>
-    </div>
+
+  <div class="itbkk-collab-board flex justify-center font-bold mt-3">
+    <h1 class="font-bold text-center cursor-default text-xl py-3">
+      Invitation Collab Boards Management
+    </h1>
   </div>
+
+  <table class="w-full text-sm text-left text-gray-500">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+      <tr>
+        <th class="py-2 px-4 font-semibold text-left">No</th>
+        <th class="py-2 px-4 font-semibold text-left">Name</th>
+        <th class="py-2 px-4 font-semibold text-left">Email</th>
+        <th class="py-2 px-4 font-semibold text-left">Access Right</th>
+        <th class="py-2 px-4 font-semibold text-left">Remove Invitation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        class="border-b hover:bg-gray-100"
+        v-for="(item, index) in invitations"
+        :key="index"
+      >
+        <td class="py-3 px-4 text-lg font-semibold">{{ index + 1 }}</td>
+        <td class="py-3 px-4 text-lg font-semibold">
+          <div class="itbkk-name hover:text-sky-500 cursor-default">
+            {{ invitations.name }}
+          </div>
+        </td>
+        <td
+          class="py-3 px-4 text-lg font-semibold"
+          :class="invitations.email == null ? 'italic' : ''"
+        >
+          {{ invitations.email == null ? 'Unassigned' : invitations.email }}
+        </td>
+        <td class="py-3 px-4 text-lg cursor-pointer">
+          <div
+            class="itbkk-access-right w-[50%]"
+            @click="
+              openChangeCollab(
+                invitations.name,
+                invitations.oid,
+                invitations.accessRight
+              )
+            "
+          >
+            {{ invitations.accessRight }}
+          </div>
+        </td>
+        <td class="py-3 px-4">
+          <button
+            @click="openCancelInvitationCollab()"
+            class="bg-gray-300 text-sm rounded-[6px] font-sans text-gray-700 hover:text-white px-4 py-1"
+          >
+            Cancel
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
   <teleport to="body" v-if="showAddNewCollaborator">
     <AddNewCollaborator
