@@ -15,6 +15,8 @@ import {
   editItem
 } from '../utils/fetchUtils.js'
 import ChangeRemoveLeaveCollab from './../components/ChangeRemoveLeaveCollab.vue'
+import CollabAddInvitation from './CollabAddInvitation.vue'
+
 const emits = defineEmits(['NameBoard', 'errorOccurred', 'NameCollabBoard'])
 const router = useRouter()
 const route = useRoute()
@@ -68,10 +70,14 @@ onMounted(async () => {
 const leaveCollab = ref(false)
 const showAddNewBoard = ref(false) // Initial value is false
 const returnPage = ref(false)
-
+const collabInvitation = ref(false)
 const showAddNewBoardPopUp = function () {
   showAddNewBoard.value = true // Set to true when the button is clicked
   router.push({ name: 'AddNewBoard' })
+}
+const showRequestInvitationListPopUp = () => {
+  collabInvitation.value = true
+  router.replace({ name: 'AddInvitation' })
 }
 
 const clearDeletePopUp = function () {
@@ -186,6 +192,12 @@ const closeProblemLeaveAlter = function () {
             @click="showAddNewBoardPopUp"
           >
             Create personal board
+          </button>
+          <button
+            class="itbkk-button-create bg-blue-500 text-sm rounded-[6px] font-sans text-white hover:text-gray-400 px-7 py-2 mr-2 my-3"
+            @click="showRequestInvitationListPopUp"
+          >
+            Request Invitation
           </button>
         </div>
         <div class="itbkk-personal-board flex justify-center font-bold">
