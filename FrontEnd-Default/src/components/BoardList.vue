@@ -282,7 +282,9 @@ const closeProblemLeaveAlter = function () {
                   ? collab.name
                   : collab.board.name
               }}
-              <h1 v-if="invited">Pending Invite</h1>
+              <div v-if="invited" class="text-sm text-gray-500">
+                <h1>: "Pending Invite"</h1>
+              </div>
             </div>
             <div class="itbkk-owner-name text-sm text-gray-500">
               <p>Owner : {{ collab.localUser.username }}</p>
