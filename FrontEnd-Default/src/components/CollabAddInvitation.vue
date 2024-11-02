@@ -13,16 +13,18 @@ import { storeToRefs } from 'pinia'
 import { userName } from '@/stores/UserManager'
 import AlertPopUp from './../components/AlertPopUp.vue'
 import { logout } from '@/stores/UserManager'
-
+import AcceptAndDeclineInvitation from './AcceptAndDeclineInvitation.vue'
 import { useCollaboratorManager } from '@/stores/CollaboratorManager'
 const router = useRouter()
-
+const acceptInvitation = ref(false)
+const declineInvitation = ref(false)
 const returnPage = ref(false)
 const closeNotLogin = ref(false)
 const route = useRoute()
 const collaboratorManager = useCollaboratorManager()
 const boardCollabList = ref(collaboratorManager.getCollaborators())
-
+const isAccept = ref()
+const isDecline = ref()
 const notInvitation = ref(false)
 // const boardCollabList = ref()
 
@@ -62,6 +64,20 @@ onMounted(async () => {
 })
 const closeNotLoginAlter = function () {
   closeNotLogin.value = false
+}
+const openAcceptPopUp = function () {
+  isAccept.value = true
+  acceptInvitation.value = true
+}
+const openDeclinePopUp = function () {
+  isDecline.value = true
+  declineInvitation.value = true
+}
+const closeAcceptInvitationCollab = function () {
+  acceptInvitation.value = false
+}
+const closeDeclineInvitationCollab = function () {
+  declineInvitation.value = false
 }
 </script>
 
@@ -170,14 +186,14 @@ const closeNotLoginAlter = function () {
               {{ collab.accessRight }} access right on {{ collab.name }} board,
               with
               <button
-                @click="acceptBoards"
+                @click="openAcceptPopUp"
                 class="ml-2 px-3 py-1 text-white bg-green-500 hover:bg-green-600 rounded-md"
               >
                 Accept invitation
               </button>
               or
               <button
-                @click="removeBoards"
+                @click="openDeclinePopUp"
                 class="ml-2 px-3 py-1 text-white bg-red-500 hover:bg-red-600 rounded-md"
               >
                 Decline
@@ -186,6 +202,20 @@ const closeNotLoginAlter = function () {
           </td>
         </tr>
       </tbody>
+      <teleport to="body" v-if="acceptInvitation">
+        <AcceptAndDeclineInvitation
+          :isAccept="isAccept"
+          @openAccept="openAcceptPopUp"
+          @cancelInvitationPopUp="closeAcceptInvitationCollab"
+        ></AcceptAndDeclineInvitation>
+      </teleport>
+      <teleport to="body" v-if="declineInvitation">
+        <AcceptAndDeclineInvitation
+          :isDecline="isDecline"
+          @openDecline="openDeclinePopUp"
+          @cancelInvitationPopUp="closeDeclineInvitationCollab"
+        ></AcceptAndDeclineInvitation>
+      </teleport>
     </table>
   </div>
 </template>

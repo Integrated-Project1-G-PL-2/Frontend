@@ -15,7 +15,7 @@ import {
   editItem
 } from '../utils/fetchUtils.js'
 import ChangeRemoveLeaveCollab from './../components/ChangeRemoveLeaveCollab.vue'
-
+import AcceptAndDeclineInvitation from './AcceptAndDeclineInvitation.vue'
 const emits = defineEmits(['NameBoard', 'errorOccurred', 'NameCollabBoard'])
 const router = useRouter()
 const route = useRoute()
@@ -29,6 +29,10 @@ const error = ref(false)
 const collabDetail = reactive({})
 const errorPrivate = ref(false)
 const errorLeave = ref(false)
+const acceptInvitation = ref(false)
+const declineInvitation = ref(false)
+const isAccept = ref()
+const isRemove = ref()
 const closeProblemAlter = () => {
   error.value = false
 }
@@ -110,6 +114,20 @@ const errorLeavePopup = function () {
 }
 const closeProblemLeaveAlter = function () {
   errorLeave.value = false
+}
+const openAcceptPopUp = function () {
+  isAccept.value = true
+  acceptInvitation.value = true
+}
+const openDeclinePopUp = function () {
+  isRemove.value = true
+  declineInvitation.value = true
+}
+const closeAcceptInvitationCollab = function () {
+  acceptInvitation.value = false
+}
+const closeDeclineInvitationCollab = function () {
+  declineInvitation.value = false
 }
 </script>
 
@@ -326,13 +344,13 @@ const closeProblemLeaveAlter = function () {
                   Leave
                 </button>
                 <button
-                  v-if="invited"
+                  @click="openAcceptPopUp"
                   class="ml-2 px-3 py-1 text-white bg-green-500 hover:bg-green-600 rounded-md"
                 >
                   Accept
                 </button>
                 <button
-                  v-if="invited"
+                  @click="openDeclinePopUp"
                   class="ml-2 px-3 py-1 text-white bg-red-500 hover:bg-red-600 rounded-md"
                 >
                   Decline
@@ -360,6 +378,20 @@ const closeProblemLeaveAlter = function () {
         @saveDetail="showDelComplete"
         @errorOccurred="showErrorMessage"
       ></AddNewBoard>
+    </teleport>
+    <teleport to="body" v-if="acceptInvitation">
+      <AcceptAndDeclineInvitation
+        :isAccept="isAccept"
+        @openAccept="openAcceptPopUp"
+        @cancelInvitationPopUp="closeAcceptInvitationCollab"
+      ></AcceptAndDeclineInvitation>
+    </teleport>
+    <teleport to="body" v-if="declineInvitation">
+      <AcceptAndDeclineInvitation
+        :isDecline="isDecline"
+        @openDecline="openDeclinePopUp"
+        @cancelInvitationPopUp="closeDeclineInvitationCollab"
+      ></AcceptAndDeclineInvitation>
     </teleport>
   </div>
 </template>

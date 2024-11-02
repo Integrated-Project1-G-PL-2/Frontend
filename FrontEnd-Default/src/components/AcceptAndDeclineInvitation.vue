@@ -1,7 +1,11 @@
 <script setup>
 import { ref, reactive } from 'vue'
 
-const deClareemit = defineEmits(['cancelInvitationPopUp'])
+const deClareemit = defineEmits([
+  'cancelInvitationPopUp',
+  'openAccept',
+  'openDecline'
+])
 
 const props = defineProps(['isRemove', 'isAccept', 'operate'])
 const confirmAcceptInvatationCollab = async function () {}
@@ -18,14 +22,12 @@ const confirmRemoveInvatationCollab = async function () {}
     >
       <div class="flex flex-col justify-between bg-white p-4 h-[100px]">
         <div class="itbkk-title w-full h-[70px] mt-1 border-b">
-          <h1 class="text-xl font-bold text-justify">Leave Board</h1>
+          <h1 class="text-xl font-bold text-justify">Accept Invitation</h1>
         </div>
 
         <div class="w-[70%] h-[100%]">
           <div class="itbkk-message pl-4 mt-4">
-            Do you want to accept this "{{
-              props.NameLeaveCollabBoard.value.name
-            }}" to become collaborator of the board?
+            Do you want to accept this "" to become collaborator of the board?
           </div>
         </div>
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
@@ -55,14 +57,12 @@ const confirmRemoveInvatationCollab = async function () {}
     >
       <div class="flex flex-col justify-between bg-white p-4 h-[100px]">
         <div class="itbkk-title w-full h-[70px] mt-1 border-b">
-          <h1 class="text-xl font-bold text-justify">Change Access Right</h1>
+          <h1 class="text-xl font-bold text-justify">Decline Invitation</h1>
         </div>
 
         <div class="w-[70%] h-[100%]">
           <div class="itbkk-message pl-4 mt-4">
-            Do you want this "
-            {{ props.NameChangeCollabBoard.value.name }}" to be remove from
-            board's collaborator
+            Do you want this " " to be remove from board's collaborator
           </div>
         </div>
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
