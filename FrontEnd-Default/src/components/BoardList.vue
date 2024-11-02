@@ -309,62 +309,14 @@ const closeProblemLeaveAlter = function () {
                 >
                   Leave
                 </button>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div
-          v-if="invited"
-          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-3"
-        >
-          <div
-            v-for="(collab, index) in boardsList.filter(
-              (board) => board.role != 'OWNER'
-            )"
-            :key="collab.id.collabId"
-            class="itbkk-collab-item bg-white border rounded-lg shadow-md p-4 flex flex-col space-y-2 hover:bg-gray-100 hover:text-sky-500"
-          >
-            <div class="flex justify-between items-center">
-              <span class="font-bold text-lg">No : {{ index + 1 }}</span>
-            </div>
-            <div
-              class="itbkk-board-name text-xl font-semibold cursor-pointer"
-              @click="
-                ;[
-                  emits('NameCollabBoard', collab.board.name),
-                  router.replace({
-                    name: 'Task',
-                    params: { id: collab.id.boardId }
-                  })
-                ]
-              "
-            >
-              Name :
-              {{
-                collab.board?.name == undefined
-                  ? collab.name
-                  : collab.board.name
-              }}
-              <h1 v-if="invited">Pending Invite</h1>
-            </div>
-            <div class="itbkk-owner-name text-sm text-gray-500">
-              <p>Owner : {{ collab.localUser.username }}</p>
-            </div>
-            <div class="itbkk-access-right text-sm text-gray-500">
-              <p>
-                Access Right :
-                {{ collab.role == undefined ? 'owner' : collab.role }}
-              </p>
-            </div>
-            <div class="itbkk-leave-board text-sm text-gray-500">
-              <p>
-                Action :
                 <button
+                  v-if="invited"
                   class="ml-2 px-3 py-1 text-white bg-green-500 hover:bg-green-600 rounded-md"
                 >
                   Accept
                 </button>
                 <button
+                  v-if="invited"
                   class="ml-2 px-3 py-1 text-white bg-red-500 hover:bg-red-600 rounded-md"
                 >
                   Decline
