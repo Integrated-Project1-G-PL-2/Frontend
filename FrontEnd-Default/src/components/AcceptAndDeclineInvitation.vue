@@ -10,6 +10,7 @@ import {
   cancelInvite
 } from '../utils/fetchUtils.js'
 import { useRoute, useRouter } from 'vue-router'
+import { useBoardManager } from '@/stores/BoardManager'
 const router = useRouter()
 const deClareemit = defineEmits([
   'cancelInvitationPopUp',

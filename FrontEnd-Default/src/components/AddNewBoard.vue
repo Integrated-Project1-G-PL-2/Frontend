@@ -47,7 +47,7 @@ const newBoard = async () => {
   }
 
   boardManager.addBoard(newBoards)
-  deClareemit('cancelDetail', true)
+  deClareemit('saveDetail', true)
   router.replace({ name: 'Task', params: { id: newBoards.id } }) // Use the new board's ID
 }
 </script>
