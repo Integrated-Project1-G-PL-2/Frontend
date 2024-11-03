@@ -1,10 +1,28 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-const deClareemit = defineEmits(['confirmDetail', 'cancelDetail', 'redAlert'])
+import { cancelInvite } from '../utils/fetchUtils.js'
+import { useCollaboratorManager } from '@/stores/CollaboratorManager'
+import { useBoardManager } from '@/stores/BoardManager'
+const deClareemit = defineEmits([
+  'confirmCancelInvatation',
+  'cancelDetail',
+  'redAlert'
+])
 const props = defineProps(['boardCancelDetail'])
 const router = useRouter()
 const route = useRoute()
+const collaboratorManager = useCollaboratorManager()
+const boardManager = useBoardManager()
+const confirmCancelInvatationCollab = async function (boardCancelId) {
+  const cancel = await cancelInvite(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${
+      props.boardCancelDetail.value.boardId
+    }/invitation`
+  )
+  boardManager.deleteBoard(boardCancelId, 'pending')
+  deClareemit('confirmCancelInvatation', true)
+}
 </script>
 
 <template>
@@ -28,10 +46,7 @@ const route = useRoute()
         <button
           class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"
           @click="
-            ;[
-              $emit('cancelDetail', true),
-              $router.replace({ name: 'CollabList' })
-            ]
+            confirmCancelInvatationCollab(props.boardCancelDetail.value.boardId)
           "
         >
           <div class="btn text-center">Confirm</div>

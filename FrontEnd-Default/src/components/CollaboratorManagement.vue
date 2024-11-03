@@ -106,6 +106,9 @@ const closeRemove = function () {
 const closeCancelInvitation = function () {
   cancelInvitationCollab.value = false
 }
+const closeComfrimCancelInvitation = function () {
+  cancelInvitationCollab.value = false
+}
 const closePermissionAlter = function () {
   closePermission.value = false
 }
@@ -497,6 +500,7 @@ const closeExistPendingAlter = function () {
     <CancelInvitation
       @cancelDetail="closeCancelInvitation"
       :boardCancelDetail="boardInvitationDetail"
+      :confirmCancelInvatation="closeComfrimCancelInvitation"
     ></CancelInvitation>
   </teleport>
 </template>
