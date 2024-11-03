@@ -8,10 +8,12 @@ export const useCollaboratorManager = defineStore('collaboratorManager', () => {
   }
   const setCollaborators = function (collaboratorList = []) {
     collaborators.length = 0
-    if (collaboratorList != null) {
+    if (!collaboratorList) {
       collaboratorList.forEach((collaborator) => {
         collaborators.push(collaborator)
       })
+    }else{
+      console.log('No collaborator')
     }
   }
   const addCollaborator = function (newCollaborator) {
