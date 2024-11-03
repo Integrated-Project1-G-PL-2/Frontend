@@ -8,26 +8,25 @@ import {
   editItem,
   acceptInvite,
   cancelInvite
-} from "../utils/fetchUtils.js";
-import { useRoute, useRouter } from "vue-router";
-const router = useRouter();
+} from '../utils/fetchUtils.js'
+import { useRoute, useRouter } from 'vue-router'
+const router = useRouter()
 const deClareemit = defineEmits([
   'cancelInvitationPopUp',
   'openAccept',
   'openDecline'
 ])
 
-
-const route = useRoute();
-const props = defineProps(['isDecline', 'isAccept', 'operate','boardDetail'])
+const route = useRoute()
+const props = defineProps(['isDecline', 'isAccept', 'operate', 'boardDetail'])
 
 const confirmAcceptInvatationCollab = async function () {
   const accept = await acceptInvite(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${
       props.boardDetail.value.boardId
     }/invitation`
-  );
-  router.replace({ name: "Board" });
+  )
+  router.replace({ name: 'Board' })
   console.log(accept)
 }
 const confirmRemoveInvatationCollab = async function () {
@@ -35,8 +34,8 @@ const confirmRemoveInvatationCollab = async function () {
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${
       props.boardDetail.value.boardId
     }/invitation`
-  );
-  router.replace({ name: "Board" });
+  )
+  router.replace({ name: 'Board' })
   console.log(cancel)
 }
 </script>
@@ -56,7 +55,8 @@ const confirmRemoveInvatationCollab = async function () {
 
         <div class="w-[70%] h-[100%]">
           <div class="itbkk-message pl-4 mt-4">
-            Do you want to accept this "" to become collaborator of the board?
+            Do you want to accept this {{ boardDetail.value.boardName }} to
+            become collaborator of the board?
           </div>
         </div>
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
@@ -91,7 +91,8 @@ const confirmRemoveInvatationCollab = async function () {
 
         <div class="w-[70%] h-[100%]">
           <div class="itbkk-message pl-4 mt-4">
-            Do you want this " " to be remove from board's collaborator
+            Do you want this {{ boardDetail.value.boardName }} to be remove from
+            board's collaborator
           </div>
         </div>
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">

@@ -116,13 +116,13 @@ const errorLeavePopup = function () {
 const closeProblemLeaveAlter = function () {
   errorLeave.value = false
 }
-const openAcceptPopUp = function (boardId) {
-  boardDetail.value = { boardId: boardId};
+const openAcceptPopUp = function (boardId, boardName) {
+  boardDetail.value = { boardId: boardId, boardName: boardName }
   isAccept.value = true
   acceptInvitation.value = true
 }
-const openDeclinePopUp = function (boardId) {
-  boardDetail.value = { boardId: boardId};
+const openDeclinePopUp = function (boardId, boardName) {
+  boardDetail.value = { boardId: boardId, boardName: boardName }
   isDecline.value = true
   declineInvitation.value = true
 }
@@ -315,7 +315,14 @@ const closeDeclineInvitationCollab = function () {
               }}
             </div>
             <div class="itbkk-owner-name text-sm text-gray-500">
-              <p>Owner : {{ collab.localUser?.username == undefined ? "can't find owner" : collab.localUser.username }}</p>
+              <p>
+                Owner :
+                {{
+                  collab.localUser?.username == undefined
+                    ? "can't find owner"
+                    : collab.localUser.username
+                }}
+              </p>
             </div>
             <div class="itbkk-access-right text-sm text-gray-500">
               <p>
@@ -390,13 +397,17 @@ const closeDeclineInvitationCollab = function () {
                 Action :
 
                 <button
-                  @click="openAcceptPopUp(pending.id.boardId)"
+                  @click="
+                    openAcceptPopUp(pending.id.boardId, pending.board.name)
+                  "
                   class="ml-2 px-3 py-1 text-white bg-green-500 hover:bg-green-600 rounded-md"
                 >
                   Accept
                 </button>
                 <button
-                  @click="openDeclinePopUp(pending.id.boardId)"
+                  @click="
+                    openDeclinePopUp(pending.id.boardId, pending.board.name)
+                  "
                   class="ml-2 px-3 py-1 text-white bg-red-500 hover:bg-red-600 rounded-md"
                 >
                   Decline
