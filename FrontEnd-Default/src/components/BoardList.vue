@@ -310,12 +310,9 @@ const closeDeclineInvitationCollab = function () {
                   ? collab.name
                   : collab.board.name
               }}
-              <div v-if="invited" class="text-sm text-gray-500">
-                <h1>: "Pending Invite"</h1>
-              </div>
             </div>
             <div class="itbkk-owner-name text-sm text-gray-500">
-              <p>Owner : {{ collab.localUser.username }}</p>
+              <p>Owner : {{ collab.localUser?.username == undefined ? "can't find owner" : collab.localUser.username }}</p>
             </div>
             <div class="itbkk-access-right text-sm text-gray-500">
               <p>
@@ -327,7 +324,6 @@ const closeDeclineInvitationCollab = function () {
               <p>
                 Action :
                 <button
-                  v-if="!invited"
                   class="itbkk-button-create bg-gray-300 text-sm rounded-[6px] font-sans text-gray-700 hover:text-white px-4 py-1"
                   @click="
                     openLeaveCollab(
@@ -339,25 +335,11 @@ const closeDeclineInvitationCollab = function () {
                 >
                   Leave
                 </button>
-                <button
-                  v-if="invited"
-                  @click="openAcceptPopUp"
-                  class="ml-2 px-3 py-1 text-white bg-green-500 hover:bg-green-600 rounded-md"
-                >
-                  Accept
-                </button>
-                <button
-                  v-if="invited"
-                  @click="openDeclinePopUp"
-                  class="ml-2 px-3 py-1 text-white bg-red-500 hover:bg-red-600 rounded-md"
-                >
-                  Decline
-                </button>
               </p>
             </div>
           </div>
         </div>
-        <!-- <div
+        <div
           v-if="invited"
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4"
         >
@@ -387,7 +369,7 @@ const closeDeclineInvitationCollab = function () {
                   ? collab.name
                   : collab.board.name
               }}
-              <div v-if="invited" class="text-sm text-gray-500">
+              <div class="text-sm text-gray-500">
                 <h1>: "Pending Invite"</h1>
               </div>
             </div>
@@ -419,7 +401,7 @@ const closeDeclineInvitationCollab = function () {
               </p>
             </div>
           </div>
-        </div> -->
+        </div>
       </div>
     </div>
     <teleport to="body" v-if="leaveCollab">
