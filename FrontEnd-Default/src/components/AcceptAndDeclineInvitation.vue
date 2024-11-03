@@ -14,7 +14,9 @@ const router = useRouter()
 const deClareemit = defineEmits([
   'cancelInvitationPopUp',
   'openAccept',
-  'openDecline'
+  'openDecline',
+  'confirmAcceptInvatation',
+  'confirmRemoveInvatation'
 ])
 
 const route = useRoute()
@@ -26,7 +28,7 @@ const confirmAcceptInvatationCollab = async function () {
       props.boardDetail.value.boardId
     }/invitation`
   )
-  router.replace({ name: 'Board' })
+  deClareemit('confirmAcceptInvatation', true)
   console.log(accept)
 }
 const confirmRemoveInvatationCollab = async function () {
@@ -35,7 +37,7 @@ const confirmRemoveInvatationCollab = async function () {
       props.boardDetail.value.boardId
     }/invitation`
   )
-  router.replace({ name: 'Board' })
+  deClareemit('confirmRemoveInvatation', true)
   console.log(cancel)
 }
 </script>

@@ -129,7 +129,13 @@ const openDeclinePopUp = function (boardId, boardName) {
 const closeAcceptInvitationCollab = function () {
   acceptInvitation.value = false
 }
+const closeConfirmAcceptInvitationCollab = function () {
+  acceptInvitation.value = false
+}
 const closeDeclineInvitationCollab = function () {
+  declineInvitation.value = false
+}
+const closeConfirmDeclineInvitationCollab = function () {
   declineInvitation.value = false
 }
 </script>
@@ -442,6 +448,7 @@ const closeDeclineInvitationCollab = function () {
         :boardDetail="boardDetail"
         @openAccept="openAcceptPopUp"
         @cancelInvitationPopUp="closeAcceptInvitationCollab"
+        @confirmAcceptInvatation="closeConfirmAcceptInvitationCollab"
       ></AcceptAndDeclineInvitation>
     </teleport>
     <teleport to="body" v-if="declineInvitation">
@@ -450,6 +457,7 @@ const closeDeclineInvitationCollab = function () {
         :boardDetail="boardDetail"
         @openDecline="openDeclinePopUp"
         @cancelInvitationPopUp="closeDeclineInvitationCollab"
+        @confirmRemoveInvatation="closeConfirmDeclineInvitationCollab"
       ></AcceptAndDeclineInvitation>
     </teleport>
   </div>
