@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, reactive, ref, watch, computed } from "vue";
+import { onMounted, reactive, ref, watch, computed } from 'vue'
 import {
   getItems,
   getItemById,
@@ -8,95 +8,91 @@ import {
   editItem,
   acceptInvite,
   cancelInvite
-} from "../utils/fetchUtils.js";
+} from '../utils/fetchUtils.js'
 
-import { useRoute, useRouter } from "vue-router";
-import { storeToRefs } from "pinia";
-import { userName } from "@/stores/UserManager";
-import AlertPopUp from "./../components/AlertPopUp.vue";
-import { logout } from "@/stores/UserManager";
-import AcceptAndDeclineInvitation from "./AcceptAndDeclineInvitation.vue";
-import { useCollaboratorManager } from "@/stores/CollaboratorManager";
-const router = useRouter();
-const acceptInvitation = ref(false);
-const declineInvitation = ref(false);
-const returnPage = ref(false);
-const closeNotLogin = ref(false);
-const route = useRoute();
-const collaboratorManager = useCollaboratorManager();
-const boardCollabList = ref(collaboratorManager.getCollaborators());
-const isAccept = ref();
-const isDecline = ref();
+import { useRoute, useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import { userName } from '@/stores/UserManager'
+import AlertPopUp from './../components/AlertPopUp.vue'
+import { logout } from '@/stores/UserManager'
+import AcceptAndDeclineInvitation from './AcceptAndDeclineInvitation.vue'
+import { useCollaboratorManager } from '@/stores/CollaboratorManager'
+const router = useRouter()
+const acceptInvitation = ref(false)
+const declineInvitation = ref(false)
+const returnPage = ref(false)
+const closeNotLogin = ref(false)
+const route = useRoute()
+const collaboratorManager = useCollaboratorManager()
+const boardCollabList = ref(collaboratorManager.getCollaborators())
+const isAccept = ref()
+const isDecline = ref()
 const inviteDetail = reactive({})
 const boardDetail = reactive([])
-const notInvitation = ref(false);
+const notInvitation = ref(false)
 // const boardCollabList = ref()
 
 const returnLoginPage = () => {
-  logout();
-  router.replace({ name: "Login" });
-  returnPage.value = true;
-};
+  logout()
+  router.replace({ name: 'Login' })
+  returnPage.value = true
+}
 
 const goBackToPersonalBoard = () => {
-  router.replace({ name: "Task" });
-};
+  router.replace({ name: 'Task' })
+}
 
 const goBackToHomeBoard = () => {
-  router.replace({ name: "Board" });
-};
+  router.replace({ name: 'Board' })
+}
 
 onMounted(async () => {
   const getDetail = await getItems(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/invitation`
-  );
+  )
 
-if(getDetail.status == 404 ){
-  //ก่อน redirect ขึ้น window alert หรือ pop up แล้ว set time out 5 วิ แล้ว replace 
-  router.replace({ name: "Board" });
-}else if(getDetail.status == 400){
-  router.replace({ name: "Login" });
-}
-Object.assign(inviteDetail, getDetail);
-
-});
+  if (getDetail.status == 404) {
+    //ก่อน redirect ขึ้น window alert หรือ pop up แล้ว set time out 5 วิ แล้ว replace
+    closeNotLogin.value = true
+    router.replace({ name: 'Board' })
+  } else if (getDetail.status == 400) {
+    router.replace({ name: 'Login' })
+  }
+  Object.assign(inviteDetail, getDetail)
+})
 
 console.log(inviteDetail)
 const acceptInv = async function () {
   const accept = await acceptInvite(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards/${
-      route.params.id
-    }/invitation`
-  );
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/invitation`
+  )
   console.log(accept)
 }
 const cancelInv = async function () {
   const cancel = await cancelInvite(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards/${
-      route.params.id
-    }/invitation`
-  );
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/invitation`
+  )
   console.log(cancel)
 }
 const closeNotLoginAlter = function () {
-  closeNotLogin.value = false;
-};
+  closeNotLogin.value = false
+}
 const openAcceptPopUp = function (boardId) {
-  isAccept.value = true;
-  boardDetail.value = { boardId: boardId};
-  acceptInvitation.value = true;
-};
+  isAccept.value = true
+  boardDetail.value = { boardId: boardId }
+  acceptInvitation.value = true
+}
 const openDeclinePopUp = function (boardId) {
-  isDecline.value = true;
-  boardDetail.value = { boardId: boardId};
-  declineInvitation.value = true;
-};
+  isDecline.value = true
+  boardDetail.value = { boardId: boardId }
+  declineInvitation.value = true
+}
 const closeAcceptInvitationCollab = function () {
-  acceptInvitation.value = false;
-};
+  acceptInvitation.value = false
+}
 const closeDeclineInvitationCollab = function () {
-  declineInvitation.value = false;
-};
+  declineInvitation.value = false
+}
 </script>
 
 <template>
@@ -163,12 +159,13 @@ const closeDeclineInvitationCollab = function () {
       </div>
     </div>
     <AlertPopUp
-      v-if="closeNotLogin"
-      :titles="'User should sign-in first. '"
+      v-if="closeNotFind"
+      :titles="'Sorry, we could not find the invitation to this board '"
       @closePopUp="closeNotLoginAlter"
       message="Error!!"
       styleType="red"
     />
+
     <table class="w-full text-sm text-left text-gray-500">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50">
         <tr>
@@ -191,15 +188,12 @@ const closeDeclineInvitationCollab = function () {
           </div>
         </div>
 
-        <tr
-     
-        >
+        <tr>
           <td class="px-4 py-3">
             <div class="itbkk-name hover:text-sky-500 cursor-default">
               {{ inviteDetail.owner }} has invited you to collaborate with
-              {{ inviteDetail.accessRight }} access right on {{ inviteDetail.boardName }} board,
-      
-              with
+              {{ inviteDetail.accessRight }} access right on
+              {{ inviteDetail.boardName }} board, with
               <button
                 @click="openAcceptPopUp(route.params.id)"
                 class="ml-2 px-3 py-1 text-white bg-green-500 hover:bg-green-600 rounded-md"
