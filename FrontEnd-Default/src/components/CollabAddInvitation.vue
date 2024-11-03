@@ -52,9 +52,14 @@ onMounted(async () => {
   )
 
   if (getDetail.status == 404) {
-    //ก่อน redirect ขึ้น window alert หรือ pop up แล้ว set time out 5 วิ แล้ว replace
-    closeNotLogin.value = true
-    router.replace({ name: 'Board' })
+    // Display alert message
+    window.alert('You are not logged in.')
+
+    // Set a timeout of 5 seconds (5000 milliseconds) before redirecting
+    setTimeout(() => {
+      closeNotLogin.value = true
+      router.replace({ name: 'Board' })
+    }, 5000) // 5000 milliseconds = 5 seconds
   } else if (getDetail.status == 400) {
     router.replace({ name: 'Login' })
   }
@@ -159,13 +164,12 @@ const closeDeclineInvitationCollab = function () {
       </div>
     </div>
     <AlertPopUp
-      v-if="closeNotFind"
-      :titles="'Sorry, we could not find the invitation to this board '"
+      v-if="closeNotLogin"
+      :titles="'Sorry, You do not have access rights to this board .User should sign-in first. '"
       @closePopUp="closeNotLoginAlter"
       message="Error!!"
       styleType="red"
     />
-
     <table class="w-full text-sm text-left text-gray-500">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50">
         <tr>
