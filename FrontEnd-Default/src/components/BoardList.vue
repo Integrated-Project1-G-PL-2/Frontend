@@ -39,7 +39,8 @@ const closeProblemAlter = () => {
 const closePrivateAlter = () => {
   errorPrivate.value = false
 }
-const invited = ref(false)
+const boardDetail = reactive([])
+const invited = ref(true)
 onMounted(async () => {
   const boards = await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards`)
   if (boards == 401) {
@@ -115,11 +116,13 @@ const errorLeavePopup = function () {
 const closeProblemLeaveAlter = function () {
   errorLeave.value = false
 }
-const openAcceptPopUp = function () {
+const openAcceptPopUp = function (boardId) {
+  boardDetail.value = { boardId: boardId};
   isAccept.value = true
   acceptInvitation.value = true
 }
-const openDeclinePopUp = function () {
+const openDeclinePopUp = function (boardId) {
+  boardDetail.value = { boardId: boardId};
   isDecline.value = true
   declineInvitation.value = true
 }
@@ -344,8 +347,8 @@ const closeDeclineInvitationCollab = function () {
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4"
         >
           <div
-            v-for="(collab, index) in boardsList.pending"
-            :key="collab.id.collabId"
+            v-for="(pending, index) in boardsList.pending"
+            :key="pending.id.collabId"
             class="itbkk-collab-item bg-white border rounded-lg shadow-md p-4 flex flex-col space-y-2 hover:bg-gray-100 hover:text-sky-500"
           >
             <div class="flex justify-between items-center">
@@ -355,31 +358,31 @@ const closeDeclineInvitationCollab = function () {
               class="itbkk-board-name text-xl font-semibold cursor-pointer"
               @click="
                 ;[
-                  emits('NameCollabBoard', collab.board.name),
+                  emits('NameCollabBoard', pending.board.name),
                   router.replace({
                     name: 'Task',
-                    params: { id: collab.id.boardId }
+                    params: { id: pending.id.boardId }
                   })
                 ]
               "
             >
               Name :
               {{
-                collab.board?.name == undefined
-                  ? collab.name
-                  : collab.board.name
+                pending.board?.name == undefined
+                  ? pending.name
+                  : pending.board.name
               }}
               <div class="text-sm text-gray-500">
                 <h1>: "Pending Invite"</h1>
               </div>
             </div>
             <div class="itbkk-owner-name text-sm text-gray-500">
-              <p>Owner : {{ collab.localUser.username }}</p>
+              <p>Owner : {{ pending.localUser.username }}</p>
             </div>
             <div class="itbkk-access-right text-sm text-gray-500">
               <p>
                 Access Right :
-                {{ collab.role == undefined ? 'owner' : collab.role }}
+                {{ pending.role == undefined ? 'owner' : pending.role }}
               </p>
             </div>
             <div class="itbkk-leave-board text-sm text-gray-500">
@@ -387,13 +390,13 @@ const closeDeclineInvitationCollab = function () {
                 Action :
 
                 <button
-                  @click="openAcceptPopUp"
+                  @click="openAcceptPopUp(pending.id.boardId)"
                   class="ml-2 px-3 py-1 text-white bg-green-500 hover:bg-green-600 rounded-md"
                 >
                   Accept
                 </button>
                 <button
-                  @click="openDeclinePopUp"
+                  @click="openDeclinePopUp(pending.id.boardId)"
                   class="ml-2 px-3 py-1 text-white bg-red-500 hover:bg-red-600 rounded-md"
                 >
                   Decline
@@ -425,6 +428,7 @@ const closeDeclineInvitationCollab = function () {
     <teleport to="body" v-if="acceptInvitation">
       <AcceptAndDeclineInvitation
         :isAccept="isAccept"
+        :boardDetail="boardDetail"
         @openAccept="openAcceptPopUp"
         @cancelInvitationPopUp="closeAcceptInvitationCollab"
       ></AcceptAndDeclineInvitation>
@@ -432,6 +436,7 @@ const closeDeclineInvitationCollab = function () {
     <teleport to="body" v-if="declineInvitation">
       <AcceptAndDeclineInvitation
         :isDecline="isDecline"
+        :boardDetail="boardDetail"
         @openDecline="openDeclinePopUp"
         @cancelInvitationPopUp="closeDeclineInvitationCollab"
       ></AcceptAndDeclineInvitation>

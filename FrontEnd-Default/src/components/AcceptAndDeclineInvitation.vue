@@ -1,15 +1,44 @@
 <script setup>
 import { ref, reactive } from 'vue'
-
+import {
+  getItems,
+  getItemById,
+  deleteItemById,
+  addItem,
+  editItem,
+  acceptInvite,
+  cancelInvite
+} from "../utils/fetchUtils.js";
+import { useRoute, useRouter } from "vue-router";
+const router = useRouter();
 const deClareemit = defineEmits([
   'cancelInvitationPopUp',
   'openAccept',
   'openDecline'
 ])
 
-const props = defineProps(['isDecline', 'isAccept', 'operate'])
-const confirmAcceptInvatationCollab = async function () {}
-const confirmRemoveInvatationCollab = async function () {}
+
+const route = useRoute();
+const props = defineProps(['isDecline', 'isAccept', 'operate','boardDetail'])
+
+const confirmAcceptInvatationCollab = async function () {
+  const accept = await acceptInvite(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${
+      props.boardDetail.value.boardId
+    }/invitation`
+  );
+  router.replace({ name: "Board" });
+  console.log(accept)
+}
+const confirmRemoveInvatationCollab = async function () {
+  const cancel = await cancelInvite(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${
+      props.boardDetail.value.boardId
+    }/invitation`
+  );
+  router.replace({ name: "Board" });
+  console.log(cancel)
+}
 </script>
 
 <template>

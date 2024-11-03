@@ -86,14 +86,7 @@ const routes = [
   {
     path: '/board/:id/collab',
     name: 'CollabList',
-    component: CollaboratorManagement,
-    children: [
-      {
-        path: '/board/:id/collab/invitations',
-        component: CollabAddInvitation,
-        name: 'AddInvitation'
-      }
-    ]
+    component: CollaboratorManagement
   },
   {
     path: '/board/:id/collab/invitations',

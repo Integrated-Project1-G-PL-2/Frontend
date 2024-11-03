@@ -27,6 +27,8 @@ const collaboratorManager = useCollaboratorManager();
 const boardCollabList = ref(collaboratorManager.getCollaborators());
 const isAccept = ref();
 const isDecline = ref();
+const inviteDetail = reactive({})
+const boardDetail = reactive([])
 const notInvitation = ref(false);
 // const boardCollabList = ref()
 
@@ -45,27 +47,21 @@ const goBackToHomeBoard = () => {
 };
 
 onMounted(async () => {
-  const collab = await getItems(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`
+  const getDetail = await getItems(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/invitation`
   );
-  // boardCollabList.value = collab
 
-  collaboratorManager.setCollaborators(collab);
-  console.log(collaboratorManager.getCollaborators());
-  const storedUserName = localStorage.getItem("userName");
-  if (storedUserName) {
-    userName.value = storedUserName;
-  }
+if(getDetail.status == 404 ){
+  //ก่อน redirect ขึ้น window alert หรือ pop up แล้ว set time out 5 วิ แล้ว replace 
+  router.replace({ name: "Board" });
+}else if(getDetail.status == 400){
+  router.replace({ name: "Login" });
+}
+Object.assign(inviteDetail, getDetail);
 
-  if (
-    route.fullPath == `/board/${route.params.id}/collab` &&
-    role !== "OWNER"
-  ) {
-    router.replace({ name: "Task" });
-  }
 });
 
-
+console.log(inviteDetail)
 const acceptInv = async function () {
   const accept = await acceptInvite(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${
@@ -85,12 +81,14 @@ const cancelInv = async function () {
 const closeNotLoginAlter = function () {
   closeNotLogin.value = false;
 };
-const openAcceptPopUp = function () {
+const openAcceptPopUp = function (boardId) {
   isAccept.value = true;
+  boardDetail.value = { boardId: boardId};
   acceptInvitation.value = true;
 };
-const openDeclinePopUp = function () {
+const openDeclinePopUp = function (boardId) {
   isDecline.value = true;
+  boardDetail.value = { boardId: boardId};
   declineInvitation.value = true;
 };
 const closeAcceptInvitationCollab = function () {
@@ -162,19 +160,6 @@ const closeDeclineInvitationCollab = function () {
             > Collaborator
           </div>
         </div>
-<!-- this is test -->
-        <div>
-          <button @click="acceptInv">
-            test Accept
-          </button>
-          </div>  
-          <div>
-          <button @click="cancelInv">
-            test Cancel
-          </button>
-          </div> 
-<!--  -->
- 
       </div>
     </div>
     <AlertPopUp
@@ -187,8 +172,7 @@ const closeDeclineInvitationCollab = function () {
     <table class="w-full text-sm text-left text-gray-500">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50">
         <tr>
-          <th class="px-4 py-3 cursor-default">No</th>
-          <th class="px-4 py-3 cursor-default">Inviter Details</th>
+          <th class="px-4 py-3 cursor-default">Inviter Detail</th>
         </tr>
       </thead>
       <tbody>
@@ -208,25 +192,23 @@ const closeDeclineInvitationCollab = function () {
         </div>
 
         <tr
-          v-for="(collab, index) in boardCollabList.collab"
-          :key="collab.id"
-          class="itbkk-item border-b cursor-pointer"
+     
         >
-          <td class="px-4 py-3">{{ index + 1 }}</td>
           <td class="px-4 py-3">
             <div class="itbkk-name hover:text-sky-500 cursor-default">
-              {{ collab.name }} has invited you to collaborate with
-              {{ collab.accessRight }} access right on {{ collab.name }} board,
+              {{ inviteDetail.owner }} has invited you to collaborate with
+              {{ inviteDetail.accessRight }} access right on {{ inviteDetail.boardName }} board,
+      
               with
               <button
-                @click="openAcceptPopUp"
+                @click="openAcceptPopUp(route.params.id)"
                 class="ml-2 px-3 py-1 text-white bg-green-500 hover:bg-green-600 rounded-md"
               >
                 Accept invitation
               </button>
               or
               <button
-                @click="openDeclinePopUp"
+                @click="openDeclinePopUp(route.params.id)"
                 class="ml-2 px-3 py-1 text-white bg-red-500 hover:bg-red-600 rounded-md"
               >
                 Decline
@@ -238,6 +220,7 @@ const closeDeclineInvitationCollab = function () {
       <teleport to="body" v-if="acceptInvitation">
         <AcceptAndDeclineInvitation
           :isAccept="isAccept"
+          :boardDetail="boardDetail"
           @openAccept="openAcceptPopUp"
           @cancelInvitationPopUp="closeAcceptInvitationCollab"
         ></AcceptAndDeclineInvitation>
@@ -245,6 +228,7 @@ const closeDeclineInvitationCollab = function () {
       <teleport to="body" v-if="declineInvitation">
         <AcceptAndDeclineInvitation
           :isDecline="isDecline"
+          :boardDetail="boardDetail"
           @openDecline="openDeclinePopUp"
           @cancelInvitationPopUp="closeDeclineInvitationCollab"
         ></AcceptAndDeclineInvitation>
