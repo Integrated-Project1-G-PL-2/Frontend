@@ -1,131 +1,134 @@
 <script setup>
-import { ref, reactive } from 'vue'
-import { deleteItemById, editReadWrite } from '@/utils/fetchUtils'
-import { useStatusManager } from '@/stores/StatusManager'
-import { useRoute, useRouter } from 'vue-router'
-import { refreshToken } from '@/stores/UserManager'
-import { useCollaboratorManager } from '@/stores/CollaboratorManager'
-import { useBoardManager } from '@/stores/BoardManager'
+import { ref, reactive } from "vue";
+import { deleteItemById, editReadWrite } from "@/utils/fetchUtils";
+import { useStatusManager } from "@/stores/StatusManager";
+import { useRoute, useRouter } from "vue-router";
+import { refreshToken } from "@/stores/UserManager";
+import { useCollaboratorManager } from "@/stores/CollaboratorManager";
+import { useBoardManager } from "@/stores/BoardManager";
 const deClareemit = defineEmits([
-  'cancelPopUp',
-  'confirmDeletePopUp',
-  'confirmChangePopUp',
-  'confirmLeavePopUp',
-  'collabId',
-  'permissionRemovePopUp',
-  'errorRemoveCollabs',
-  'errorChangeCollabs',
-  'notCollabPopUp',
-  'confirmLeaveErrorPopUp',
-  'permissionAccessPopUp'
-])
+  "cancelPopUp",
+  "confirmDeletePopUp",
+  "confirmChangePopUp",
+  "confirmLeavePopUp",
+  "collabId",
+  "permissionRemovePopUp",
+  "errorRemoveCollabs",
+  "errorChangeCollabs",
+  "notCollabPopUp",
+  "confirmLeaveErrorPopUp",
+  "permissionAccessPopUp",
+]);
 
 const props = defineProps([
-  'isChange',
-  'isRemove',
-  'isLeave',
-  'operate',
-  'NameLeaveCollabBoard',
-  'NameRemoveCollabBoard',
-  'NameChangeCollabBoard'
-])
-const error = ref(false)
-const router = useRouter()
-const boardManager = useBoardManager()
-const collaboratorManager = useCollaboratorManager()
-const route = useRoute()
-const deletedCollab = reactive({})
-const editCollab = reactive({})
-const leaveCollab = reactive({})
-const collaborators = collaboratorManager.changeCollaboratorAccessRight()
+  "isChange",
+  "isRemove",
+  "isLeave",
+  "operate",
+  "NameLeaveCollabBoard",
+  "NameRemoveCollabBoard",
+  "NameChangeCollabBoard",
+]);
+const error = ref(false);
+const router = useRouter();
+const boardManager = useBoardManager();
+const collaboratorManager = useCollaboratorManager();
+const route = useRoute();
+const deletedCollab = reactive({});
+const editCollab = reactive({});
+const leaveCollab = reactive({});
+const collaborators = collaboratorManager.changeCollaboratorAccessRight();
 const confirmLeaveCollab = async function (leaveId) {
   leaveCollab.value = await deleteItemById(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${
       props.NameLeaveCollabBoard.value.id
     }/collabs`,
     props.NameLeaveCollabBoard.value.userId
-  )
-  console.log(leaveCollab.value)
-  if (leaveCollab.value == '401') {
-    refreshToken(router)
-    deClareemit('confirmDeletePopUp', true)
-    return
+  );
+  console.log(leaveCollab.value);
+  if (leaveCollab.value == "401") {
+    refreshToken(router);
+    deClareemit("confirmDeletePopUp", true);
+    return;
   }
   //403 404 กลับหน้า board ปิด popup
   //500 ขึ้น There is a problem. Please try again later.
 
   // Check if the leaveCollab has a successful structure instead of specific codes
   if (leaveId) {
-    boardManager.deleteBoard(leaveId)
-    deClareemit('confirmLeavePopUp', true)
+    boardManager.deleteBoard(leaveId, "collab");
+    deClareemit("confirmLeavePopUp", true);
   } else {
-    deClareemit('errorLeaveCollabs', true)
-    deClareemit('confirmDeletePopUp', true)
+    deClareemit("errorLeaveCollabs", true);
+    deClareemit("confirmDeletePopUp", true);
   }
-}
+};
 
 const removeCollaborator = async (removeId) => {
   deletedCollab.value = await deleteItemById(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`,
     removeId
-  )
-  console.log(deletedCollab.value)
-  if (deletedCollab.value == '401') {
-    refreshToken(router)
-    deClareemit('confirmDeletePopUp', true)
-    return
-  } else if (deletedCollab.value == '403') {
-    deClareemit('permissionRemovePopUp', true)
-    deClareemit('confirmDeletePopUp', true)
-    return
-  } else if (deletedCollab.value == '404') {
-    deClareemit('notCollabPopUp', true)
-    collaboratorManager.deleteCollaborator(removeId)
-    deClareemit('confirmDeletePopUp', true)
-    return
+  );
+  console.log(deletedCollab.value);
+  if (deletedCollab.value == "401") {
+    refreshToken(router);
+    deClareemit("confirmDeletePopUp", true);
+    return;
+  } else if (deletedCollab.value == "403") {
+    deClareemit("permissionRemovePopUp", true);
+    deClareemit("confirmDeletePopUp", true);
+    return;
+  } else if (deletedCollab.value == "404") {
+    deClareemit("notCollabPopUp", true);
+    collaboratorManager.deleteCollaborator(removeId);
+    deClareemit("confirmDeletePopUp", true);
+    return;
   }
 
   // Check for successful response
   if (removeId) {
-    collaboratorManager.deleteCollaborator(removeId)
-    deClareemit('confirmDeletePopUp', true)
+    collaboratorManager.deleteCollaborator(removeId);
+    deClareemit("confirmDeletePopUp", true);
   } else {
-    deClareemit('errorRemoveCollabs', true)
-    deClareemit('confirmDeletePopUp', true)
+    deClareemit("errorRemoveCollabs", true);
+    deClareemit("confirmDeletePopUp", true);
   }
-}
+};
 
 const updateCollaboratorAccessRight = async function () {
   editCollab.value = await editReadWrite(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`,
     props.NameChangeCollabBoard.value.id,
     props.NameChangeCollabBoard.value.accessChange
-  )
-  console.log(editCollab.value)
+  );
+  console.log(editCollab.value);
 
-  if (editCollab.value == '401') {
-    refreshToken(router)
-    deClareemit('confirmChangePopUp', true)
-    return
+  if (editCollab.value == "401") {
+    refreshToken(router);
+    deClareemit("confirmChangePopUp", true);
+    return;
   }
   // 403 You do not have permission to change collaborator access right.
-  if (editCollab.value == '403') {
-    router.replace({ name: 'Login' })
-    deClareemit(' permissionAccessPopUp', true)
-    deClareemit('confirmChangePopUp', true)
-    return
+  if (editCollab.value == "403") {
+    router.replace({ name: "Login" });
+    deClareemit(" permissionAccessPopUp", true);
+    deClareemit("confirmChangePopUp", true);
+    return;
   }
 
   // Check if the editCollab has a successful structure instead of specific codes
   if (editCollab.value.oid) {
-    collaboratorManager.editCollaborator(editCollab.value.oid, editCollab.value)
-    deClareemit('confirmChangePopUp', true)
+    collaboratorManager.editCollaborator(
+      editCollab.value.oid,
+      editCollab.value
+    );
+    deClareemit("confirmChangePopUp", true);
     // 500 There is a problem. Please try again later.
   } else {
-    deClareemit('errorChangeCollabs', true)
-    deClareemit('confirmChangePopUp', true)
+    deClareemit("errorChangeCollabs", true);
+    deClareemit("confirmChangePopUp", true);
   }
-}
+};
 </script>
 
 <template>
@@ -158,7 +161,7 @@ const updateCollaboratorAccessRight = async function () {
 
           <button
             class="itbkk-button-cancel bg-red-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
-            @click=";[$emit('cancelPopUp', true)]"
+            @click="[$emit('cancelPopUp', true)];"
           >
             <div class="btn text-center">Cancel</div>
           </button>
@@ -196,7 +199,7 @@ const updateCollaboratorAccessRight = async function () {
 
           <button
             class="itbkk-button-cancel bg-red-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
-            @click=";[$emit('cancelPopUp', true)]"
+            @click="[$emit('cancelPopUp', true)];"
           >
             <div class="btn text-center">Cancel</div>
           </button>
@@ -232,7 +235,7 @@ const updateCollaboratorAccessRight = async function () {
 
           <button
             class="itbkk-button-cancel bg-red-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
-            @click=";[$emit('cancelPopUp', true)]"
+            @click="[$emit('cancelPopUp', true)];"
           >
             <div class="btn text-center">Cancel</div>
           </button>

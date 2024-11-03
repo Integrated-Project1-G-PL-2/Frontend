@@ -96,8 +96,8 @@ onMounted(async () => {
   statusGroups.forEach((statusGroup) => {
     thisStatus.value = statusGroup.id
   })
-  
-  const userRole = boardManager.getBoards().filter(el => el.id.boardId == route.params.id)[0].role
+  const userRole = [...(boardManager.getBoards().personal || []), ...(boardManager.getBoards().collab || [])]
+  .find(item => item.id.boardId ===  route.params.id)?.role;
   sessionStorage.setItem('userRole', userRole);
   if (
     (storedUserRole.value == 'VISITOR' ||storedUserRole.value == null)&&

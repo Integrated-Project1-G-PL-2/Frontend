@@ -1,39 +1,44 @@
-import { reactive, ref } from 'vue'
-import { defineStore, acceptHMRUpdate } from 'pinia'
+import { reactive, ref } from "vue";
+import { defineStore, acceptHMRUpdate } from "pinia";
 
-export const useBoardManager = defineStore('boardManager', () => {
-  const boards = reactive([])
-  let currentBoard = reactive({})
+export const useBoardManager = defineStore("boardManager", () => {
+  const boards = reactive({
+    personal: [],
+    collab: [],
+    pending: [],
+  });
+  let currentBoard = reactive({});
   const getBoards = function () {
-    return boards
-  }
-  const setBoards = function (boardsList = []) {
-    boards.length = 0
-    if (boardsList != null) {
-      boards.push(...boardsList.collab);  // Push all items from the collab array
-        boards.push(...boardsList.personal);  // Push all items from the personal array
-        console.log(boards)
-      }
-    }
-  
-  const addBoard = function (newBoard) {
-    boards.push(newBoard)
-  }
-  const findIndexById = function (id) {
-    return boards.findIndex((el) => el.id === id)
-  }
+    return boards;
+  };
+
+  const setBoards = function (boardsList = {}) {
+    Object.keys(boards).forEach((key) => delete boards[key]);
+    Object.keys(boardsList).forEach((key) => {
+      boards[key] = Array.isArray(boardsList[key])
+        ? [...boardsList[key]]
+        : boardsList[key];
+    });
+  };
+
+  const addBoard = function (newBoard, addTo) {
+    boards[addTo].push(newBoard);
+  };
+  const findIndexById = function (id, findOn) {
+    return boards[findOn].findIndex((el) => el.id === id);
+  };
   const setCurrentBoard = function (board) {
-    currentBoard = board
-  }
+    currentBoard = board;
+  };
   const getCurrentBoard = function () {
-    return currentBoard
-  }
-  const deleteBoard = function (id) {
-    const index = boards.findIndex((el) => {
-      return el.id == id
-    })
-    boards.splice(index, 1)
-  }
+    return currentBoard;
+  };
+  const deleteBoard = function (id, findOn) {
+    const index = boards[findOn].findIndex((el) => {
+      return el.id == id;
+    });
+    boards[findOn].splice(index, 1);
+  };
 
   return {
     setCurrentBoard,
@@ -42,10 +47,10 @@ export const useBoardManager = defineStore('boardManager', () => {
     addBoard,
     findIndexById,
     getCurrentBoard,
-    deleteBoard
-  }
-})
+    deleteBoard,
+  };
+});
 
 if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useBoardManager, import.meta.hot))
+  import.meta.hot.accept(acceptHMRUpdate(useBoardManager, import.meta.hot));
 }

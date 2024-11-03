@@ -229,9 +229,7 @@ const closeDeclineInvitationCollab = function () {
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
         >
           <div
-            v-for="(board, index) in boardsList.filter(
-              (board) => board.role == 'OWNER'
-            )"
+            v-for="(board, index) in boardsList.personal"
             :key="board.id.boardId"
             class="itbkk-personal-item bg-white border rounded-lg shadow-md p-4 flex flex-col space-y-2 hover:bg-gray-100 hover:text-sky-500"
           >
@@ -287,9 +285,7 @@ const closeDeclineInvitationCollab = function () {
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
         >
           <div
-            v-for="(collab, index) in boardsList.filter(
-              (board) => board.role != 'OWNER'
-            )"
+            v-for="(collab, index) in boardsList.collab"
             :key="collab.id.collabId"
             class="itbkk-collab-item bg-white border rounded-lg shadow-md p-4 flex flex-col space-y-2 hover:bg-gray-100 hover:text-sky-500"
           >
@@ -366,9 +362,7 @@ const closeDeclineInvitationCollab = function () {
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4"
         >
           <div
-            v-for="(collab, index) in boardsList.filter(
-              (board) => board.role != 'OWNER'
-            )"
+            v-for="(collab, index) in boardsList.pending"
             :key="collab.id.collabId"
             class="itbkk-collab-item bg-white border rounded-lg shadow-md p-4 flex flex-col space-y-2 hover:bg-gray-100 hover:text-sky-500"
           >
