@@ -10,7 +10,8 @@ import {
   cancelInvite
 } from '../utils/fetchUtils.js'
 import { useRoute, useRouter } from 'vue-router'
-import { useBoardManager } from '@/stores/BoardManager'
+import { useCollaboratorManager } from '@/stores/CollaboratorManager'
+const collaboratorManager = useCollaboratorManager()
 const router = useRouter()
 const deClareemit = defineEmits([
   'cancelInvitationPopUp',
@@ -21,21 +22,27 @@ const deClareemit = defineEmits([
 ])
 
 const route = useRoute()
-const props = defineProps(['isDecline', 'isAccept', 'operate', 'boardDetail'])
+const props = defineProps([
+  'isDecline',
+  'isAccept',
+  'operate',
+  'boardAcceptDetail',
+  'boardDeclineDetail'
+])
 
-const confirmAcceptInvatationCollab = async function () {
+const confirmAcceptInvatationCollab = async function (boardAcceptId) {
   const accept = await acceptInvite(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${
-      props.boardDetail.value.boardId
+      props.boardAcceptDetail.value.boardId
     }/invitation`
   )
   deClareemit('confirmAcceptInvatation', true)
   console.log(accept)
 }
-const confirmRemoveInvatationCollab = async function () {
+const confirmRemoveInvatationCollab = async function (boardDeclineId) {
   const cancel = await cancelInvite(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${
-      props.boardDetail.value.boardId
+      props.boardDeclineDetail.value.boardId
     }/invitation`
   )
   deClareemit('confirmRemoveInvatation', true)
@@ -58,14 +65,19 @@ const confirmRemoveInvatationCollab = async function () {
 
         <div class="w-[70%] h-[100%]">
           <div class="itbkk-message pl-4 mt-4">
-            Do you want to accept this {{ boardDetail.value.boardName }} to
-            become collaborator of the board?
+            Do you want to accept this
+            {{ props.boardAcceptDetail.value.boardName }} to become collaborator
+            of the board?
           </div>
         </div>
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
           <button
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
-            @click="confirmAcceptInvatationCollab()"
+            @click="
+              confirmAcceptInvatationCollab(
+                props.boardAcceptDetail.value.boardId
+              )
+            "
           >
             <div class="btn text-center">Confirm</div>
           </button>
@@ -94,14 +106,18 @@ const confirmRemoveInvatationCollab = async function () {
 
         <div class="w-[70%] h-[100%]">
           <div class="itbkk-message pl-4 mt-4">
-            Do you want this {{ boardDetail.value.boardName }} to be remove from
-            board's collaborator
+            Do you want this {{ props.boardDeclineDetail.value.boardName }} to
+            be remove from board's collaborator
           </div>
         </div>
         <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
           <button
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
-            @click="confirmRemoveInvatationCollab()"
+            @click="
+              confirmRemoveInvatationCollab(
+                props.boardDeclineDetail.value.boardId
+              )
+            "
           >
             <div class="btn text-center">Confirm</div>
           </button>

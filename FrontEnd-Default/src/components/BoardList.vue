@@ -445,7 +445,7 @@ const closeConfirmDeclineInvitationCollab = function () {
     <teleport to="body" v-if="acceptInvitation">
       <AcceptAndDeclineInvitation
         :isAccept="isAccept"
-        :boardDetail="boardDetail"
+        :boardAcceptDetail="boardDetail"
         @openAccept="openAcceptPopUp"
         @cancelInvitationPopUp="closeAcceptInvitationCollab"
         @confirmAcceptInvatation="closeConfirmAcceptInvitationCollab"
@@ -454,7 +454,7 @@ const closeConfirmDeclineInvitationCollab = function () {
     <teleport to="body" v-if="declineInvitation">
       <AcceptAndDeclineInvitation
         :isDecline="isDecline"
-        :boardDetail="boardDetail"
+        :boardDeclineDetail="boardDetail"
         @openDecline="openDeclinePopUp"
         @cancelInvitationPopUp="closeDeclineInvitationCollab"
         @confirmRemoveInvatation="closeConfirmDeclineInvitationCollab"
