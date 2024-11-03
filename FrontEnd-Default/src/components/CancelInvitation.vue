@@ -2,11 +2,9 @@
 import { ref, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 const deClareemit = defineEmits(['confirmDetail', 'cancelDetail', 'redAlert'])
-const props = defineProps(['taskId'])
+const props = defineProps(['boardCancelDetail'])
 const router = useRouter()
 const route = useRoute()
-
-
 </script>
 
 <template>
@@ -21,7 +19,8 @@ const route = useRoute()
 
         <div class="w-[70%] h-[100%]">
           <div class="flex pl-4 mt-5">
-            Do you want to cancel invitation to "name" ?
+            Do you want to cancel invitation to
+            {{ props.boardCancelDetail.value.boardName }}?
           </div>
         </div>
       </div>

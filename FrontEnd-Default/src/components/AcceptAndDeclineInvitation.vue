@@ -38,7 +38,7 @@ const confirmAcceptInvatationCollab = async function (boardAcceptId) {
       props.boardAcceptDetail.value.boardId
     }/invitation`
   )
-  boardManager.addBoard(boardAcceptId, 'collab')
+  boardManager.addBoard(boardAcceptId, 'pending')
   deClareemit('confirmAcceptInvatation', true)
   console.log(accept)
 }
@@ -48,7 +48,7 @@ const confirmRemoveInvatationCollab = async function (boardDeclineId) {
       props.boardDeclineDetail.value.boardId
     }/invitation`
   )
-  boardManager.deleteBoard(boardDeclineId, 'collab')
+  boardManager.deleteBoard(boardDeclineId, 'pending')
   deClareemit('confirmRemoveInvatation', true)
   console.log(cancel)
 }
