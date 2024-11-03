@@ -119,7 +119,7 @@ const userRole = [...(boardManager.getBoards().personal || []), ...(boardManager
   thisUser.value = storedUserName;
 
   if (
-    (storedUserRole.value == "VISITOR" || storedUserRole.value == null) &&
+    (storedUserRole.value == "READ" || storedUserRole.value == null) &&
     (route.fullPath == `/board/${route.params.id}/task/add` ||
       route.fullPath.match(
         new RegExp(`/board/${route.params.id}/task/.+/delete`)
@@ -581,7 +581,7 @@ const closeMostLargeFilesAlter = function () {
           <input
             :disabled="
               !isSwitch &&
-              (storedUserRole == 'VISITOR' || storedUserRole == null)
+              (storedUserRole == 'READ' || storedUserRole == null)
             "
             type="checkbox"
             v-model="isSwitch"
@@ -599,7 +599,7 @@ const closeMostLargeFilesAlter = function () {
         </label>
         <div
           v-if="
-            !isSwitch && (storedUserRole == 'VISITOR' || storedUserRole == null)
+            !isSwitch && (storedUserRole == 'READ' || storedUserRole == null)
           "
           class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
         >
@@ -624,7 +624,7 @@ const closeMostLargeFilesAlter = function () {
       <div class="relative group">
         <button
           :disabled="
-            !isSwitch && (storedUserRole == 'VISITOR' || storedUserRole == null)
+            !isSwitch && (storedUserRole == 'READ' || storedUserRole == null)
           "
           @click="showAddPopUpTaskDetail('add')"
           class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
@@ -633,7 +633,7 @@ const closeMostLargeFilesAlter = function () {
         </button>
         <div
           v-if="
-            !isSwitch && (storedUserRole == 'VISITOR' || storedUserRole == null)
+            !isSwitch && (storedUserRole == 'READ' || storedUserRole == null)
           "
           class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
         >
@@ -641,7 +641,7 @@ const closeMostLargeFilesAlter = function () {
         </div>
         <div
           v-if="
-            !isSwitch && (storedUserRole == 'VISITOR' || storedUserRole == null)
+            !isSwitch && (storedUserRole == 'READ' || storedUserRole == null)
           "
           class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
         >
@@ -769,7 +769,7 @@ const closeMostLargeFilesAlter = function () {
               <button
                 :disabled="
                   !isSwitch &&
-                  (storedUserRole == 'VISITOR' || storedUserRole == null)
+                  (storedUserRole == 'READ' || storedUserRole == null)
                 "
                 class="itbkk-button-edit inline-flex"
                 :class="{ disabled: boardOwner !== thisUser && isSwitch }"
@@ -780,7 +780,7 @@ const closeMostLargeFilesAlter = function () {
               <div
                 v-if="
                   !isSwitch &&
-                  (storedUserRole == 'VISITOR' || storedUserRole == null)
+                  (storedUserRole == 'READ' || storedUserRole == null)
                 "
                 class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
               >
@@ -789,7 +789,7 @@ const closeMostLargeFilesAlter = function () {
               <div
                 v-if="
                   !isSwitch &&
-                  (storedUserRole == 'VISITOR' || storedUserRole == null)
+                  (storedUserRole == 'READ' || storedUserRole == null)
                 "
                 class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
               >
@@ -801,7 +801,7 @@ const closeMostLargeFilesAlter = function () {
               <button
                 :disabled="
                   !isSwitch &&
-                  (storedUserRole == 'VISITOR' || storedUserRole == null)
+                  (storedUserRole == 'READ' || storedUserRole == null)
                 "
                 class="itbkk-button-delete inline-flex"
                 @click="
@@ -817,7 +817,7 @@ const closeMostLargeFilesAlter = function () {
               <div
                 v-if="
                   !isSwitch &&
-                  (storedUserRole == 'VISITOR' || storedUserRole == null)
+                  (storedUserRole == 'READ' || storedUserRole == null)
                 "
                 class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
               >
@@ -826,7 +826,7 @@ const closeMostLargeFilesAlter = function () {
               <div
                 v-if="
                   !isSwitch &&
-                  (storedUserRole == 'VISITOR' || storedUserRole == null)
+                  (storedUserRole == 'READ' || storedUserRole == null)
                 "
                 class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
               >

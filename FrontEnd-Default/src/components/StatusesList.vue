@@ -100,7 +100,7 @@ onMounted(async () => {
   .find(item => item.id.boardId ===  route.params.id)?.role;
   sessionStorage.setItem('userRole', userRole);
   if (
-    (storedUserRole.value == 'VISITOR' ||storedUserRole.value == null)&&
+    (storedUserRole.value == 'READ' ||storedUserRole.value == null)&&
     (route.fullPath == `/board/${route.params.id}/status/add` ||
     route.fullPath.match(new RegExp(`/board/${route.params.id}/status/.+/delete`)) ||
     route.fullPath.match(new RegExp(`/board/${route.params.id}/.+/edit`)))
@@ -343,19 +343,19 @@ const closeOwnerAlter = function () {
         <div class="relative group">
           <button
             @click="showAddStatusesModal('add')"
-            :disabled="!isSwitch && (storedUserRole == 'VISITOR' ||storedUserRole == null)"
+            :disabled="!isSwitch && (storedUserRole == 'READ' ||storedUserRole == null)"
             class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2 my-3"
           >
             ✚ Add Status
           </button>
           <div
-            v-if="!isSwitch && (storedUserRole == 'VISITOR' ||storedUserRole == null)"
+            v-if="!isSwitch && (storedUserRole == 'READ' ||storedUserRole == null)"
             class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-3"
           >
             You need to be board owner to perform this action.
           </div>
           <div
-            v-if="(!isSwitch && (storedUserRole == 'VISITOR' ||storedUserRole == null)) "
+            v-if="(!isSwitch && (storedUserRole == 'READ' ||storedUserRole == null)) "
             class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
           >
             You need to be board owner or has write access to perform this
@@ -443,19 +443,19 @@ const closeOwnerAlter = function () {
                         id: statuses.id
                       })
                     "
-                    :disabled="!isSwitch && (storedUserRole == 'VISITOR' ||storedUserRole == null)"
+                    :disabled="!isSwitch && (storedUserRole == 'READ' ||storedUserRole == null)"
                   >
                     Edit
                   </button>
                 </ButtonStyle>
                 <div
-                  v-if="!isSwitch && (storedUserRole == 'VISITOR' ||storedUserRole == null)"
+                  v-if="!isSwitch && (storedUserRole == 'READ' ||storedUserRole == null)"
                   class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
                 >
                   You need to be board owner to perform this action.
                 </div>
                 <div
-                  v-if="(!isSwitch && (storedUserRole == 'VISITOR' ||storedUserRole == null)) "
+                  v-if="(!isSwitch && (storedUserRole == 'READ' ||storedUserRole == null)) "
                   class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
                 >
                   You need to be board owner or has write access to perform this
@@ -486,19 +486,19 @@ const closeOwnerAlter = function () {
                         index: index + 1
                       })
                     "
-                    :disabled="!isSwitch && (storedUserRole == 'VISITOR' ||storedUserRole == null)"
+                    :disabled="!isSwitch && (storedUserRole == 'READ' ||storedUserRole == null)"
                   >
                     Delete
                   </button>
                 </ButtonStyle>
                 <div
-                  v-if="!isSwitch && (storedUserRole == 'VISITOR' ||storedUserRole == null)"
+                  v-if="!isSwitch && (storedUserRole == 'READ' ||storedUserRole == null)"
                   class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
                 >
                   You need to be board owner to perform this action.
                 </div>
                 <div
-                  v-if="(!isSwitch && (storedUserRole == 'VISITOR' ||storedUserRole == null)) "
+                  v-if="(!isSwitch && (storedUserRole == 'READ' ||storedUserRole == null)) "
                   class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
                 >
                   You need to be board owner or has write access to perform this

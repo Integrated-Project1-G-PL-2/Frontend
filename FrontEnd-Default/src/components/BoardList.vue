@@ -315,7 +315,7 @@ const closeDeclineInvitationCollab = function () {
               </div>
             </div>
             <div class="itbkk-owner-name text-sm text-gray-500">
-              <p>Owner : {{ collab.localUser.username }}</p>
+              <p>Owner : {{ collab.localUser?.username == undefined ? "can't find owner" : collab.localUser.username }}</p>
             </div>
             <div class="itbkk-access-right text-sm text-gray-500">
               <p>
