@@ -11,8 +11,10 @@ import {
 } from '../utils/fetchUtils.js'
 import { useRoute, useRouter } from 'vue-router'
 import { useCollaboratorManager } from '@/stores/CollaboratorManager'
+import { useBoardManager } from '@/stores/BoardManager'
 const collaboratorManager = useCollaboratorManager()
 const router = useRouter()
+const boardManager = useBoardManager()
 const deClareemit = defineEmits([
   'cancelInvitationPopUp',
   'openAccept',
@@ -36,6 +38,7 @@ const confirmAcceptInvatationCollab = async function (boardAcceptId) {
       props.boardAcceptDetail.value.boardId
     }/invitation`
   )
+  boardManager.addBoard(boardAcceptId, 'collab')
   deClareemit('confirmAcceptInvatation', true)
   console.log(accept)
 }
@@ -45,6 +48,7 @@ const confirmRemoveInvatationCollab = async function (boardDeclineId) {
       props.boardDeclineDetail.value.boardId
     }/invitation`
   )
+  boardManager.deleteBoard(boardDeclineId, 'collab')
   deClareemit('confirmRemoveInvatation', true)
   console.log(cancel)
 }
