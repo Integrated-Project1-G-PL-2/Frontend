@@ -6,6 +6,8 @@ import {
   deleteItemById,
   addItem,
   editItem,
+  acceptInvite,
+  cancelInvite
 } from "../utils/fetchUtils.js";
 
 import { useRoute, useRouter } from "vue-router";
@@ -62,6 +64,24 @@ onMounted(async () => {
     router.replace({ name: "Task" });
   }
 });
+
+
+const acceptInv = async function () {
+  const accept = await acceptInvite(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${
+      route.params.id
+    }/invitation`
+  );
+  console.log(accept)
+}
+const cancelInv = async function () {
+  const cancel = await cancelInvite(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${
+      route.params.id
+    }/invitation`
+  );
+  console.log(cancel)
+}
 const closeNotLoginAlter = function () {
   closeNotLogin.value = false;
 };
@@ -142,6 +162,19 @@ const closeDeclineInvitationCollab = function () {
             > Collaborator
           </div>
         </div>
+<!-- this is test -->
+        <div>
+          <button @click="acceptInv">
+            test Accept
+          </button>
+          </div>  
+          <div>
+          <button @click="cancelInv">
+            test Cancel
+          </button>
+          </div> 
+<!--  -->
+ 
       </div>
     </div>
     <AlertPopUp

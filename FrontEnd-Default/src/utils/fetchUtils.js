@@ -74,6 +74,8 @@ async function getItemById(url, id, router) {
   }
 }
 
+
+
 async function deleteItemById(url, id, router) {
   try {
     const options = {
@@ -193,6 +195,46 @@ async function editReadWrite(url, id, readWrite) {
     return null
   }
 }
+
+async function acceptInvite(url, router) {
+  try {
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    const res = await fetchWithAuth(url, options, router)
+    if (res.ok) {
+      return await res.json()
+    }
+    return res.status
+  } catch (error) {
+    console.error(`Network error: ${error}`)
+    return null
+  }
+}
+
+async function cancelInvite(url, router) {
+  try {
+    const options = {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    const res = await fetchWithAuth(url, options, router)
+    if (res.ok) {
+      return res
+    }
+    return res.status
+  } catch (error) {
+    console.error(`Network error: ${error}`)
+    return null
+  }
+}
 export {
   getItemById,
   deleteItemById,
@@ -200,5 +242,7 @@ export {
   editItem,
   deleteAndTransferItem,
   toggleVisibility,
-  editReadWrite
+  editReadWrite,
+  acceptInvite,
+  cancelInvite
 }

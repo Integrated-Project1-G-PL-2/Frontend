@@ -122,6 +122,7 @@ const updateCollaboratorAccessRight = async function () {
       "collab",
       editCollab.value
     );
+  
     deClareemit("confirmChangePopUp", true);
     // 500 There is a problem. Please try again later.
   } else {

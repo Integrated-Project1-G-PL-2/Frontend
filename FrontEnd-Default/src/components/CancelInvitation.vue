@@ -5,6 +5,8 @@ const deClareemit = defineEmits(['confirmDetail', 'cancelDetail', 'redAlert'])
 const props = defineProps(['taskId'])
 const router = useRouter()
 const route = useRoute()
+
+
 </script>
 
 <template>

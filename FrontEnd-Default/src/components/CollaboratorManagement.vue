@@ -195,6 +195,8 @@ const closeInviteCollabAlter = function () {
 const closeExistPendingAlter = function () {
   existPending.value = false;
 };
+
+
 </script>
 
 <template>
@@ -420,13 +422,13 @@ const closeExistPendingAlter = function () {
     <tbody>
       <tr
         class="border-b hover:bg-gray-100"
-        v-for="(item, index) in invitations"
+        v-for="(pending, index) in boardCollabList.pending"
         :key="index"
       >
         <td class="py-3 px-4 text-lg font-semibold">{{ index + 1 }}</td>
         <td class="py-3 px-4 text-lg font-semibold">
           <div class="itbkk-name hover:text-sky-500 cursor-default">
-            {{ invitations.name }}
+            {{ pending.name }}
             <div v-if="invited" class="text-sm text-gray-500">
               <h1>: "Pending Invite"</h1>
             </div>
@@ -434,22 +436,22 @@ const closeExistPendingAlter = function () {
         </td>
         <td
           class="py-3 px-4 text-lg font-semibold"
-          :class="invitations.email == null ? 'italic' : ''"
+          :class="pending.email == null ? 'italic' : ''"
         >
-          {{ invitations.email == null ? "Unassigned" : invitations.email }}
+          {{ pending.email == null ? "Unassigned" : pending.email }}
         </td>
         <td class="py-3 px-4 text-lg cursor-pointer">
           <div
             class="itbkk-access-right w-[50%]"
             @click="
               openChangeCollab(
-                invitations.name,
-                invitations.oid,
-                invitations.accessRight
+                pending.name,
+                pending.oid,
+                pending.accessRight
               )
             "
           >
-            {{ invitations.accessRight }}
+            {{ pending.accessRight }}
           </div>
         </td>
         <td class="py-3 px-4">

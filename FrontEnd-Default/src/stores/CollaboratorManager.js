@@ -16,17 +16,21 @@ export const useCollaboratorManager = defineStore("collaboratorManager", () => {
         ? [...collaboratorList[key]]
         : collaboratorList[key];
     });
+    console.log(collaborators)
   };
   const addCollaborator = function (newCollaborator, addTo) {
     collaborators[addTo].push(newCollaborator);
+    console.log(collaborators)
   };
-  const findIndexById = function (id, findOn) {
-    return collaborators[findOn].findIndex((el) => el.id === id);
+  const findIndexById = function (oid, findOn) {
+    console.log(collaborators)
+    return collaborators[findOn].findIndex((el) => el.oid == oid);
   };
 
   const editCollaborator = function (id, editOn, newCollaborator) {
     const index = findIndexById(id, editOn);
     collaborators[editOn][index] = newCollaborator;
+    console.log(index)
   };
 
   const setCurrentCollaboratorBoard = function (board) {
