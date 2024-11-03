@@ -1,200 +1,200 @@
 <script setup>
-import { onMounted, reactive, ref, watch, computed } from 'vue'
+import { onMounted, reactive, ref, watch, computed } from "vue";
 import {
   getItems,
   getItemById,
   deleteItemById,
   addItem,
-  editItem
-} from '../utils/fetchUtils.js'
-import { useTaskManager } from '@/stores/TaskManager'
-import AddNewCollaborator from './../components/AddNewCollaborator.vue'
-import { useRoute, useRouter } from 'vue-router'
+  editItem,
+} from "../utils/fetchUtils.js";
+import { useTaskManager } from "@/stores/TaskManager";
+import AddNewCollaborator from "./../components/AddNewCollaborator.vue";
+import { useRoute, useRouter } from "vue-router";
 import {
   sortByTitle,
   sortByTitleReverse,
   sortByTitleDate,
-  searchByStatus
-} from '@/stores/SortManager.js'
-import { storeToRefs } from 'pinia'
-import { userName } from '@/stores/UserManager'
-import { userEmail } from '@/stores/UserManager'
-import { logout } from '@/stores/UserManager'
-import ChangeRemoveLeaveCollab from './../components/ChangeRemoveLeaveCollab.vue'
-import AlertPopUp from './../components/AlertPopUp.vue'
-import { useCollaboratorManager } from '@/stores/CollaboratorManager'
-import CancelInvitation from './../components/CancelInvitation.vue'
-const router = useRouter()
-const removeCollab = ref()
-const cancelInvitationCollab = ref(false)
-const changeCollab = ref()
-const isChange = ref()
-const isRemove = ref()
-const showAddNewCollaborator = ref(false)
-const closePermission = ref(false)
-const closeUser = ref(false)
-const closeCollaborator = ref(false)
-const closeProblem = ref(false)
-const closeAccessRight = ref(false)
-const closeRemoveRight = ref(false)
-const closeNotCollaborator = ref(false)
-const errorCollab = ref(false)
-const returnPage = ref(false)
-const errorRemoveCollab = ref(false)
-const errorChangeCollab = ref(false)
-const inviteCollab = ref(false)
-const route = useRoute()
-const collaboratorManager = useCollaboratorManager()
-const boardCollabList = ref(collaboratorManager.getCollaborators())
-const collabDetail = reactive({})
-const collabEmail = reactive({})
-const role = sessionStorage.getItem('userRole')
-const invited = ref(false)
-const existPending = ref(false)
-let newName = ref(`${userName.value}`)
+  searchByStatus,
+} from "@/stores/SortManager.js";
+import { storeToRefs } from "pinia";
+import { userName } from "@/stores/UserManager";
+import { userEmail } from "@/stores/UserManager";
+import { logout } from "@/stores/UserManager";
+import ChangeRemoveLeaveCollab from "./../components/ChangeRemoveLeaveCollab.vue";
+import AlertPopUp from "./../components/AlertPopUp.vue";
+import { useCollaboratorManager } from "@/stores/CollaboratorManager";
+import CancelInvitation from "./../components/CancelInvitation.vue";
+const router = useRouter();
+const removeCollab = ref();
+const cancelInvitationCollab = ref(false);
+const changeCollab = ref();
+const isChange = ref();
+const isRemove = ref();
+const showAddNewCollaborator = ref(false);
+const closePermission = ref(false);
+const closeUser = ref(false);
+const closeCollaborator = ref(false);
+const closeProblem = ref(false);
+const closeAccessRight = ref(false);
+const closeRemoveRight = ref(false);
+const closeNotCollaborator = ref(false);
+const errorCollab = ref(false);
+const returnPage = ref(false);
+const errorRemoveCollab = ref(false);
+const errorChangeCollab = ref(false);
+const inviteCollab = ref(false);
+const route = useRoute();
+const collaboratorManager = useCollaboratorManager();
+const boardCollabList = ref(collaboratorManager.getCollaborators());
+const collabDetail = reactive({});
+const collabEmail = reactive({});
+const role = sessionStorage.getItem("userRole");
+const invited = ref(false);
+const existPending = ref(false);
+let newName = ref(`${userName.value}`);
 
 // const boardCollabList = ref()
-const selectedAccessLevel = ref('VISITOR')
+const selectedAccessLevel = ref("VISITOR");
 const returnLoginPage = () => {
-  logout()
-  router.replace({ name: 'Login' })
-  returnPage.value = true
-}
+  logout();
+  router.replace({ name: "Login" });
+  returnPage.value = true;
+};
 
 const goBackToPersonalBoard = () => {
-  router.replace({ name: 'Task' })
-}
+  router.replace({ name: "Task" });
+};
 
 const showAddNewCollaboratorPopUp = function () {
-  collabEmail.value = userEmail
-  showAddNewCollaborator.value = true // Set to true when the button is clicked
-  console.log(userEmail.value)
-}
+  collabEmail.value = userEmail;
+  showAddNewCollaborator.value = true; // Set to true when the button is clicked
+  console.log(userEmail.value);
+};
 const cancelCollabPopUp = function () {
-  showAddNewCollaborator.value = false
-}
+  showAddNewCollaborator.value = false;
+};
 const goBackToHomeBoard = () => {
-  router.replace({ name: 'Board' })
-}
+  router.replace({ name: "Board" });
+};
 const openChangeCollab = async function (nameCollab, oid, readWrite) {
-  console.log(readWrite)
-  if (readWrite == 'READ') {
-    readWrite = 'WRITE'
+  console.log(readWrite);
+  if (readWrite == "READ") {
+    readWrite = "WRITE";
   } else {
-    readWrite = 'READ'
+    readWrite = "READ";
   }
-  collabDetail.value = { name: nameCollab, id: oid, accessChange: readWrite }
-  isChange.value = true
-  changeCollab.value = true
-}
+  collabDetail.value = { name: nameCollab, id: oid, accessChange: readWrite };
+  isChange.value = true;
+  changeCollab.value = true;
+};
 const closeChange = function () {
-  changeCollab.value = false
-}
+  changeCollab.value = false;
+};
 const openRemoveCollab = async function (collabName, collabId) {
-  collabDetail.value = { name: collabName, id: collabId }
-  isRemove.value = true
-  removeCollab.value = true
-}
+  collabDetail.value = { name: collabName, id: collabId };
+  isRemove.value = true;
+  removeCollab.value = true;
+};
 const openCancelInvitationCollab = async function () {
-  cancelInvitationCollab.value = true
-}
+  cancelInvitationCollab.value = true;
+};
 
 const closeRemove = function () {
-  removeCollab.value = false
-}
+  removeCollab.value = false;
+};
 const closeCancelInvitation = function () {
-  cancelInvitationCollab.value = false
-}
+  cancelInvitationCollab.value = false;
+};
 const closePermissionAlter = function () {
-  closePermission.value = false
-}
+  closePermission.value = false;
+};
 const closeUserAlter = function () {
-  closeUser.value = false
-}
+  closeUser.value = false;
+};
 const closeCollaboratorAlter = function () {
-  closeCollaborator.value = false
-}
+  closeCollaborator.value = false;
+};
 const closeProblemAlter = function () {
-  closeProblem.value = false
-}
+  closeProblem.value = false;
+};
 const closeProblemCollabAlter = function () {
-  errorCollab.value = false
-}
+  errorCollab.value = false;
+};
 const closeAccessAlter = function () {
-  closeAccessRight.value = false
-}
+  closeAccessRight.value = false;
+};
 const closeRemoveAlter = function () {
-  closeRemoveRight.value = false
-}
+  closeRemoveRight.value = false;
+};
 const closeNotCollabAlter = function () {
-  closeNotCollaborator.value = false
-}
+  closeNotCollaborator.value = false;
+};
 const showErrorMessage = function () {
-  errorCollab.value = true
-  showAddNewCollaborator.value = false
-}
+  errorCollab.value = true;
+  showAddNewCollaborator.value = false;
+};
 const showErrorAddCollabMessage = function () {
-  closePermission.value = true
-}
+  closePermission.value = true;
+};
 const showNotExitCollabMessage = function () {
-  closeUser.value = true
-}
+  closeUser.value = true;
+};
 const showExitCollabMessage = function () {
-  closeCollaborator.value = true
-}
+  closeCollaborator.value = true;
+};
 const closeRemoveCollab = function () {
-  removeCollab.value = false
-}
+  removeCollab.value = false;
+};
 const closeChangeCollab = function () {
-  changeCollab.value = false
-}
+  changeCollab.value = false;
+};
 onMounted(async () => {
   const collab = await getItems(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`
-  )
+  );
   // boardCollabList.value = collab
 
-  collaboratorManager.setCollaborators(collab)
-  console.log(collaboratorManager.getCollaborators())
-  const storedUserName = localStorage.getItem('userName')
+  collaboratorManager.setCollaborators(collab);
+  console.log(collaboratorManager.getCollaborators());
+  const storedUserName = localStorage.getItem("userName");
   if (storedUserName) {
-    userName.value = storedUserName
+    userName.value = storedUserName;
   }
 
   if (
     route.fullPath == `/board/${route.params.id}/collab` &&
-    role !== 'OWNER'
+    role !== "OWNER"
   ) {
-    router.replace({ name: 'Task' })
+    router.replace({ name: "Task" });
   }
-})
+});
 const openPermissionCollabError = function () {
-  closeRemoveRight.value = true
-}
+  closeRemoveRight.value = true;
+};
 const openNotCollabError = function () {
-  closeNotCollaborator.value = true
-}
+  closeNotCollaborator.value = true;
+};
 const openErrorCollab = function () {
-  errorRemoveCollab.value = true
-}
+  errorRemoveCollab.value = true;
+};
 const closeProblemErrorRemoveAlter = function () {
-  errorRemoveCollab.value = false
-}
+  errorRemoveCollab.value = false;
+};
 const openPermissionChangeError = function () {
-  closeAccessRight.value = true
-}
+  closeAccessRight.value = true;
+};
 const openErrorChangeCollab = function () {
-  errorChangeCollab.value = true
-}
+  errorChangeCollab.value = true;
+};
 const closeProblemChangeCollabAlter = function () {
-  errorChangeCollab.value = false
-}
+  errorChangeCollab.value = false;
+};
 const closeInviteCollabAlter = function () {
-  inviteCollab.value = false
-}
+  inviteCollab.value = false;
+};
 const closeExistPendingAlter = function () {
-  existPending.value = false
-}
+  existPending.value = false;
+};
 </script>
 
 <template>
@@ -361,7 +361,7 @@ const closeExistPendingAlter = function () {
       </thead>
       <tbody>
         <tr
-          v-for="(collab, index) in boardCollabList"
+          v-for="(collab, index) in boardCollabList.collab"
           :key="collab.id"
           class="itbkk-item border-b cursor-pointer"
         >
@@ -375,7 +375,7 @@ const closeExistPendingAlter = function () {
             class="itbkk-email px-4 py-3 cursor-default"
             :class="collab.email == null ? 'italic' : ''"
           >
-            {{ collab.email == null ? 'Unassigned' : collab.email }}
+            {{ collab.email == null ? "Unassigned" : collab.email }}
           </td>
           <td class="px-4 py-3 cursor-default">
             <div
@@ -436,7 +436,7 @@ const closeExistPendingAlter = function () {
           class="py-3 px-4 text-lg font-semibold"
           :class="invitations.email == null ? 'italic' : ''"
         >
-          {{ invitations.email == null ? 'Unassigned' : invitations.email }}
+          {{ invitations.email == null ? "Unassigned" : invitations.email }}
         </td>
         <td class="py-3 px-4 text-lg cursor-pointer">
           <div

@@ -80,14 +80,13 @@ const removeCollaborator = async (removeId) => {
     return;
   } else if (deletedCollab.value == "404") {
     deClareemit("notCollabPopUp", true);
-    collaboratorManager.deleteCollaborator(removeId);
     deClareemit("confirmDeletePopUp", true);
     return;
   }
 
   // Check for successful response
   if (removeId) {
-    collaboratorManager.deleteCollaborator(removeId);
+    collaboratorManager.deleteCollaborator(removeId, "collab");
     deClareemit("confirmDeletePopUp", true);
   } else {
     deClareemit("errorRemoveCollabs", true);
@@ -120,6 +119,7 @@ const updateCollaboratorAccessRight = async function () {
   if (editCollab.value.oid) {
     collaboratorManager.editCollaborator(
       editCollab.value.oid,
+      "collab",
       editCollab.value
     );
     deClareemit("confirmChangePopUp", true);
@@ -161,7 +161,7 @@ const updateCollaboratorAccessRight = async function () {
 
           <button
             class="itbkk-button-cancel bg-red-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
-            @click="[$emit('cancelPopUp', true)];"
+            @click="[$emit('cancelPopUp', true)]"
           >
             <div class="btn text-center">Cancel</div>
           </button>
@@ -199,7 +199,7 @@ const updateCollaboratorAccessRight = async function () {
 
           <button
             class="itbkk-button-cancel bg-red-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
-            @click="[$emit('cancelPopUp', true)];"
+            @click="[$emit('cancelPopUp', true)]"
           >
             <div class="btn text-center">Cancel</div>
           </button>
@@ -235,7 +235,7 @@ const updateCollaboratorAccessRight = async function () {
 
           <button
             class="itbkk-button-cancel bg-red-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
-            @click="[$emit('cancelPopUp', true)];"
+            @click="[$emit('cancelPopUp', true)]"
           >
             <div class="btn text-center">Cancel</div>
           </button>

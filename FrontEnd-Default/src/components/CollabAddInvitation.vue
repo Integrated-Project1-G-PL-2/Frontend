@@ -1,84 +1,84 @@
 <script setup>
-import { onMounted, reactive, ref, watch, computed } from 'vue'
+import { onMounted, reactive, ref, watch, computed } from "vue";
 import {
   getItems,
   getItemById,
   deleteItemById,
   addItem,
-  editItem
-} from '../utils/fetchUtils.js'
+  editItem,
+} from "../utils/fetchUtils.js";
 
-import { useRoute, useRouter } from 'vue-router'
-import { storeToRefs } from 'pinia'
-import { userName } from '@/stores/UserManager'
-import AlertPopUp from './../components/AlertPopUp.vue'
-import { logout } from '@/stores/UserManager'
-import AcceptAndDeclineInvitation from './AcceptAndDeclineInvitation.vue'
-import { useCollaboratorManager } from '@/stores/CollaboratorManager'
-const router = useRouter()
-const acceptInvitation = ref(false)
-const declineInvitation = ref(false)
-const returnPage = ref(false)
-const closeNotLogin = ref(false)
-const route = useRoute()
-const collaboratorManager = useCollaboratorManager()
-const boardCollabList = ref(collaboratorManager.getCollaborators())
-const isAccept = ref()
-const isDecline = ref()
-const notInvitation = ref(false)
+import { useRoute, useRouter } from "vue-router";
+import { storeToRefs } from "pinia";
+import { userName } from "@/stores/UserManager";
+import AlertPopUp from "./../components/AlertPopUp.vue";
+import { logout } from "@/stores/UserManager";
+import AcceptAndDeclineInvitation from "./AcceptAndDeclineInvitation.vue";
+import { useCollaboratorManager } from "@/stores/CollaboratorManager";
+const router = useRouter();
+const acceptInvitation = ref(false);
+const declineInvitation = ref(false);
+const returnPage = ref(false);
+const closeNotLogin = ref(false);
+const route = useRoute();
+const collaboratorManager = useCollaboratorManager();
+const boardCollabList = ref(collaboratorManager.getCollaborators());
+const isAccept = ref();
+const isDecline = ref();
+const notInvitation = ref(false);
 // const boardCollabList = ref()
 
 const returnLoginPage = () => {
-  logout()
-  router.replace({ name: 'Login' })
-  returnPage.value = true
-}
+  logout();
+  router.replace({ name: "Login" });
+  returnPage.value = true;
+};
 
 const goBackToPersonalBoard = () => {
-  router.replace({ name: 'Task' })
-}
+  router.replace({ name: "Task" });
+};
 
 const goBackToHomeBoard = () => {
-  router.replace({ name: 'Board' })
-}
+  router.replace({ name: "Board" });
+};
 
 onMounted(async () => {
   const collab = await getItems(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`
-  )
+  );
   // boardCollabList.value = collab
 
-  collaboratorManager.setCollaborators(collab)
-  console.log(collaboratorManager.getCollaborators())
-  const storedUserName = localStorage.getItem('userName')
+  collaboratorManager.setCollaborators(collab);
+  console.log(collaboratorManager.getCollaborators());
+  const storedUserName = localStorage.getItem("userName");
   if (storedUserName) {
-    userName.value = storedUserName
+    userName.value = storedUserName;
   }
 
   if (
     route.fullPath == `/board/${route.params.id}/collab` &&
-    role !== 'OWNER'
+    role !== "OWNER"
   ) {
-    router.replace({ name: 'Task' })
+    router.replace({ name: "Task" });
   }
-})
+});
 const closeNotLoginAlter = function () {
-  closeNotLogin.value = false
-}
+  closeNotLogin.value = false;
+};
 const openAcceptPopUp = function () {
-  isAccept.value = true
-  acceptInvitation.value = true
-}
+  isAccept.value = true;
+  acceptInvitation.value = true;
+};
 const openDeclinePopUp = function () {
-  isDecline.value = true
-  declineInvitation.value = true
-}
+  isDecline.value = true;
+  declineInvitation.value = true;
+};
 const closeAcceptInvitationCollab = function () {
-  acceptInvitation.value = false
-}
+  acceptInvitation.value = false;
+};
 const closeDeclineInvitationCollab = function () {
-  declineInvitation.value = false
-}
+  declineInvitation.value = false;
+};
 </script>
 
 <template>
@@ -175,7 +175,7 @@ const closeDeclineInvitationCollab = function () {
         </div>
 
         <tr
-          v-for="(collab, index) in boardCollabList"
+          v-for="(collab, index) in boardCollabList.collab"
           :key="collab.id"
           class="itbkk-item border-b cursor-pointer"
         >
