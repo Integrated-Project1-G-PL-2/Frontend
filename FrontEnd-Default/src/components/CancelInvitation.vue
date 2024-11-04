@@ -16,13 +16,14 @@ const collaboratorManager = useCollaboratorManager()
 const boardManager = useBoardManager()
 const confirmCancelInvatationCollab = async function (boardCancelId) {
   const cancel = await cancelInvite(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards/${
-      props.boardCancelDetail.value.boardId
-    }/invitation`
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/invitation`,props.boardCancelDetail.value.id
   )
+
   collaboratorManager.deleteCollaborator(boardCancelId, 'pending')
   deClareemit('confirmCancelInvatation', true)
 }
+
+console.log(props.boardCancelDetail.value)
 </script>
 
 <template>
@@ -46,7 +47,7 @@ const confirmCancelInvatationCollab = async function (boardCancelId) {
         <button
           class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"
           @click="
-            confirmCancelInvatationCollab(props.boardCancelDetail.value.boardId)
+            confirmCancelInvatationCollab(props.boardCancelDetail.value.id)
           "
         >
           <div class="btn text-center">Confirm</div>

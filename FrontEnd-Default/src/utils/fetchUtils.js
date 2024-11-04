@@ -196,6 +196,27 @@ async function editReadWrite(url, id, readWrite) {
   }
 }
 
+async function editInviteReadWrite(url, id, readWrite) {
+  try {
+    const options = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ accessRight: readWrite })
+    }
+    const res = await fetchWithAuth(`${url}/${id}`, options)
+    console.log(res)
+    if (res.ok) {
+      return await res.json()
+    }
+    return null
+  } catch (error) {
+    console.error(`Network error: ${error}`)
+    return null
+  }
+}
+
 async function acceptInvite(url, router) {
   try {
     const options = {
@@ -216,7 +237,7 @@ async function acceptInvite(url, router) {
   }
 }
 
-async function cancelInvite(url, router) {
+async function cancelInvite(url, id) {
   try {
     const options = {
       method: 'DELETE',
@@ -224,12 +245,32 @@ async function cancelInvite(url, router) {
         'Content-Type': 'application/json'
       }
     }
-
-    const res = await fetchWithAuth(url, options, router)
+    const res = await fetchWithAuth(`${url}/${id}`, options)
+    console.log(res)
     if (res.ok) {
       return res
     }
-    return res.status
+    return null
+  } catch (error) {
+    console.error(`Network error: ${error}`)
+    return null
+  }
+}
+
+async function declineInvite(url) {
+  try {
+    const options = {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+    const res = await fetchWithAuth(`${url}`, options)
+    console.log(res)
+    if (res.ok) {
+      return res
+    }
+    return null
   } catch (error) {
     console.error(`Network error: ${error}`)
     return null
@@ -245,5 +286,7 @@ export {
   toggleVisibility,
   editReadWrite,
   acceptInvite,
-  cancelInvite
+  cancelInvite,
+  editInviteReadWrite,
+  declineInvite
 }

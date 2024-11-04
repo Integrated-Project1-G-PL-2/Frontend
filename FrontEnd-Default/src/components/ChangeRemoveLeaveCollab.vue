@@ -1,6 +1,6 @@
 <script setup>
 import { ref, reactive } from "vue";
-import { deleteItemById, editReadWrite } from "@/utils/fetchUtils";
+import { deleteItemById, editReadWrite,editInviteReadWrite } from "@/utils/fetchUtils";
 import { useStatusManager } from "@/stores/StatusManager";
 import { useRoute, useRouter } from "vue-router";
 import { refreshToken } from "@/stores/UserManager";
@@ -28,6 +28,7 @@ const props = defineProps([
   "NameLeaveCollabBoard",
   "NameRemoveCollabBoard",
   "NameChangeCollabBoard",
+  "isChangeInvite"
 ]);
 const error = ref(false);
 const router = useRouter();
@@ -36,6 +37,7 @@ const collaboratorManager = useCollaboratorManager();
 const route = useRoute();
 const deletedCollab = reactive({});
 const editCollab = reactive({});
+const editInvite = reactive({})
 const leaveCollab = reactive({});
 const collaborators = collaboratorManager.changeCollaboratorAccessRight();
 const confirmLeaveCollab = async function (leaveId) {
@@ -130,6 +132,44 @@ const updateCollaboratorAccessRight = async function () {
     deClareemit("confirmChangePopUp", true);
   }
 };
+
+const updateInviteAccessRight = async function () {
+  // ทำ function ปิด popup ให้หน่อย แล้วปุ่ม cancel ด้วย แล้วดู error ให้ด้วยเพราะกุเอา declareemit อันเก่ามาไม่รู้ว่าใช้ได้ไหม
+  editInvite.value = await editInviteReadWrite(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/invitation`,
+    props.NameChangeCollabBoard.value.id,
+    props.NameChangeCollabBoard.value.accessChange
+  );
+  console.log(editInvite.value);
+
+  if (editInvite.value == "401") {
+    refreshToken(router);
+    deClareemit("confirmChangePopUp", true);
+    return;
+  }
+  // 403 You do not have permission to change collaborator access right.
+  if (editInvite.value == "403") {
+    router.replace({ name: "Login" });
+    deClareemit(" permissionAccessPopUp", true);
+    deClareemit("confirmChangePopUp", true);
+    return;
+  }
+
+  // Check if the editCollab has a successful structure instead of specific codes
+  if (editInvite.value.oid) {
+    collaboratorManager.editCollaborator(
+      editInvite.value.oid,
+      "pending",
+      editInvite.value
+    );
+  
+    deClareemit("confirmChangePopUp", true);
+    // 500 There is a problem. Please try again later.
+  } else {
+    deClareemit("errorChangeCollabs", true);
+    deClareemit("confirmChangePopUp", true);
+  }
+};
 </script>
 
 <template>
@@ -208,6 +248,46 @@ const updateCollaboratorAccessRight = async function () {
       </div>
     </div>
   </div>
+
+  <div
+    class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[10px]"
+    v-if="props.isChangeInvite"
+  >
+    <div
+      class="itbkk-modal-alert w-[30%] m-[auto] mt-[20%] border border-gray-600 h-[200px]"
+    >
+      <div class="flex flex-col justify-between bg-white p-4 h-[100px]">
+        <div class="itbkk-title w-full h-[70px] mt-1 border-b">
+          <h1 class="text-xl font-bold text-justify">Change Access Right</h1>
+        </div>
+
+        <div class="w-[70%] h-[100%]">
+          <div class="itbkk-message pl-4 mt-4">
+            Do you want to change invite access right of "
+            {{ props.NameChangeCollabBoard.value.name }}" to "{{
+              props.NameChangeCollabBoard.value.accessChange
+            }}"
+          </div>
+        </div>
+        <div class="flex flex-row w-full justify-end border-t h-[60%] mt-6">
+          <button
+            class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[60px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
+            @click="updateInviteAccessRight()"
+          >
+            <div class="btn text-center">Confirm</div>
+          </button>
+
+          <button
+            class="itbkk-button-cancel bg-red-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4"
+            @click="[$emit('cancelPopUp', true)]"
+          >
+            <div class="btn text-center">Cancel</div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div
     class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[10px]"
     v-if="props.isRemove"

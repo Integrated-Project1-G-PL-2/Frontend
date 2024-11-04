@@ -7,7 +7,7 @@ import {
   addItem,
   editItem,
   acceptInvite,
-  cancelInvite
+  declineInvite
 } from '../utils/fetchUtils.js'
 import { useRoute, useRouter } from 'vue-router'
 import { useCollaboratorManager } from '@/stores/CollaboratorManager'
@@ -38,19 +38,29 @@ const confirmAcceptInvatationCollab = async function (boardAcceptId) {
       props.boardAcceptDetail.value.boardId
     }/invitation`
   )
-  collaboratorManager.addCollaborator(boardAcceptId, 'pending')
+  const boards = await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards`)
+  if (boards == 401) {
+    router.replace({ name: 'Login' })
+    return
+  }
+  boardManager.setBoards(boards)
   deClareemit('confirmAcceptInvatation', true)
   console.log(accept)
 }
-const confirmRemoveInvatationCollab = async function (boardDeclineId) {
-  const cancel = await cancelInvite(
+const confirmRemoveInvatationCollab = async function () {
+  const cancel = await declineInvite(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${
       props.boardDeclineDetail.value.boardId
     }/invitation`
   )
-  collaboratorManager.deleteCollaborator(boardDeclineId, 'pending')
+  const boards = await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards`)
+  if (boards == 401) {
+    router.replace({ name: 'Login' })
+    return
+  }
+  boardManager.setBoards(boards)
   deClareemit('confirmRemoveInvatation', true)
-  console.log(cancel)
+
 }
 </script>
 

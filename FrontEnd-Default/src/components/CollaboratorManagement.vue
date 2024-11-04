@@ -28,7 +28,9 @@ const router = useRouter()
 const removeCollab = ref()
 const cancelInvitationCollab = ref(false)
 const changeCollab = ref()
+const changeInvite = ref()
 const isChange = ref()
+const isChangeInvite = ref()
 const isRemove = ref()
 const showAddNewCollaborator = ref(false)
 const closePermission = ref(false)
@@ -77,7 +79,6 @@ const goBackToHomeBoard = () => {
   router.replace({ name: 'Board' })
 }
 const openChangeCollab = async function (nameCollab, oid, readWrite) {
-  console.log(readWrite)
   if (readWrite == 'READ') {
     readWrite = 'WRITE'
   } else {
@@ -87,6 +88,19 @@ const openChangeCollab = async function (nameCollab, oid, readWrite) {
   isChange.value = true
   changeCollab.value = true
 }
+
+const openChangeInvite = async function (nameCollab, oid, readWrite) {
+  console.log(readWrite)
+  if (readWrite == 'READ') {
+    readWrite = 'WRITE'
+  } else {
+    readWrite = 'READ'
+  }
+  collabDetail.value = { name: nameCollab, id: oid, accessChange: readWrite }
+  isChangeInvite.value = true
+  changeInvite.value = true
+}
+
 const closeChange = function () {
   changeCollab.value = false
 }
@@ -95,8 +109,8 @@ const openRemoveCollab = async function (collabName, collabId) {
   isRemove.value = true
   removeCollab.value = true
 }
-const openCancelInvitationCollab = async function (boardId, boardName) {
-  boardInvitationDetail.value = { boardId: boardId, boardName: boardName }
+const openCancelInvitationCollab = async function ( boardName, oid) {
+  boardInvitationDetail.value = { boardName: boardName ,id: oid}
   cancelInvitationCollab.value = true
 }
 
@@ -448,7 +462,7 @@ const closeExistPendingAlter = function () {
           <div
             class="itbkk-access-right w-[50%]"
             @click="
-              openChangeCollab(pending.name, pending.oid, pending.accessRight)
+              openChangeInvite(pending.name, pending.oid, pending.accessRight)
             "
           >
             {{ pending.accessRight }}
@@ -456,7 +470,7 @@ const closeExistPendingAlter = function () {
         </td>
         <td class="py-3 px-4">
           <button
-            @click="openCancelInvitationCollab(pending.oid, pending.name)"
+            @click="openCancelInvitationCollab(pending.name, pending.oid)"
             class="bg-gray-300 text-sm rounded-[6px] font-sans text-gray-700 hover:text-white px-4 py-1"
           >
             Cancel
@@ -487,6 +501,16 @@ const closeExistPendingAlter = function () {
       :NameChangeCollabBoard="collabDetail"
     ></ChangeRemoveLeaveCollab>
   </teleport>
+  <teleport to="body" v-if="changeInvite">
+    <ChangeRemoveLeaveCollab
+      @cancelPopUp="closeChange"
+      @confirmChangePopUp="closeChangeCollab"
+      @permissionAccessPopUp="openPermissionChangeError"
+      @errorChangeCollabs="openErrorChangeCollab"
+      :isChangeInvite="isChangeInvite"
+      :NameChangeCollabBoard="collabDetail"
+    ></ChangeRemoveLeaveCollab>
+  </teleport>
   <teleport to="body" v-if="removeCollab">
     <ChangeRemoveLeaveCollab
       @cancelPopUp="closeRemove"
@@ -495,7 +519,6 @@ const closeExistPendingAlter = function () {
       @notCollabPopUp="openNotCollabError"
       @errorRemoveCollabs="openErrorCollab"
       :isRemove="isRemove"
-      :operate="operation"
       :NameRemoveCollabBoard="collabDetail"
     ></ChangeRemoveLeaveCollab>
   </teleport>

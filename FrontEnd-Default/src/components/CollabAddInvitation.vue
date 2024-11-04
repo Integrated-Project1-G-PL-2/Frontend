@@ -50,7 +50,7 @@ onMounted(async () => {
   const getDetail = await getItems(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/invitation`
   )
-
+console.log(getDetail)
   if (getDetail.status == 404) {
     // Display alert message
     window.alert('You are not logged in.')
@@ -67,18 +67,7 @@ onMounted(async () => {
 })
 
 console.log(inviteDetail)
-const acceptInv = async function () {
-  const accept = await acceptInvite(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/invitation`
-  )
-  console.log(accept)
-}
-const cancelInv = async function () {
-  const cancel = await cancelInvite(
-    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/invitation`
-  )
-  console.log(cancel)
-}
+
 const closeNotLoginAlter = function () {
   closeNotLogin.value = false
 }
