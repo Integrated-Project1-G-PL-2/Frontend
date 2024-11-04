@@ -45,6 +45,7 @@ const returnPage = ref(false)
 const errorRemoveCollab = ref(false)
 const errorChangeCollab = ref(false)
 const inviteCollab = ref(false)
+const inviteProblemCollab = ref(false)
 const route = useRoute()
 const collaboratorManager = useCollaboratorManager()
 const boardCollabList = ref(collaboratorManager.getCollaborators())
@@ -109,8 +110,8 @@ const openRemoveCollab = async function (collabName, collabId) {
   isRemove.value = true
   removeCollab.value = true
 }
-const openCancelInvitationCollab = async function ( boardName, oid) {
-  boardInvitationDetail.value = { boardName: boardName ,id: oid}
+const openCancelInvitationCollab = async function (boardName, oid) {
+  boardInvitationDetail.value = { boardName: boardName, id: oid }
   cancelInvitationCollab.value = true
 }
 
@@ -212,6 +213,9 @@ const closeInviteCollabAlter = function () {
 }
 const closeExistPendingAlter = function () {
   existPending.value = false
+}
+const closeInviteProblemCollabAlter = function () {
+  inviteProblemCollab.value = false
 }
 </script>
 
@@ -329,10 +333,25 @@ const closeExistPendingAlter = function () {
       styleType="red"
     />
     <AlertPopUp
+      v-if="existPending"
+      :titles="'The user is already the collaborator or pending collaborator of this board'"
+      @closePopUp="closeExistPendingAlter"
+      message="Error!!"
+      styleType="red"
+    />
+    <AlertPopUp
       v-if="inviteCollab"
       :titles="`${pending.name} has invited you to collaborate with ${pending.accessRight} access right on ${userName} board.`"
       :link="{ path: `/board/${boardId}/collab/invitations` }"
       @closePopUp="closeInviteCollabAlter"
+      message="You have a new invitation!"
+      styleType="green"
+    />
+    <AlertPopUp
+      v-if="inviteProblemCollab"
+      :titles="`We could not send e-mail to ${pending.name} , he/she can accept the invitation at `"
+      :link="{ path: `/board/${boardId}/collab/invitations` }"
+      @closePopUp="closeInviteProblemCollabAlter"
       message="You have a new invitation!"
       styleType="green"
     />
