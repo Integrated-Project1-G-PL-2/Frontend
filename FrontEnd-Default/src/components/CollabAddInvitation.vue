@@ -22,6 +22,9 @@ const acceptInvitation = ref(false)
 const declineInvitation = ref(false)
 const returnPage = ref(false)
 const closeNotLogin = ref(false)
+const closeNotFound = ref(false)
+const wrongToken = ref(false)
+const closeNotPermission = ref(false)
 const route = useRoute()
 const collaboratorManager = useCollaboratorManager()
 const boardCollabList = ref(collaboratorManager.getCollaborators())
@@ -51,7 +54,16 @@ onMounted(async () => {
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/invitation`
   )
   // 401 tokken มั่ว 403 ไม่มีสิทธิ์ 404 หาไม่เจอ
-console.log(getDetail)
+  console.log(getDetail)
+  if (getDetail.status == 401) {
+    wrongToken.value = true
+  }
+  if (getDetail.status == 403) {
+    closeNotPermission.value = true
+  }
+  if (getDetail.status == 404) {
+    closeNotFound.value = true
+  }
   if (getDetail.status == 404) {
     // Display alert message
     window.alert('You are not logged in.')
@@ -72,14 +84,23 @@ console.log(inviteDetail)
 const closeNotLoginAlter = function () {
   closeNotLogin.value = false
 }
-const openAcceptPopUp = function (boardId,boardName) {
+const closeWrongTokenAlter = function () {
+  wrongToken.value = false
+}
+const closeNotFoundAlter = function () {
+  closeNotFound.value = false
+}
+const closeNotPermissionAlter = function () {
+  closeNotPermission.value = false
+}
+const openAcceptPopUp = function (boardId, boardName) {
   isAccept.value = true
-  boardDetail.value = { boardId: boardId , boardName: boardName}
+  boardDetail.value = { boardId: boardId, boardName: boardName }
   acceptInvitation.value = true
 }
-const openDeclinePopUp = function (boardId,boardName) {
+const openDeclinePopUp = function (boardId, boardName) {
   isDecline.value = true
-  boardDetail.value = { boardId: boardId , boardName: boardName}
+  boardDetail.value = { boardId: boardId, boardName: boardName }
   declineInvitation.value = true
 }
 const closeAcceptInvitationCollab = function () {
@@ -166,8 +187,29 @@ onMounted(async () => {
       </div>
     </div>
     <AlertPopUp
+      v-if="wrongToken"
+      :titles="'Sorry, You do not have access rights to this board, User Token is incorrect. '"
+      @closePopUp="closeWrongTokenAlter"
+      message="Error!!"
+      styleType="red"
+    />
+    <AlertPopUp
+      v-if="closeNotPermission"
+      :titles="'Sorry, You do not have access rights to this board, User do not have permission to do this. '"
+      @closePopUp="closeNotPermissionAlter"
+      message="Error!!"
+      styleType="red"
+    />
+    <AlertPopUp
+      v-if="closeNotFound"
+      :titles="'Sorry, You do not have access rights to this board, We could not found your Invitation Collab. '"
+      @closePopUp="closeNotFoundAlter"
+      message="Error!!"
+      styleType="red"
+    />
+    <AlertPopUp
       v-if="closeNotLogin"
-      :titles="'Sorry, You do not have access rights to this board .User should sign-in first. '"
+      :titles="'Sorry, You do not have access rights to this board, User should sign-in first. '"
       @closePopUp="closeNotLoginAlter"
       message="Error!!"
       styleType="red"
@@ -203,14 +245,18 @@ onMounted(async () => {
               {{ inviteDetail.accessRight }} access right on
               {{ inviteDetail.boardName }} board, with
               <button
-                @click="openAcceptPopUp(route.params.id, inviteDetail.boardName)"
+                @click="
+                  openAcceptPopUp(route.params.id, inviteDetail.boardName)
+                "
                 class="ml-2 px-3 py-1 text-white bg-green-500 hover:bg-green-600 rounded-md"
               >
                 Accept invitation
               </button>
               or
               <button
-                @click="openDeclinePopUp(route.params.id,inviteDetail.boardName)"
+                @click="
+                  openDeclinePopUp(route.params.id, inviteDetail.boardName)
+                "
                 class="ml-2 px-3 py-1 text-white bg-red-500 hover:bg-red-600 rounded-md"
               >
                 Decline
