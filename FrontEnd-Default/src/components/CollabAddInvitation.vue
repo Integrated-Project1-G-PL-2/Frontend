@@ -64,7 +64,17 @@ onMounted(async () => {
   if (getDetail.status == 404) {
     closeNotFound.value = true
   }
-  if (getDetail.status == 404) {
+  // if (getDetail.status == 404) {
+  //   // Display alert message
+  //   window.alert('You are not logged in.')
+
+  //   // Set a timeout of 5 seconds (5000 milliseconds) before redirecting
+  //   setTimeout(() => {
+  //     closeNotLogin.value = true
+  //     router.replace({ name: 'Board' })
+  //   }, 5000) // 5000 milliseconds = 5 seconds
+  // }
+  else if (getDetail.status == 400) {
     // Display alert message
     window.alert('You are not logged in.')
 
@@ -73,7 +83,6 @@ onMounted(async () => {
       closeNotLogin.value = true
       router.replace({ name: 'Board' })
     }, 5000) // 5000 milliseconds = 5 seconds
-  } else if (getDetail.status == 400) {
     router.replace({ name: 'Login' })
   }
   Object.assign(inviteDetail, getDetail)
