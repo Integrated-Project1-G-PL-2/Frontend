@@ -406,7 +406,7 @@ const closeInviteProblemCollabAlter = function () {
         >
           <td class="px-4 py-3">{{ index + 1 }}</td>
           <td class="px-4 py-3">
-            <div class="itbkk-name  cursor-default">
+            <div class="itbkk-name cursor-default">
               {{ collab.name }}
             </div>
           </td>
@@ -466,7 +466,6 @@ const closeInviteProblemCollabAlter = function () {
         <td class="py-3 px-4 text-lg font-semibold">
           <div class="itbkk-name cursor-default">
             {{ pending.name }}
-           
           </div>
         </td>
         <td
@@ -543,7 +542,7 @@ const closeInviteProblemCollabAlter = function () {
     <CancelInvitation
       @cancelDetail="closeCancelInvitation"
       :boardCancelDetail="boardInvitationDetail"
-      :confirmCancelInvatation="closeComfrimCancelInvitation"
+      @confirmCancelInvatation="closeComfrimCancelInvitation"
     ></CancelInvitation>
   </teleport>
 </template>
