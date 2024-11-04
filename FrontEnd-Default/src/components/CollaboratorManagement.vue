@@ -260,7 +260,7 @@ const closeExistPendingAlter = function () {
     />
     <AlertPopUp
       v-if="closeCollaborator"
-      :titles="'The user is already the collaborator of this board.'"
+      :titles="'The user is already the collaborator or pending collaborator of this board , the access right is not updated.'"
       @closePopUp="closeCollaboratorAlter"
       message="Error!!"
       styleType="red"
@@ -321,13 +321,13 @@ const closeExistPendingAlter = function () {
       message="Error!!"
       styleType="green"
     />
-    <AlertPopUp
+    <!-- <AlertPopUp
       v-if="existPending"
       :titles="'The user is already the collaborator or pending collaborator of this board , the access right is not updated. '"
       @closePopUp="closeExistPendingAlter"
       message="Error!!"
       styleType="red"
-    />
+    /> -->
     <div class="flex justify-end">
       <div
         class="flex justify-between items-start w-full font-bold space-y-2 border-b py-2 border-r-slate-500"
