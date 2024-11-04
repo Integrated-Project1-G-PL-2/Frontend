@@ -50,6 +50,7 @@ onMounted(async () => {
   const getDetail = await getItems(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/invitation`
   )
+  // 401 tokken มั่ว 403 ไม่มีสิทธิ์ 404 หาไม่เจอ
 console.log(getDetail)
   if (getDetail.status == 404) {
     // Display alert message

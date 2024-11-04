@@ -98,7 +98,12 @@ const newCollab = async () => {
   }
 
   // Handle successful collaborator creation
-  if (newCollabBoards.oid) {
+  if(!newCollabBoards.mailStatus){
+    // We couldn't send email to ...
+    deClareemit("cancelCollab", true);
+  }
+
+  else if (newCollabBoards.oid) {
     collabManager.addCollaborator(newCollabBoards, "pending");
     console.log(collabManager.getCollaborators());
     deClareemit("cancelCollab", true);

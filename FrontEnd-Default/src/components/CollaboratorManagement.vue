@@ -387,7 +387,7 @@ const closeExistPendingAlter = function () {
         >
           <td class="px-4 py-3">{{ index + 1 }}</td>
           <td class="px-4 py-3">
-            <div class="itbkk-name hover:text-sky-500 cursor-default">
+            <div class="itbkk-name  cursor-default">
               {{ collab.name }}
             </div>
           </td>
@@ -399,7 +399,7 @@ const closeExistPendingAlter = function () {
           </td>
           <td class="px-4 py-3 cursor-default">
             <div
-              class="itbkk-access-right w-[50%]"
+              class="itbkk-access-right hover:text-sky-500 w-[50%]"
               @click="
                 openChangeCollab(collab.name, collab.oid, collab.accessRight)
               "
@@ -445,11 +445,9 @@ const closeExistPendingAlter = function () {
       >
         <td class="py-3 px-4 text-lg font-semibold">{{ index + 1 }}</td>
         <td class="py-3 px-4 text-lg font-semibold">
-          <div class="itbkk-name hover:text-sky-500 cursor-default">
+          <div class="itbkk-name cursor-default">
             {{ pending.name }}
-            <div class="text-sm text-gray-500">
-              <h1>: "Pending Invite"</h1>
-            </div>
+           
           </div>
         </td>
         <td
@@ -460,7 +458,7 @@ const closeExistPendingAlter = function () {
         </td>
         <td class="py-3 px-4 text-lg cursor-pointer">
           <div
-            class="itbkk-access-right w-[50%]"
+            class="itbkk-access-right hover:text-sky-500 w-[50%]"
             @click="
               openChangeInvite(pending.name, pending.oid, pending.accessRight)
             "

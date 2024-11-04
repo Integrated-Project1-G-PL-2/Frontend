@@ -45,7 +45,7 @@ const confirmAcceptInvatationCollab = async function (boardAcceptId) {
   }
   boardManager.setBoards(boards)
   deClareemit('confirmAcceptInvatation', true)
-  console.log(accept)
+
 }
 const confirmRemoveInvatationCollab = async function () {
   const cancel = await declineInvite(
