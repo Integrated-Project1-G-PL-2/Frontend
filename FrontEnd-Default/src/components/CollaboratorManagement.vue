@@ -479,6 +479,7 @@ const closeExistPendingAlter = function () {
       @cancelCollab="cancelCollabPopUp"
       @errorCollab="showErrorMessage"
       :EmailCollabBoard="collabEmail"
+      :inviteEmail="inviteCollab"
     ></AddNewCollaborator>
   </teleport>
   <teleport to="body" v-if="changeCollab">

@@ -5,7 +5,12 @@ import { useRouter } from 'vue-router'
 import { useBoardManager } from '@/stores/BoardManager'
 import { userName } from '@/stores/UserManager'
 
-const deClareemit = defineEmits(['saveDetail', 'cancelDetail', 'errorOccurred'])
+const deClareemit = defineEmits([
+  'saveDetail',
+  'cancelDetail',
+  'errorOccurred',
+  'inviteEmail'
+])
 const router = useRouter()
 const isNameOverLimit = ref(false)
 const boardManager = useBoardManager()
@@ -45,7 +50,7 @@ const newBoard = async () => {
     deClareemit('errorOccurred', (error.value = true))
     return
   }
-
+  deClareemit('inviteEmail', true)
   boardManager.addBoard(newBoards)
   deClareemit('saveDetail', true)
   router.replace({ name: 'Task', params: { id: newBoards.id } }) // Use the new board's ID
