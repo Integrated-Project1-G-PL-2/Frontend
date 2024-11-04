@@ -431,7 +431,7 @@ const closeExistPendingAlter = function () {
         <td class="py-3 px-4 text-lg font-semibold">
           <div class="itbkk-name hover:text-sky-500 cursor-default">
             {{ pending.name }}
-            <div v-if="invited" class="text-sm text-gray-500">
+            <div class="text-sm text-gray-500">
               <h1>: "Pending Invite"</h1>
             </div>
           </div>
