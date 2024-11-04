@@ -20,7 +20,7 @@ const confirmCancelInvatationCollab = async function (boardCancelId) {
       props.boardCancelDetail.value.boardId
     }/invitation`
   )
-  boardManager.deleteBoard(boardCancelId, 'pending')
+  collaboratorManager.deleteCollaborator(boardCancelId, 'pending')
   deClareemit('confirmCancelInvatation', true)
 }
 </script>
