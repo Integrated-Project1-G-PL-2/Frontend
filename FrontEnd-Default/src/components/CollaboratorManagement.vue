@@ -105,6 +105,9 @@ const openChangeInvite = async function (nameCollab, oid, readWrite) {
 const closeChange = function () {
   changeCollab.value = false
 }
+const closeInviteChange = function () {
+  changeInvite.value = false
+}
 const openRemoveCollab = async function (collabName, collabId) {
   collabDetail.value = { name: collabName, id: collabId }
   isRemove.value = true
@@ -166,6 +169,9 @@ const closeRemoveCollab = function () {
 }
 const closeChangeCollab = function () {
   changeCollab.value = false
+}
+const closeInviteChangeCollab = function () {
+  changeInvite.value = false
 }
 onMounted(async () => {
   const collab = await getItems(
@@ -519,8 +525,8 @@ const closeInviteProblemCollabAlter = function () {
   </teleport>
   <teleport to="body" v-if="changeInvite">
     <ChangeRemoveLeaveCollab
-      @cancelPopUp="closeChange"
-      @confirmChangePopUp="closeChangeCollab"
+      @cancelPopUp="closeInviteChange"
+      @confirmChangePopUp="closeInviteChangeCollab"
       @permissionAccessPopUp="openPermissionChangeError"
       @errorChangeCollabs="openErrorChangeCollab"
       :isChangeInvite="isChangeInvite"
