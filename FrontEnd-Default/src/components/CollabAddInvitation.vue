@@ -183,7 +183,9 @@ onMounted(async () => {
           class="relative text-center text-xl text-red-600 p-4"
         >
           <div class="flex justify-center items-center">
-            <h2>Sorry, we couldn't find the invitation to this board.</h2>
+            <h2>
+              Sorry, we couldn't find your active invitation to this board.
+            </h2>
             <button
               @click="notInvitation = false"
               class="ml-2 text-red-600 hover:text-red-800 font-bold"
