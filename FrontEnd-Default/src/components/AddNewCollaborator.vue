@@ -1,122 +1,121 @@
 <script setup>
-import { addItem } from "@/utils/fetchUtils";
-import { ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { useCollaboratorManager } from "@/stores/CollaboratorManager";
-import { userEmail } from "@/stores/UserManager";
-import { refreshToken } from "@/stores/UserManager";
+import { addItem } from '@/utils/fetchUtils'
+import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useCollaboratorManager } from '@/stores/CollaboratorManager'
+import { userEmail } from '@/stores/UserManager'
+import { refreshToken } from '@/stores/UserManager'
 
 const deClareemit = defineEmits([
-  "saveCollab",
-  "cancelCollab",
-  "errorCollabs",
-  "errorAddCollab",
-  "errorNotExitCollab",
-  "errorExitCollab",
-]);
-const props = defineProps(["EmailCollabBoard"]);
-const isNameOverLimit = ref(false);
-const MAX_LENGTH = 50;
-const route = useRoute();
-const router = useRouter();
-const errorCollab = ref(false);
-const collabManager = useCollaboratorManager();
+  'saveCollab',
+  'cancelCollab',
+  'errorCollabs',
+  'errorAddCollab',
+  'errorNotExitCollab',
+  'errorExitCollab',
+  'problemSendEmail',
+  'inviteEmail'
+])
+const props = defineProps(['EmailCollabBoard'])
+const isNameOverLimit = ref(false)
+const MAX_LENGTH = 50
+const route = useRoute()
+const router = useRouter()
+const errorCollab = ref(false)
+const collabManager = useCollaboratorManager()
 // Initialize selectedAccessLevel with "READ"
-const selectedAccessLevel = ref("READ");
+const selectedAccessLevel = ref('READ')
 // Define newCollabEmailName with default value
-let newCollabEmailName = ref("");
+let newCollabEmailName = ref('')
 // Owner email (replace with actual owner email)
-const ownerEmail = ref("");
+const ownerEmail = ref('')
 // Invalid email flag
-const isInvalidEmail = ref(false);
+const isInvalidEmail = ref(false)
 
 // Email validation regex
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const validateEmail = () => {
   // ตรวจสอบ email ด้วย regex และตรวจสอบว่าไม่ซ้ำกับ ownerEmail
   isInvalidEmail.value =
     !emailRegex.test(newCollabEmailName.value) ||
-    newCollabEmailName.value === ownerEmail.value;
+    newCollabEmailName.value === ownerEmail.value
   if (!newCollabEmailName.value) {
-    isInvalidEmail.value = false;
-    return;
+    isInvalidEmail.value = false
+    return
   }
   if (newCollabEmailName.value == props.EmailCollabBoard.value) {
-    isInvalidEmail.value = true;
+    isInvalidEmail.value = true
   }
-};
+}
 
 // Check length of the collaborator email and enforce the limit
 const checkNameLength = () => {
   if (newCollabEmailName.value.length > MAX_LENGTH) {
-    isNameOverLimit.value = true;
-    newCollabEmailName.value = newCollabEmailName.value.substring(
-      0,
-      MAX_LENGTH
-    );
+    isNameOverLimit.value = true
+    newCollabEmailName.value = newCollabEmailName.value.substring(0, MAX_LENGTH)
     setTimeout(() => {
-      isNameOverLimit.value = false;
-    }, 1000);
+      isNameOverLimit.value = false
+    }, 1000)
   } else {
-    isNameOverLimit.value = false;
+    isNameOverLimit.value = false
   }
-};
+}
 
 // Handle creating a new collaborator
 const newCollab = async () => {
-  console.log(selectedAccessLevel.value);
+  console.log(selectedAccessLevel.value)
 
   // Attempt to add a new collaborator
   const newCollabBoards = await addItem(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`,
     {
       email: newCollabEmailName.value,
-      accessRight: selectedAccessLevel.value,
+      accessRight: selectedAccessLevel.value
     }
-  );
+  )
 
-  console.log(newCollabBoards);
+  console.log(newCollabBoards)
 
   // Check for specific error responses
   if (newCollabBoards == 401) {
-    deClareemit("cancelCollab", true);
-    refreshToken(router);
-    return;
+    deClareemit('cancelCollab', true)
+    refreshToken(router)
+    return
   } else if (newCollabBoards == 403) {
-    deClareemit("errorAddCollab", true);
-    deClareemit("cancelCollab", true);
-    return;
+    deClareemit('errorAddCollab', true)
+    deClareemit('cancelCollab', true)
+    return
   } else if (newCollabBoards == 404) {
-    deClareemit("errorNotExitCollab", true);
-    deClareemit("cancelCollab", true);
-    return;
+    deClareemit('errorNotExitCollab', true)
+    deClareemit('cancelCollab', true)
+    return
   } else if (newCollabBoards == 409) {
-    deClareemit("errorExitCollab", true);
-    deClareemit("cancelCollab", true);
-    return;
+    deClareemit('errorExitCollab', true)
+    deClareemit('cancelCollab', true)
+    return
   }
 
   // Handle successful collaborator creation
-  if(!newCollabBoards.mailStatus){
+  if (!newCollabBoards.mailStatus) {
     // We couldn't send email to ...
-    collabManager.addCollaborator(newCollabBoards, "pending");
-    deClareemit("cancelCollab", true);
-  }
-
-  else if (newCollabBoards.oid) {
-    collabManager.addCollaborator(newCollabBoards, "pending");
-    console.log(collabManager.getCollaborators());
-    deClareemit("cancelCollab", true);
+    deClareemit('problemSendEmail', true)
+    collabManager.addCollaborator(newCollabBoards, 'pending')
+    deClareemit('cancelCollab', true)
+  } else if (newCollabBoards.oid) {
+    deClareemit('inviteEmail', true)
+    collabManager.addCollaborator(newCollabBoards, 'pending')
+    console.log(collabManager.getCollaborators())
+    deClareemit('cancelCollab', true)
     // Optionally redirect or perform further actions here
     // router.replace({ name: 'CollabList' });
-    console.log(newCollabBoards);
+    console.log(newCollabBoards)
   } else {
     // Handle unexpected responses
-    deClareemit("errorCollabs", true);
-    deClareemit("cancelCollab", true);
+    deClareemit('errorCollabs', true)
+    deClareemit('cancelCollab', true)
   }
-};
+}
 </script>
 
 <template>
@@ -146,13 +145,13 @@ const newCollab = async () => {
                 v-model="newCollabEmailName"
                 @input="
                   () => {
-                    checkNameLength();
-                    validateEmail();
+                    checkNameLength()
+                    validateEmail()
                   }
                 "
                 :class="{
                   'border-red-600 text-red-600':
-                    isNameOverLimit || isInvalidEmail,
+                    isNameOverLimit || isInvalidEmail
                 }"
                 class="itbkk-collaborator-email font-bold text-justify w-full break-all border border-gray-300 rounded-md resize-none"
               ></textarea>
@@ -226,10 +225,10 @@ const newCollab = async () => {
         <button
           class="itbkk-button-cancel bg-red-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center flex flex-col gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"
           @click="
-            [
+            ;[
               $emit('cancelCollab', true),
-              $router.replace({ name: 'CollabList' }),
-            ];
+              $router.replace({ name: 'CollabList' })
+            ]
           "
         >
           <div class="btn text-center">Cancel</div>

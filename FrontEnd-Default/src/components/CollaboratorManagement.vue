@@ -53,7 +53,6 @@ const collabDetail = reactive({})
 const collabEmail = reactive({})
 const role = sessionStorage.getItem('userRole')
 const invited = ref(false)
-const existPending = ref(false)
 let newName = ref(`${userName.value}`)
 const boardInvitationDetail = reactive({})
 // const boardCollabList = ref()
@@ -155,9 +154,14 @@ const showErrorMessage = function () {
   errorCollab.value = true
   showAddNewCollaborator.value = false
 }
+
 const showErrorAddCollabMessage = function () {
   closePermission.value = true
 }
+const showErrorProblemInvite = function () {
+  inviteProblemCollab.value = true
+}
+
 const showNotExitCollabMessage = function () {
   closeUser.value = true
 }
@@ -217,9 +221,7 @@ const closeProblemChangeCollabAlter = function () {
 const closeInviteCollabAlter = function () {
   inviteCollab.value = false
 }
-const closeExistPendingAlter = function () {
-  existPending.value = false
-}
+
 const closeInviteProblemCollabAlter = function () {
   inviteProblemCollab.value = false
 }
@@ -284,7 +286,7 @@ const closeInviteProblemCollabAlter = function () {
     />
     <AlertPopUp
       v-if="closeCollaborator"
-      :titles="'The user is already the collaborator or pending collaborator of this board , the access right is not updated.'"
+      :titles="'The user is already the collaborator or pending collaborator of this board '"
       @closePopUp="closeCollaboratorAlter"
       message="Error!!"
       styleType="red"
@@ -339,13 +341,6 @@ const closeInviteProblemCollabAlter = function () {
       styleType="red"
     />
     <AlertPopUp
-      v-if="existPending"
-      :titles="'The user is already the collaborator or pending collaborator of this board'"
-      @closePopUp="closeExistPendingAlter"
-      message="Error!!"
-      styleType="red"
-    />
-    <AlertPopUp
       v-if="inviteCollab"
       :titles="`${pending.name} has invited you to collaborate with ${pending.accessRight} access right on ${userName} board.`"
       :link="{ path: `/board/${boardId}/collab/invitations` }"
@@ -362,13 +357,6 @@ const closeInviteProblemCollabAlter = function () {
       styleType="green"
     />
 
-    <!-- <AlertPopUp
-      v-if="existPending"
-      :titles="'The user is already the collaborator or pending collaborator of this board , the access right is not updated. '"
-      @closePopUp="closeExistPendingAlter"
-      message="Error!!"
-      styleType="red"
-    /> -->
     <div class="flex justify-end">
       <div
         class="flex justify-between items-start w-full font-bold space-y-2 border-b py-2 border-r-slate-500"
@@ -504,13 +492,14 @@ const closeInviteProblemCollabAlter = function () {
 
   <teleport to="body" v-if="showAddNewCollaborator">
     <AddNewCollaborator
+      @problemSendEmail="showErrorProblemInvite"
       @errorAddCollab="showErrorAddCollabMessage"
       @errorNotExitCollab="showNotExitCollabMessage"
       @errorExitCollab="showExitCollabMessage"
       @cancelCollab="cancelCollabPopUp"
       @errorCollab="showErrorMessage"
       :EmailCollabBoard="collabEmail"
-      :inviteEmail="inviteCollab"
+      @inviteEmail="inviteCollab"
     ></AddNewCollaborator>
   </teleport>
   <teleport to="body" v-if="changeCollab">
