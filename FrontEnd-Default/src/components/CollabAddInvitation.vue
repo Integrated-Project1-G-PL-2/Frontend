@@ -98,6 +98,12 @@ const closeAcceptInvitationCollab = function () {
 const closeDeclineInvitationCollab = function () {
   declineInvitation.value = false
 }
+onMounted(async () => {
+  const storedUserName = localStorage.getItem('userName')
+  if (storedUserName) {
+    userName.value = storedUserName
+  }
+})
 </script>
 
 <template>

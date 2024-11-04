@@ -316,7 +316,14 @@ const closeExistPendingAlter = function () {
     />
     <AlertPopUp
       v-if="inviteCollab"
-      :titles="'<<inviter name>> has invited you to collaborate with <<access-right given>> access right on <<board name>> board.'"
+      :titles="
+        pending.name +
+        'has invited you to collaborate with ' +
+        pending.accessRight +
+        ' access right on ' +
+        userName +
+        ' board.'
+      "
       @closePopUp="closeInviteCollabAlter"
       message="Error!!"
       styleType="green"
