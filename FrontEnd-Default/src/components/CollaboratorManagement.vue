@@ -316,18 +316,13 @@ const closeExistPendingAlter = function () {
     />
     <AlertPopUp
       v-if="inviteCollab"
-      :titles="
-        pending.name +
-        'has invited you to collaborate with ' +
-        pending.accessRight +
-        ' access right on ' +
-        userName +
-        ' board.'
-      "
+      :titles="`${pending.name} has invited you to collaborate with ${pending.accessRight} access right on ${userName} board.`"
+      :link="{ path: `/board/${boardId}/collab/invitations` }"
       @closePopUp="closeInviteCollabAlter"
-      message="Error!!"
+      message="You have a new invitation!"
       styleType="green"
     />
+
     <!-- <AlertPopUp
       v-if="existPending"
       :titles="'The user is already the collaborator or pending collaborator of this board , the access right is not updated. '"
