@@ -72,14 +72,14 @@ console.log(inviteDetail)
 const closeNotLoginAlter = function () {
   closeNotLogin.value = false
 }
-const openAcceptPopUp = function (boardId) {
+const openAcceptPopUp = function (boardId,boardName) {
   isAccept.value = true
-  boardDetail.value = { boardId: boardId }
+  boardDetail.value = { boardId: boardId , boardName: boardName}
   acceptInvitation.value = true
 }
-const openDeclinePopUp = function (boardId) {
+const openDeclinePopUp = function (boardId,boardName) {
   isDecline.value = true
-  boardDetail.value = { boardId: boardId }
+  boardDetail.value = { boardId: boardId , boardName: boardName}
   declineInvitation.value = true
 }
 const closeAcceptInvitationCollab = function () {
@@ -198,19 +198,19 @@ onMounted(async () => {
 
         <tr>
           <td class="px-4 py-3">
-            <div class="itbkk-name hover:text-sky-500 cursor-default">
+            <div class="itbkk-name cursor-default">
               {{ inviteDetail.owner }} has invited you to collaborate with
               {{ inviteDetail.accessRight }} access right on
               {{ inviteDetail.boardName }} board, with
               <button
-                @click="openAcceptPopUp(route.params.id)"
+                @click="openAcceptPopUp(route.params.id, inviteDetail.boardName)"
                 class="ml-2 px-3 py-1 text-white bg-green-500 hover:bg-green-600 rounded-md"
               >
                 Accept invitation
               </button>
               or
               <button
-                @click="openDeclinePopUp(route.params.id)"
+                @click="openDeclinePopUp(route.params.id,inviteDetail.boardName)"
                 class="ml-2 px-3 py-1 text-white bg-red-500 hover:bg-red-600 rounded-md"
               >
                 Decline
@@ -222,19 +222,19 @@ onMounted(async () => {
       <teleport to="body" v-if="acceptInvitation">
         <AcceptAndDeclineInvitation
           :isAccept="isAccept"
-          :boardDetail="boardDetail"
+          :boardAcceptDetail="boardDetail"
           @openAccept="openAcceptPopUp"
           @cancelInvitationPopUp="closeAcceptInvitationCollab"
-          :confirmAcceptInvatation="closeConfirmAcceptInvitationCollab"
+          @confirmAcceptInvatation="closeConfirmAcceptInvitationCollab"
         ></AcceptAndDeclineInvitation>
       </teleport>
       <teleport to="body" v-if="declineInvitation">
         <AcceptAndDeclineInvitation
           :isDecline="isDecline"
-          :boardDetail="boardDetail"
+          :boardDeclineDetail="boardDetail"
           @openDecline="openDeclinePopUp"
           @cancelInvitationPopUp="closeDeclineInvitationCollab"
-          :confirmRemoveInvatation="closeConfirmDeclineInvitationCollab"
+          @confirmRemoveInvatation="closeConfirmDeclineInvitationCollab"
         ></AcceptAndDeclineInvitation>
       </teleport>
     </table>

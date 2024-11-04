@@ -43,6 +43,7 @@ const confirmAcceptInvatationCollab = async function (boardAcceptId) {
     router.replace({ name: 'Login' })
     return
   }
+  router.replace({ name: "Board" });
   boardManager.setBoards(boards)
   deClareemit('confirmAcceptInvatation', true)
 
@@ -58,6 +59,7 @@ const confirmRemoveInvatationCollab = async function () {
     router.replace({ name: 'Login' })
     return
   }
+  router.replace({ name: "Board" });
   boardManager.setBoards(boards)
   deClareemit('confirmRemoveInvatation', true)
 
