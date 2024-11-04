@@ -50,7 +50,7 @@ onMounted(async () => {
   const getDetail = await getItems(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/invitation`
   )
-console.log(getDetail)
+  console.log(getDetail)
   if (getDetail.status == 404) {
     // Display alert message
     window.alert('You are not logged in.')
@@ -84,7 +84,13 @@ const openDeclinePopUp = function (boardId) {
 const closeAcceptInvitationCollab = function () {
   acceptInvitation.value = false
 }
+const closeConfirmAcceptInvitationCollab = function () {
+  acceptInvitation.value = false
+}
 const closeDeclineInvitationCollab = function () {
+  declineInvitation.value = false
+}
+const closeConfirmDeclineInvitationCollab = function () {
   declineInvitation.value = false
 }
 onMounted(async () => {
@@ -216,6 +222,7 @@ onMounted(async () => {
           :boardDetail="boardDetail"
           @openAccept="openAcceptPopUp"
           @cancelInvitationPopUp="closeAcceptInvitationCollab"
+          :confirmAcceptInvatation="closeConfirmAcceptInvitationCollab"
         ></AcceptAndDeclineInvitation>
       </teleport>
       <teleport to="body" v-if="declineInvitation">
@@ -224,6 +231,7 @@ onMounted(async () => {
           :boardDetail="boardDetail"
           @openDecline="openDeclinePopUp"
           @cancelInvitationPopUp="closeDeclineInvitationCollab"
+          :confirmRemoveInvatation="closeConfirmDeclineInvitationCollab"
         ></AcceptAndDeclineInvitation>
       </teleport>
     </table>
