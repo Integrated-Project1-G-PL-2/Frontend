@@ -386,12 +386,12 @@ const showRequestInvitationListPopUp = () => {
       >
         ✚ Add Collaborator
       </button>
-      <button
+      <!-- <button
         class="bg-blue-500 text-sm rounded-[6px] font-sans text-white hover:text-gray-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px]btn-xs scr-l:btn-m text-center gap-5 mr-2 my-3"
         @click="showRequestInvitationListPopUp"
       >
         Request Invitation
-      </button>
+      </button> -->
     </div>
     <table class="w-full text-sm text-left text-gray-500">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50">
