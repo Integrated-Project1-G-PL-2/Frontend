@@ -93,7 +93,7 @@ onMounted(async () => {
 console.log(inviteDetail)
 
 const closeNotLoginAlter = function () {
-  closeNotLogin.value = false
+  // closeNotLogin.value = false
 }
 const closeWrongTokenAlter = function () {
   wrongToken.value = false
