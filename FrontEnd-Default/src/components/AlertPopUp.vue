@@ -52,6 +52,8 @@ const emit = defineEmits(['closePopUp'])
               ? 'text-green-500 '
               : styleType === 'red'
               ? 'text-red-500 '
+              : styleType === 'yellow'
+              ? 'text-yellow-500 '
               : 'text-gray-500'
           "
           role="button"
