@@ -221,12 +221,12 @@ const closeConfirmDeclineInvitationCollab = function () {
             >
               Create personal board
             </button>
-            <button
+            <!-- <button
               class="bg-blue-500 text-sm rounded-[6px] font-sans text-white hover:text-gray-400 px-7 py-2"
               @click="showRequestInvitationListPopUp"
             >
               Request Invitation
-            </button>
+            </button> -->
           </div>
         </div>
         <div class="itbkk-personal-board flex justify-center font-bold">

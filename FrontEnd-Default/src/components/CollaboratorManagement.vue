@@ -225,6 +225,9 @@ const closeInviteCollabAlter = function () {
 const closeInviteProblemCollabAlter = function () {
   inviteProblemCollab.value = false
 }
+const showRequestInvitationListPopUp = () => {
+  router.replace({ name: 'AddInvitation' })
+}
 </script>
 
 <template>
@@ -380,6 +383,12 @@ const closeInviteProblemCollabAlter = function () {
         class="itbkk-collaborator-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
       >
         ✚ Add Collaborator
+      </button>
+      <button
+        class="bg-blue-500 text-sm rounded-[6px] font-sans text-white hover:text-gray-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px]btn-xs scr-l:btn-m text-center gap-5 mr-2 my-3"
+        @click="showRequestInvitationListPopUp"
+      >
+        Request Invitation
       </button>
     </div>
     <table class="w-full text-sm text-left text-gray-500">
