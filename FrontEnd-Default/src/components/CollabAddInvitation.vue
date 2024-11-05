@@ -80,10 +80,9 @@ onMounted(async () => {
   else if (getDetail.status == 400) {
     // Display alert message
     window.alert('You are not logged in.')
-
+    closeNotLogin.value = true
     // Set a timeout of 5 seconds (5000 milliseconds) before redirecting
     setTimeout(() => {
-      closeNotLogin.value = true
       router.replace({ name: 'Board' })
     }, 5000) // 5000 milliseconds = 5 seconds
     router.replace({ name: 'Login' })
