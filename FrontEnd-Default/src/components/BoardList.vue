@@ -79,9 +79,6 @@ const showAddNewBoardPopUp = function () {
   showAddNewBoard.value = true // Set to true when the button is clicked
   router.push({ name: 'AddNewBoard' })
 }
-const showRequestInvitationListPopUp = () => {
-  router.replace({ name: 'AddInvitation' })
-}
 
 const clearDeletePopUp = function () {
   showAddNewBoard.value = false // Close the popup when cancel is clicked
@@ -221,12 +218,6 @@ const closeConfirmDeclineInvitationCollab = function () {
             >
               Create personal board
             </button>
-            <!-- <button
-              class="bg-blue-500 text-sm rounded-[6px] font-sans text-white hover:text-gray-400 px-7 py-2"
-              @click="showRequestInvitationListPopUp"
-            >
-              Request Invitation
-            </button> -->
           </div>
         </div>
         <div class="itbkk-personal-board flex justify-center font-bold">
