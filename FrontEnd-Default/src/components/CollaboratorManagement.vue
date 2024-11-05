@@ -344,6 +344,7 @@ const showRequestInvitationListPopUp = () => {
       styleType="red"
     />
     <AlertPopUp
+      v-for="pending in boardCollabList.pending"
       v-if="inviteCollab"
       :titles="`${pending.name} has invited you to collaborate with ${pending.accessRight} access right on ${userName} board.`"
       :link="{ path: `/board/${route.params.id}/collab/invitations` }"
@@ -352,6 +353,7 @@ const showRequestInvitationListPopUp = () => {
       styleType="green"
     />
     <AlertPopUp
+      v-for="pending in boardCollabList.pending"
       v-if="inviteProblemCollab"
       :titles="`We could not send e-mail to ${pending.name} , he/she can accept the invitation at `"
       :link="{ path: `/board/${route.params.id}/collab/invitations` }"
