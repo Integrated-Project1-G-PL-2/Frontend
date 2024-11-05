@@ -60,6 +60,9 @@ onMounted(async () => {
   }
   if (getDetail.status == 403) {
     closeNotPermission.value = true
+    setTimeout(() => {
+      router.replace({ name: 'CollabList' })
+    }, 1000)
   }
   if (getDetail.status == 404) {
     closeNotFound.value = true
@@ -100,7 +103,7 @@ const closeNotFoundAlter = function () {
   closeNotFound.value = false
 }
 const closeNotPermissionAlter = function () {
-  closeNotPermission.value = false
+  // closeNotPermission.value = false
 }
 const openAcceptPopUp = function (boardId, boardName) {
   isAccept.value = true
