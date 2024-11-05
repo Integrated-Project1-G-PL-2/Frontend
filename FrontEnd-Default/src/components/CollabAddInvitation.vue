@@ -206,7 +206,7 @@ onMounted(async () => {
     />
     <AlertPopUp
       v-if="closeNotPermission"
-      :titles="'Sorry, You do not have access rights to this board, User do not have permission to do this. '"
+      :titles="'Sorry, You do not have permission to access rights to this board.'"
       @closePopUp="closeNotPermissionAlter"
       message="Error!!"
       styleType="red"
