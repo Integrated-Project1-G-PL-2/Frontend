@@ -359,7 +359,7 @@ const showRequestInvitationListPopUp = () => {
       :link="{ path: `/board/${route.params.id}/collab/invitations` }"
       @closePopUp="closeInviteProblemCollabAlter"
       message="You have a new invitation!"
-      styleType="green"
+      styleType="yellow"
     />
 
     <div class="flex justify-end">
