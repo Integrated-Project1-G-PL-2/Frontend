@@ -524,11 +524,13 @@ const closeMostLargeFilesAlter = function () {
       message="Error!!"
       styleType="red"
     />
-    <AlertPopUp v-if="listsSameFiles" :titles="'File with the same filename
-    cannot be added or updated to the attachments. Please delete the attachment
-    and add again to update the file. The following files are not added:" + list
-    of files NOT added. '" @closePopUp="closeMostLargeFilesAlter"
-    message="Error!!" styleType="red" />
+    <AlertPopUp
+      v-if="listsSameFiles"
+      :titles="'File with the same filename cannot be added or updated to the attachments. Please delete the attachment and add again to update the file, The following files are not added: '"
+      @closePopUp="closeMostLargeFilesAlter"
+      message="Error!!"
+      styleType="red"
+    />
     <div class="flex justify-end">
       <div
         class="itbkk-status-filter flex items-center space-x-2 mr-auto ml-4 my-3 border"
