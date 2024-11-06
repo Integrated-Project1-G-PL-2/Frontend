@@ -39,7 +39,8 @@ if (prop.taskDetail.value) {
     taskTitle: prop.taskDetail.value.title,
     updatedOn: new Date(prop.taskDetail.value.updatedOn)
       .toLocaleString('en-GB')
-      .replace(',', '')
+      .replace(',', ''),
+    taskAttachments: '-'
   })
 } else {
   task = reactive({
@@ -48,6 +49,7 @@ if (prop.taskDetail.value) {
     taskAssignees: 'Unassigned',
     taskDescription: 'No Description Provided',
     taskStatus: {},
+    taskAttachments: '-',
     taskTitle: null,
     updatedOn: null
   })
