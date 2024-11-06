@@ -318,10 +318,7 @@ const handleClick = async () => {
                 </select>
               </label>
             </div>
-            <div
-              v-if="prop.operate !== 'add'"
-              class="w-full h-[100px] flex-col"
-            >
+            <div v-if="prop.operate !== 'add'" class="w-full flex-col">
               <div class="pl-4 mt-4">Attachments</div>
               <div class="h-[43px]">
                 <textarea
@@ -357,7 +354,7 @@ const handleClick = async () => {
                 </div>
               </div>
             </div>
-            <div class="mt-10 ml-4">
+            <div class="mt-10 ml-4 p-2">
               <div class="itbkk-timezone">
                 <div>
                   TimeZone :
