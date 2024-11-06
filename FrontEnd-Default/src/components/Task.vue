@@ -1,125 +1,127 @@
 <script setup>
-import { onMounted, reactive, ref, watch, computed } from "vue";
+import { onMounted, reactive, ref, watch, computed } from 'vue'
 import {
   getItems,
   getItemById,
   deleteItemById,
   addItem,
-  editItem,
-} from "../utils/fetchUtils.js";
-import { useTaskManager } from "@/stores/TaskManager";
-import TaskDetail from "./../components/TaskDetail.vue";
-import { useRoute, useRouter } from "vue-router";
-import DeletePopUp from "./../components/DeletePopUp.vue";
-import AlertPopUp from "./../components/AlertPopUp.vue";
-import StatusesList from "./StatusesList.vue";
-import { useStatusManager } from "@/stores/StatusManager";
-import StatusLimitSetting from "./StatusLimitSetting.vue";
+  editItem
+} from '../utils/fetchUtils.js'
+import { useTaskManager } from '@/stores/TaskManager'
+import TaskDetail from './../components/TaskDetail.vue'
+import { useRoute, useRouter } from 'vue-router'
+import DeletePopUp from './../components/DeletePopUp.vue'
+import AlertPopUp from './../components/AlertPopUp.vue'
+import StatusesList from './StatusesList.vue'
+import { useStatusManager } from '@/stores/StatusManager'
+import StatusLimitSetting from './StatusLimitSetting.vue'
 import {
   sortByTitle,
   sortByTitleReverse,
   sortByTitleDate,
-  searchByStatus,
-} from "@/stores/SortManager.js";
-import { storeToRefs } from "pinia";
-import { userName } from "@/stores/UserManager";
-import { logout } from "@/stores/UserManager";
-import boardsList from "./../components/BoardList.vue";
-import { useBoardManager } from "@/stores/BoardManager";
-import VisibilityChangedPopUp from "./../components/VisibilityChangedPopUP.vue";
-import ChangeRemoveLeaveCollab from "./../components/ChangeRemoveLeaveCollab.vue";
-const statusManager = useStatusManager();
-const showStatusDetailModal = ref(false);
-const showCollabDetailModal = ref(false);
-const showStatusDetailLimit = ref(false);
-const router = useRouter();
-const route = useRoute();
-const showTaskDetailModal = ref(false);
-const switchSort = ref(false);
-const switchSort2 = ref(false);
-const switchDate = ref(false);
-const taskManager = useTaskManager();
-const taskDetail = reactive({});
-const showDeleteTaskDetail = ref(false);
-const operation = ref("");
-const returnPage = ref(false);
-const boardVisibility = ref();
-const isSwitch = ref(false);
-const collectStatus = reactive([]);
-const boardManager = useBoardManager();
-const storedUserRole = ref();
-const limitFiles = ref(false);
-const largeFiles = ref(false);
-const mostLargeFiles = ref(false);
+  searchByStatus
+} from '@/stores/SortManager.js'
+import { storeToRefs } from 'pinia'
+import { userName } from '@/stores/UserManager'
+import { logout } from '@/stores/UserManager'
+import boardsList from './../components/BoardList.vue'
+import { useBoardManager } from '@/stores/BoardManager'
+import VisibilityChangedPopUp from './../components/VisibilityChangedPopUP.vue'
+import ChangeRemoveLeaveCollab from './../components/ChangeRemoveLeaveCollab.vue'
+const statusManager = useStatusManager()
+const showStatusDetailModal = ref(false)
+const showCollabDetailModal = ref(false)
+const showStatusDetailLimit = ref(false)
+const router = useRouter()
+const route = useRoute()
+const showTaskDetailModal = ref(false)
+const switchSort = ref(false)
+const switchSort2 = ref(false)
+const switchDate = ref(false)
+const taskManager = useTaskManager()
+const taskDetail = reactive({})
+const showDeleteTaskDetail = ref(false)
+const operation = ref('')
+const returnPage = ref(false)
+const boardVisibility = ref()
+const isSwitch = ref(false)
+const collectStatus = reactive([])
+const boardManager = useBoardManager()
+const storedUserRole = ref()
+const limitFiles = ref(false)
+const largeFiles = ref(false)
+const sameFiles = ref(false)
 const visibilityToggle = reactive({
   public: { state: false },
-  private: { state: false },
-});
+  private: { state: false }
+})
 const greenPopup = reactive({
-  add: { state: false, taskTitle: "" },
-  edit: { state: false, taskTitle: "" },
-  delete: { state: false, taskTitle: "" },
-});
+  add: { state: false, taskTitle: '' },
+  edit: { state: false, taskTitle: '' },
+  delete: { state: false, taskTitle: '' }
+})
 const redPopup = reactive({
-  edit: { state: false, taskTitle: "" },
-  delete: { state: false, taskTitle: "" },
-});
+  edit: { state: false, taskTitle: '' },
+  delete: { state: false, taskTitle: '' }
+})
 
-const privateTask = ref();
-const bName = ref();
-const boardOwner = ref();
-const thisUser = ref();
+const privateTask = ref()
+const bName = ref()
+const boardOwner = ref()
+const thisUser = ref()
 
-const cannotConfig = ref(false);
-const leave = ref(false);
+const cannotConfig = ref(false)
+const leave = ref(false)
 onMounted(async () => {
   const currentBoard = await getItemById(
     `${import.meta.env.VITE_BASE_URL}/v3/boards`,
     route.params.id
-  );
-  console.log(currentBoard);
+  )
+  console.log(currentBoard)
   const tasksItem = await getItems(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
-  );
-  const boards = await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards`);
-  boardManager.setBoards(boards);
+  )
+  const boards = await getItems(`${import.meta.env.VITE_BASE_URL}/v3/boards`)
+  boardManager.setBoards(boards)
 
-  privateTask.value = tasksItem.status;
+  privateTask.value = tasksItem.status
   if (tasksItem == 401) {
-    router.replace({ name: "Login" });
-    return;
+    router.replace({ name: 'Login' })
+    return
   }
 
-  boardManager.setCurrentBoard(currentBoard);
+  boardManager.setCurrentBoard(currentBoard)
 
-const userRole = [...(boardManager.getBoards().personal || []), ...(boardManager.getBoards().collab || [])]
-  .find(item => item.id.boardId ===  route.params.id)?.role;
-  sessionStorage.setItem("userRole", userRole);
-  storedUserRole.value = sessionStorage.getItem("userRole");
+  const userRole = [
+    ...(boardManager.getBoards().personal || []),
+    ...(boardManager.getBoards().collab || [])
+  ].find((item) => item.id.boardId === route.params.id)?.role
+  sessionStorage.setItem('userRole', userRole)
+  storedUserRole.value = sessionStorage.getItem('userRole')
 
-  taskManager.setTasks(tasksItem);
+  taskManager.setTasks(tasksItem)
   statusManager.setStatuses(
     await getItems(
       `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`
     )
-  );
-  const storedUserName = localStorage.getItem("userName");
+  )
+  const storedUserName = localStorage.getItem('userName')
   if (storedUserName) {
-    userName.value = storedUserName;
+    userName.value = storedUserName
   }
   const getBoardName = await getItemById(
     `${import.meta.env.VITE_BASE_URL}/v3/boards`,
     `${route.params.id}`
-  );
-  bName.value = getBoardName.name;
-  const board = boardManager.getCurrentBoard();
-  boardVisibility.value = board.visibility;
-  boardOwner.value = currentBoard.owner.name;
+  )
+  bName.value = getBoardName.name
+  const board = boardManager.getCurrentBoard()
+  boardVisibility.value = board.visibility
+  boardOwner.value = currentBoard.owner.name
 
-  thisUser.value = storedUserName;
+  thisUser.value = storedUserName
 
   if (
-    (storedUserRole.value == "READ" || storedUserRole.value == null) &&
+    (storedUserRole.value == 'READ' || storedUserRole.value == null) &&
     (route.fullPath == `/board/${route.params.id}/task/add` ||
       route.fullPath.match(
         new RegExp(`/board/${route.params.id}/task/.+/delete`)
@@ -128,145 +130,145 @@ const userRole = [...(boardManager.getBoards().personal || []), ...(boardManager
         new RegExp(`/board/${route.params.id}/task/.+/edit`)
       ))
   ) {
-    cannotConfig.value = true;
-    router.replace({ name: "Task" });
+    cannotConfig.value = true
+    router.replace({ name: 'Task' })
   }
-});
+})
 
 const showTaskDetail = async function (id, operate) {
-  router.push({ name: "DetailTask", params: { tid: id } });
-  operation.value = operate;
+  router.push({ name: 'DetailTask', params: { tid: id } })
+  operation.value = operate
   taskDetail.value = await getItemById(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
     id
-  );
-  if (taskDetail.value.status == "404") {
-    alert("The requested task does not exist");
-    router.replace({ name: "Task" });
-    return;
+  )
+  if (taskDetail.value.status == '404') {
+    alert('The requested task does not exist')
+    router.replace({ name: 'Task' })
+    return
   }
-  showTaskDetailModal.value = true;
-};
+  showTaskDetailModal.value = true
+}
 
 const showEditTaskDetail = async function (id, operate) {
-  router.push({ name: "EditTaskDetail", params: { tid: id } });
-  operation.value = operate;
+  router.push({ name: 'EditTaskDetail', params: { tid: id } })
+  operation.value = operate
   taskDetail.value = await getItemById(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
     id
-  );
-  if (taskDetail.value.status == "404") {
-    alert("The requested task does not exist");
-    router.replace({ name: "Task" });
-    return;
+  )
+  if (taskDetail.value.status == '404') {
+    alert('The requested task does not exist')
+    router.replace({ name: 'Task' })
+    return
   }
-  showTaskDetailModal.value = true;
-};
+  showTaskDetailModal.value = true
+}
 
 const showAddPopUpTaskDetail = function (operate) {
-  router.push({ name: "AddTaskDetail" });
-  taskDetail.value = null;
-  operation.value = operate;
-  showTaskDetailModal.value = true;
-};
+  router.push({ name: 'AddTaskDetail' })
+  taskDetail.value = null
+  operation.value = operate
+  showTaskDetailModal.value = true
+}
 const showDeletePopUpTaskDetail = function (obj) {
-  router.push({ name: "DeleteTaskDetail", params: { tid: obj.id } });
-  taskDetail.value = { id: obj.id, taskTitle: obj.taskTitle, index: obj.index };
-  showDeleteTaskDetail.value = true;
-};
+  router.push({ name: 'DeleteTaskDetail', params: { tid: obj.id } })
+  taskDetail.value = { id: obj.id, taskTitle: obj.taskTitle, index: obj.index }
+  showDeleteTaskDetail.value = true
+}
 
 const openRedPopup = function (obj) {
-  const newObj = obj == undefined ? { operate: "delete", taskTitle: "" } : obj;
-  redPopup[newObj.operate].state = true;
-  redPopup[newObj.operate].taskTitle = newObj.taskTitle;
-};
+  const newObj = obj == undefined ? { operate: 'delete', taskTitle: '' } : obj
+  redPopup[newObj.operate].state = true
+  redPopup[newObj.operate].taskTitle = newObj.taskTitle
+}
 
 const openGreenPopup = function (obj) {
-  greenPopup[obj.operate].state = true;
-  greenPopup[obj.operate].taskTitle = obj.taskTitle;
-};
+  greenPopup[obj.operate].state = true
+  greenPopup[obj.operate].taskTitle = obj.taskTitle
+}
 
 const closeRedPopup = async function (operate) {
-  router.push({ name: "Task" });
-  redPopup[operate].state = false;
-};
+  router.push({ name: 'Task' })
+  redPopup[operate].state = false
+}
 
 const closeGreenPopup = async function (operate) {
-  router.push({ name: "Task" });
-  greenPopup[operate].state = false;
-};
+  router.push({ name: 'Task' })
+  greenPopup[operate].state = false
+}
 
 const clearDeletePopUp = async function () {
-  router.push({ name: "Task" });
-  showDeleteTaskDetail.value = false;
-};
+  router.push({ name: 'Task' })
+  showDeleteTaskDetail.value = false
+}
 const clearLimitStatusPopUp = async function () {
-  router.push({ name: "Task" });
-  showStatusDetailLimit.value = false;
-};
+  router.push({ name: 'Task' })
+  showStatusDetailLimit.value = false
+}
 
 const showDelComplete = async function () {
-  router.push({ name: "Task" });
-  showDeleteTaskDetail.value = false;
-  greenPopup.delete.state = true;
-};
+  router.push({ name: 'Task' })
+  showDeleteTaskDetail.value = false
+  greenPopup.delete.state = true
+}
 
 const showStatusesList = function () {
-  router.replace({ name: "StatusList" });
-  showStatusDetailModal.value = true;
-};
+  router.replace({ name: 'StatusList' })
+  showStatusDetailModal.value = true
+}
 const showCollabManagement = function () {
-  router.replace({ name: "CollabList" });
-  showCollabDetailModal.value = true;
-};
-const closeWrite = ref(false);
-const closeOwner = ref(false);
-const error = ref(false);
-const permission = ref(false);
+  router.replace({ name: 'CollabList' })
+  showCollabDetailModal.value = true
+}
+const closeWrite = ref(false)
+const closeOwner = ref(false)
+const error = ref(false)
+const permission = ref(false)
 const openErrorVisibility = () => {
-  console.log("Error visibility triggered"); // ตรวจสอบการทำงานของฟังก์ชัน
-  router.push({ name: "Task" });
-  error.value = true;
-};
+  console.log('Error visibility triggered') // ตรวจสอบการทำงานของฟังก์ชัน
+  router.push({ name: 'Task' })
+  error.value = true
+}
 const openPermissionVisibility = () => {
-  router.push({ name: "Task" });
-  permission.value = true;
-};
+  router.push({ name: 'Task' })
+  permission.value = true
+}
 
 const switchDefault = function () {
-  switchDate.value = true;
-  switchSort.value = true;
-};
+  switchDate.value = true
+  switchSort.value = true
+}
 
 const switchSortText = function () {
-  switchSort.value = false;
-  switchSort2.value = true;
-};
+  switchSort.value = false
+  switchSort2.value = true
+}
 
 const switchBack = function () {
-  switchSort2.value = false;
-  switchDate.value = false;
-};
+  switchSort2.value = false
+  switchDate.value = false
+}
 
-const taskGroups = ref(taskManager.getTasks());
+const taskGroups = ref(taskManager.getTasks())
 
-const searchStatus = ref("");
-const cloneTaskGroups = ref(statusManager.getStatuses());
+const searchStatus = ref('')
+const cloneTaskGroups = ref(statusManager.getStatuses())
 
 const closePermissionAlter = function () {
-  permission.value = false;
-};
+  permission.value = false
+}
 
 const closeProblemAlter = () => {
-  error.value = false;
-};
+  error.value = false
+}
 
 watch(searchStatus, (status) => {
   if (collectStatus.includes(status) || status === null) {
-    return;
+    return
   }
-  collectStatus.push(status);
-});
+  collectStatus.push(status)
+})
 watch(collectStatus, async () => {
   taskManager.setTasks(
     await getItems(
@@ -274,8 +276,8 @@ watch(collectStatus, async () => {
         route.params.id
       }/tasks?filterStatuses=${collectStatus.join()}`
     )
-  );
-});
+  )
+})
 
 // onMounted(() => {
 //   const storedUserName = localStorage.getItem('userName')
@@ -285,74 +287,74 @@ watch(collectStatus, async () => {
 // })
 
 const returnLoginPage = () => {
-  logout();
-  router.replace({ name: "Login" });
-  returnPage.value = true;
-};
+  logout()
+  router.replace({ name: 'Login' })
+  returnPage.value = true
+}
 
 const goBackToHomeBoard = () => {
-  router.replace({ name: "Board" });
-};
+  router.replace({ name: 'Board' })
+}
 
 // Reactive variable to track checkbox state
 watch(boardVisibility, (newVisibility) => {
-  isSwitch.value = newVisibility === "PUBLIC";
-});
+  isSwitch.value = newVisibility === 'PUBLIC'
+})
 
 // Computed label based on checkbox state
-const toggleLabel = computed(() => (isSwitch.value ? "public" : "private"));
-let previousState = ref(false); // Store the previous toggle state
-const isPopupOpen = ref(false);
+const toggleLabel = computed(() => (isSwitch.value ? 'public' : 'private'))
+let previousState = ref(false) // Store the previous toggle state
+const isPopupOpen = ref(false)
 // Function to open visibility settings (trigger the popup)
 const openVisibilitySetting = async function () {
-  previousState.value = isSwitch.value;
-  isPopupOpen.value = true;
+  previousState.value = isSwitch.value
+  isPopupOpen.value = true
   if (isSwitch.value) {
     // If it's already Public, switch to Private and show private popup
-    visibilityToggle.private.state = true;
-    visibilityToggle.public.state = false;
-    isSwitch.value = false;
+    visibilityToggle.private.state = true
+    visibilityToggle.public.state = false
+    isSwitch.value = false
   } else {
     // If it's Private, switch to Public and show public popup
-    visibilityToggle.public.state = true;
-    visibilityToggle.private.state = false;
-    isSwitch.value = true;
+    visibilityToggle.public.state = true
+    visibilityToggle.private.state = false
+    isSwitch.value = true
   }
-};
+}
 
 // Function to close visibility pop-up
 const closeVisibility = function () {
-  visibilityToggle.public.state = false;
-  visibilityToggle.private.state = false;
-  isSwitch.value = previousState.value;
+  visibilityToggle.public.state = false
+  visibilityToggle.private.state = false
+  isSwitch.value = previousState.value
 
-  router.push({ name: "Task" });
-  isPopupOpen.value = false;
-};
+  router.push({ name: 'Task' })
+  isPopupOpen.value = false
+}
 
 // Function to confirm visibility change
 const confirmVisibility = function () {
-  visibilityToggle.public.state = false;
-  visibilityToggle.private.state = false;
+  visibilityToggle.public.state = false
+  visibilityToggle.private.state = false
 
-  router.push({ name: "Task" });
-  isPopupOpen.value = false;
-};
+  router.push({ name: 'Task' })
+  isPopupOpen.value = false
+}
 const closeOwnerAlter = function () {
-  closeOwner.value = false;
-};
+  closeOwner.value = false
+}
 const closeWriteAlter = function () {
-  closeWrite.value = false;
-};
+  closeWrite.value = false
+}
 const closeLimitFilesAlter = function () {
-  limitFiles.value = false;
-};
+  limitFiles.value = false
+}
 const closeLargeFilesAlter = function () {
-  largeFiles.value = false;
-};
+  largeFiles.value = false
+}
 const closeMostLargeFilesAlter = function () {
-  mostLargeFiles.value = false;
-};
+  mostLargeFiles.value = false
+}
 </script>
 
 <template>
@@ -509,20 +511,24 @@ const closeMostLargeFilesAlter = function () {
     />
     <AlertPopUp
       v-if="largeFiles"
-      :titles="'Each file cannot be larger than $MAX_FILE_SIZE MB. The following files are not added: '"
+      :titles="'Each file cannot be larger than $MAX_FILE_SIZE MB.'"
       @closePopUp="closeLargeFilesAlter"
       message="Error!!"
       styleType="red"
     />
 
     <AlertPopUp
-      v-if="mostLargeFiles"
-      :titles="'Each task can have at most $MAX_FILES files and each file cannot be larger than $MAX_FILE_SIZE MB. The following files are not added: '"
+      v-if="sameFiles"
+      :titles="'File with the same filename cannot be added or updated to the attachments. Please delete the attachment and add again to update the file. '"
       @closePopUp="closeMostLargeFilesAlter"
       message="Error!!"
       styleType="red"
     />
-
+    <AlertPopUp v-if="listsSameFiles" :titles="'File with the same filename
+    cannot be added or updated to the attachments. Please delete the attachment
+    and add again to update the file. The following files are not added:" + list
+    of files NOT added. '" @closePopUp="closeMostLargeFilesAlter"
+    message="Error!!" styleType="red" />
     <div class="flex justify-end">
       <div
         class="itbkk-status-filter flex items-center space-x-2 mr-auto ml-4 my-3 border"
@@ -547,7 +553,7 @@ const closeMostLargeFilesAlter = function () {
           role="button"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
-          @click="(collectStatus.length = 0), (searchStatus = null)"
+          @click=";(collectStatus.length = 0), (searchStatus = null)"
         >
           <path
             d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"
@@ -580,8 +586,7 @@ const closeMostLargeFilesAlter = function () {
         <label class="inline-flex items-center cursor-pointer">
           <input
             :disabled="
-              !isSwitch &&
-              (storedUserRole == 'READ' || storedUserRole == null)
+              !isSwitch && (storedUserRole == 'READ' || storedUserRole == null)
             "
             type="checkbox"
             v-model="isSwitch"
@@ -691,7 +696,7 @@ const closeMostLargeFilesAlter = function () {
               height="1.2rem"
               viewBox="0 0 48 48"
               v-if="!switchDate"
-              @click="[(switchDefault(), sortByTitle(taskGroups))]"
+              @click=";[(switchDefault(), sortByTitle(taskGroups))]"
             >
               <path fill="#afacac" d="M38 33V5h-4v28h-6l8 10l8-10z" />
               <path
@@ -706,7 +711,7 @@ const closeMostLargeFilesAlter = function () {
               height="1.2rem"
               viewBox="0 0 48 48"
               v-if="switchSort"
-              @click="[(switchSortText(), sortByTitleReverse(taskGroups))]"
+              @click=";[(switchSortText(), sortByTitleReverse(taskGroups))]"
             >
               <path fill="#1e40af" d="M38 33V5h-4v28h-6l8 10l8-10z" />
               <path
@@ -721,7 +726,7 @@ const closeMostLargeFilesAlter = function () {
               height="1.2rem"
               viewBox="0 0 16 16"
               v-if="switchSort2"
-              @click="[(switchBack(), sortByTitleDate(taskGroups))]"
+              @click=";[(switchBack(), sortByTitleDate(taskGroups))]"
             >
               <g fill="#1e40af">
                 <path
@@ -808,7 +813,7 @@ const closeMostLargeFilesAlter = function () {
                   showDeletePopUpTaskDetail({
                     id: task.id,
                     taskTitle: task.title,
-                    index: index + 1,
+                    index: index + 1
                   })
                 "
               >
@@ -847,7 +852,7 @@ const closeMostLargeFilesAlter = function () {
             class="itbkk-assignees px-4 py-3 cursor-default"
             :class="task.assignees == null ? 'italic' : 'italic'"
           >
-            {{ task.assignees == null ? "Unassigned" : task.assignees }}
+            {{ task.assignees == null ? 'Unassigned' : task.assignees }}
           </td>
           <td class="itbkk-status px-4 py-3 cursor-default">
             <div
@@ -860,7 +865,7 @@ const closeMostLargeFilesAlter = function () {
                     ? '#ffff99'
                     : task.status.name === 'No Status'
                     ? 'lightgray'
-                    : '#90EE90',
+                    : '#90EE90'
               }"
             >
               <p>{{ task.status.name }}</p>
