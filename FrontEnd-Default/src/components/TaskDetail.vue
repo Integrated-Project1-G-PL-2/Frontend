@@ -1,8 +1,8 @@
 <script setup>
-import { onMounted,reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useTaskManager } from '@/stores/TaskManager'
-import { getItems,getItemById,addItem, editItem } from '@/utils/fetchUtils'
+import { getItems, getItemById, addItem, editItem } from '@/utils/fetchUtils'
 import { useStatusManager } from '@/stores/StatusManager'
 import { useBoardManager } from '@/stores/BoardManager'
 
@@ -73,7 +73,6 @@ const thisUser = ref()
 const userName = ref()
 const boardVisibility = ref()
 
-
 onMounted(async () => {
   const taskItems = await getItems(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
@@ -104,7 +103,10 @@ onMounted(async () => {
   boardOwner.value = currentBoard.owner.name
   thisUser.value = storedUserName
   console.log(thisUser.value)
-  if(boardVisibility.value == 'PUBLIC' && thisUser.value !== boardOwner.value){
+  if (
+    boardVisibility.value == 'PUBLIC' &&
+    thisUser.value !== boardOwner.value
+  ) {
     console.log('test')
   }
 })
@@ -214,19 +216,19 @@ const handleClick = async () => {
         <div class="flex flex-row">
           <div class="w-[70%] h-[50%]">
             <div class="pl-4 mt-4">Description</div>
-            <div class=" w-full h-[420px]">
-              <div
-              class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none font-style: italic"
+            <div class="w-full h-[420px]">
+              <textarea
+                class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none font-style: italic"
                 :disabled="operate == 'show'"
-            
+                v-model="task.taskDescription"
                 :class="
-                  (task.taskAssignees == null ? 'italic text-gray-500 ' : '',
+                  (task.taskDescription == null ? 'italic text-gray-500 ' : '',
                   isDescriptionOverLimit ? 'border-red-600 text-red-600' : '')
                 "
-              
                 @input="checkDescriptionLength"
-              >{{ task.taskDescription }}
-            </div>
+                >{{ task.taskDescription }}
+            </textarea
+              >
               <div
                 style="display: flex; align-items: center"
                 v-if="isDescriptionOverLimit"
