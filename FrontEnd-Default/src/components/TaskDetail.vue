@@ -70,7 +70,7 @@ const checkAssigneesLength = () => {
   isAssigneesOverLimit.value = task.taskAssignees.length > 30
 }
 const checkAttachmentsLength = () => {
-  isAttachmentsOverLimit.value = task.taskAttachments.length > 10
+  isAttachmentsOverLimit.value = task.taskAttachments >= 11
 }
 
 const privateTask = ref()
