@@ -59,7 +59,7 @@ const isTitleOverLimit = ref(false)
 const isDescriptionOverLimit = ref(false)
 const isAssigneesOverLimit = ref(false)
 const isAttachmentsOverLimit = ref(false)
-
+const isAttachmentsSizeOverLimit = ref(false)
 const checkTitleLength = () => {
   isTitleOverLimit.value = task.taskTitle.length > 100
 }
@@ -71,6 +71,9 @@ const checkAssigneesLength = () => {
 }
 const checkAttachmentsLength = () => {
   isAttachmentsOverLimit.value = task.taskAttachments >= 11
+}
+const checkAttachmentsSizeLength = () => {
+  isAttachmentsSizeOverLimit.value = task.taskAttachments >= 20
 }
 
 const privateTask = ref()
