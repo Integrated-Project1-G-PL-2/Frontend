@@ -48,9 +48,12 @@ const isSwitch = ref(false)
 const collectStatus = reactive([])
 const boardManager = useBoardManager()
 const storedUserRole = ref()
+const limitMostListsFiles = ref(false)
 const limitFiles = ref(false)
 const largeFiles = ref(false)
 const sameFiles = ref(false)
+const listsSameFiles = ref(false)
+const limitListsFiles = ref(false)
 const visibilityToggle = reactive({
   public: { state: false },
   private: { state: false }
@@ -346,14 +349,23 @@ const closeOwnerAlter = function () {
 const closeWriteAlter = function () {
   closeWrite.value = false
 }
+const closeLimitMostListsFilesAlter = function () {
+  limitMostListsFiles.value = false
+}
 const closeLimitFilesAlter = function () {
   limitFiles.value = false
+}
+const closeLimitListsFilesAlter = function () {
+  limitListsFiles.value = false
 }
 const closeLargeFilesAlter = function () {
   largeFiles.value = false
 }
-const closeMostLargeFilesAlter = function () {
-  mostLargeFiles.value = false
+const closeListsSameFilesAlter = function () {
+  listsSameFiles.value = false
+}
+const closeSameFilesAlter = function () {
+  sameFiles.value = false
 }
 </script>
 
@@ -503,9 +515,23 @@ const closeMostLargeFilesAlter = function () {
       styleType="red"
     />
     <AlertPopUp
+      v-if="limitMostListsFiles"
+      :titles="'Each task can have at most $MAX_FILES files. The following files are not added:'"
+      @closePopUp="closeLimitMostListsFilesAlter"
+      message="Error!!"
+      styleType="red"
+    />
+    <AlertPopUp
       v-if="limitFiles"
       :titles="'Each task can have at most $MAX_FILES files.'"
       @closePopUp="closeLimitFilesAlter"
+      message="Error!!"
+      styleType="red"
+    />
+    <AlertPopUp
+      v-if="limitListsFiles"
+      :titles="'Each file cannot be larger than $MAX_FILE_SIZE MB. The following files are not added:'"
+      @closePopUp="closeLimitListsFilesAlter"
       message="Error!!"
       styleType="red"
     />
@@ -520,14 +546,14 @@ const closeMostLargeFilesAlter = function () {
     <AlertPopUp
       v-if="sameFiles"
       :titles="'File with the same filename cannot be added or updated to the attachments. Please delete the attachment and add again to update the file. '"
-      @closePopUp="closeMostLargeFilesAlter"
+      @closePopUp="closeSameFilesAlter"
       message="Error!!"
       styleType="red"
     />
     <AlertPopUp
       v-if="listsSameFiles"
       :titles="'File with the same filename cannot be added or updated to the attachments. Please delete the attachment and add again to update the file, The following files are not added: '"
-      @closePopUp="closeMostLargeFilesAlter"
+      @closePopUp="closeListsSameFilesAlter"
       message="Error!!"
       styleType="red"
     />
