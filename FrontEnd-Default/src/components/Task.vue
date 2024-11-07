@@ -771,7 +771,7 @@ const closeSameFilesAlter = function () {
               </g>
             </svg>
           </th>
-          <th class="px-4 py-3 cursor-default">Attachments</th>
+          <th class="px-8 py-3 space-x-2 cursor-default">Attachments</th>
         </tr>
       </thead>
       <tbody>
@@ -907,8 +907,10 @@ const closeSameFilesAlter = function () {
           <td class="itbkk-attachments px-4 py-3">
             <div class="h-[43px]">
               <div
-                class="w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bbg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none italic"
-              ></div>
+                class="cursor-default w-[95%] h-[90%] px-4 py-3 mx-4 my-2 bbg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none italic"
+              >
+                -
+              </div>
             </div>
           </td>
         </tr>
