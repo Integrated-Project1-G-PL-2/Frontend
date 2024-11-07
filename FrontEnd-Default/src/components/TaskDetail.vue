@@ -1,8 +1,8 @@
 <script setup>
-import { onMounted,reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useTaskManager } from '@/stores/TaskManager'
-import { getItems,getItemById,addItem, editItem } from '@/utils/fetchUtils'
+import { getItems, getItemById, addItem, editItem } from '@/utils/fetchUtils'
 import { useStatusManager } from '@/stores/StatusManager'
 import { useBoardManager } from '@/stores/BoardManager'
 
@@ -39,7 +39,8 @@ if (prop.taskDetail.value) {
     taskTitle: prop.taskDetail.value.title,
     updatedOn: new Date(prop.taskDetail.value.updatedOn)
       .toLocaleString('en-GB')
-      .replace(',', '')
+      .replace(',', ''),
+    taskAttachments: '-'
   })
 } else {
   task = reactive({
@@ -48,6 +49,7 @@ if (prop.taskDetail.value) {
     taskAssignees: 'Unassigned',
     taskDescription: 'No Description Provided',
     taskStatus: {},
+    taskAttachments: '-',
     taskTitle: null,
     updatedOn: null
   })
@@ -56,7 +58,8 @@ const taskSet = ref((task.taskStatus = 'No Status'))
 const isTitleOverLimit = ref(false)
 const isDescriptionOverLimit = ref(false)
 const isAssigneesOverLimit = ref(false)
-
+const isAttachmentsOverLimit = ref(false)
+const isAttachmentsSizeOverLimit = ref(false)
 const checkTitleLength = () => {
   isTitleOverLimit.value = task.taskTitle.length > 100
 }
@@ -66,13 +69,18 @@ const checkDescriptionLength = () => {
 const checkAssigneesLength = () => {
   isAssigneesOverLimit.value = task.taskAssignees.length > 30
 }
+const checkAttachmentsLength = () => {
+  isAttachmentsOverLimit.value = task.taskAttachments >= 11
+}
+const checkAttachmentsSizeLength = () => {
+  isAttachmentsSizeOverLimit.value = task.taskAttachments >= 20
+}
 
 const privateTask = ref()
 const boardOwner = ref()
 const thisUser = ref()
 const userName = ref()
 const boardVisibility = ref()
-
 
 onMounted(async () => {
   const taskItems = await getItems(
@@ -104,7 +112,10 @@ onMounted(async () => {
   boardOwner.value = currentBoard.owner.name
   thisUser.value = storedUserName
   console.log(thisUser.value)
-  if(boardVisibility.value == 'PUBLIC' && thisUser.value !== boardOwner.value){
+  if (
+    boardVisibility.value == 'PUBLIC' &&
+    thisUser.value !== boardOwner.value
+  ) {
     console.log('test')
   }
 })
@@ -214,19 +225,19 @@ const handleClick = async () => {
         <div class="flex flex-row">
           <div class="w-[70%] h-[50%]">
             <div class="pl-4 mt-4">Description</div>
-            <div class=" w-full h-[420px]">
-              <div
-              class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none font-style: italic"
+            <div class="w-full h-[420px]">
+              <textarea
+                class="itbkk-description w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none font-style: italic"
                 :disabled="operate == 'show'"
-            
+                v-model="task.taskDescription"
                 :class="
-                  (task.taskAssignees == null ? 'italic text-gray-500 ' : '',
+                  (task.taskDescription == null ? 'italic text-gray-500 ' : '',
                   isDescriptionOverLimit ? 'border-red-600 text-red-600' : '')
                 "
-              
                 @input="checkDescriptionLength"
-              >{{ task.taskDescription }}
-            </div>
+                >{{ task.taskDescription }}
+            </textarea
+              >
               <div
                 style="display: flex; align-items: center"
                 v-if="isDescriptionOverLimit"
@@ -307,7 +318,43 @@ const handleClick = async () => {
                 </select>
               </label>
             </div>
-            <div class="mt-10 ml-4">
+            <div v-if="prop.operate !== 'add'" class="w-full flex-col">
+              <div class="pl-4 mt-4">Attachments</div>
+              <div class="h-[43px]">
+                <textarea
+                  :disabled="operate == 'show'"
+                  v-model="task.taskAttachments"
+                  class="itbkk-attachments w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bbg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none italic"
+                  :class="
+                    (task.taskAssignees == null ? 'italic text-gray-500 ' : '',
+                    isAttachmentsOverLimit ? 'border-red-600 text-red-600' : '')
+                  "
+                  @input="checkAttachmentsLength"
+                ></textarea>
+                <div
+                  style="display: flex; align-items: center"
+                  v-if="isAttachmentsOverLimit"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="-mt-px h-4 w-[20rem]"
+                    class="w-[15px] text-red-600"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 01.67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 11-.671-1.34l.041-.022zM12 9a.75.75 0 100-1.5.75.75 0 000 1.5z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  <div class="text-sm text-red-600">
+                    Limit to 10 files or less.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="mt-10 ml-4 p-2">
               <div class="itbkk-timezone">
                 <div>
                   TimeZone :
