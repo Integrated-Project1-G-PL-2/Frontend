@@ -632,7 +632,8 @@ const closeSameFilesAlter = function () {
         </label>
         <div
           v-if="
-            isSwitch && (storedUserRole == 'READ' || storedUserRole == 'undefined')
+            isSwitch &&
+            (storedUserRole == 'READ' || storedUserRole == 'undefined')
           "
           class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
         >
@@ -657,16 +658,18 @@ const closeSameFilesAlter = function () {
       <div class="relative group">
         <button
           :disabled="
-             isSwitch && (storedUserRole == 'READ' || storedUserRole == 'undefined')
+            isSwitch &&
+            (storedUserRole == 'READ' || storedUserRole == 'undefined')
           "
-           @click="showAddPopUpTaskDetail('add')"
+          @click="showAddPopUpTaskDetail('add')"
           class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
         >
           ✚ Add New Task
         </button>
         <div
           v-if="
-            isSwitch && (storedUserRole == 'READ' || storedUserRole == 'undefined')
+            isSwitch &&
+            (storedUserRole == 'READ' || storedUserRole == 'undefined')
           "
           class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
         >
@@ -674,7 +677,8 @@ const closeSameFilesAlter = function () {
         </div>
         <div
           v-if="
-            isSwitch && (storedUserRole == 'READ' || storedUserRole == 'undefined')
+            isSwitch &&
+            (storedUserRole == 'READ' || storedUserRole == 'undefined')
           "
           class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
         >
@@ -767,6 +771,7 @@ const closeSameFilesAlter = function () {
               </g>
             </svg>
           </th>
+          <th class="px-4 py-3 cursor-default">Attachments</th>
         </tr>
       </thead>
       <tbody>
@@ -801,7 +806,8 @@ const closeSameFilesAlter = function () {
             <div class="relative group">
               <button
                 :disabled="
-                  isSwitch && (storedUserRole == 'READ' || storedUserRole == 'undefined')
+                  isSwitch &&
+                  (storedUserRole == 'READ' || storedUserRole == 'undefined')
                 "
                 class="itbkk-button-edit inline-flex"
                 :class="{ disabled: boardOwner !== thisUser && isSwitch }"
@@ -811,7 +817,8 @@ const closeSameFilesAlter = function () {
               </button>
               <div
                 v-if="
-                  isSwitch && (storedUserRole == 'READ' || storedUserRole == 'undefined')
+                  isSwitch &&
+                  (storedUserRole == 'READ' || storedUserRole == 'undefined')
                 "
                 class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
               >
@@ -819,7 +826,8 @@ const closeSameFilesAlter = function () {
               </div>
               <div
                 v-if="
-                  isSwitch && (storedUserRole == 'READ' || storedUserRole == 'undefined')
+                  isSwitch &&
+                  (storedUserRole == 'READ' || storedUserRole == 'undefined')
                 "
                 class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
               >
@@ -830,7 +838,8 @@ const closeSameFilesAlter = function () {
             <div class="relative group">
               <button
                 :disabled="
-                  isSwitch && (storedUserRole == 'READ' || storedUserRole == 'undefined')
+                  isSwitch &&
+                  (storedUserRole == 'READ' || storedUserRole == 'undefined')
                 "
                 class="itbkk-button-delete inline-flex"
                 @click="
@@ -845,7 +854,8 @@ const closeSameFilesAlter = function () {
               </button>
               <div
                 v-if="
-                  isSwitch && (storedUserRole == 'READ' || storedUserRole == 'undefined')
+                  isSwitch &&
+                  (storedUserRole == 'READ' || storedUserRole == 'undefined')
                 "
                 class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
               >
@@ -853,7 +863,8 @@ const closeSameFilesAlter = function () {
               </div>
               <div
                 v-if="
-                  isSwitch && (storedUserRole == 'READ' || storedUserRole == 'undefined')
+                  isSwitch &&
+                  (storedUserRole == 'READ' || storedUserRole == 'undefined')
                 "
                 class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
               >
@@ -891,6 +902,13 @@ const closeSameFilesAlter = function () {
               }"
             >
               <p>{{ task.status.name }}</p>
+            </div>
+          </td>
+          <td class="itbkk-attachments px-4 py-3">
+            <div class="h-[43px]">
+              <div
+                class="w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bbg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none italic"
+              ></div>
             </div>
           </td>
         </tr>

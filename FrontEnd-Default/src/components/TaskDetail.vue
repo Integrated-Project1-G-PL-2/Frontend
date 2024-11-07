@@ -321,7 +321,7 @@ const handleClick = async () => {
             <div v-if="prop.operate !== 'add'" class="w-full flex-col">
               <div class="pl-4 mt-4">Attachments</div>
               <div class="h-[43px]">
-                <textarea
+                <!-- <textarea
                   :disabled="operate == 'show'"
                   v-model="task.taskAttachments"
                   class="itbkk-attachments w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bbg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none italic"
@@ -330,7 +330,7 @@ const handleClick = async () => {
                     isAttachmentsOverLimit ? 'border-red-600 text-red-600' : '')
                   "
                   @input="checkAttachmentsLength"
-                ></textarea>
+                ></textarea> -->
                 <div
                   style="display: flex; align-items: center"
                   v-if="isAttachmentsOverLimit"
