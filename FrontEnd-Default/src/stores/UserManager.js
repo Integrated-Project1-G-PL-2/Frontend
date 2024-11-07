@@ -3,6 +3,7 @@ import { ref } from 'vue'
 // เก็บค่า userName ใน ref
 export const userName = ref('')
 export const userEmail = ref('')
+export const userRole = ref('')
 
 // ฟังก์ชันถอดรหัส JWT
 export function decodeJWT(token) {
@@ -30,6 +31,7 @@ export function decodeJWT(token) {
         throw new Error(`Missing required field in JWT payload: ${field}`)
       }
     }
+    
     userEmail.value = decodedPayload.email
     localStorage.setItem('userEmail', decodedPayload.email)
     userName.value = decodedPayload.name
