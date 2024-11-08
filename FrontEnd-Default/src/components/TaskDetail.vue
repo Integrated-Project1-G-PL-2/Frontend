@@ -339,22 +339,27 @@ const closeDeleteAttachmentDetail = async function () {
               </label>
             </div>
             <div v-if="prop.operate !== 'add'" class="w-full flex-col">
-              <div class="pl-4 mt-4">Attachments :</div>
-              <button
-                :disabled="isAttachmentsOverLimit"
-                @click="showAddPopUpAttachmentsDetail()"
-                class="itbkk-button-add bg-blue-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
-              >
-                Add New Attachments
-              </button>
-              <button
-                :disabled="isAttachmentsOverLimit"
-                @click="showDeletePopUpAttachmentsDetail()"
-                class="itbkk-button-add bg-yellow-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
-              >
-                Delete Attachments
-              </button>
-              <div class="h-[43px]">
+              <div class="flex items-center pl-4 mt-4 space-x-2">
+                Attachments :
+
+                <button
+                  v-if="prop.operate == 'edit'"
+                  :disabled="isAttachmentsOverLimit"
+                  @click="showAddPopUpAttachmentsDetail()"
+                  class="itbkk-button-add bg-blue-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
+                >
+                  Add New Attachments
+                </button>
+              </div>
+              <div class="h-[43px] pl-4 mt-4">
+                <button
+                  v-if="prop.operate == 'edit'"
+                  :disabled="isAttachmentsOverLimit"
+                  @click="showDeletePopUpAttachmentsDetail()"
+                  class="itbkk-button-add bg-yellow-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
+                >
+                  Delete Attachments
+                </button>
                 <!-- <textarea
                   :disabled="operate == 'show'"
                   v-model="task.taskAttachments"
