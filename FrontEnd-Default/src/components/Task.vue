@@ -28,10 +28,12 @@ import boardsList from './../components/BoardList.vue'
 import { useBoardManager } from '@/stores/BoardManager'
 import VisibilityChangedPopUp from './../components/VisibilityChangedPopUP.vue'
 import ChangeRemoveLeaveCollab from './../components/ChangeRemoveLeaveCollab.vue'
+import AttachmentsDetail from './AttachmentsDetail.vue'
 const statusManager = useStatusManager()
 const showStatusDetailModal = ref(false)
 const showCollabDetailModal = ref(false)
 const showStatusDetailLimit = ref(false)
+const showAttachmentsDetail = ref(false)
 const router = useRouter()
 const route = useRoute()
 const showTaskDetailModal = ref(false)
@@ -174,6 +176,10 @@ const showAddPopUpTaskDetail = function (operate) {
   operation.value = operate
   showTaskDetailModal.value = true
 }
+const showAddPopUpAttachmentsDetail = async function () {
+  router.push({ name: 'AddAttachmentsDetail' })
+  showAttachmentsDetail.value = true
+}
 const showDeletePopUpTaskDetail = function (obj) {
   router.push({ name: 'DeleteTaskDetail', params: { tid: obj.id } })
   taskDetail.value = { id: obj.id, taskTitle: obj.taskTitle, index: obj.index }
@@ -208,6 +214,10 @@ const clearDeletePopUp = async function () {
 const clearLimitStatusPopUp = async function () {
   router.push({ name: 'Task' })
   showStatusDetailLimit.value = false
+}
+const closeAttachmentDetail = async function () {
+  router.push({ name: 'Task' })
+  showAttachmentsDetail.value = false
 }
 
 const showDelComplete = async function () {
@@ -952,6 +962,11 @@ const closeSameFilesAlter = function () {
     <StatusLimitSetting
       @clearLimitPopUp="clearLimitStatusPopUp"
     ></StatusLimitSetting>
+  </Teleport>
+  <Teleport to="body" v-if="showAttachmentsDetail">
+    <AttachmentsDetail
+      @cancelAttachmentDetail="closeAttachmentDetail"
+    ></AttachmentsDetail>
   </Teleport>
 </template>
 <style scoped></style>

@@ -10,6 +10,7 @@ import BoardList from '@/components/BoardList.vue'
 import AddNewBoard from '@/components/AddNewBoard.vue'
 import CollaboratorManagement from '@/components/CollaboratorManagement.vue'
 import CollabAddInvitation from '@/components/CollabAddInvitation.vue'
+import AttachmentsDetail from '@/components/AttachmentsDetail.vue'
 const history = createWebHistory(import.meta.env.BASE_URL)
 const routes = [
   {
@@ -42,6 +43,11 @@ const routes = [
         path: '/board/:id/task/add',
         name: 'AddTaskDetail',
         component: TaskDetail
+      },
+      {
+        path: '/board/:id/attachment/add',
+        name: 'AddAttachmentsDetail',
+        component: AttachmentsDetail
       },
       {
         path: '/board/:id/task/:tid',
