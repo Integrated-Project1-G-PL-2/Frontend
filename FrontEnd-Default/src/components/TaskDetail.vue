@@ -85,6 +85,7 @@ const boardOwner = ref()
 const thisUser = ref()
 const userName = ref()
 const boardVisibility = ref()
+const haveFiles = ref(false)
 
 onMounted(async () => {
   const taskItems = await getItems(
@@ -353,7 +354,7 @@ const closeDeleteAttachmentDetail = async function () {
               </div>
               <div class="h-[43px] pl-4 mt-4">
                 <button
-                  v-if="prop.operate == 'edit'"
+                  v-if="prop.operate == 'edit' && haveFiles"
                   :disabled="isAttachmentsOverLimit"
                   @click="showDeletePopUpAttachmentsDetail()"
                   class="itbkk-button-add bg-yellow-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
