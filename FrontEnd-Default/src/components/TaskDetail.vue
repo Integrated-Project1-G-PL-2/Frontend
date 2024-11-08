@@ -6,6 +6,7 @@ import { getItems, getItemById, addItem, editItem } from '@/utils/fetchUtils'
 import { useStatusManager } from '@/stores/StatusManager'
 import { useBoardManager } from '@/stores/BoardManager'
 import AttachmentsDetail from './AttachmentsDetail.vue'
+import DeleteAttachment from './DeleteAttachment.vue'
 const emits = defineEmits([
   'showTaskDetailModal',
   'showRedPopup',
@@ -56,6 +57,7 @@ if (prop.taskDetail.value) {
   })
 }
 const showAttachmentsDetail = ref(false)
+const showDeleteAttachmentsDetail = ref(false)
 const taskSet = ref((task.taskStatus = 'No Status'))
 const isTitleOverLimit = ref(false)
 const isDescriptionOverLimit = ref(false)
@@ -190,6 +192,14 @@ const showAddPopUpAttachmentsDetail = async function () {
 const closeAttachmentDetail = async function () {
   router.push({ name: 'EditTaskDetail' })
   showAttachmentsDetail.value = false
+}
+const showDeletePopUpAttachmentsDetail = async function () {
+  router.push({ name: 'DeleteAttachmentsDetail' })
+  showDeleteAttachmentsDetail.value = true
+}
+const closeDeleteAttachmentDetail = async function () {
+  router.push({ name: 'EditTaskDetail' })
+  showDeleteAttachmentsDetail.value = false
 }
 </script>
 
@@ -339,7 +349,7 @@ const closeAttachmentDetail = async function () {
               </button>
               <button
                 :disabled="isAttachmentsOverLimit"
-                @click="showAddPopUpAttachmentsDetail()"
+                @click="showDeletePopUpAttachmentsDetail()"
                 class="itbkk-button-add bg-yellow-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
               >
                 Delete Attachments
@@ -425,6 +435,11 @@ const closeAttachmentDetail = async function () {
     <AttachmentsDetail
       @cancelAttachmentDetail="closeAttachmentDetail"
     ></AttachmentsDetail>
+  </Teleport>
+  <Teleport to="body" v-if="showDeleteAttachmentsDetail">
+    <DeleteAttachment
+      @cancelDeleteAttachmentDetail="closeDeleteAttachmentDetail"
+    ></DeleteAttachment>
   </Teleport>
 </template>
 
