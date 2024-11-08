@@ -5,12 +5,13 @@ import { useTaskManager } from '@/stores/TaskManager'
 import { getItems, getItemById, addItem, editItem } from '@/utils/fetchUtils'
 import { useStatusManager } from '@/stores/StatusManager'
 import { useBoardManager } from '@/stores/BoardManager'
-
+import AttachmentsDetail from './AttachmentsDetail.vue'
 const emits = defineEmits([
   'showTaskDetailModal',
   'showRedPopup',
   'showGreenPopup'
 ])
+const MAX_FILE_SIZE = ref()
 const taskManager = useTaskManager()
 const statusManager = useStatusManager()
 const router = useRouter()
@@ -54,6 +55,7 @@ if (prop.taskDetail.value) {
     updatedOn: null
   })
 }
+const showAttachmentsDetail = ref(false)
 const taskSet = ref((task.taskStatus = 'No Status'))
 const isTitleOverLimit = ref(false)
 const isDescriptionOverLimit = ref(false)
@@ -180,6 +182,14 @@ const handleClick = async () => {
     router.replace({ name: 'Task' })
     emits('showTaskDetailModal', false)
   }
+}
+const showAddPopUpAttachmentsDetail = async function () {
+  router.push({ name: 'AddAttachmentsDetail' })
+  showAttachmentsDetail.value = true
+}
+const closeAttachmentDetail = async function () {
+  router.push({ name: 'EditTaskDetail' })
+  showAttachmentsDetail.value = false
 }
 </script>
 
@@ -319,7 +329,21 @@ const handleClick = async () => {
               </label>
             </div>
             <div v-if="prop.operate !== 'add'" class="w-full flex-col">
-              <div class="pl-4 mt-4">Attachments</div>
+              <div class="pl-4 mt-4">Attachments :</div>
+              <button
+                :disabled="isAttachmentsOverLimit"
+                @click="showAddPopUpAttachmentsDetail()"
+                class="itbkk-button-add bg-blue-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
+              >
+                Add New Attachments
+              </button>
+              <button
+                :disabled="isAttachmentsOverLimit"
+                @click="showAddPopUpAttachmentsDetail()"
+                class="itbkk-button-add bg-yellow-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
+              >
+                Delete Attachments
+              </button>
               <div class="h-[43px]">
                 <!-- <textarea
                   :disabled="operate == 'show'"
@@ -386,7 +410,7 @@ const handleClick = async () => {
             @click="
               ;[
                 $emit('showTaskDetailModal', false),
-                $router.replace({ name: 'Task' })
+                $router.replace({ name: 'EditTaskDetail' })
               ]
             "
             class="itbkk-button-cancel bg-gray-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
@@ -397,6 +421,11 @@ const handleClick = async () => {
       </div>
     </div>
   </div>
+  <Teleport to="body" v-if="showAttachmentsDetail">
+    <AttachmentsDetail
+      @cancelAttachmentDetail="closeAttachmentDetail"
+    ></AttachmentsDetail>
+  </Teleport>
 </template>
 
 <style scoped></style>

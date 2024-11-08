@@ -45,7 +45,7 @@ const routes = [
         component: TaskDetail
       },
       {
-        path: '/board/:id/attachment/add',
+        path: '/board/:id/task/:tid/edit/attachment/add',
         name: 'AddAttachmentsDetail',
         component: AttachmentsDetail
       },
