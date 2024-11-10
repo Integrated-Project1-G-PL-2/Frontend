@@ -61,8 +61,8 @@ onMounted(async () => {
   if (getDetail.status == 403) {
     closeNotPermission.value = true
     // setTimeout(() => {
-    //   router.replace({ name: 'CollabList' })
-    // }, 1000)
+    //   router.replace({ name: 'Login' })
+    // }, 3000)
   }
   if (getDetail.status == 404) {
     closeNotFound.value = true
@@ -94,15 +94,19 @@ console.log(inviteDetail)
 
 const closeNotLoginAlter = function () {
   closeNotLogin.value = false
+  router.replace({ name: 'Login' })
 }
 const closeWrongTokenAlter = function () {
   wrongToken.value = false
+  router.replace({ name: 'Login' })
 }
 const closeNotFoundAlter = function () {
   closeNotFound.value = false
+  router.replace({ name: 'Login' })
 }
 const closeNotPermissionAlter = function () {
   closeNotPermission.value = false
+  router.replace({ name: 'Login' })
 }
 const openAcceptPopUp = function (boardId, boardName) {
   isAccept.value = true
