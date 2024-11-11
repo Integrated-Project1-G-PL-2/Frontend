@@ -217,7 +217,7 @@ onMounted(async () => {
     />
     <AlertPopUp
       v-if="closeNotFound"
-      :titles="'Sorry, You do not have access rights to this board, We could not found your Invitation Collab. '"
+      :titles="`Sorry, we couldn't find your active invitation to this board.`"
       @closePopUp="closeNotFoundAlter"
       message="Error!!"
       styleType="red"
