@@ -46,7 +46,7 @@ const selectFiles = (event) => {
 
 <template>
   <div
-    class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[10px]"
+    class="bg-grey-500 backdrop-blur-sm w-screen h-screen fixed top-0 left-0 pt-[10px] overflow-auto"
   >
     <div
       class="itbkk-modal-new w-[40%] m-[auto] border border-green-700 mt-[20%]"
@@ -107,7 +107,7 @@ const selectFiles = (event) => {
           @click="
             ;[
               $emit('cancelAttachmentDetail', true),
-              $router.replace({ name: 'Task' })
+              $router.replace({ name: 'EditTaskDetail' })
             ]
           "
         >
