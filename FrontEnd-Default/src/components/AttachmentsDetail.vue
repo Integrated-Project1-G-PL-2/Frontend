@@ -11,7 +11,7 @@ const deClareemit = defineEmits([
 
 const router = useRouter()
 
-const MAX_FILES = 5 // Maximum allowed attachments per task
+const MAX_FILES = 10 // Maximum allowed attachments per task
 
 const isNameOverLimit = ref(false)
 
