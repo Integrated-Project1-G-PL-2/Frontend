@@ -28,35 +28,48 @@ const selectFiles = (event) => {
   errorFileCountMessage.value = ''
   errorFileSizeMessage.value = ''
 
-  // Check for file count limit
-  const totalFiles = attachments.value.length + selectedFiles.length
-  if (totalFiles > MAX_FILES) {
-    const allowedFiles = selectedFiles.slice(
-      0,
-      MAX_FILES - attachments.value.length
-    )
-    const excessFiles = selectedFiles.slice(
-      MAX_FILES - attachments.value.length
-    )
-
-    attachments.value.push(...allowedFiles)
-    errorFileCountMessage.value = `Each task can have a maximum of ${MAX_FILES} files. The following files were not added: ${excessFiles
-      .map((file) => file.name)
-      .join(', ')}`
-  } else {
-    attachments.value.push(...selectedFiles)
-  }
-
-  // Check for file size limit
+  // Check for oversized files
+  const validFiles = selectedFiles.filter(
+    (file) => file.size <= MAX_FILE_SIZE_BYTES
+  )
   const oversizedFiles = selectedFiles.filter(
     (file) => file.size > MAX_FILE_SIZE_BYTES
   )
+
   if (oversizedFiles.length > 0) {
-    errorFileSizeMessage.value = `Each file must be under ${MAX_FILE_SIZE_MB} MB. The following files exceed the size limit: ${oversizedFiles
+    errorFileSizeMessage.value = `Each file must be under ${MAX_FILE_SIZE_MB} MB. The following files exceed the size limit and were not added: ${oversizedFiles
       .map((file) => file.name)
       .join(', ')}`
+
+    // Hide the error message after 3 seconds
+    setTimeout(() => {
+      errorFileSizeMessage.value = ''
+    }, 3000) // 3000 ms = 3 seconds
+  }
+
+  // Check for file count limit after filtering
+  const totalFiles = attachments.value.length + validFiles.length
+  if (totalFiles > MAX_FILES) {
+    const allowedFiles = validFiles.slice(
+      0,
+      MAX_FILES - attachments.value.length
+    )
+    const excessFiles = validFiles.slice(MAX_FILES - attachments.value.length)
+
+    attachments.value.push(...allowedFiles)
+    errorFileCountMessage.value = `Each task can have a maximum of ${MAX_FILES} files. The following files were not added due to the file count limit: ${excessFiles
+      .map((file) => file.name)
+      .join(', ')}`
+
+    // Hide the error message after 3 seconds
+    setTimeout(() => {
+      errorFileCountMessage.value = ''
+    }, 3000) // 3000 ms = 3 seconds
+  } else {
+    attachments.value.push(...validFiles)
   }
 }
+
 // Function to remove file
 const removeFile = (index) => {
   attachments.value.splice(index, 1)
@@ -85,7 +98,6 @@ const removeFile = (index) => {
           <!-- File selection button -->
           <div class="mt-4">
             <button
-              :disabled="MAX_FILES"
               @click="$refs.fileInput.click()"
               class="bg-blue-500 text-white px-4 py-2 rounded"
             >
