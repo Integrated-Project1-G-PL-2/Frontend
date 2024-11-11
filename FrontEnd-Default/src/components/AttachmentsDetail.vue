@@ -67,7 +67,7 @@ const selectFiles = (event) => {
           <!-- File selection button -->
           <div class="mt-4">
             <button
-              :disabled="MAX_FILES > 5"
+              :disabled="MAX_FILES > 10"
               @click="$refs.fileInput.click()"
               class="bg-blue-500 text-white px-4 py-2 rounded"
             >
@@ -100,7 +100,7 @@ const selectFiles = (event) => {
         <button
           class="itbkk-button-ok bg-green-400 rounded-[2px] w-[60px] h-[25px] font-sans btn-xs text-center flex gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"
           @click="newAttachment"
-          :disabled="MAX_FILES > 5"
+          :disabled="MAX_FILES > 10"
         >
           <div class="btn text-center">Confirm</div>
         </button>
