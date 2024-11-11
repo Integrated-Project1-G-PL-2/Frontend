@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { userName } from '@/stores/UserManager'
@@ -12,19 +12,24 @@ const deClareemit = defineEmits([
 const router = useRouter()
 
 const MAX_FILES = 10 // Maximum allowed attachments per task
-const MAX_FILE_SIZE = 20
-const MAX_FILE_SIZE_BINARY = MAX_FILE_SIZE.toString(2)
-const isNameOverLimit = ref(false)
+const MAX_FILE_SIZE_MB = 20 // Maximum file size in MB
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024 // Convert to bytes
 
 const newBoardName = ref(`${userName.value} personal board`)
 const attachments = ref([]) // Store selected files
-const errorMessage = ref('') // Error message for excess files
+const errorFileCountMessage = ref('') // Error message for excess files
+const errorFileSizeMessage = ref('') // Error message for oversized files
 
 // Handle file selection
 const selectFiles = (event) => {
   const selectedFiles = Array.from(event.target.files)
-  const totalFiles = attachments.value.length + selectedFiles.length
 
+  // Reset error messages before new selection
+  errorFileCountMessage.value = ''
+  errorFileSizeMessage.value = ''
+
+  // Check for file count limit
+  const totalFiles = attachments.value.length + selectedFiles.length
   if (totalFiles > MAX_FILES) {
     const allowedFiles = selectedFiles.slice(
       0,
@@ -35,12 +40,21 @@ const selectFiles = (event) => {
     )
 
     attachments.value.push(...allowedFiles)
-    errorMessage.value = `Each task can have at most ${MAX_FILES} files. The following files are not added: ${excessFiles
+    errorFileCountMessage.value = `Each task can have a maximum of ${MAX_FILES} files. The following files were not added: ${excessFiles
       .map((file) => file.name)
       .join(', ')}`
   } else {
     attachments.value.push(...selectedFiles)
-    errorMessage.value = ''
+  }
+
+  // Check for file size limit
+  const oversizedFiles = selectedFiles.filter(
+    (file) => file.size > MAX_FILE_SIZE_BYTES
+  )
+  if (oversizedFiles.length > 0) {
+    errorFileSizeMessage.value = `Each file must be under ${MAX_FILE_SIZE_MB} MB. The following files exceed the size limit: ${oversizedFiles
+      .map((file) => file.name)
+      .join(', ')}`
   }
 }
 </script>
@@ -67,7 +81,6 @@ const selectFiles = (event) => {
           <!-- File selection button -->
           <div class="mt-4">
             <button
-              :disabled="MAX_FILES > 10"
               @click="$refs.fileInput.click()"
               class="bg-blue-500 text-white px-4 py-2 rounded"
             >
@@ -89,9 +102,14 @@ const selectFiles = (event) => {
             </li>
           </ul>
 
-          <!-- Display error message for excess files -->
-          <div v-if="errorMessage" class="text-red-600 mt-2">
-            {{ errorMessage }}
+          <!-- Display error message for excess file count -->
+          <div v-if="errorFileCountMessage" class="text-red-600 mt-2">
+            {{ errorFileCountMessage }}
+          </div>
+
+          <!-- Display error message for oversized files -->
+          <div v-if="errorFileSizeMessage" class="text-red-600 mt-2">
+            {{ errorFileSizeMessage }}
           </div>
         </div>
       </div>
@@ -100,7 +118,6 @@ const selectFiles = (event) => {
         <button
           class="itbkk-button-ok bg-green-400 rounded-[2px] w-[60px] h-[25px] font-sans btn-xs text-center flex gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"
           @click="newAttachment"
-          :disabled="MAX_FILES > 10"
         >
           <div class="btn text-center">Confirm</div>
         </button>
@@ -109,7 +126,7 @@ const selectFiles = (event) => {
           @click="
             ;[
               $emit('cancelAttachmentDetail', true),
-              $router.replace({ name: 'EditTaskDetail' })
+              router.replace({ name: 'EditTaskDetail' })
             ]
           "
         >
