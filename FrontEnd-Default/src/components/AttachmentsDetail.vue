@@ -57,6 +57,10 @@ const selectFiles = (event) => {
       .join(', ')}`
   }
 }
+// Function to remove file
+const removeFile = (index) => {
+  attachments.value.splice(index, 1)
+}
 </script>
 
 <template>
@@ -98,7 +102,13 @@ const selectFiles = (event) => {
           <!-- Display selected files -->
           <ul class="mt-2">
             <li v-for="(file, index) in attachments" :key="index">
-              {{ file.name }}
+              {{ index + 1 }}. {{ file.name }}
+              <button
+                @click="removeFile(index)"
+                class="ml-2 bg-red-500 text-white px-2 py-1 rounded"
+              >
+                Delete File
+              </button>
             </li>
           </ul>
 
