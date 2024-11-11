@@ -161,6 +161,9 @@ const showErrorAddCollabMessage = function () {
 const showErrorProblemInvite = function () {
   inviteProblemCollab.value = true
 }
+const showInvite = function () {
+  inviteCollab.value = true
+}
 
 const showNotExitCollabMessage = function () {
   closeUser.value = true
@@ -510,7 +513,7 @@ const showRequestInvitationListPopUp = () => {
       @cancelCollab="cancelCollabPopUp"
       @errorCollab="showErrorMessage"
       :EmailCollabBoard="collabEmail"
-      @inviteEmail="inviteCollab"
+      @inviteEmail="showInvite"
     ></AddNewCollaborator>
   </teleport>
   <teleport to="body" v-if="changeCollab">
