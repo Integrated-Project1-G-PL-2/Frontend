@@ -12,7 +12,8 @@ const deClareemit = defineEmits([
 const router = useRouter()
 
 const MAX_FILES = 10 // Maximum allowed attachments per task
-
+const MAX_FILE_SIZE = 20
+const MAX_FILE_SIZE_BINARY = MAX_FILE_SIZE.toString(2)
 const isNameOverLimit = ref(false)
 
 const newBoardName = ref(`${userName.value} personal board`)
@@ -66,6 +67,7 @@ const selectFiles = (event) => {
           <!-- File selection button -->
           <div class="mt-4">
             <button
+              :disabled="MAX_FILES > 5"
               @click="$refs.fileInput.click()"
               class="bg-blue-500 text-white px-4 py-2 rounded"
             >
