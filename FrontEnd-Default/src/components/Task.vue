@@ -668,7 +668,7 @@ const closeSameFilesAlter = function () {
         >
           ✚ Add New Task
         </button>
-        <button
+        <!-- <button
           :disabled="
             isSwitch &&
             (storedUserRole == 'READ' || storedUserRole == 'undefined')
@@ -677,7 +677,7 @@ const closeSameFilesAlter = function () {
           class="itbkk-button-add bg-blue-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
         >
           ✚ Add New Attachments
-        </button>
+        </button> -->
         <div
           v-if="
             isSwitch &&
