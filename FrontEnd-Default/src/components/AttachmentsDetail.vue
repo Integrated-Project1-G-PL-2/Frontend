@@ -113,6 +113,7 @@ const removeFile = (index) => {
           <!-- File selection button -->
           <div class="mt-4">
             <button
+              :disabled="MAX_FILES > 10"
               @click="$refs.fileInput.click()"
               class="bg-blue-500 text-white px-4 py-2 rounded"
             >
@@ -158,10 +159,11 @@ const removeFile = (index) => {
 
       <div class="flex flex-row w-full justify-end border-t h-[60%]">
         <button
+          :disabled="MAX_FILES > 10"
           class="itbkk-button-ok bg-green-400 rounded-[2px] w-[60px] h-[25px] font-sans btn-xs text-center flex gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"
           @click="newAttachment"
         >
-          <div class="btn text-center">Confirm</div>
+          <div class="btn text-center">Save</div>
         </button>
         <button
           class="itbkk-button-cancel bg-red-400 rounded-[2px] w-[50px] h-[25px] font-sans btn-xs text-center flex gap-2 hover:text-gray-200 mr-3 mt-4 mb-2"
