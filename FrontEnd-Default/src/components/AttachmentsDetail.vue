@@ -1,24 +1,26 @@
 <script setup>
-import { ref } from 'vue'
+// Import required dependencies and setup
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-
 import { userName } from '@/stores/UserManager'
 
 const deClareemit = defineEmits([
   'saveAttachmentDetail',
   'cancelAttachmentDetail'
 ])
-
 const router = useRouter()
 
-const MAX_FILES = 10 // Maximum allowed attachments per task
-const MAX_FILE_SIZE_MB = 20 // Maximum file size in MB
-const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024 // Convert to bytes
+// Constants for file limits
+const MAX_FILES = 10
+const MAX_FILE_SIZE_MB = 20
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024
 
+// Reactive variables
 const newBoardName = ref(`${userName.value} personal board`)
-const attachments = ref([]) // Store selected files
-const errorFileCountMessage = ref('') // Error message for excess files
-const errorFileSizeMessage = ref('') // Error message for oversized files
+const attachments = ref([])
+const errorFileCountMessage = ref('')
+const errorFileSizeMessage = ref('')
+const errorFileDuplicateMessage = ref('')
 
 // Handle file selection
 const selectFiles = (event) => {
@@ -27,8 +29,9 @@ const selectFiles = (event) => {
   // Reset error messages before new selection
   errorFileCountMessage.value = ''
   errorFileSizeMessage.value = ''
+  errorFileDuplicateMessage.value = ''
 
-  // Check for oversized files
+  // Check for oversized files and filter them out
   const validFiles = selectedFiles.filter(
     (file) => file.size <= MAX_FILE_SIZE_BYTES
   )
@@ -36,37 +39,49 @@ const selectFiles = (event) => {
     (file) => file.size > MAX_FILE_SIZE_BYTES
   )
 
+  // Set error for oversized files
   if (oversizedFiles.length > 0) {
     errorFileSizeMessage.value = `Each file must be under ${MAX_FILE_SIZE_MB} MB. The following files exceed the size limit and were not added: ${oversizedFiles
       .map((file) => file.name)
       .join(', ')}`
-
-    // Hide the error message after 3 seconds
     setTimeout(() => {
       errorFileSizeMessage.value = ''
-    }, 3000) // 3000 ms = 3 seconds
+    }, 3000)
   }
 
-  // Check for file count limit after filtering
-  const totalFiles = attachments.value.length + validFiles.length
+  // Filter out duplicate files based on filename
+  const newFiles = validFiles.filter(
+    (file) => !attachments.value.some((att) => att.name === file.name)
+  )
+  const duplicateFiles = validFiles.filter((file) =>
+    attachments.value.some((att) => att.name === file.name)
+  )
+
+  // Set error for duplicate files
+  if (duplicateFiles.length > 0) {
+    errorFileDuplicateMessage.value = `File with the same filename cannot be
+added or updated to the attachments. Please delete the attachment and add again to update the
+file: ${duplicateFiles.map((file) => file.name).join(', ')}`
+    setTimeout(() => {
+      errorFileDuplicateMessage.value = ''
+    }, 3000)
+  }
+
+  // Check file count limit
+  const totalFiles = attachments.value.length + newFiles.length
   if (totalFiles > MAX_FILES) {
-    const allowedFiles = validFiles.slice(
-      0,
-      MAX_FILES - attachments.value.length
-    )
-    const excessFiles = validFiles.slice(MAX_FILES - attachments.value.length)
+    const allowedFiles = newFiles.slice(0, MAX_FILES - attachments.value.length)
+    const excessFiles = newFiles.slice(MAX_FILES - attachments.value.length)
 
     attachments.value.push(...allowedFiles)
     errorFileCountMessage.value = `Each task can have a maximum of ${MAX_FILES} files. The following files were not added due to the file count limit: ${excessFiles
       .map((file) => file.name)
       .join(', ')}`
-
-    // Hide the error message after 3 seconds
     setTimeout(() => {
       errorFileCountMessage.value = ''
-    }, 3000) // 3000 ms = 3 seconds
+    }, 3000)
   } else {
-    attachments.value.push(...validFiles)
+    attachments.value.push(...newFiles)
   }
 }
 
@@ -133,6 +148,10 @@ const removeFile = (index) => {
           <!-- Display error message for oversized files -->
           <div v-if="errorFileSizeMessage" class="text-red-600 mt-2">
             {{ errorFileSizeMessage }}
+          </div>
+          <!-- Display error message for duplicate files -->
+          <div v-if="errorFileDuplicateMessage" class="text-red-600 mt-2">
+            {{ errorFileDuplicateMessage }}
           </div>
         </div>
       </div>
