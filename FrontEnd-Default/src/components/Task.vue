@@ -256,7 +256,7 @@ const switchBack = function () {
 }
 
 const taskGroups = ref(taskManager.getTasks())
-
+const attachments = ref(taskManager.getTasks())
 const searchStatus = ref('')
 const cloneTaskGroups = ref(statusManager.getStatuses())
 
@@ -918,8 +918,30 @@ const closeSameFilesAlter = function () {
           </td>
           <td class="itbkk-attachments px-4 py-3">
             <div class="h-[43px]">
+              <!-- Check if there are attachments -->
+              <div v-if="attachments.length > 0">
+                <!-- Loop through each attachment -->
+                <div
+                  v-for="(attachment, index) in attachments"
+                  :key="index"
+                  class="flex items-center space-x-2 p-2 my-1 border border-gray-300 rounded-md"
+                >
+                  <!-- Display thumbnail -->
+                  <img
+                    :src="attachment.thumbnail"
+                    alt="Attachment Thumbnail"
+                    class="w-8 h-8 rounded-md object-cover"
+                  />
+                  <!-- Display filename -->
+                  <span class="text-gray-800 italic">{{
+                    attachment.filename
+                  }}</span>
+                </div>
+              </div>
+              <!-- Show a dash if there are no attachments -->
               <div
-                class="cursor-default w-[95%] h-[90%] px-4 py-3 mx-4 my-2 bbg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none italic"
+                v-else
+                class="cursor-default w-[95%] h-[90%] px-4 py-3 mx-4 my-2 bg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none italic"
               >
                 -
               </div>
