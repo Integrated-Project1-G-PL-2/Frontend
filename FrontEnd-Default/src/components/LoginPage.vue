@@ -103,6 +103,9 @@ const checkPasswordLength = () => {
 const togglePasswordVisibility = () => {
   isPasswordVisible.value = !isPasswordVisible.value
 }
+const handleMSIPLogin = () => {
+  // logic for MSIP login
+}
 </script>
 
 <template>
@@ -243,6 +246,18 @@ const togglePasswordVisibility = () => {
           class="itbkk-button-signin w-full py-2 rounded-md"
         >
           Sign In
+        </button>
+        <div class="flex items-center my-4">
+          <div class="flex-grow border-t border-gray-300"></div>
+          <span class="mx-4 text-gray-500">Or</span>
+          <div class="flex-grow border-t border-gray-300"></div>
+        </div>
+
+        <button
+          @click="handleMSIPLogin"
+          class="w-full flex items-center justify-center border border-gray-300 py-2 rounded-lg hover:bg-gray-100 transition duration-200"
+        >
+          Log in with Microsoft account
         </button>
       </div>
     </div>
