@@ -388,7 +388,7 @@ function handleAttachmentClick(attachment) {
                       @click="handleAttachmentClick(attachment)"
                       class="text-blue-500 hover:underline"
                     >
-                      Open/Download
+                      View/Download
                     </button>
                   </div>
                 </div>
