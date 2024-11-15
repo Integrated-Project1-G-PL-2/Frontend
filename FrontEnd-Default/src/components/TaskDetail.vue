@@ -392,7 +392,6 @@ function handleAttachmentClick(attachment) {
                     </button>
                   </div>
                 </div>
-                >
               </div>
               <div class="h-[43px] pl-4 mt-4">
                 <button
