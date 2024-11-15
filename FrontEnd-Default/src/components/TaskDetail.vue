@@ -202,21 +202,21 @@ const closeDeleteAttachmentDetail = async function () {
   router.push({ name: 'EditTaskDetail' })
   showDeleteAttachmentsDetail.value = false
 }
-const attachments = ref([]);
+const attachments = ref([])
 
 // Function to handle attachment click based on file type
 function handleAttachmentClick(attachment) {
-  const supportedTypes = ['pdf', 'image']; // Types that can be displayed in the browser
+  const supportedTypes = ['pdf', 'image'] // Types that can be displayed in the browser
 
   if (supportedTypes.includes(attachment.type)) {
     // Open file in a new tab if supported by browser
-    window.open(attachment.url, '_blank');
+    window.open(attachment.url, '_blank')
   } else {
     // Otherwise, trigger download
-    const link = document.createElement('a');
-    link.href = attachment.url;
-    link.download = attachment.name;
-    link.click();
+    const link = document.createElement('a')
+    link.href = attachment.url
+    link.download = attachment.name
+    link.click()
   }
 }
 </script>
@@ -367,31 +367,32 @@ function handleAttachmentClick(attachment) {
                   class="itbkk-button-add bg-blue-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
                 >
                   Add New Attachments
-                </button
-                !-- Display attachments if they exist -->
-<div v-if="attachments.length > 0" class="mt-4">
-  <div
-    v-for="attachment in attachments"
-    :key="attachment.id"
-    class="flex items-center space-x-2 mb-2"
-  >
-    <!-- Thumbnail (use a default icon if no thumbnail is available) -->
-    <img
-      :src="attachment.thumbnail || 'default-thumbnail.png'"
-      alt="Attachment thumbnail"
-      class="w-8 h-8"
-    />
-    <!-- File name -->
-    <span class="text-gray-800">{{ attachment.name }}</span>
-    <!-- View/Download link -->
-    <button
-      @click="handleAttachmentClick(attachment)"
-      class="text-blue-500 hover:underline"
-    >
-      Open
-    </button>
-  </div>
-</div>>
+                </button>
+                <!-- Display attachments if they exist -->
+                <div v-if="attachments.length > 0" class="mt-4">
+                  <div
+                    v-for="attachment in attachments"
+                    :key="attachment.id"
+                    class="flex items-center space-x-2 mb-2"
+                  >
+                    <!-- Thumbnail (use a default icon if no thumbnail is available) -->
+                    <img
+                      :src="attachment.thumbnail || 'default-thumbnail.png'"
+                      alt="Attachment thumbnail"
+                      class="w-8 h-8"
+                    />
+                    <!-- File name -->
+                    <span class="text-gray-800">{{ attachment.name }}</span>
+                    <!-- View/Download link -->
+                    <button
+                      @click="handleAttachmentClick(attachment)"
+                      class="text-blue-500 hover:underline"
+                    >
+                      Open/Download
+                    </button>
+                  </div>
+                </div>
+                >
               </div>
               <div class="h-[43px] pl-4 mt-4">
                 <button
