@@ -31,7 +31,7 @@ const handleSubmit = () => {
           <rect x="11" y="1" width="9" height="9" fill="#7fba00" />
           <rect x="11" y="11" width="9" height="9" fill="#ffb900" />
         </svg>
-        <h1 class="text-xl font-bold text-blue-600 ml-2">Microsoft</h1>
+        <h1 class="text-xl font-bold text-gray-600 ml-2">Microsoft</h1>
       </div>
       <h2 class="text-lg font-semibold mb-6 text-center">Sign in</h2>
 
