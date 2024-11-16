@@ -100,8 +100,8 @@ const handleSubmit = () => {
       </button>
 
       <!-- Go Back to Home Page -->
-      <p class="text-center mt-4 text-sm text-gray-500">
-        <a href="/" class="text-blue-500 hover:underline"
+      <p class="text-left mt-4 text-sm text-gray-500">
+        <a href="/login" class="text-blue-500 hover:underline"
           >Go back to the home page</a
         >
       </p>
