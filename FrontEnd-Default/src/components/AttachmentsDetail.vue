@@ -6,7 +6,9 @@ import { userName } from '@/stores/UserManager'
 
 const deClareemit = defineEmits([
   'saveAttachmentDetail',
-  'cancelAttachmentDetail'
+  'cancelAttachmentDetail',
+  'limitMostListsFilesDetail',
+  'limitFilesDetail'
 ])
 const router = useRouter()
 
