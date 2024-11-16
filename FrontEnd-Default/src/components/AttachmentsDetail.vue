@@ -96,6 +96,26 @@ const isAttachmentsNull = computed(() => {
 const isAttachmentsFiles = computed(() => {
   return attachments.value.length >= MAX_FILES
 })
+const newAttachment = async () => {
+  try {
+    const formData = new FormData()
+    attachments.value.forEach((file) => formData.append('attachments', file))
+
+    const response = await axios.post('/api/tasks/attachments', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+
+    if (response.status === 200) {
+      $emit('saveAttachmentDetail', attachments.value)
+      alert('Attachments saved successfully!')
+      router.replace({ name: 'EditTaskDetail' })
+    } else {
+      throw new Error('Failed to save attachments.')
+    }
+  } catch (error) {
+    alert(`Error saving attachments: ${error.message}`)
+  }
+}
 </script>
 
 <template>
