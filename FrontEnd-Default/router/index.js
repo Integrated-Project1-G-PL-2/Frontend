@@ -12,6 +12,7 @@ import CollaboratorManagement from '@/components/CollaboratorManagement.vue'
 import CollabAddInvitation from '@/components/CollabAddInvitation.vue'
 import AttachmentsDetail from '@/components/AttachmentsDetail.vue'
 import DeleteAttachment from '@/components/DeleteAttachment.vue'
+import LoginMicrosoftPage from '@/components/LoginMicrosoftPage.vue'
 const history = createWebHistory(import.meta.env.BASE_URL)
 const routes = [
   {
@@ -21,7 +22,14 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: LoginPage
+    component: LoginPage,
+    children: [
+      {
+        path: '/login/microsoft',
+        name: 'LoginWithMicrosoft',
+        component: LoginMicrosoftPage
+      }
+    ]
   },
   {
     path: '/board',
