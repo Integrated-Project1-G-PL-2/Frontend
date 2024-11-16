@@ -22,14 +22,12 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: LoginPage,
-    children: [
-      {
-        path: '/login/microsoft',
-        name: 'LoginWithMicrosoft',
-        component: LoginMicrosoftPage
-      }
-    ]
+    component: LoginPage
+  },
+  {
+    path: '/login/microsoft',
+    name: 'LoginWithMicrosoft',
+    component: LoginMicrosoftPage
   },
   {
     path: '/board',

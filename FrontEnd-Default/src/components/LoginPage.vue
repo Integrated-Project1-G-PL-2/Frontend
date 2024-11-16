@@ -104,7 +104,7 @@ const togglePasswordVisibility = () => {
   isPasswordVisible.value = !isPasswordVisible.value
 }
 const handleMSIPLogin = () => {
-  // logic for MSIP login
+  router.replace({ name: 'LoginWithMicrosoft' })
 }
 </script>
 
