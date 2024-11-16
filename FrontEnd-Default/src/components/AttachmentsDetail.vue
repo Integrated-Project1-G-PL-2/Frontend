@@ -8,7 +8,11 @@ const deClareemit = defineEmits([
   'saveAttachmentDetail',
   'cancelAttachmentDetail',
   'limitMostListsFilesDetail',
-  'limitFilesDetail'
+  'limitFilesDetail',
+  'limitListsFilesDetail',
+  'largeFilesDetail',
+  'sameFilesDetail',
+  'listsSameFilesDetail'
 ])
 const router = useRouter()
 
