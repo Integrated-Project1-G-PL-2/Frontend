@@ -174,18 +174,9 @@ const newAttachment = async () => {
             </li>
           </ul>
 
-          <!-- Display error message for excess file count -->
-          <div v-if="errorFileCountMessage" class="text-red-600 mt-2">
-            {{ errorFileCountMessage }}
-          </div>
-
-          <!-- Display error message for oversized files -->
-          <div v-if="errorFileSizeMessage" class="text-red-600 mt-2">
-            {{ errorFileSizeMessage }}
-          </div>
-
-          <!-- Display error message for duplicate files -->
-          <div v-if="errorFileDuplicateMessage" class="text-red-600 mt-2">
+          <!-- Display error message -->
+          <div class="text-red-600 mt-2">
+            {{ errorFileCountMessage }} , {{ errorFileSizeMessage }} ,
             {{ errorFileDuplicateMessage }}
           </div>
         </div>
