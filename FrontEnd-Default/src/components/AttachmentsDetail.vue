@@ -27,14 +27,13 @@ const attachments = ref([])
 const errorFileCountMessage = ref('')
 const errorFileSizeMessage = ref('')
 const errorFileDuplicateMessage = ref('')
+const errorMessages = ref([])
 
 const selectFiles = (event) => {
   const selectedFiles = Array.from(event.target.files)
 
   // Reset error messages before new selection
-  let fileSizeError = ''
-  let fileDuplicateError = ''
-  let fileCountError = ''
+  let errors = []
 
   // Check for oversized files and filter them out
   const validFiles = selectedFiles.filter(
@@ -44,11 +43,12 @@ const selectFiles = (event) => {
     (file) => file.size > MAX_FILE_SIZE_BYTES
   )
 
-  // Set error for oversized files
   if (oversizedFiles.length > 0) {
-    fileSizeError = `Each file must be under ${MAX_FILE_SIZE_MB} MB. The following files exceed the size limit and were not added: ${oversizedFiles
-      .map((file) => file.name)
-      .join(', ')}`
+    errors.push(
+      `Each file must be under ${MAX_FILE_SIZE_MB} MB. The following files exceed the size limit and were not added: ${oversizedFiles
+        .map((file) => file.name)
+        .join(', ')}`
+    )
   }
 
   // Filter out duplicate files based on filename
@@ -59,11 +59,12 @@ const selectFiles = (event) => {
     attachments.value.some((att) => att.name === file.name)
   )
 
-  // Set error for duplicate files
   if (duplicateFiles.length > 0) {
-    fileDuplicateError = `File with the same filename cannot be added or updated to the attachments. Please delete the attachment and add again to update the file: ${duplicateFiles
-      .map((file) => file.name)
-      .join(', ')}`
+    errors.push(
+      `File with the same filename cannot be added or updated to the attachments. Please delete the attachment and add again to update the file: ${duplicateFiles
+        .map((file) => file.name)
+        .join(', ')}`
+    )
   }
 
   // Check file count limit
@@ -73,23 +74,22 @@ const selectFiles = (event) => {
     const excessFiles = newFiles.slice(MAX_FILES - attachments.value.length)
 
     attachments.value.push(...allowedFiles)
-    fileCountError = `Each task can have a maximum of ${MAX_FILES} files. The following files were not added due to the file count limit: ${excessFiles
-      .map((file) => file.name)
-      .join(', ')}`
+    errors.push(
+      `Each task can have a maximum of ${MAX_FILES} files. The following files were not added due to the file count limit: ${excessFiles
+        .map((file) => file.name)
+        .join(', ')}`
+    )
   } else {
     attachments.value.push(...newFiles)
-
-    // Update error messages reactively
-    errorFileSizeMessage.value = fileSizeError
-    errorFileDuplicateMessage.value = fileDuplicateError
-    errorFileCountMessage.value = fileCountError
-
-    setTimeout(() => {
-      errorFileSizeMessage.value = ''
-      errorFileDuplicateMessage.value = ''
-      errorFileCountMessage.value = ''
-    }, 3000)
   }
+
+  // Update error messages reactively
+  errorMessages.value = errors
+
+  // Clear messages after 3 seconds
+  setTimeout(() => {
+    errorMessages.value = []
+  }, 3000)
 }
 
 // Function to remove file
@@ -174,10 +174,12 @@ const newAttachment = async () => {
             </li>
           </ul>
 
-          <!-- Display error message -->
-          <div class="text-red-600 mt-2">
-            {{ errorFileCountMessage }} , {{ errorFileSizeMessage }} ,
-            {{ errorFileDuplicateMessage }}
+          <div v-if="errorMessages.length > 0" class="text-red-600 mt-2">
+            <ul>
+              <li v-for="(message, index) in errorMessages" :key="index">
+                {{ index + 1 }}. {{ message }}
+              </li>
+            </ul>
           </div>
         </div>
       </div>
