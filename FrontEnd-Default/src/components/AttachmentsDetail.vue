@@ -28,14 +28,13 @@ const errorFileCountMessage = ref('')
 const errorFileSizeMessage = ref('')
 const errorFileDuplicateMessage = ref('')
 
-// Handle file selection
 const selectFiles = (event) => {
   const selectedFiles = Array.from(event.target.files)
 
   // Reset error messages before new selection
-  errorFileCountMessage.value = ''
-  errorFileSizeMessage.value = ''
-  errorFileDuplicateMessage.value = ''
+  let fileSizeError = ''
+  let fileDuplicateError = ''
+  let fileCountError = ''
 
   // Check for oversized files and filter them out
   const validFiles = selectedFiles.filter(
@@ -47,12 +46,9 @@ const selectFiles = (event) => {
 
   // Set error for oversized files
   if (oversizedFiles.length > 0) {
-    errorFileSizeMessage.value = `Each file must be under ${MAX_FILE_SIZE_MB} MB. The following files exceed the size limit and were not added: ${oversizedFiles
+    fileSizeError = `Each file must be under ${MAX_FILE_SIZE_MB} MB. The following files exceed the size limit and were not added: ${oversizedFiles
       .map((file) => file.name)
       .join(', ')}`
-    setTimeout(() => {
-      errorFileSizeMessage.value = ''
-    }, 3000)
   }
 
   // Filter out duplicate files based on filename
@@ -65,12 +61,9 @@ const selectFiles = (event) => {
 
   // Set error for duplicate files
   if (duplicateFiles.length > 0) {
-    errorFileDuplicateMessage.value = `File with the same filename cannot be
-added or updated to the attachments. Please delete the attachment and add again to update the
-file: ${duplicateFiles.map((file) => file.name).join(', ')}`
-    setTimeout(() => {
-      errorFileDuplicateMessage.value = ''
-    }, 3000)
+    fileDuplicateError = `File with the same filename cannot be added or updated to the attachments. Please delete the attachment and add again to update the file: ${duplicateFiles
+      .map((file) => file.name)
+      .join(', ')}`
   }
 
   // Check file count limit
@@ -80,14 +73,22 @@ file: ${duplicateFiles.map((file) => file.name).join(', ')}`
     const excessFiles = newFiles.slice(MAX_FILES - attachments.value.length)
 
     attachments.value.push(...allowedFiles)
-    errorFileCountMessage.value = `Each task can have a maximum of ${MAX_FILES} files. The following files were not added due to the file count limit: ${excessFiles
+    fileCountError = `Each task can have a maximum of ${MAX_FILES} files. The following files were not added due to the file count limit: ${excessFiles
       .map((file) => file.name)
       .join(', ')}`
-    setTimeout(() => {
-      errorFileCountMessage.value = ''
-    }, 3000)
   } else {
     attachments.value.push(...newFiles)
+
+    // Update error messages reactively
+    errorFileSizeMessage.value = fileSizeError
+    errorFileDuplicateMessage.value = fileDuplicateError
+    errorFileCountMessage.value = fileCountError
+
+    setTimeout(() => {
+      errorFileSizeMessage.value = ''
+      errorFileDuplicateMessage.value = ''
+      errorFileCountMessage.value = ''
+    }, 3000)
   }
 }
 
@@ -182,6 +183,7 @@ const newAttachment = async () => {
           <div v-if="errorFileSizeMessage" class="text-red-600 mt-2">
             {{ errorFileSizeMessage }}
           </div>
+
           <!-- Display error message for duplicate files -->
           <div v-if="errorFileDuplicateMessage" class="text-red-600 mt-2">
             {{ errorFileDuplicateMessage }}
