@@ -368,30 +368,36 @@ function handleAttachmentClick(attachment) {
                 >
                   Add New Attachments
                 </button>
-                <!-- Display attachments if they exist -->
-                <div v-if="attachments.length > 0" class="mt-4">
-                  <div
-                    v-for="attachment in attachments"
-                    :key="attachment.id"
-                    class="flex items-center space-x-2 mb-2"
-                  >
-                    <!-- Thumbnail (use a default icon if no thumbnail is available) -->
-                    <img
-                      :src="attachment.thumbnail || 'default-thumbnail.png'"
-                      alt="Attachment thumbnail"
-                      class="w-8 h-8"
-                    />
-                    <!-- File name -->
-                    <span class="text-gray-800">{{ attachment.name }}</span>
-                    <!-- View/Download link -->
-                    <button
-                      @click="handleAttachmentClick(attachment)"
-                      class="text-blue-500 hover:underline"
+                <ul class="mt-2">
+                  <li v-for="(file, index) in attachments" :key="index">
+                    {{ index + 1 }}. {{ file.name }}
+                  </li>
+
+                  <!-- Display attachments if they exist -->
+                  <div v-if="attachments.length > 0" class="mt-4">
+                    <div
+                      v-for="attachment in attachments"
+                      :key="attachment.id"
+                      class="flex items-center space-x-2 mb-2"
                     >
-                      View/Download
-                    </button>
+                      <!-- Thumbnail (use a default icon if no thumbnail is available) -->
+                      <img
+                        :src="attachment.thumbnail || 'default-thumbnail.png'"
+                        alt="Attachment thumbnail"
+                        class="w-8 h-8"
+                      />
+                      <!-- File name -->
+                      <span class="text-gray-800">{{ attachment.name }}</span>
+                      <!-- View/Download link -->
+                      <button
+                        @click="handleAttachmentClick(attachment)"
+                        class="text-blue-500 hover:underline"
+                      >
+                        View/Download
+                      </button>
+                    </div>
                   </div>
-                </div>
+                </ul>
               </div>
               <div class="h-[43px] pl-4 mt-4">
                 <button
