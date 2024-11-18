@@ -146,7 +146,6 @@ const newAttachment = async () => {
           <!-- File selection button -->
           <div class="mt-4">
             <button
-              :disabled="isAttachmentsFiles"
               @click="$refs.fileInput.click()"
               class="bg-blue-500 text-white px-4 py-2 rounded"
             >
