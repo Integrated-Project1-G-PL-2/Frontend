@@ -395,19 +395,27 @@ function handleAttachmentClick(attachment) {
                       >
                         View/Download
                       </button>
+                      <button
+                        v-if="prop.operate == 'edit' && haveFiles"
+                        :disabled="isAttachmentsOverLimit"
+                        @click="showDeletePopUpAttachmentsDetail()"
+                        class="itbkk-button-add bg-yellow-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
+                      >
+                        Delete Attachments
+                      </button>
                     </div>
                   </div>
                 </ul>
               </div>
               <div class="h-[43px] pl-4 mt-4">
-                <button
+                <!-- <button
                   v-if="prop.operate == 'edit' && haveFiles"
                   :disabled="isAttachmentsOverLimit"
                   @click="showDeletePopUpAttachmentsDetail()"
                   class="itbkk-button-add bg-yellow-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
                 >
                   Delete Attachments
-                </button>
+                </button> -->
                 <!-- <textarea
                   :disabled="operate == 'show'"
                   v-model="task.taskAttachments"
