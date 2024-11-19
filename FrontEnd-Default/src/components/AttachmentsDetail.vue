@@ -116,14 +116,16 @@ const newAttachment = async () => {
     })
 
     if (response.status === 200) {
-      $emit('saveAttachmentDetail', attachments.value)
+      deClareemit('saveAttachmentDetail', attachments.value)
       alert('Attachments saved successfully!')
       router.replace({ name: 'EditTaskDetail' })
     } else {
       throw new Error('Failed to save attachments.')
     }
   } catch (error) {
-    alert(`Error saving attachments: ${error.message}`)
+    const errorMessage = `Error saving attachments: ${error.message}`
+    deClareemit('errorMessage', [errorMessage]) // ส่ง error message ไปยัง parent component
+    alert(errorMessage) // แสดง error message ใน alert
   }
 }
 </script>

@@ -219,6 +219,10 @@ function handleAttachmentClick(attachment) {
     link.click()
   }
 }
+// ฟังก์ชันแสดงข้อความ error
+const displayErrorMessage = (messages) => {
+  errorMessages.value = messages
+}
 </script>
 
 <template>
@@ -408,6 +412,14 @@ function handleAttachmentClick(attachment) {
                 </ul>
               </div>
               <div class="h-[43px] pl-4 mt-4">
+                <!-- แสดงข้อความ Error -->
+                <div v-if="errorMessages.length > 0" class="text-red-600 mt-4">
+                  <ul>
+                    <li v-for="(message, index) in errorMessages" :key="index">
+                      {{ message }}
+                    </li>
+                  </ul>
+                </div>
                 <!-- <button
                   v-if="prop.operate == 'edit' && haveFiles"
                   :disabled="isAttachmentsOverLimit"
@@ -495,6 +507,7 @@ function handleAttachmentClick(attachment) {
   <Teleport to="body" v-if="showAttachmentsDetail">
     <AttachmentsDetail
       @cancelAttachmentDetail="closeAttachmentDetail"
+      @errorMessage="displayErrorMessage"
     ></AttachmentsDetail>
   </Teleport>
   <Teleport to="body" v-if="showDeleteAttachmentsDetail">
