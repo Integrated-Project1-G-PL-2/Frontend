@@ -87,9 +87,11 @@ const selectFiles = (event) => {
   errorMessages.value = errors
 
   // Clear messages after 3 seconds
-  setTimeout(() => {
-    errorMessages.value = []
-  }, 3000)
+  if (errors.length > 0) {
+    setTimeout(() => {
+      errorMessages.value = []
+    }, 3000)
+  }
 }
 
 // Function to remove file
