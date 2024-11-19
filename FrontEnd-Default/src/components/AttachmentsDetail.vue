@@ -12,7 +12,8 @@ const deClareemit = defineEmits([
   'limitListsFilesDetail',
   'largeFilesDetail',
   'sameFilesDetail',
-  'listsSameFilesDetail'
+  'listsSameFilesDetail',
+  'errorMessage'
 ])
 const router = useRouter()
 
@@ -85,7 +86,7 @@ const selectFiles = (event) => {
 
   // Update error messages reactively
   errorMessages.value = errors
-
+  deClareemit('errorMessage', errors)
   // Clear messages after 3 seconds
   if (errors.length > 0) {
     setTimeout(() => {
