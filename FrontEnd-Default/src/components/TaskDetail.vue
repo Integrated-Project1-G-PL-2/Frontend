@@ -203,7 +203,7 @@ const closeDeleteAttachmentDetail = async function () {
   showDeleteAttachmentsDetail.value = false
 }
 const attachments = ref([])
-
+const errorMessages = ref([])
 // Function to handle attachment click based on file type
 function handleAttachmentClick(attachment) {
   const supportedTypes = ['pdf', 'image'] // Types that can be displayed in the browser
