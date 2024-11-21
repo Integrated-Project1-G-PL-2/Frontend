@@ -194,11 +194,19 @@ const closeAttachmentDetail = async function () {
   router.push({ name: 'EditTaskDetail' })
   showAttachmentsDetail.value = false
 }
+const saveAttachmentDetail = async function () {
+  router.push({ name: 'EditTaskDetail' })
+  showAttachmentsDetail.value = false
+}
 const showDeletePopUpAttachmentsDetail = async function () {
   router.push({ name: 'DeleteAttachmentsDetail' })
   showDeleteAttachmentsDetail.value = true
 }
 const closeDeleteAttachmentDetail = async function () {
+  router.push({ name: 'EditTaskDetail' })
+  showDeleteAttachmentsDetail.value = false
+}
+const confirmDeleteAttachmentDetail = async function () {
   router.push({ name: 'EditTaskDetail' })
   showDeleteAttachmentsDetail.value = false
 }
@@ -508,11 +516,13 @@ const displayErrorMessage = (messages) => {
     <AttachmentsDetail
       @cancelAttachmentDetail="closeAttachmentDetail"
       @errorMessage="displayErrorMessage"
+      @saveAttachmentDetail="saveAttachmentDetail"
     ></AttachmentsDetail>
   </Teleport>
   <Teleport to="body" v-if="showDeleteAttachmentsDetail">
     <DeleteAttachment
       @cancelDeleteAttachmentDetail="closeDeleteAttachmentDetail"
+      @confirmDeleteAttachmentDetail="confirmDeleteAttachmentDetail"
     ></DeleteAttachment>
   </Teleport>
 </template>

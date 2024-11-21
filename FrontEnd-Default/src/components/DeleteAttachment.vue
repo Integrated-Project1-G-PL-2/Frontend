@@ -12,6 +12,24 @@ const props = defineProps(['fileId'])
 const router = useRouter()
 
 const route = useRoute()
+const deleteAttachmentTask = async () => {
+  if (!props.fileId) {
+    // Emit red alert for invalid fileId
+    return
+  }
+  try {
+    const response = await deleteItemById(props.fileId)
+    if (response.success) {
+      // Emit confirmation event and navigate back
+      deClareemit('confirmDeleteAttachmentDetail', true)
+      router.replace({ name: 'EditTaskDetail' })
+    } else {
+      // Emit red alert with error message
+    }
+  } catch (error) {
+    // Emit red alert with error details
+  }
+}
 </script>
 
 <template>
