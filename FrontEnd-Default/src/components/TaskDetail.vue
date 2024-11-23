@@ -569,7 +569,7 @@ const removeAttachment = function (index) {
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
             :class="{ disabled: !task.taskTitle }"
             @click="handleClick"
-            :disabled="task.taskTitle == null"
+            :disabled="task.taskTitle == null || errorMessages.length > 0"
           >
             save
           </button>
