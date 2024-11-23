@@ -2,7 +2,13 @@
 import { onMounted, reactive, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useTaskManager } from '@/stores/TaskManager'
-import { getItems, getItemById, addItem, editItem } from '@/utils/fetchUtils'
+import {
+  getItems,
+  getItemById,
+  addItem,
+  editItem,
+  editItemWithFile
+} from '@/utils/fetchUtils'
 import { useStatusManager } from '@/stores/StatusManager'
 import { useBoardManager } from '@/stores/BoardManager'
 import AttachmentsDetail from './AttachmentsDetail.vue'
@@ -42,7 +48,7 @@ if (prop.taskDetail.value) {
     updatedOn: new Date(prop.taskDetail.value.updatedOn)
       .toLocaleString('en-GB')
       .replace(',', ''),
-    taskAttachments: '-'
+    taskAttachments: prop.taskDetail.value.filesDataList
   })
 } else {
   task = reactive({
@@ -56,6 +62,7 @@ if (prop.taskDetail.value) {
     updatedOn: null
   })
 }
+console.log(task)
 const showAttachmentsDetail = ref(false)
 const showDeleteAttachmentsDetail = ref(false)
 const taskSet = ref((task.taskStatus = 'No Status'))
@@ -64,6 +71,7 @@ const isDescriptionOverLimit = ref(false)
 const isAssigneesOverLimit = ref(false)
 const isAttachmentsOverLimit = ref(false)
 const isAttachmentsSizeOverLimit = ref(false)
+const fileInput = ref(null)
 const checkTitleLength = () => {
   isTitleOverLimit.value = task.taskTitle.length > 100
 }
@@ -86,6 +94,10 @@ const thisUser = ref()
 const userName = ref()
 const boardVisibility = ref()
 const haveFiles = ref(false)
+
+const MAX_FILES = 10
+const MAX_FILE_SIZE_MB = 20
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024
 
 onMounted(async () => {
   const taskItems = await getItems(
@@ -162,12 +174,14 @@ const handleClick = async () => {
     }
     emits('showTaskDetailModal', false)
   } else if (prop.operate == 'edit') {
+    const file = Array.from(fileInput.value?.files)
     addOrUpdateTaskDetail.status = statusManager.findStatusByName(
       task.taskStatus
     ).id
-    const editTask = await editItem(
+    const editTask = await editItemWithFile(
       `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
       task.id,
+      file,
       addOrUpdateTaskDetail
     )
     if (editTask.status != '500' && editTask.status != '404') {
@@ -230,6 +244,75 @@ function handleAttachmentClick(attachment) {
 // ฟังก์ชันแสดงข้อความ error
 const displayErrorMessage = (messages) => {
   errorMessages.value = messages
+}
+
+const selectFiles = (event) => {
+  const selectedFiles = Array.from(event.target.files)
+
+  // Reset error messages before new selection
+  let errors = []
+
+  // Check for oversized files and filter them out
+  const validFiles = selectedFiles.filter(
+    (file) => file.size <= MAX_FILE_SIZE_BYTES
+  )
+  const oversizedFiles = selectedFiles.filter(
+    (file) => file.size > MAX_FILE_SIZE_BYTES
+  )
+
+  if (oversizedFiles.length > 0) {
+    errors.push(
+      `Each file must be under ${MAX_FILE_SIZE_MB} MB. The following files exceed the size limit and were not added: ${oversizedFiles
+        .map((file) => file.name)
+        .join(', ')}`
+    )
+  }
+
+  // Filter out duplicate files based on filename
+  const newFiles = validFiles.filter(
+    (file) => !attachments.value.some((att) => att.name === file.name)
+  )
+  const duplicateFiles = validFiles.filter((file) =>
+    attachments.value.some((att) => att.name === file.name)
+  )
+
+  if (duplicateFiles.length > 0) {
+    errors.push(
+      `File with the same filename cannot be added or updated to the attachments. Please delete the attachment and add again to update the file: ${duplicateFiles
+        .map((file) => file.name)
+        .join(', ')}`
+    )
+  }
+
+  // Check file count limit
+  const totalFiles = attachments.value.length + newFiles.length
+  if (totalFiles > MAX_FILES) {
+    const allowedFiles = newFiles.slice(0, MAX_FILES - attachments.value.length)
+    const excessFiles = newFiles.slice(MAX_FILES - attachments.value.length)
+
+    attachments.value.push(...allowedFiles)
+    errors.push(
+      `Each task can have a maximum of ${MAX_FILES} files. The following files were not added due to the file count limit: ${excessFiles
+        .map((file) => file.name)
+        .join(', ')}`
+    )
+  } else {
+    attachments.value.push(...newFiles)
+    console.log(attachments.value)
+  }
+
+  // Update error messages reactively
+  // errorMessages.value = errors
+  // deClareemit('errorMessage', errors)
+  // // Clear messages after 3 seconds
+  // if (errors.length > 0) {
+  //   setTimeout(() => {
+  //     errorMessages.value = []
+  //   }, 3000)
+  // }
+}
+const removeAttachment = function (index) {
+  attachments.value.splice(index, 1)
 }
 </script>
 
@@ -368,57 +451,60 @@ const displayErrorMessage = (messages) => {
                 </select>
               </label>
             </div>
-            <div v-if="prop.operate !== 'add'" class="w-full flex-col">
+            <div v-if="prop.operate == 'edit'" class="w-full flex-col">
               <div class="flex items-center pl-4 mt-4 space-x-2">
-                <span>Attachments :</span>
-
-                <button
-                  v-if="prop.operate == 'edit'"
-                  :disabled="isAttachmentsOverLimit"
-                  @click="showAddPopUpAttachmentsDetail()"
-                  class="itbkk-button-add bg-blue-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
-                >
-                  Add New Attachments
-                </button>
-                <ul class="mt-2">
-                  <li v-for="(file, index) in attachments" :key="index">
-                    {{ index + 1 }}. {{ file.name }}
-                  </li>
-
-                  <!-- Display attachments if they exist -->
-                  <div v-if="attachments.length > 0" class="mt-4">
-                    <div
-                      v-for="attachment in attachments"
-                      :key="attachment.id"
-                      class="flex items-center space-x-2 mb-2"
+                <span
+                  >Attachments :
+                  <ul>
+                    <li
+                      v-for="(file, index) in task.taskAttachments"
+                      :key="index"
+                      class="flex items-center justify-between"
                     >
-                      <!-- Thumbnail (use a default icon if no thumbnail is available) -->
-                      <img
-                        :src="attachment.thumbnail || 'default-thumbnail.png'"
-                        alt="Attachment thumbnail"
-                        class="w-8 h-8"
-                      />
-                      <!-- File name -->
-                      <span class="text-gray-800">{{ attachment.name }}</span>
-                      <!-- View/Download link -->
-                      <button
-                        @click="handleAttachmentClick(attachment)"
-                        class="text-blue-500 hover:underline"
+                      <span>{{ index + 1 }}. {{ file.name }}</span>
+                      <div
+                        v-if="file.type == 'jpg'"
+                        class="flex items-center space-x-2"
                       >
-                        View/Download
-                      </button>
-                      <button
-                        v-if="prop.operate == 'edit' && haveFiles"
-                        :disabled="isAttachmentsOverLimit"
-                        @click="showDeletePopUpAttachmentsDetail()"
-                        class="itbkk-button-add bg-yellow-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-2 my-3"
+                        <img
+                          :src="file.path"
+                          alt="Image preview"
+                          class="w-16 h-16 object-cover"
+                        />
+                      </div>
+                      <div
+                        @click="removeAttachment(index)"
+                        class="cursor-pointer text-blue-500"
                       >
-                        Delete Attachments
-                      </button>
-                    </div>
-                  </div>
-                </ul>
+                        <u>Remove</u>
+                      </div>
+                    </li>
+                  </ul>
+                </span>
               </div>
+              <ul class="flex items-center justify-between">
+                <li v-for="(file, index) in attachments" :key="index">
+                  {{ index + 1 }}. {{ file.name }}
+                  <div @click="removeAttachment(index)">❌</div>
+                </li>
+              </ul>
+
+              <div class="mt-4">
+                <button
+                  @click="$refs.fileInput.click()"
+                  class="bg-blue-500 text-white px-4 py-2 rounded"
+                >
+                  Add Files
+                </button>
+                <input
+                  ref="fileInput"
+                  type="file"
+                  multiple
+                  class="hidden"
+                  @change="selectFiles"
+                />
+              </div>
+
               <div class="h-[43px] pl-4 mt-4">
                 <!-- แสดงข้อความ Error -->
                 <div v-if="errorMessages.length > 0" class="text-red-600 mt-4">
@@ -436,16 +522,6 @@ const displayErrorMessage = (messages) => {
                 >
                   Delete Attachments
                 </button> -->
-                <!-- <textarea
-                  :disabled="operate == 'show'"
-                  v-model="task.taskAttachments"
-                  class="itbkk-attachments w-[95%] h-[90%] px-4 py-2 mx-4 my-2 bbg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none italic"
-                  :class="
-                    (task.taskAssignees == null ? 'italic text-gray-500 ' : '',
-                    isAttachmentsOverLimit ? 'border-red-600 text-red-600' : '')
-                  "
-                  @input="checkAttachmentsLength"
-                ></textarea> -->
                 <div
                   style="display: flex; align-items: center"
                   v-if="isAttachmentsOverLimit"
