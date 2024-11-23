@@ -103,21 +103,32 @@ const checkPasswordLength = () => {
 const togglePasswordVisibility = () => {
   isPasswordVisible.value = !isPasswordVisible.value
 }
+const initializeMSAL = async () => {
+  try {
+    await msalInstance.initialize()
+    console.log('MSAL initialized successfully')
+  } catch (error) {
+    console.error('Error initializing MSAL:', error)
+  }
+}
+
+// Call the initialization function during app startup
+initializeMSAL()
 const handleMSIPLogin = async () => {
+  const router = useRouter()
   try {
     const loginResponse = await msalInstance.loginPopup({
-      scopes: ['User.Read'] // Adjust scopes based on your requirements
+      scopes: ['User.Read']
     })
-    console.log('Login successful', loginResponse)
+    console.log('Login successful:', loginResponse)
 
-    // Decode token and handle user data
     const account = msalInstance.getActiveAccount()
     if (account) {
       console.log('Account info:', account)
-      router.replace({ name: 'Board' }) // Navigate to the board after login
+      router.replace({ name: 'Board' })
     }
   } catch (error) {
-    console.error('Login failed', error)
+    console.error('Login failed:', error)
   }
 }
 </script>
