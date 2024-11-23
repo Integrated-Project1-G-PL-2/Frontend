@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@azure/msal-browser": "^3.27.0",
+    "@microsoft/microsoft-graph-client": "^3.0.7",
     "@vueform/multiselect": "^2.6.7",
     "pinia": "^2.1.7",
     "vue": "^3.4.21",
