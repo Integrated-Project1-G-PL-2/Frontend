@@ -8,7 +8,7 @@ import {
   useAuthGuard,
   refreshToken
 } from '@/stores/UserManager'
-import msalInstance from '@/stores/'
+import msalInstance from '@/stores/Mlogin'
 const showTaskModal = ref(false)
 const username = ref('')
 const password = ref('')
