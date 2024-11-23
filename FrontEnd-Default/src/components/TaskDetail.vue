@@ -509,8 +509,21 @@ const removeAttachment = function (index) {
                 <!-- แสดงข้อความ Error -->
                 <div v-if="errorMessages.length > 0" class="text-red-600 mt-4">
                   <ul>
-                    <li v-for="(message, index) in errorMessages" :key="index">
-                      {{ message }}
+                    <li>
+                      <div class="text-sm text-red-600 mt-4">
+                        Each file must be under MB. The following files exceed
+                        the size limit and were not added:
+                      </div>
+                      <div class="text-sm text-red-600 mt-4">
+                        File with the same filename cannot be added or updated
+                        to the attachments. Please delete the attachment and add
+                        again to update the file:
+                      </div>
+                      <div class="text-sm text-red-600 mt-4">
+                        Each task can have a maximum of ${MAX_FILES} files. The
+                        following files were not added due to the file count
+                        limit:
+                      </div>
                     </li>
                   </ul>
                 </div>
