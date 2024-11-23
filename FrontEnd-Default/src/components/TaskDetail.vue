@@ -302,14 +302,14 @@ const selectFiles = (event) => {
   }
 
   // Update error messages reactively
-  // errorMessages.value = errors
+  errorMessages.value = errors
   // deClareemit('errorMessage', errors)
   // // Clear messages after 3 seconds
-  // if (errors.length > 0) {
-  //   setTimeout(() => {
-  //     errorMessages.value = []
-  //   }, 3000)
-  // }
+  if (errors.length > 0) {
+    setTimeout(() => {
+      errorMessages.value = []
+    }, 3000)
+  }
 }
 const removeAttachment = function (index) {
   attachments.value.splice(index, 1)
@@ -510,7 +510,7 @@ const removeAttachment = function (index) {
                 <div v-if="errorMessages.length > 0" class="text-red-600 mt-4">
                   <ul>
                     <li v-for="(message, index) in errorMessages" :key="index">
-                      {{ message }}
+                      {{ index + 1 }}. {{ message }}
                     </li>
                   </ul>
                 </div>
