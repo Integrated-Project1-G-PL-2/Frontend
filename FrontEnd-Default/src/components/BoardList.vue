@@ -17,6 +17,7 @@ import {
 import ChangeRemoveLeaveCollab from './../components/ChangeRemoveLeaveCollab.vue'
 import AcceptAndDeclineInvitation from './AcceptAndDeclineInvitation.vue'
 import msalInstance from '@/stores/Mlogin'
+
 const emits = defineEmits(['NameBoard', 'errorOccurred', 'NameCollabBoard'])
 const router = useRouter()
 const route = useRoute()
@@ -135,6 +136,16 @@ const closeDeclineInvitationCollab = function () {
 }
 const closeConfirmDeclineInvitationCollab = function () {
   declineInvitation.value = false
+}
+const handleMSLogout = async () => {
+  try {
+    await msalInstance.logoutPopup({
+      postLogoutRedirectUri: 'http://localhost:5173' // เปลี่ยนเป็น URL หลัง logout
+    })
+    console.log('Logout successful')
+  } catch (error) {
+    console.error('Logout failed:', error)
+  }
 }
 </script>
 

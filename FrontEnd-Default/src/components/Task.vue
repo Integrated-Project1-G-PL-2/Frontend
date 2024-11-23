@@ -28,7 +28,7 @@ import boardsList from './../components/BoardList.vue'
 import { useBoardManager } from '@/stores/BoardManager'
 import VisibilityChangedPopUp from './../components/VisibilityChangedPopUP.vue'
 import ChangeRemoveLeaveCollab from './../components/ChangeRemoveLeaveCollab.vue'
-
+import msalInstance from '@/stores/Mlogin'
 const statusManager = useStatusManager()
 const showStatusDetailModal = ref(false)
 const showCollabDetailModal = ref(false)
@@ -368,6 +368,16 @@ const closeListsSameFilesAlter = function () {
 }
 const closeSameFilesAlter = function () {
   sameFiles.value = false
+}
+const handleMSLogout = async () => {
+  try {
+    await msalInstance.logoutPopup({
+      postLogoutRedirectUri: 'http://localhost:5173' // เปลี่ยนเป็น URL หลัง logout
+    })
+    console.log('Logout successful')
+  } catch (error) {
+    console.error('Logout failed:', error)
+  }
 }
 </script>
 

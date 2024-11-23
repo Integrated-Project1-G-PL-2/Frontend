@@ -18,6 +18,7 @@ import DeleteStatus from './DeleteStatus.vue'
 import { useTaskManager } from '@/stores/TaskManager'
 import ButtonStyle from './ButtonStyle.vue'
 import { useBoardManager } from '@/stores/BoardManager'
+import msalInstance from '@/stores/Mlogin'
 const boardManager = useBoardManager()
 const isSwitch = ref(false)
 const taskManager = useTaskManager()
@@ -90,20 +91,24 @@ onMounted(async () => {
   boardVisibility.value = board.visibility
   boardOwner.value = currentBoard.owner.name
   thisUser.value = storedUserName
-  storedUserRole.value = sessionStorage.getItem('userRole');
+  storedUserRole.value = sessionStorage.getItem('userRole')
 
   const statusGroups = statusManager.getStatuses()
   statusGroups.forEach((statusGroup) => {
     thisStatus.value = statusGroup.id
   })
-  const userRole = [...(boardManager.getBoards().personal || []), ...(boardManager.getBoards().collab || [])]
-  .find(item => item.id.boardId ===  route.params.id)?.role;
-  sessionStorage.setItem('userRole', userRole);
+  const userRole = [
+    ...(boardManager.getBoards().personal || []),
+    ...(boardManager.getBoards().collab || [])
+  ].find((item) => item.id.boardId === route.params.id)?.role
+  sessionStorage.setItem('userRole', userRole)
   if (
-    (storedUserRole.value == 'READ' ||storedUserRole.value == null)&&
+    (storedUserRole.value == 'READ' || storedUserRole.value == null) &&
     (route.fullPath == `/board/${route.params.id}/status/add` ||
-    route.fullPath.match(new RegExp(`/board/${route.params.id}/status/.+/delete`)) ||
-    route.fullPath.match(new RegExp(`/board/${route.params.id}/.+/edit`)))
+      route.fullPath.match(
+        new RegExp(`/board/${route.params.id}/status/.+/delete`)
+      ) ||
+      route.fullPath.match(new RegExp(`/board/${route.params.id}/.+/edit`)))
   ) {
     cannotConfig.value = true
     router.replace({ name: 'StatusList' })
@@ -215,6 +220,16 @@ const closeAccessAlter = function () {
 const cannotConfig = ref(false)
 const closeOwnerAlter = function () {
   closeOwner.value = false
+}
+const handleMSLogout = async () => {
+  try {
+    await msalInstance.logoutPopup({
+      postLogoutRedirectUri: 'http://localhost:5173' // เปลี่ยนเป็น URL หลัง logout
+    })
+    console.log('Logout successful')
+  } catch (error) {
+    console.error('Logout failed:', error)
+  }
 }
 </script>
 
@@ -343,19 +358,28 @@ const closeOwnerAlter = function () {
         <div class="relative group">
           <button
             @click="showAddStatusesModal('add')"
-            :disabled="isSwitch && (storedUserRole == 'READ' || storedUserRole == 'undefined')"
+            :disabled="
+              isSwitch &&
+              (storedUserRole == 'READ' || storedUserRole == 'undefined')
+            "
             class="itbkk-button-add bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] font-sans btn-xs scr-l:btn-m text-center gap-5 text-gray-100 hover:text-gray-200 mr-3 mt-2 my-3"
           >
             ✚ Add Status
           </button>
           <div
-            v-if="isSwitch && (storedUserRole == 'READ' || storedUserRole == 'undefined')"
+            v-if="
+              isSwitch &&
+              (storedUserRole == 'READ' || storedUserRole == 'undefined')
+            "
             class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-3"
           >
             You need to be board owner to perform this action.
           </div>
           <div
-            v-if="(isSwitch && (storedUserRole == 'READ' || storedUserRole == 'undefined')) "
+            v-if="
+              isSwitch &&
+              (storedUserRole == 'READ' || storedUserRole == 'undefined')
+            "
             class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
           >
             You need to be board owner or has write access to perform this
@@ -443,19 +467,29 @@ const closeOwnerAlter = function () {
                         id: statuses.id
                       })
                     "
-                    :disabled="isSwitch && (storedUserRole == 'READ' || storedUserRole == 'undefined')"
+                    :disabled="
+                      isSwitch &&
+                      (storedUserRole == 'READ' ||
+                        storedUserRole == 'undefined')
+                    "
                   >
                     Edit
                   </button>
                 </ButtonStyle>
                 <div
-                  v-if="isSwitch && (storedUserRole == 'READ' || storedUserRole == 'undefined')"
+                  v-if="
+                    isSwitch &&
+                    (storedUserRole == 'READ' || storedUserRole == 'undefined')
+                  "
                   class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
                 >
                   You need to be board owner to perform this action.
                 </div>
                 <div
-                  v-if="(isSwitch && (storedUserRole == 'READ' || storedUserRole == 'undefined')) "
+                  v-if="
+                    isSwitch &&
+                    (storedUserRole == 'READ' || storedUserRole == 'undefined')
+                  "
                   class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
                 >
                   You need to be board owner or has write access to perform this
@@ -486,19 +520,29 @@ const closeOwnerAlter = function () {
                         index: index + 1
                       })
                     "
-                    :disabled="isSwitch && (storedUserRole == 'READ' || storedUserRole == 'undefined')"
+                    :disabled="
+                      isSwitch &&
+                      (storedUserRole == 'READ' ||
+                        storedUserRole == 'undefined')
+                    "
                   >
                     Delete
                   </button>
                 </ButtonStyle>
                 <div
-                  v-if="isSwitch && (storedUserRole == 'READ' || storedUserRole == 'undefined')"
+                  v-if="
+                    isSwitch &&
+                    (storedUserRole == 'READ' || storedUserRole == 'undefined')
+                  "
                   class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
                 >
                   You need to be board owner to perform this action.
                 </div>
                 <div
-                  v-if="(isSwitch && (storedUserRole == 'READ' || storedUserRole == 'undefined')) "
+                  v-if="
+                    isSwitch &&
+                    (storedUserRole == 'READ' || storedUserRole == 'undefined')
+                  "
                   class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
                 >
                   You need to be board owner or has write access to perform this
