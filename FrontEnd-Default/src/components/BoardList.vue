@@ -16,6 +16,7 @@ import {
 } from '../utils/fetchUtils.js'
 import ChangeRemoveLeaveCollab from './../components/ChangeRemoveLeaveCollab.vue'
 import AcceptAndDeclineInvitation from './AcceptAndDeclineInvitation.vue'
+import msalInstance from '@/stores/Mlogin'
 const emits = defineEmits(['NameBoard', 'errorOccurred', 'NameCollabBoard'])
 const router = useRouter()
 const route = useRoute()

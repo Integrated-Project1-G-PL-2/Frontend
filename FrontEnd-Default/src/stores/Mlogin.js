@@ -1,40 +1,18 @@
-import { UserAgentApplication } from 'msal'
+import { PublicClientApplication } from '@azure/msal-browser'
 
-var msalConfig = {
+const msalConfig = {
   auth: {
-    clientId: '444047af-5673-4101-99ff-01fa1a5951be',
+    clientId: '444047af-5673-4101-99ff-01fa1a5951be', // Replace with your client ID
     authority:
-      'https://login.microsoftonline.com/79845616-9df0-43e0-8842-e300feb2642a',
-    redirectURI: ' http://localhost:5173/'
+      'https://login.microsoftonline.com/79845616-9df0-43e0-8842-e300feb2642a', // Replace with your tenant ID
+    redirectUri: 'http://localhost:5173' // Replace with your redirect URI
   },
   cache: {
-    cacheLocation: 'localStorage',
-    storeAuthStateInCookie: true
+    cacheLocation: 'localStorage', // Options: "localStorage", "sessionStorage"
+    storeAuthStateInCookie: false // Recommended for IE11 or Edge
   }
 }
 
-var requestObj = {
-  scopes: ['user.read']
-}
+const msalInstance = new PublicClientApplication(msalConfig)
 
-var myMSALObj = new UserAgentApplication(msalConfig)
-
-var login = async () => {
-  var authResult = await myMSALObj.loginPopup(requestObj)
-  return authResult.account
-}
-
-var getAccount = async () => {
-  var account = await myMSALObj.getAccount()
-  return account
-}
-
-var logoff = () => {
-  myMSALObj.logout()
-}
-
-export default {
-  login,
-  getAccount,
-  logoff
-}
+export default msalInstance
