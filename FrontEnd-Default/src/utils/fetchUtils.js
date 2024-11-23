@@ -74,8 +74,6 @@ async function getItemById(url, id, router) {
   }
 }
 
-
-
 async function deleteItemById(url, id, router) {
   try {
     const options = {
@@ -277,6 +275,38 @@ async function declineInvite(url) {
   }
 }
 
+async function editItemWithFile(url, id, file = null, editedItem, router) {
+  const formData = new FormData()
+  console.log(file)
+  if (file) {
+    file.forEach((file) => {
+      formData.append('file', file)
+    })
+  }
+  if (editedItem && Object.keys(editedItem).length > 0) {
+    const jsonString = JSON.stringify(editedItem)
+    const blob = new Blob([jsonString], { type: 'application/json' })
+    formData.append('taskDetails', blob)
+  }
+
+  try {
+    const options = {
+      method: 'PUT',
+      body: formData
+    }
+    console.log(options)
+
+    const res = await fetchWithAuth(`${url}/${id}`, options, router)
+    if (res) {
+      return await res.json()
+    }
+    return null
+  } catch (error) {
+    console.error(`Network error: ${error}`)
+    return null
+  }
+}
+
 export {
   getItemById,
   deleteItemById,
@@ -288,5 +318,6 @@ export {
   acceptInvite,
   cancelInvite,
   editInviteReadWrite,
-  declineInvite
+  declineInvite,
+  editItemWithFile
 }
