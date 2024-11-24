@@ -539,7 +539,9 @@ const removeAttachmentList = function (id, name, type, indexClick) {
               <ul class="flex items-center justify-between">
                 <li v-for="(file, index) in attachments" :key="index">
                   {{ index + 1 }}. {{ file.name }}
-                  <div @click="removeAttachment(index)">❌</div>
+                  <div @click="removeAttachment(index)" class="cursor-pointer">
+                    ❌
+                  </div>
                 </li>
               </ul>
 
