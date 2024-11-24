@@ -2,10 +2,10 @@ import { PublicClientApplication } from '@azure/msal-browser'
 
 const msalConfig = {
   auth: {
-    clientId: '444047af-5673-4101-99ff-01fa1a5951be', // Replace with your client ID
+    clientId: 'd129054b-4326-426a-a979-999c98603cc6', // Replace with your client ID
     authority:
       'https://login.microsoftonline.com/79845616-9df0-43e0-8842-e300feb2642a', // Replace with your tenant ID
-    redirectUri: 'http://localhost:5173' // Replace with your redirect URI
+    redirectUri: 'http://localhost:8080/callback/login' // Replace with your redirect URI
   },
   cache: {
     cacheLocation: 'localStorage', // Options: "localStorage", "sessionStorage"
