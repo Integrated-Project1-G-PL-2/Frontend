@@ -455,22 +455,19 @@ const removeAttachment = function (index) {
               <div class="flex items-center pl-4 mt-4 space-x-2">
                 <span
                   >Attachments :
-                  <div class="mt-4">
-                    <button
-                      @click="$refs.fileInput.click()"
-                      class="bg-blue-500 text-white px-4 py-2 rounded"
-                    >
-                      Add Files
-                    </button>
-                    <input
-                      ref="fileInput"
-                      type="file"
-                      multiple
-                      class="hidden"
-                      @change="selectFiles"
-                    />
-                  </div>
-
+                  <button
+                    @click="$refs.fileInput.click()"
+                    class="bg-blue-500 text-white px-4 py-2 rounded"
+                  >
+                    Add Files
+                  </button>
+                  <input
+                    ref="fileInput"
+                    type="file"
+                    multiple
+                    class="hidden"
+                    @change="selectFiles"
+                  />
                   <ul>
                     <li
                       v-for="(file, index) in task.taskAttachments"
@@ -501,7 +498,9 @@ const removeAttachment = function (index) {
               <ul class="flex items-center justify-between">
                 <li v-for="(file, index) in attachments" :key="index">
                   {{ index + 1 }}. {{ file.name }}
-                  <div @click="removeAttachment(index)">❌</div>
+                  <div @click="removeAttachment(index)" class="cursor-pointer">
+                    ❌
+                  </div>
                 </li>
               </ul>
 
