@@ -536,14 +536,19 @@ const removeAttachmentList = function (id, name, type, indexClick) {
                   </ul>
                 </span>
               </div>
-              <ul class="flex items-center justify-between">
-                <li v-for="(file, index) in attachments" :key="index">
-                  {{ index + 1 }}. {{ file.name }}
-                  <div @click="removeAttachment(index)" class="cursor-pointer">
-                    ❌
-                  </div>
-                </li>
-              </ul>
+              <li
+                v-for="(file, index) in attachments"
+                :key="index"
+                class="flex items-center justify-between"
+              >
+                <span>{{ index + 1 + '.' }} {{ file.name }}</span>
+                <div
+                  @click="removeAttachment(index)"
+                  class="cursor-pointer ml-2"
+                >
+                  ❌
+                </div>
+              </li>
 
               <!-- <div class="mt-4">
                 <button
@@ -561,15 +566,14 @@ const removeAttachmentList = function (id, name, type, indexClick) {
                 />
               </div> -->
 
-              <div class="h-[43px] pl-4 mt-4">
-                <!-- แสดงข้อความ Error -->
-                <div v-if="errorMessages.length > 0" class="text-red-600 mt-4">
-                  <ul>
-                    <li v-for="(message, index) in errorMessages" :key="index">
-                      {{ index + 1 }}. {{ message }}
-                    </li>
-                  </ul>
-                </div>
+              <!-- แสดงข้อความ Error -->
+              <div v-if="errorMessages.length > 0" class="text-red-600 mt-4">
+                <ul>
+                  <li v-for="(message, index) in errorMessages" :key="index">
+                    {{ index + 1 }}. {{ message }}
+                  </li>
+                </ul>
+
                 <!-- <button
                   v-if="prop.operate == 'edit' && haveFiles"
                   :disabled="isAttachmentsOverLimit"
