@@ -1,6 +1,7 @@
 import { refreshToken } from '@/stores/UserManager'
 
 async function fetchWithAuth(url, options, router) {
+  console.log(options)
   const token = localStorage.getItem('jwt')
   if (token) {
     options.headers = {
@@ -309,6 +310,23 @@ async function editItemWithFile(url, id, file = null, editedItem, router) {
   }
 }
 
+async function deleteFile(url, id,file,router ) {
+  try {
+    const options = {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json'}
+  }
+    const res = await fetchWithAuth(`${url}/${id}/file/${file}`, options, router)
+    if (res.ok) {
+      return res.status
+    }
+    return null
+  } catch (error) {
+    console.error(`Network error: ${error}`)
+    return null
+  }
+}
+
 export {
   getItemById,
   deleteItemById,
@@ -321,5 +339,6 @@ export {
   cancelInvite,
   editInviteReadWrite,
   declineInvite,
-  editItemWithFile
+  editItemWithFile,
+  deleteFile
 }
