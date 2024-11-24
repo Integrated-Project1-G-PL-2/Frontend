@@ -131,6 +131,30 @@ const handleMSIPLogin = async () => {
     console.error('Login failed:', error)
   }
 }
+// const handleMicrosoftLogin = async (authorizationCode) => {
+//   try {
+//     const response = await fetch('http://localhost:8080/callback/login', {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+//       body: new URLSearchParams({ code: authorizationCode })
+//     })
+
+//     if (!response.ok) {
+//       throw new Error('Failed to retrieve token from backend')
+//     }
+
+//     const tokens = await response.json()
+//     console.log('Access Token:', tokens.access_token)
+
+//     // เก็บ Access Token สำหรับใช้ใน API อื่นๆ
+//     localStorage.setItem('accessToken', tokens.access_token)
+
+//     // นำไปใช้งาน เช่น Redirect ไปยังหน้า Dashboard
+//     router.replace({ name: 'Board' })
+//   } catch (error) {
+//     console.error('Login failed:', error)
+//   }
+// }
 </script>
 
 <template>
@@ -258,7 +282,7 @@ const handleMSIPLogin = async () => {
 
       <div class="mb-4">
         <button
-          @click="handleLogin"
+          @click="handleMSIPLogin"
           :disabled="
             trimmedUsername.length === 0 || trimmedPassword.length === 0
           "
@@ -279,7 +303,7 @@ const handleMSIPLogin = async () => {
         </div>
 
         <button
-          @click="handleMSIPLogin"
+          @click="handleMicrosoftLogin"
           class="w-full py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-primary-600 transition-colors text-sm dark:border-gray-700 dark:focus:ring-offset-gray-800"
         >
           <svg
