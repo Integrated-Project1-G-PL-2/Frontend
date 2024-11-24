@@ -8,7 +8,7 @@ import {
   useAuthGuard,
   refreshToken
 } from '@/stores/UserManager'
-
+import msalInstance from '@/stores/Mlogin'
 const showTaskModal = ref(false)
 const username = ref('')
 const password = ref('')
@@ -103,8 +103,33 @@ const checkPasswordLength = () => {
 const togglePasswordVisibility = () => {
   isPasswordVisible.value = !isPasswordVisible.value
 }
-const handleMSIPLogin = () => {
-  router.replace({ name: 'LoginWithMicrosoft' })
+const initializeMSAL = async () => {
+  try {
+    await msalInstance.initialize()
+    console.log('MSAL initialized successfully')
+  } catch (error) {
+    console.error('Error initializing MSAL:', error)
+  }
+}
+
+// Call the initialization function during app startup
+initializeMSAL()
+const handleMSIPLogin = async () => {
+  const router = useRouter()
+  try {
+    const loginResponse = await msalInstance.loginPopup({
+      scopes: ['User.Read']
+    })
+    console.log('Login successful:', loginResponse)
+
+    const account = msalInstance.getActiveAccount()
+    if (account) {
+      console.log('Account info:', account)
+      router.replace({ name: 'Board' })
+    }
+  } catch (error) {
+    console.error('Login failed:', error)
+  }
 }
 </script>
 
