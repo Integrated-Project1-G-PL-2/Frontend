@@ -504,7 +504,7 @@ const removeAttachmentList = function (id, name, type, indexClick) {
                       :key="index"
                       class="flex items-center justify-between"
                     >
-                      <span>{{ index + 1 }}. {{ file.name }}</span>
+                      <span>{{ index + 1 + '.' }} {{ file.name }}</span>
                       <div
                         v-if="file.type == 'jpg' || 'png'"
                         class="flex items-center space-x-2"
