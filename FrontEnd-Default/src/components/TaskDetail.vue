@@ -1,321 +1,318 @@
 <script setup>
-import { onMounted, reactive, ref } from "vue";
-import { useRouter, useRoute } from "vue-router";
-import { useTaskManager } from "@/stores/TaskManager";
+import { onMounted, reactive, ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { useTaskManager } from '@/stores/TaskManager'
 import {
   getItems,
   getItemById,
   addItem,
   editItem,
   editItemWithFile,
-  deleteFile,
-} from "@/utils/fetchUtils";
-import { useStatusManager } from "@/stores/StatusManager";
-import { useBoardManager } from "@/stores/BoardManager";
-import AttachmentsDetail from "./AttachmentsDetail.vue";
-import DeleteAttachment from "./DeleteAttachment.vue";
+  deleteFile
+} from '@/utils/fetchUtils'
+import { useStatusManager } from '@/stores/StatusManager'
+import { useBoardManager } from '@/stores/BoardManager'
+import AttachmentsDetail from './AttachmentsDetail.vue'
+import DeleteAttachment from './DeleteAttachment.vue'
 const emits = defineEmits([
-  "showTaskDetailModal",
-  "showRedPopup",
-  "showGreenPopup",
-]);
-const MAX_FILE_SIZE = ref();
-const taskManager = useTaskManager();
-const statusManager = useStatusManager();
-const router = useRouter();
-const route = useRoute();
+  'showTaskDetailModal',
+  'showRedPopup',
+  'showGreenPopup'
+])
+const MAX_FILE_SIZE = ref()
+const taskManager = useTaskManager()
+const statusManager = useStatusManager()
+const router = useRouter()
+const route = useRoute()
 const prop = defineProps({
   taskDetail: Object,
-  operate: String,
-});
-const boardManager = useBoardManager();
-let task;
+  operate: String
+})
+const boardManager = useBoardManager()
+let task
 if (prop.taskDetail.value) {
   task = reactive({
     createdOn: new Date(prop.taskDetail.value.createdOn)
-      .toLocaleString("en-GB")
-      .replace(",", ""),
+      .toLocaleString('en-GB')
+      .replace(',', ''),
     id: prop.taskDetail.value.id,
     taskAssignees:
       prop.taskDetail.value.assignees != null
         ? prop.taskDetail.value.assignees
-        : "",
+        : '',
     taskDescription:
       prop.taskDetail.value.description != null
         ? prop.taskDetail.value.description
-        : "",
+        : '',
     taskStatus: prop.taskDetail.value.status.name,
     taskTitle: prop.taskDetail.value.title,
     updatedOn: new Date(prop.taskDetail.value.updatedOn)
-      .toLocaleString("en-GB")
-      .replace(",", ""),
-    taskAttachments: prop.taskDetail.value.filesDataList,
-  });
+      .toLocaleString('en-GB')
+      .replace(',', ''),
+    taskAttachments: prop.taskDetail.value.filesDataList
+  })
 } else {
   task = reactive({
     createdOn: null,
     id: null,
-    taskAssignees: "Unassigned",
-    taskDescription: "No Description Provided",
+    taskAssignees: 'Unassigned',
+    taskDescription: 'No Description Provided',
     taskStatus: {},
-    taskAttachments: "-",
+    taskAttachments: '-',
     taskTitle: null,
-    updatedOn: null,
-  });
+    updatedOn: null
+  })
 }
-console.log(task);
-const showAttachmentsDetail = ref(false);
-const showDeleteAttachmentsDetail = ref(false);
-const taskSet = ref((task.taskStatus = "No Status"));
-const isTitleOverLimit = ref(false);
-const isDescriptionOverLimit = ref(false);
-const isAssigneesOverLimit = ref(false);
-const isAttachmentsOverLimit = ref(false);
-const isAttachmentsSizeOverLimit = ref(false);
-const clickedIndex = ref([]);
-const fileInput = ref(null);
+console.log(task)
+const showAttachmentsDetail = ref(false)
+const showDeleteAttachmentsDetail = ref(false)
+const taskSet = ref((task.taskStatus = 'No Status'))
+const isTitleOverLimit = ref(false)
+const isDescriptionOverLimit = ref(false)
+const isAssigneesOverLimit = ref(false)
+const isAttachmentsOverLimit = ref(false)
+const isAttachmentsSizeOverLimit = ref(false)
+const clickedIndex = ref([])
+const fileInput = ref(null)
 const checkTitleLength = () => {
-  isTitleOverLimit.value = task.taskTitle.length > 100;
-};
+  isTitleOverLimit.value = task.taskTitle.length > 100
+}
 const checkDescriptionLength = () => {
-  isDescriptionOverLimit.value = task.taskDescription.length > 500;
-};
+  isDescriptionOverLimit.value = task.taskDescription.length > 500
+}
 const checkAssigneesLength = () => {
-  isAssigneesOverLimit.value = task.taskAssignees.length > 30;
-};
+  isAssigneesOverLimit.value = task.taskAssignees.length > 30
+}
 const checkAttachmentsLength = () => {
-  isAttachmentsOverLimit.value = task.taskAttachments >= 11;
-};
+  isAttachmentsOverLimit.value = task.taskAttachments >= 11
+}
 const checkAttachmentsSizeLength = () => {
-  isAttachmentsSizeOverLimit.value = task.taskAttachments >= 20;
-};
+  isAttachmentsSizeOverLimit.value = task.taskAttachments >= 20
+}
 
-const privateTask = ref();
-const boardOwner = ref();
-const thisUser = ref();
-const userName = ref();
-const boardVisibility = ref();
-const haveFiles = ref(false);
-const removeList = reactive([]);
+const privateTask = ref()
+const boardOwner = ref()
+const thisUser = ref()
+const userName = ref()
+const boardVisibility = ref()
+const haveFiles = ref(false)
+const removeList = reactive([])
 
-const MAX_FILES = 10;
-const MAX_FILE_SIZE_MB = 20;
-const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+const MAX_FILES = 10
+const MAX_FILE_SIZE_MB = 20
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024
 
 onMounted(async () => {
   const taskItems = await getItems(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
-  );
+  )
   const currentBoard = await getItemById(
     `${import.meta.env.VITE_BASE_URL}/v3/boards`,
     route.params.id
-  );
-  privateTask.value = taskItems;
+  )
+  privateTask.value = taskItems
   if (taskItems == 401) {
-    router.replace({ name: "Login" });
-    return;
+    router.replace({ name: 'Login' })
+    return
   }
-  boardManager.setCurrentBoard(currentBoard);
-  taskManager.setTasks(taskItems);
+  boardManager.setCurrentBoard(currentBoard)
+  taskManager.setTasks(taskItems)
   statusManager.setStatuses(
     await getItems(
       `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`
     )
-  );
-  const storedUserName = localStorage.getItem("userName");
+  )
+  const storedUserName = localStorage.getItem('userName')
   if (storedUserName) {
-    userName.value = storedUserName;
+    userName.value = storedUserName
   }
 
-  const board = boardManager.getCurrentBoard();
-  boardVisibility.value = board.visibility;
-  boardOwner.value = currentBoard.owner.name;
-  thisUser.value = storedUserName;
-  console.log(thisUser.value);
+  const board = boardManager.getCurrentBoard()
+  boardVisibility.value = board.visibility
+  boardOwner.value = currentBoard.owner.name
+  thisUser.value = storedUserName
+  console.log(thisUser.value)
   if (
-    boardVisibility.value == "PUBLIC" &&
+    boardVisibility.value == 'PUBLIC' &&
     thisUser.value !== boardOwner.value
   ) {
-    console.log("test");
+    console.log('test')
   }
-});
+})
 
 const handleClick = async () => {
-  if (prop.operate == "show") {
-    emits("showTaskDetailModal", false);
-    router.replace({ name: "Task" });
-    return;
+  if (prop.operate == 'show') {
+    emits('showTaskDetailModal', false)
+    router.replace({ name: 'Task' })
+    return
   }
   const addOrUpdateTaskDetail = {
     title: task.taskTitle?.length > 0 ? task.taskTitle : null,
     assignees: task.taskAssignees?.length > 0 ? task.taskAssignees : null,
-    description: task.taskDescription?.length > 0 ? task.taskDescription : null,
-  };
+    description: task.taskDescription?.length > 0 ? task.taskDescription : null
+  }
   if (
     isTitleOverLimit.value ||
     isDescriptionOverLimit.value ||
     isAssigneesOverLimit.value
   ) {
-    return;
+    return
   }
-  if (prop.operate == "add") {
+  if (prop.operate == 'add') {
     addOrUpdateTaskDetail.status = statusManager.findStatusByName(
       task.taskStatus
-    ).id;
+    ).id
     const newTask = await addItem(
       `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
       addOrUpdateTaskDetail
-    );
-    console.log(newTask);
-    router.replace({ name: "Task" });
-    if (newTask.status != "500") {
-      taskManager.addTask(newTask);
-      emits("showGreenPopup", {
+    )
+    console.log(newTask)
+    router.replace({ name: 'Task' })
+    if (newTask.status != '500') {
+      taskManager.addTask(newTask)
+      emits('showGreenPopup', {
         taskTitle: newTask.title,
-        operate: prop.operate,
-      });
+        operate: prop.operate
+      })
     }
-    emits("showTaskDetailModal", false);
-  } else if (prop.operate == "edit") {
-    const file = Array.from(fileInput.value?.files);
+    emits('showTaskDetailModal', false)
+  } else if (prop.operate == 'edit') {
+    const file = Array.from(fileInput.value?.files)
     addOrUpdateTaskDetail.status = statusManager.findStatusByName(
       task.taskStatus
-    ).id;
+    ).id
     const editTask = await editItemWithFile(
       `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
       task.id,
       file,
       addOrUpdateTaskDetail
-    );
-    console.log(removeList.length);
+    )
+    console.log(removeList.length)
     if (removeList.length != 0) {
-      console.log(removeList);
+      console.log(removeList)
       removeList.forEach(async (element) => {
         const fetchRemoveFile = await deleteFile(
           `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
           task.id,
           element
-        );
-      });
+        )
+      })
     }
-    if (editTask.status != "500" && editTask.status != "404") {
-      taskManager.editTask(editTask.id, editTask);
-      emits("showGreenPopup", {
+    if (editTask.status != '500' && editTask.status != '404') {
+      taskManager.editTask(editTask.id, editTask)
+      emits('showGreenPopup', {
         taskTitle: editTask.title,
-        operate: prop.operate,
-      });
+        operate: prop.operate
+      })
     } else {
-      emits("showRedPopup", {
+      emits('showRedPopup', {
         taskTitle: !editTask.title ? task.taskTitle : editTask.title,
-        operate: prop.operate,
-      });
+        operate: prop.operate
+      })
     }
-    router.replace({ name: "Task" });
-    emits("showTaskDetailModal", false);
+    router.replace({ name: 'Task' })
+    emits('showTaskDetailModal', false)
   }
-};
+}
 const showAddPopUpAttachmentsDetail = async function () {
-  router.push({ name: "AddAttachmentsDetail" });
-  showAttachmentsDetail.value = true;
-};
+  router.push({ name: 'AddAttachmentsDetail' })
+  showAttachmentsDetail.value = true
+}
 const closeAttachmentDetail = async function () {
-  router.push({ name: "EditTaskDetail" });
-  showAttachmentsDetail.value = false;
-};
+  router.push({ name: 'EditTaskDetail' })
+  showAttachmentsDetail.value = false
+}
 const saveAttachmentDetail = async function () {
-  router.push({ name: "EditTaskDetail" });
-  showAttachmentsDetail.value = false;
-};
+  router.push({ name: 'EditTaskDetail' })
+  showAttachmentsDetail.value = false
+}
 const showDeletePopUpAttachmentsDetail = async function () {
-  router.push({ name: "DeleteAttachmentsDetail" });
-  showDeleteAttachmentsDetail.value = true;
-};
+  router.push({ name: 'DeleteAttachmentsDetail' })
+  showDeleteAttachmentsDetail.value = true
+}
 const closeDeleteAttachmentDetail = async function () {
-  router.push({ name: "EditTaskDetail" });
-  showDeleteAttachmentsDetail.value = false;
-};
+  router.push({ name: 'EditTaskDetail' })
+  showDeleteAttachmentsDetail.value = false
+}
 const confirmDeleteAttachmentDetail = async function () {
-  router.push({ name: "EditTaskDetail" });
-  showDeleteAttachmentsDetail.value = false;
-};
-const attachments = ref([]);
-const errorMessages = ref([]);
+  router.push({ name: 'EditTaskDetail' })
+  showDeleteAttachmentsDetail.value = false
+}
+const attachments = ref([])
+const errorMessages = ref([])
 // Function to handle attachment click based on file type
 function handleAttachmentClick(attachment) {
-  const supportedTypes = ["pdf", "image"]; // Types that can be displayed in the browser
+  const supportedTypes = ['pdf', 'image'] // Types that can be displayed in the browser
 
   if (supportedTypes.includes(attachment.type)) {
     // Open file in a new tab if supported by browser
-    window.open(attachment.url, "_blank");
+    window.open(attachment.url, '_blank')
   } else {
     // Otherwise, trigger download
-    const link = document.createElement("a");
-    link.href = attachment.url;
-    link.download = attachment.name;
-    link.click();
+    const link = document.createElement('a')
+    link.href = attachment.url
+    link.download = attachment.name
+    link.click()
   }
 }
 // ฟังก์ชันแสดงข้อความ error
 const displayErrorMessage = (messages) => {
-  errorMessages.value = messages;
-};
+  errorMessages.value = messages
+}
 
 const selectFiles = (event) => {
-  const selectedFiles = Array.from(event.target.files);
+  const selectedFiles = Array.from(event.target.files)
 
   // Reset error messages before new selection
-  let errors = [];
+  let errors = []
 
   // Check for oversized files and filter them out
   const validFiles = selectedFiles.filter(
     (file) => file.size <= MAX_FILE_SIZE_BYTES
-  );
+  )
   const oversizedFiles = selectedFiles.filter(
     (file) => file.size > MAX_FILE_SIZE_BYTES
-  );
+  )
 
   if (oversizedFiles.length > 0) {
     errors.push(
       `Each file must be under ${MAX_FILE_SIZE_MB} MB. The following files exceed the size limit and were not added: ${oversizedFiles
         .map((file) => file.name)
-        .join(", ")}`
-    );
+        .join(', ')}`
+    )
   }
 
   // Filter out duplicate files based on filename
   const newFiles = validFiles.filter(
     (file) => !attachments.value.some((att) => att.name === file.name)
-  );
+  )
   const duplicateFiles = validFiles.filter((file) =>
     attachments.value.some((att) => att.name === file.name)
-  );
+  )
 
   if (duplicateFiles.length > 0) {
     errors.push(
       `File with the same filename cannot be added or updated to the attachments. Please delete the attachment and add again to update the file: ${duplicateFiles
         .map((file) => file.name)
-        .join(", ")}`
-    );
+        .join(', ')}`
+    )
   }
 
   // Check file count limit
-  const totalFiles = attachments.value.length + newFiles.length;
+  const totalFiles = attachments.value.length + newFiles.length
   if (totalFiles > MAX_FILES) {
-    const allowedFiles = newFiles.slice(
-      0,
-      MAX_FILES - attachments.value.length
-    );
-    const excessFiles = newFiles.slice(MAX_FILES - attachments.value.length);
+    const allowedFiles = newFiles.slice(0, MAX_FILES - attachments.value.length)
+    const excessFiles = newFiles.slice(MAX_FILES - attachments.value.length)
 
-    attachments.value.push(...allowedFiles);
+    attachments.value.push(...allowedFiles)
     errors.push(
       `Each task can have a maximum of ${MAX_FILES} files. The following files were not added due to the file count limit: ${excessFiles
         .map((file) => file.name)
-        .join(", ")}`
-    );
+        .join(', ')}`
+    )
   } else {
-    attachments.value.push(...newFiles);
-    console.log(attachments.value);
+    attachments.value.push(...newFiles)
+    console.log(attachments.value)
   }
 
   // Update error messages reactively
@@ -327,25 +324,25 @@ const selectFiles = (event) => {
   //     errorMessages.value = []
   //   }, 3000)
   // }
-};
+}
 const removeAttachment = function (index) {
-  attachments.value.splice(index, 1);
-};
+  attachments.value.splice(index, 1)
+}
 
 const removeAttachmentList = function (id, name, type, indexClick) {
-  const pushData = id + "_" + name + "." + type;
-  console.log(pushData);
-  const index = removeList.indexOf(pushData);
+  const pushData = id + '_' + name + '.' + type
+  console.log(pushData)
+  const index = removeList.indexOf(pushData)
   if (index !== -1) {
-    removeList.splice(index, 1);
-    clickedIndex.value.splice(index, 1);
-    console.log(clickedIndex.value);
-    return;
+    removeList.splice(index, 1)
+    clickedIndex.value.splice(index, 1)
+    console.log(clickedIndex.value)
+    return
   }
-  clickedIndex.value.push(indexClick);
-  removeList.push(pushData);
-  console.log(clickedIndex.value);
-};
+  clickedIndex.value.push(indexClick)
+  removeList.push(pushData)
+  console.log(clickedIndex.value)
+}
 </script>
 
 <template>
@@ -487,6 +484,20 @@ const removeAttachmentList = function (id, name, type, indexClick) {
               <div class="flex items-center pl-4 mt-4 space-x-2">
                 <span
                   >Attachments :
+
+                  <button
+                    @click="$refs.fileInput.click()"
+                    class="bg-blue-500 text-white px-4 py-2 rounded"
+                  >
+                    Add Files
+                  </button>
+                  <input
+                    ref="fileInput"
+                    type="file"
+                    multiple
+                    class="hidden"
+                    @change="selectFiles"
+                  />
                   <ul>
                     <li
                       v-for="(file, index) in task.taskAttachments"
@@ -507,7 +518,7 @@ const removeAttachmentList = function (id, name, type, indexClick) {
                       <div
                         :class="{
                           'text-blue-500': clickedIndex.value != index,
-                          'text-red-500': clickedIndex.value == index,
+                          'text-red-500': clickedIndex.value == index
                         }"
                         @click="
                           removeAttachmentList(
@@ -517,7 +528,7 @@ const removeAttachmentList = function (id, name, type, indexClick) {
                             // index
                           )
                         "
-                        class="cursor-pointer"
+                        class="cursor-pointer bg-blue-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
                       >
                         <u>Remove</u>
                       </div>
@@ -528,11 +539,13 @@ const removeAttachmentList = function (id, name, type, indexClick) {
               <ul class="flex items-center justify-between">
                 <li v-for="(file, index) in attachments" :key="index">
                   {{ index + 1 }}. {{ file.name }}
-                  <div @click="removeAttachment(index)">❌</div>
+                  <div @click="removeAttachment(index)" class="cursor-pointer">
+                    ❌
+                  </div>
                 </li>
               </ul>
 
-              <div class="mt-4">
+              <!-- <div class="mt-4">
                 <button
                   @click="$refs.fileInput.click()"
                   class="bg-blue-500 text-white px-4 py-2 rounded"
@@ -546,14 +559,14 @@ const removeAttachmentList = function (id, name, type, indexClick) {
                   class="hidden"
                   @change="selectFiles"
                 />
-              </div>
+              </div> -->
 
               <div class="h-[43px] pl-4 mt-4">
                 <!-- แสดงข้อความ Error -->
                 <div v-if="errorMessages.length > 0" class="text-red-600 mt-4">
                   <ul>
                     <li v-for="(message, index) in errorMessages" :key="index">
-                      {{ message }}
+                      {{ index + 1 }}. {{ message }}
                     </li>
                   </ul>
                 </div>
@@ -618,9 +631,9 @@ const removeAttachmentList = function (id, name, type, indexClick) {
           </button>
           <button
             @click="
-              [
+              ;[
                 $emit('showTaskDetailModal', false),
-                $router.replace({ name: 'EditTaskDetail' }),
+                $router.replace({ name: 'EditTaskDetail' })
               ]
             "
             class="itbkk-button-cancel bg-gray-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
