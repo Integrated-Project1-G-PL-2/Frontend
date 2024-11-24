@@ -7,7 +7,8 @@ import {
   getItemById,
   addItem,
   editItem,
-  editItemWithFile
+  editItemWithFile,
+  deleteFile
 } from '@/utils/fetchUtils'
 import { useStatusManager } from '@/stores/StatusManager'
 import { useBoardManager } from '@/stores/BoardManager'
@@ -71,6 +72,7 @@ const isDescriptionOverLimit = ref(false)
 const isAssigneesOverLimit = ref(false)
 const isAttachmentsOverLimit = ref(false)
 const isAttachmentsSizeOverLimit = ref(false)
+const clickedIndex = ref([])
 const fileInput = ref(null)
 const checkTitleLength = () => {
   isTitleOverLimit.value = task.taskTitle.length > 100
@@ -94,6 +96,7 @@ const thisUser = ref()
 const userName = ref()
 const boardVisibility = ref()
 const haveFiles = ref(false)
+const removeList = reactive([])
 
 const MAX_FILES = 10
 const MAX_FILE_SIZE_MB = 20
@@ -184,6 +187,17 @@ const handleClick = async () => {
       file,
       addOrUpdateTaskDetail
     )
+    console.log(removeList.length)
+    if (removeList.length != 0) {
+      console.log(removeList)
+      removeList.forEach(async (element) => {
+        const fetchRemoveFile = await deleteFile(
+          `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
+          task.id,
+          element
+        )
+      })
+    }
     if (editTask.status != '500' && editTask.status != '404') {
       taskManager.editTask(editTask.id, editTask)
       emits('showGreenPopup', {
@@ -302,17 +316,32 @@ const selectFiles = (event) => {
   }
 
   // Update error messages reactively
-  errorMessages.value = errors
+  // errorMessages.value = errors
   // deClareemit('errorMessage', errors)
   // // Clear messages after 3 seconds
-  if (errors.length > 0) {
-    setTimeout(() => {
-      errorMessages.value = []
-    }, 3000)
-  }
+  // if (errors.length > 0) {
+  //   setTimeout(() => {
+  //     errorMessages.value = []
+  //   }, 3000)
+  // }
 }
 const removeAttachment = function (index) {
   attachments.value.splice(index, 1)
+}
+
+const removeAttachmentList = function (id, name, type, indexClick) {
+  const pushData = id + '_' + name + '.' + type
+  console.log(pushData)
+  const index = removeList.indexOf(pushData)
+  if (index !== -1) {
+    removeList.splice(index, 1)
+    clickedIndex.value.splice(index, 1)
+    console.log(clickedIndex.value)
+    return
+  }
+  clickedIndex.value.push(indexClick)
+  removeList.push(pushData)
+  console.log(clickedIndex.value)
 }
 </script>
 
@@ -455,19 +484,6 @@ const removeAttachment = function (index) {
               <div class="flex items-center pl-4 mt-4 space-x-2">
                 <span
                   >Attachments :
-                  <button
-                    @click="$refs.fileInput.click()"
-                    class="bg-blue-500 text-white px-4 py-2 rounded"
-                  >
-                    Add Files
-                  </button>
-                  <input
-                    ref="fileInput"
-                    type="file"
-                    multiple
-                    class="hidden"
-                    @change="selectFiles"
-                  />
                   <ul>
                     <li
                       v-for="(file, index) in task.taskAttachments"
@@ -476,7 +492,7 @@ const removeAttachment = function (index) {
                     >
                       <span>{{ index + 1 }}. {{ file.name }}</span>
                       <div
-                        v-if="file.type == 'jpg'"
+                        v-if="file.type == 'jpg' || 'png'"
                         class="flex items-center space-x-2"
                       >
                         <img
@@ -486,8 +502,19 @@ const removeAttachment = function (index) {
                         />
                       </div>
                       <div
-                        @click="removeAttachment(index)"
-                        class="cursor-pointer text-blue-500"
+                        :class="{
+                          'text-blue-500': clickedIndex.value != index,
+                          'text-red-500': clickedIndex.value == index
+                        }"
+                        @click="
+                          removeAttachmentList(
+                            file.id,
+                            file.name,
+                            file.type
+                            // index
+                          )
+                        "
+                        class="cursor-pointer"
                       >
                         <u>Remove</u>
                       </div>
@@ -498,18 +525,32 @@ const removeAttachment = function (index) {
               <ul class="flex items-center justify-between">
                 <li v-for="(file, index) in attachments" :key="index">
                   {{ index + 1 }}. {{ file.name }}
-                  <div @click="removeAttachment(index)" class="cursor-pointer">
-                    ❌
-                  </div>
+                  <div @click="removeAttachment(index)">❌</div>
                 </li>
               </ul>
+
+              <div class="mt-4">
+                <button
+                  @click="$refs.fileInput.click()"
+                  class="bg-blue-500 text-white px-4 py-2 rounded"
+                >
+                  Add Files
+                </button>
+                <input
+                  ref="fileInput"
+                  type="file"
+                  multiple
+                  class="hidden"
+                  @change="selectFiles"
+                />
+              </div>
 
               <div class="h-[43px] pl-4 mt-4">
                 <!-- แสดงข้อความ Error -->
                 <div v-if="errorMessages.length > 0" class="text-red-600 mt-4">
                   <ul>
                     <li v-for="(message, index) in errorMessages" :key="index">
-                      {{ index + 1 }}. {{ message }}
+                      {{ message }}
                     </li>
                   </ul>
                 </div>
@@ -568,7 +609,7 @@ const removeAttachment = function (index) {
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
             :class="{ disabled: !task.taskTitle }"
             @click="handleClick"
-            :disabled="task.taskTitle == null || errorMessages.length > 0"
+            :disabled="task.taskTitle == null"
           >
             save
           </button>
