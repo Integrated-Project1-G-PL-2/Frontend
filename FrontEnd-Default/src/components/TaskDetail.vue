@@ -316,14 +316,14 @@ const selectFiles = (event) => {
   }
 
   // Update error messages reactively
-  // errorMessages.value = errors
+  errorMessages.value = errors
   // deClareemit('errorMessage', errors)
   // // Clear messages after 3 seconds
-  // if (errors.length > 0) {
-  //   setTimeout(() => {
-  //     errorMessages.value = []
-  //   }, 3000)
-  // }
+  if (errors.length > 0) {
+    setTimeout(() => {
+      errorMessages.value = []
+    }, 3000)
+  }
 }
 const removeAttachment = function (index) {
   attachments.value.splice(index, 1)
@@ -484,6 +484,20 @@ const removeAttachmentList = function (id, name, type, indexClick) {
               <div class="flex items-center pl-4 mt-4 space-x-2">
                 <span
                   >Attachments :
+
+                  <button
+                    @click="$refs.fileInput.click()"
+                    class="bg-blue-500 text-white px-4 py-2 rounded"
+                  >
+                    Add Files
+                  </button>
+                  <input
+                    ref="fileInput"
+                    type="file"
+                    multiple
+                    class="hidden"
+                    @change="selectFiles"
+                  />
                   <ul>
                     <li
                       v-for="(file, index) in task.taskAttachments"
@@ -529,7 +543,7 @@ const removeAttachmentList = function (id, name, type, indexClick) {
                 </li>
               </ul>
 
-              <div class="mt-4">
+              <!-- <div class="mt-4">
                 <button
                   @click="$refs.fileInput.click()"
                   class="bg-blue-500 text-white px-4 py-2 rounded"
@@ -543,14 +557,14 @@ const removeAttachmentList = function (id, name, type, indexClick) {
                   class="hidden"
                   @change="selectFiles"
                 />
-              </div>
+              </div> -->
 
               <div class="h-[43px] pl-4 mt-4">
                 <!-- แสดงข้อความ Error -->
                 <div v-if="errorMessages.length > 0" class="text-red-600 mt-4">
                   <ul>
                     <li v-for="(message, index) in errorMessages" :key="index">
-                      {{ message }}
+                      {{ index + 1 }}. {{ message }}
                     </li>
                   </ul>
                 </div>
@@ -609,7 +623,7 @@ const removeAttachmentList = function (id, name, type, indexClick) {
             class="itbkk-button-confirm bg-green-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
             :class="{ disabled: !task.taskTitle }"
             @click="handleClick"
-            :disabled="task.taskTitle == null"
+            :disabled="task.taskTitle == null || errorMessages.length > 0"
           >
             save
           </button>
