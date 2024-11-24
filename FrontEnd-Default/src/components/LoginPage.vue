@@ -131,6 +131,11 @@ const handleMSIPLogin = async () => {
     console.error('Login failed:', error)
   }
 }
+// const handleMSIPLogin = () => {
+//   const loginUrl = 'http://localhost:8080/api/auth/login'; // Backend endpoint
+//   window.location.href = loginUrl;
+// };
+
 // const handleMicrosoftLogin = async (authorizationCode) => {
 //   try {
 //     const response = await fetch('http://localhost:8080/callback/login', {
