@@ -568,11 +568,9 @@ const removeAttachmentList = function (id, name, type, indexClick) {
 
               <!-- แสดงข้อความ Error -->
               <div v-if="errorMessages.length > 0" class="text-red-600 mt-4">
-                <ul>
-                  <li v-for="(message, index) in errorMessages" :key="index">
-                    {{ index + 1 }}. {{ message }}
-                  </li>
-                </ul>
+                <li v-for="(message, index) in errorMessages" :key="index">
+                  {{ message }}
+                </li>
 
                 <!-- <button
                   v-if="prop.operate == 'edit' && haveFiles"
