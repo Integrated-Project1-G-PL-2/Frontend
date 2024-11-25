@@ -331,7 +331,7 @@ const removeAttachment = function (index) {
 
 const removeAttachmentList = function (id, name, type, indexClick) {
   const pushData = id + '_' + name + '.' + type
-  console.log(pushData)
+  console.log(indexClick)
   const index = removeList.indexOf(pushData)
   if (index !== -1) {
     removeList.splice(index, 1)
@@ -516,19 +516,18 @@ const removeAttachmentList = function (id, name, type, indexClick) {
                         />
                       </div>
                       <div
-                        :class="{
-                          'text-blue-500': clickedIndex.value != index,
-                          'text-red-500': clickedIndex.value == index
+                        :class="{                      
+                          'text-red-500': clickedIndex.includes(index)
                         }"
                         @click="
                           removeAttachmentList(
                             file.id,
                             file.name,
-                            file.type
-                            // index
+                            file.type,
+                            index
                           )
                         "
-                        class="cursor-pointer scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
+                        class="text-blue-500 cursor-pointer scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
                       >
                         <u>Remove</u>
                       </div>

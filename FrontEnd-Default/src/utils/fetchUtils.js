@@ -1,7 +1,6 @@
 import { refreshToken } from '@/stores/UserManager'
 
 async function fetchWithAuth(url, options, router) {
-  console.log(options)
   const token = localStorage.getItem('jwt')
   if (token) {
     options.headers = {
