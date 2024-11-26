@@ -179,7 +179,8 @@ const handleClick = async () => {
     }
     emits('showTaskDetailModal', false)
   } else if (prop.operate == 'edit') {
-    const file = Array.from(fileInput.value?.files)
+    const file = Array.from(attachments.value)
+    console.log(file)
     addOrUpdateTaskDetail.status = statusManager.findStatusByName(
       task.taskStatus
     ).id
@@ -319,6 +320,7 @@ const selectFiles = (event) => {
   }
   else {
     attachments.value.push(...newFiles)
+    console.log(  attachments.value)
   }
 
   // Update error messages reactively
