@@ -369,12 +369,12 @@ const selectFiles = (event) => {
   }
   // Update error messages reactively
   errorMessages.value = errors
-  // deClareemit('errorMessage', errors)
-  // Clear messages after 3 seconds
+
+  // Clear messages after 5 seconds if there are errors
   if (errors.length > 0) {
     setTimeout(() => {
       errorMessages.value = []
-    }, 5000)
+    }, 5000) // Clear after 5 seconds
   }
 }
 const removeAttachment = function (index) {
