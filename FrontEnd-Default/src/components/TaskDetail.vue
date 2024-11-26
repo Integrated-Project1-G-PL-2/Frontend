@@ -301,10 +301,10 @@ const selectFiles = (event) => {
 
   // Check if files already exist in task.taskAttachments
   const newFilesInTask = newFiles.filter(
-    (file) => !task.taskAttachments.some((att) => att.name === file.name)
+    (file) => !task.taskAttachments.value.some((att) => att.name === file.name)
   )
   const existingFilesInTask = newFiles.filter((file) =>
-    task.taskAttachments.some((att) => att.name === file.name)
+    task.taskAttachments.value.some((att) => att.name === file.name)
   )
 
   if (existingFilesInTask.length > 0) {
