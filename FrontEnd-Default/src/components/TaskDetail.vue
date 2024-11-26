@@ -312,71 +312,33 @@ const selectFiles = (event) => {
         .join(', ')}`
     )
   }
+
+  // Check for unsupported file types
   if (unSupportedTypes.includes(selectedFiles[0].type)) {
     errors.push(`You can't upload this ${selectedFiles[0].type} file type`)
   } else {
     attachments.value.push(...newFiles)
     console.log(attachments.value)
   }
-  // Check for errors in `task.taskAttachments`
-  const oversizedTaskAttachments = task.taskAttachments.filter(
-    (attachment) => attachment.size > MAX_FILE_SIZE_BYTES
-  )
-  if (oversizedTaskAttachments.length > 0) {
+
+  // Check task attachments if it exists
+  if (task.taskAttachments && task.taskAttachments.length > 0) {
     errors.push(
-      `Each file must be under ${MAX_FILE_SIZE_MB} MB. The following files in task attachments exceed the size limit: ${oversizedTaskAttachments
-        .map((file) => file.name)
-        .join(', ')}`
-    )
-  }
-  const duplicateTaskAttachments = task.taskAttachments.filter((attachment) =>
-    validFiles.some((file) => file.name === attachment.name)
-  )
-  if (duplicateTaskAttachments.length > 0) {
-    errors.push(
-      `File with the same filename cannot be added to task attachments. The following files already exist: ${duplicateTaskAttachments
-        .map((attachment) => attachment.name)
-        .join(', ')}`
+      `Task already has attachments. Please ensure you are adding new files instead of duplicates or updating existing ones.`
     )
   }
 
-  const unsupportedTaskAttachments = task.taskAttachments.filter((attachment) =>
-    unSupportedTypes.includes(attachment.type)
-  )
-  if (unsupportedTaskAttachments.length > 0) {
-    errors.push(
-      `You can't upload this file types in task attachments: ${unsupportedTaskAttachments
-        .map((attachment) => attachment.name)
-        .join(', ')}`
-    )
-  }
-  const totalTaskAttachments = task.taskAttachments.length + newFiles.length
-  if (totalTaskAttachments > MAX_FILES) {
-    const allowedTaskAttachments = newFiles.slice(
-      0,
-      MAX_FILES - task.taskAttachments.length
-    )
-    const excessTaskAttachments = newFiles.slice(
-      MAX_FILES - task.taskAttachments.length
-    )
-
-    task.taskAttachments.push(...allowedTaskAttachments)
-    errors.push(
-      `Each task can have a maximum of ${MAX_FILES} files. The following files in task attachments were not added due to the file count limit: ${excessTaskAttachments
-        .map((file) => file.name)
-        .join(', ')}`
-    )
-  }
   // Update error messages reactively
   errorMessages.value = errors
 
-  // Clear messages after 5 seconds if there are errors
+  // Clear messages after 5 seconds
   if (errors.length > 0) {
     setTimeout(() => {
       errorMessages.value = []
-    }, 5000) // Clear after 5 seconds
+    }, 5000)
   }
 }
+
 const removeAttachment = function (index) {
   attachments.value.splice(index, 1)
 }
