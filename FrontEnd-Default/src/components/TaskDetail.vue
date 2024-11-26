@@ -345,7 +345,7 @@ const selectFiles = (event) => {
   )
   if (unsupportedTaskAttachments.length > 0) {
     errors.push(
-      `Unsupported file types in task attachments: ${unsupportedTaskAttachments
+      `You can't upload this file types in task attachments: ${unsupportedTaskAttachments
         .map((attachment) => attachment.name)
         .join(', ')}`
     )
