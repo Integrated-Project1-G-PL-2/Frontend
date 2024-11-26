@@ -350,6 +350,23 @@ const selectFiles = (event) => {
         .join(', ')}`
     )
   }
+  const totalTaskAttachments = task.taskAttachments.length + newFiles.length
+  if (totalTaskAttachments > MAX_FILES) {
+    const allowedTaskAttachments = newFiles.slice(
+      0,
+      MAX_FILES - task.taskAttachments.length
+    )
+    const excessTaskAttachments = newFiles.slice(
+      MAX_FILES - task.taskAttachments.length
+    )
+
+    task.taskAttachments.push(...allowedTaskAttachments)
+    errors.push(
+      `Each task can have a maximum of ${MAX_FILES} files. The following files in task attachments were not added due to the file count limit: ${excessTaskAttachments
+        .map((file) => file.name)
+        .join(', ')}`
+    )
+  }
   // Update error messages reactively
   errorMessages.value = errors
   // deClareemit('errorMessage', errors)
