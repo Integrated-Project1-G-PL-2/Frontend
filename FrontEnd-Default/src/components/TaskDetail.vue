@@ -267,11 +267,6 @@ const selectFiles = (event) => {
   // Reset error messages before new selection
   let errors = []
 
-  // Ensure task.taskAttachments is defined and is an array
-  const taskAttachments = Array.isArray(task.taskAttachments.value)
-    ? task.taskAttachments.value
-    : []
-
   // Check for oversized files and filter them out
   const validFiles = selectedFiles.filter(
     (file) => file.size <= MAX_FILE_SIZE_BYTES
@@ -304,32 +299,13 @@ const selectFiles = (event) => {
     )
   }
 
-  // Check if files already exist in task.taskAttachments
-  const newFilesInTask = newFiles.filter(
-    (file) => !taskAttachments.some((att) => att.name === file.name)
-  )
-  const existingFilesInTask = newFiles.filter((file) =>
-    taskAttachments.some((att) => att.name === file.name)
-  )
-
-  if (existingFilesInTask.length > 0) {
-    errors.push(
-      `The following files already exist in the task and cannot be added again: ${existingFilesInTask
-        .map((file) => file.name)
-        .join(', ')}`
-    )
-  }
-
   // Check file count limit
-  const totalFiles = attachments.value.length + newFilesInTask.length
-  if (totalFiles > MAX_FILES) {
-    const allowedFiles = newFilesInTask.slice(
-      0,
-      MAX_FILES - attachments.value.length
-    )
-    const excessFiles = newFilesInTask.slice(
-      MAX_FILES - attachments.value.length
-    )
+  const currentFileCount = attachments.value.length
+  const remainingSlots = MAX_FILES - currentFileCount
+
+  if (newFiles.length > remainingSlots) {
+    const allowedFiles = newFiles.slice(0, remainingSlots)
+    const excessFiles = newFiles.slice(remainingSlots)
 
     attachments.value.push(...allowedFiles)
     errors.push(
@@ -337,19 +313,27 @@ const selectFiles = (event) => {
         .map((file) => file.name)
         .join(', ')}`
     )
+  } else {
+    attachments.value.push(...newFiles)
   }
 
-  if (unSupportedTypes.includes(selectedFiles[0].type)) {
-    errors.push(`You can't upload this ${selectedFiles[0].type} file type`)
-  } else {
-    attachments.value.push(...newFilesInTask)
-    console.log(attachments.value)
+  // Unsupported file types check
+  const unsupportedFiles = selectedFiles.filter((file) =>
+    unSupportedTypes.includes(file.type)
+  )
+
+  if (unsupportedFiles.length > 0) {
+    errors.push(
+      `The following files have unsupported types and were not added: ${unsupportedFiles
+        .map((file) => file.name)
+        .join(', ')}`
+    )
   }
 
   // Update error messages reactively
   errorMessages.value = errors
 
-  // Clear messages after 3 seconds
+  // Clear messages after 5 seconds
   if (errors.length > 0) {
     setTimeout(() => {
       errorMessages.value = []
