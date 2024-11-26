@@ -28,7 +28,7 @@ const prop = defineProps({
   taskDetail: Object,
   operate: String
 })
-const supportedTypes = ['pdf', 'image','png'];
+const supportedTypes = ['pdf', 'image', 'png']
 const unSupportedTypes = ['application/x-msdownload']
 const boardManager = useBoardManager()
 let task
@@ -201,7 +201,7 @@ const handleClick = async () => {
       })
     }
     if (editTask.status != '500' && editTask.status != '404') {
-      console.log(editTask);
+      console.log(editTask)
       taskManager.editTask(editTask.id, editTask)
       emits('showGreenPopup', {
         taskTitle: editTask.title,
@@ -245,7 +245,6 @@ const attachments = ref([])
 const errorMessages = ref([])
 // Function to handle attachment click based on file type
 function handleAttachmentClick(attachment) {
-
   if (supportedTypes.includes(attachment.type)) {
     // Open file in a new tab if supported by browser
     window.open(attachment.url, '_blank')
@@ -313,16 +312,44 @@ const selectFiles = (event) => {
         .join(', ')}`
     )
   }
-  if(unSupportedTypes.includes(selectedFiles[0].type)){
+  if (unSupportedTypes.includes(selectedFiles[0].type)) {
+    errors.push(`You can't upload this ${selectedFiles[0].type} file type`)
+  } else {
+    attachments.value.push(...newFiles)
+    console.log(attachments.value)
+  }
+  // Check for errors in `task.taskAttachments`
+  const oversizedTaskAttachments = task.taskAttachments.filter(
+    (attachment) => attachment.size > MAX_FILE_SIZE_BYTES
+  )
+  if (oversizedTaskAttachments.length > 0) {
     errors.push(
-      `You can't upload this ${selectedFiles[0].type} file type`
+      `Each file must be under ${MAX_FILE_SIZE_MB} MB. The following files in task attachments exceed the size limit: ${oversizedTaskAttachments
+        .map((file) => file.name)
+        .join(', ')}`
     )
   }
-  else {
-    attachments.value.push(...newFiles)
-    console.log(  attachments.value)
+  const duplicateTaskAttachments = task.taskAttachments.filter((attachment) =>
+    validFiles.some((file) => file.name === attachment.name)
+  )
+  if (duplicateTaskAttachments.length > 0) {
+    errors.push(
+      `File with the same filename cannot be added to task attachments. The following files already exist: ${duplicateTaskAttachments
+        .map((attachment) => attachment.name)
+        .join(', ')}`
+    )
   }
 
+  const unsupportedTaskAttachments = task.taskAttachments.filter((attachment) =>
+    unSupportedTypes.includes(attachment.type)
+  )
+  if (unsupportedTaskAttachments.length > 0) {
+    errors.push(
+      `Unsupported file types in task attachments: ${unsupportedTaskAttachments
+        .map((attachment) => attachment.name)
+        .join(', ')}`
+    )
+  }
   // Update error messages reactively
   errorMessages.value = errors
   // deClareemit('errorMessage', errors)
@@ -496,6 +523,7 @@ const removeAttachmentList = function (id, name, type, indexClick) {
                   <button
                     @click="$refs.fileInput.click()"
                     class="bg-blue-500 text-white px-4 py-2 rounded"
+                    :disabled="task.taskAttachments.length > 10"
                   >
                     Add Files
                   </button>
@@ -514,7 +542,7 @@ const removeAttachmentList = function (id, name, type, indexClick) {
                     >
                       <span>{{ index + 1 + '.' }} {{ file.name }}</span>
                       <div
-                        v-if="file.type == 'jpg' || file.type =='png'"
+                        v-if="file.type == 'jpg' || file.type == 'png'"
                         class="flex items-center space-x-2"
                       >
                         <img
@@ -524,7 +552,7 @@ const removeAttachmentList = function (id, name, type, indexClick) {
                         />
                       </div>
                       <div
-                        :class="{                      
+                        :class="{
                           'text-red-500': clickedIndex.includes(index)
                         }"
                         @click="
