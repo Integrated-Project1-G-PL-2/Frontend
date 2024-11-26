@@ -267,6 +267,11 @@ const selectFiles = (event) => {
   // Reset error messages before new selection
   let errors = []
 
+  // Ensure task.taskAttachments is defined and is an array
+  const taskAttachments = Array.isArray(task.taskAttachments.value)
+    ? task.taskAttachments.value
+    : []
+
   // Check for oversized files and filter them out
   const validFiles = selectedFiles.filter(
     (file) => file.size <= MAX_FILE_SIZE_BYTES
@@ -301,10 +306,10 @@ const selectFiles = (event) => {
 
   // Check if files already exist in task.taskAttachments
   const newFilesInTask = newFiles.filter(
-    (file) => !task.taskAttachments.value.some((att) => att.name === file.name)
+    (file) => !taskAttachments.some((att) => att.name === file.name)
   )
   const existingFilesInTask = newFiles.filter((file) =>
-    task.taskAttachments.value.some((att) => att.name === file.name)
+    taskAttachments.some((att) => att.name === file.name)
   )
 
   if (existingFilesInTask.length > 0) {
