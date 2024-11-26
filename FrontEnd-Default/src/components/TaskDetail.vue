@@ -267,45 +267,70 @@ const selectFiles = (event) => {
   // Reset error messages before new selection
   let errors = []
 
-  // Check for oversized files and filter them out
-  const validFiles = selectedFiles.filter(
-    (file) => file.size <= MAX_FILE_SIZE_BYTES
-  )
-  const oversizedFiles = selectedFiles.filter(
-    (file) => file.size > MAX_FILE_SIZE_BYTES
-  )
+  // Check oversized files in both selected files and task.taskAttachments
+  const oversizedFiles = [
+    ...selectedFiles.filter((file) => file.size > MAX_FILE_SIZE_BYTES),
+    ...task.taskAttachments.filter((file) => file.size > MAX_FILE_SIZE_BYTES)
+  ]
 
   if (oversizedFiles.length > 0) {
     errors.push(
-      `Each file must be under ${MAX_FILE_SIZE_MB} MB. The following files exceed the size limit and were not added: ${oversizedFiles
+      `Each file must be under ${MAX_FILE_SIZE_MB} MB. The following files exceed the size limit: ${oversizedFiles
         .map((file) => file.name)
         .join(', ')}`
     )
   }
 
-  // Filter out duplicate files based on filename in attachments.value
-  const newFiles = validFiles.filter(
-    (file) => !attachments.value.some((att) => att.name === file.name)
-  )
-  const duplicateFiles = validFiles.filter((file) =>
-    attachments.value.some((att) => att.name === file.name)
-  )
+  // Filter out duplicate files based on filename in both attachments and task.taskAttachments
+  const duplicateFiles = [
+    ...selectedFiles.filter(
+      (file) =>
+        attachments.value.some((att) => att.name === file.name) ||
+        task.taskAttachments.some((att) => att.name === file.name)
+    )
+  ]
 
   if (duplicateFiles.length > 0) {
     errors.push(
-      `File with the same filename cannot be added or updated to the attachments. Please delete the attachment and add again to update the file: ${duplicateFiles
+      `File with the same filename cannot be added. Please delete the attachment and add again to update the file: ${duplicateFiles
         .map((file) => file.name)
         .join(', ')}`
     )
   }
 
+  // Unsupported file types check in both selected files and task.taskAttachments
+  const unsupportedFiles = [
+    ...selectedFiles.filter((file) => unSupportedTypes.includes(file.type)),
+    ...task.taskAttachments.filter((file) =>
+      unSupportedTypes.includes(file.type)
+    )
+  ]
+
+  if (unsupportedFiles.length > 0) {
+    errors.push(
+      `The following files have unsupported types: ${unsupportedFiles
+        .map((file) => file.name)
+        .join(', ')}`
+    )
+  }
+
+  // Add valid files to attachments
+  const validFiles = selectedFiles.filter(
+    (file) =>
+      file.size <= MAX_FILE_SIZE_BYTES &&
+      !attachments.value.some((att) => att.name === file.name) &&
+      !task.taskAttachments.some((att) => att.name === file.name) &&
+      !unSupportedTypes.includes(file.type)
+  )
+
   // Check file count limit
-  const currentFileCount = attachments.value.length
+  const currentFileCount =
+    attachments.value.length + task.taskAttachments.length
   const remainingSlots = MAX_FILES - currentFileCount
 
-  if (newFiles.length > remainingSlots) {
-    const allowedFiles = newFiles.slice(0, remainingSlots)
-    const excessFiles = newFiles.slice(remainingSlots)
+  if (validFiles.length > remainingSlots) {
+    const allowedFiles = validFiles.slice(0, remainingSlots)
+    const excessFiles = validFiles.slice(remainingSlots)
 
     attachments.value.push(...allowedFiles)
     errors.push(
@@ -314,20 +339,7 @@ const selectFiles = (event) => {
         .join(', ')}`
     )
   } else {
-    attachments.value.push(...newFiles)
-  }
-
-  // Unsupported file types check
-  const unsupportedFiles = selectedFiles.filter((file) =>
-    unSupportedTypes.includes(file.type)
-  )
-
-  if (unsupportedFiles.length > 0) {
-    errors.push(
-      `The following files have unsupported types and were not added: ${unsupportedFiles
-        .map((file) => file.name)
-        .join(', ')}`
-    )
+    attachments.value.push(...validFiles)
   }
 
   // Update error messages reactively
