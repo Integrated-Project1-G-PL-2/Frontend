@@ -283,7 +283,7 @@ const selectFiles = (event) => {
     )
   }
 
-  // Filter out duplicate files based on filename
+  // Filter out duplicate files based on filename in attachments.value
   const newFiles = validFiles.filter(
     (file) => !attachments.value.some((att) => att.name === file.name)
   )
@@ -299,11 +299,32 @@ const selectFiles = (event) => {
     )
   }
 
+  // Check if files already exist in task.taskAttachments
+  const newFilesInTask = newFiles.filter(
+    (file) => !task.taskAttachments.some((att) => att.name === file.name)
+  )
+  const existingFilesInTask = newFiles.filter((file) =>
+    task.taskAttachments.some((att) => att.name === file.name)
+  )
+
+  if (existingFilesInTask.length > 0) {
+    errors.push(
+      `The following files already exist in the task and cannot be added again: ${existingFilesInTask
+        .map((file) => file.name)
+        .join(', ')}`
+    )
+  }
+
   // Check file count limit
-  const totalFiles = attachments.value.length + newFiles.length
+  const totalFiles = attachments.value.length + newFilesInTask.length
   if (totalFiles > MAX_FILES) {
-    const allowedFiles = newFiles.slice(0, MAX_FILES - attachments.value.length)
-    const excessFiles = newFiles.slice(MAX_FILES - attachments.value.length)
+    const allowedFiles = newFilesInTask.slice(
+      0,
+      MAX_FILES - attachments.value.length
+    )
+    const excessFiles = newFilesInTask.slice(
+      MAX_FILES - attachments.value.length
+    )
 
     attachments.value.push(...allowedFiles)
     errors.push(
@@ -313,25 +334,17 @@ const selectFiles = (event) => {
     )
   }
 
-  // Check for unsupported file types
   if (unSupportedTypes.includes(selectedFiles[0].type)) {
     errors.push(`You can't upload this ${selectedFiles[0].type} file type`)
   } else {
-    attachments.value.push(...newFiles)
+    attachments.value.push(...newFilesInTask)
     console.log(attachments.value)
-  }
-
-  // Check task attachments if it exists
-  if (task.taskAttachments && task.taskAttachments.length > 0) {
-    errors.push(
-      `Task already has attachments. Please ensure you are adding new files instead of duplicates or updating existing ones.`
-    )
   }
 
   // Update error messages reactively
   errorMessages.value = errors
 
-  // Clear messages after 5 seconds
+  // Clear messages after 3 seconds
   if (errors.length > 0) {
     setTimeout(() => {
       errorMessages.value = []
