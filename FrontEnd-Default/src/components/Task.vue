@@ -922,9 +922,9 @@ const closeSameFilesAlter = function () {
                 class="cursor-default w-[95%] h-[90%] px-4 py-3 mx-4 my-2 bbg-white text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none italic"
               >
                 {{
-                  task.filesDataList == 0
+                  task.filesDataList?.length == 0
                     ? '-'
-                    : task.filesDataList
+                    : task.filesDataList?.length
                 }}
               </div>
             </div>

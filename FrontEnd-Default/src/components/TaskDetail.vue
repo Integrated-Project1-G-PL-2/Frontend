@@ -190,7 +190,6 @@ const handleClick = async () => {
       file,
       addOrUpdateTaskDetail
     )
-    console.log(removeList.length)
     if (removeList.length != 0) {
       console.log(removeList)
       removeList.forEach(async (element) => {
@@ -202,6 +201,7 @@ const handleClick = async () => {
       })
     }
     if (editTask.status != '500' && editTask.status != '404') {
+      console.log(editTask);
       taskManager.editTask(editTask.id, editTask)
       emits('showGreenPopup', {
         taskTitle: editTask.title,
@@ -514,7 +514,7 @@ const removeAttachmentList = function (id, name, type, indexClick) {
                     >
                       <span>{{ index + 1 + '.' }} {{ file.name }}</span>
                       <div
-                        v-if="file.type == 'jpg' || 'png'"
+                        v-if="file.type == 'jpg' || file.type =='png'"
                         class="flex items-center space-x-2"
                       >
                         <img
@@ -543,6 +543,7 @@ const removeAttachmentList = function (id, name, type, indexClick) {
                   </ul>
                 </span>
               </div>
+              <p>New upload file</p>
               <li
                 v-for="(file, index) in attachments"
                 :key="index"
