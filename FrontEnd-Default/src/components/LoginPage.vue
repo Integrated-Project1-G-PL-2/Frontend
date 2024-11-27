@@ -1,136 +1,125 @@
 <script setup>
-import { reactive, ref, computed } from 'vue'
-import AlertPopUp from './../components/AlertPopUp.vue'
-import { useRouter } from 'vue-router'
+import { reactive, ref, computed, onMounted } from "vue";
+import AlertPopUp from "./../components/AlertPopUp.vue";
+import { useRouter } from "vue-router";
 import {
   login,
   decodeJWT,
   useAuthGuard,
-  refreshToken
-} from '@/stores/UserManager'
-import msalInstance from '@/stores/Mlogin'
-const showTaskModal = ref(false)
-const username = ref('')
-const password = ref('')
-const isPasswordVisible = ref(false)
-const router = useRouter()
-const isUserNameOverLimit = ref(false)
-const isPasswordOverLimit = ref(false)
-const incorrect = ref(false)
-const error = ref(false)
-const trimmedUsername = computed(() => username.value.trim())
-const trimmedPassword = computed(() => password.value.trim())
-const MAX_USERNAME_LENGTH = 50
-const MAX_PASSWORD_LENGTH = 14
+  refreshToken,
+} from "@/stores/UserManager";
+import { msalInstance } from "@/stores/msalConfig";
+import { msalService } from "@/utils/msalService";
+const { loginMicrosoft, handleRedirect } = msalService();
+const showTaskModal = ref(false);
+const username = ref("");
+const password = ref("");
+const isPasswordVisible = ref(false);
+const router = useRouter();
+const isUserNameOverLimit = ref(false);
+const isPasswordOverLimit = ref(false);
+const incorrect = ref(false);
+const error = ref(false);
+const trimmedUsername = computed(() => username.value.trim());
+const trimmedPassword = computed(() => password.value.trim());
+const MAX_USERNAME_LENGTH = 50;
+const MAX_PASSWORD_LENGTH = 14;
 
 const handleLogin = async () => {
   const data = await login(
     {
       userName: trimmedUsername.value,
-      password: trimmedPassword.value
+      password: trimmedPassword.value,
     },
     router
-  )
+  );
 
-  if (data == '400' || data == '401') {
-    incorrect.value = true
-  } else if ((data != '400', data != '401')) {
-    error.value = true
+  if (data == "400" || data == "401") {
+    incorrect.value = true;
+  } else if ((data != "400", data != "401")) {
+    error.value = true;
   }
   // ตรวจสอบเงื่อนไขว่ามีโทเค็นหรือไม่
   if (data && data.access_token) {
-    const decodedToken = decodeJWT(data.access_token) // ถอดรหัส JWT เพื่อตรวจสอบข้อมูล
+    const decodedToken = decodeJWT(data.access_token); // ถอดรหัส JWT เพื่อตรวจสอบข้อมูล
     // console.log('Decoded JWT:', decodedToken) // แสดงข้อมูล JWT ที่ถอดรหัสใน console
 
     // ตรวจสอบว่าค่าที่กรอกมาตรงกับข้อมูลใน JWT หรือไม่
     if (decodedToken.payload.sub === trimmedUsername.value) {
       // เปลี่ยนเส้นทางไปยังหน้า 'Task' และแสดง modal
       // เรียก useAuthGuard เพื่อเริ่มต้นการตรวจสอบ token
-      useAuthGuard(router)
-      router.replace({ name: 'Board' })
-      showTaskModal.value = true
+      useAuthGuard(router);
+      router.replace({ name: "Board" });
+      showTaskModal.value = true;
     } else {
       // If no access token is present, try refreshing the token
-      const newAccessToken = await refreshToken(router)
+      const newAccessToken = await refreshToken(router);
 
       if (newAccessToken) {
-        const decodedToken = decodeJWT(newAccessToken) // ถอดรหัส JWT เพื่อตรวจสอบข้อมูล
+        const decodedToken = decodeJWT(newAccessToken); // ถอดรหัส JWT เพื่อตรวจสอบข้อมูล
 
         if (decodedToken.payload.sub === trimmedUsername.value) {
           // เปลี่ยนเส้นทางไปยังหน้า 'Task' และแสดง modal
-          useAuthGuard(router)
-          router.replace({ name: 'Board' })
-          showTaskModal.value = true
+          useAuthGuard(router);
+          router.replace({ name: "Board" });
+          showTaskModal.value = true;
         }
       } else {
         // Handle the case where refreshing the token fails
-        error.value = true
+        error.value = true;
       }
     }
   }
-}
+};
 const closeIncorrectAlter = () => {
-  incorrect.value = false
-}
+  incorrect.value = false;
+};
 const closeProblemAlter = () => {
-  error.value = false
-}
+  error.value = false;
+};
 
 const checkUserNameLength = () => {
   if (trimmedUsername.value.length > MAX_USERNAME_LENGTH) {
-    isUserNameOverLimit.value = true
-    username.value = trimmedUsername.value.substring(0, MAX_USERNAME_LENGTH)
+    isUserNameOverLimit.value = true;
+    username.value = trimmedUsername.value.substring(0, MAX_USERNAME_LENGTH);
     setTimeout(() => {
-      isUserNameOverLimit.value = false
-    }, 1000)
+      isUserNameOverLimit.value = false;
+    }, 1000);
   } else {
-    isUserNameOverLimit.value = false
+    isUserNameOverLimit.value = false;
   }
-}
+};
 
 const checkPasswordLength = () => {
   if (trimmedPassword.value.length > MAX_PASSWORD_LENGTH) {
-    isPasswordOverLimit.value = true
-    password.value = trimmedPassword.value.substring(0, MAX_PASSWORD_LENGTH)
+    isPasswordOverLimit.value = true;
+    password.value = trimmedPassword.value.substring(0, MAX_PASSWORD_LENGTH);
     setTimeout(() => {
-      isPasswordOverLimit.value = false
-    }, 1000)
+      isPasswordOverLimit.value = false;
+    }, 1000);
   } else {
-    isPasswordOverLimit.value = false
+    isPasswordOverLimit.value = false;
   }
-}
+};
 
 const togglePasswordVisibility = () => {
-  isPasswordVisible.value = !isPasswordVisible.value
-}
-const initializeMSAL = async () => {
+  isPasswordVisible.value = !isPasswordVisible.value;
+};
+const initialize = async () => {
   try {
-    await msalInstance.initialize()
-    console.log('MSAL initialized successfully')
+    await msalInstance.initialize();
   } catch (error) {
-    console.error('Error initializing MSAL:', error)
+    console.log("Initialization error", error);
   }
-}
+};
+onMounted(async () => {
+  await initialize();
+  await handleRedirect();
+});
 
-// Call the initialization function during app startup
-initializeMSAL()
 const handleMSIPLogin = async () => {
-  const router = useRouter()
-  try {
-    const loginResponse = await msalInstance.loginPopup({
-      scopes: ['User.Read']
-    })
-    console.log('Login successful:', loginResponse)
-
-    const account = msalInstance.getActiveAccount()
-    if (account) {
-      console.log('Account info:', account)
-      router.replace({ name: 'Board' })
-    }
-  } catch (error) {
-    console.error('Login failed:', error)
-  }
-}
+  await loginMicrosoft();
+};
 </script>
 
 <template>
@@ -266,7 +255,7 @@ const handleMSIPLogin = async () => {
             'disabled bg-gray-400 text-gray-200 cursor-not-allowed':
               trimmedUsername.length === 0 || trimmedPassword.length === 0,
             'bg-purple-500 hover:bg-purple-600 text-white':
-              trimmedUsername.length > 0 && trimmedPassword.length > 0
+              trimmedUsername.length > 0 && trimmedPassword.length > 0,
           }"
           class="itbkk-button-signin w-full py-2 rounded-md"
         >
