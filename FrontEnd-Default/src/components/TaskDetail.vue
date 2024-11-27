@@ -555,8 +555,7 @@ const downloadFile = function (url) {
                       </div>
                       <div
                         v-else-if="
-                          file.type ==='pdf' ||
-                          file.type == 'rtf'
+                          file.type ==='pdf'
                         "
                         class="flex items-center space-x-2"
                       >
