@@ -184,22 +184,24 @@ const handleClick = async () => {
     addOrUpdateTaskDetail.status = statusManager.findStatusByName(
       task.taskStatus
     ).id;
-    const editTask = await editItemWithFile(
-      `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
-      task.id,
-      file,
-      addOrUpdateTaskDetail
-    );
     if (removeList.length != 0) {
-      console.log(removeList);
       removeList.forEach(async (element) => {
         const fetchRemoveFile = await deleteFile(
           `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
           task.id,
           element
         );
+        console.log(fetchRemoveFile)
       });
     }
+    const editTask = await editItemWithFile(
+      `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
+      task.id,
+      file,
+      addOrUpdateTaskDetail
+    );
+    console.log(editTask)
+
     if (editTask.status != "500" && editTask.status != "404") {
       console.log(editTask);
       taskManager.editTask(editTask.id, editTask);

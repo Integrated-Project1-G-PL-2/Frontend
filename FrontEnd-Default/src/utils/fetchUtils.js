@@ -317,9 +317,8 @@ async function deleteFile(url, id,file,router ) {
   }
     const res = await fetchWithAuth(`${url}/${id}/file/${file}`, options, router)
     if (res.ok) {
-      return res.status
+      return await res.json()
     }
-    return null
   } catch (error) {
     console.error(`Network error: ${error}`)
     return null
