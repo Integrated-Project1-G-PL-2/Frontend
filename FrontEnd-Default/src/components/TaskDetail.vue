@@ -28,8 +28,6 @@ const prop = defineProps({
   taskDetail: Object,
   operate: String
 })
-const supportedTypes = ['pdf', 'image','png'];
-const unSupportedTypes = ['application/x-msdownload']
 const boardManager = useBoardManager()
 let task
 if (prop.taskDetail.value) {
@@ -244,6 +242,7 @@ const attachments = ref([])
 const errorMessages = ref([])
 // Function to handle attachment click based on file type
 function handleAttachmentClick(attachment) {
+  const supportedTypes = ['pdf', 'image'] // Types that can be displayed in the browser
 
   if (supportedTypes.includes(attachment.type)) {
     // Open file in a new tab if supported by browser
@@ -311,14 +310,9 @@ const selectFiles = (event) => {
         .map((file) => file.name)
         .join(', ')}`
     )
-  }
-  if(unSupportedTypes.includes(selectedFiles[0].type)){
-    errors.push(
-      `You can't upload this ${selectedFiles[0].type} file type`
-    )
-  }
-  else {
+  } else {
     attachments.value.push(...newFiles)
+    console.log(attachments.value)
   }
 
   // Update error messages reactively
@@ -328,7 +322,7 @@ const selectFiles = (event) => {
   if (errors.length > 0) {
     setTimeout(() => {
       errorMessages.value = []
-    }, 5000)
+    }, 3000)
   }
 }
 const removeAttachment = function (index) {
