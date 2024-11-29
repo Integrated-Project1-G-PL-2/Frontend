@@ -10,7 +10,7 @@ import {
 } from "@/stores/UserManager";
 import { msalInstance } from "@/stores/msalConfig";
 import { msalService } from "@/utils/msalService";
-const { loginMicrosoft, handleRedirect } = msalService();
+const { loginMicrosoft, handleRedirect, logout } = msalService();
 const showTaskModal = ref(false);
 const username = ref("");
 const password = ref("");
@@ -118,7 +118,10 @@ onMounted(async () => {
 });
 
 const handleMSIPLogin = async () => {
-  await loginMicrosoft();
+  // const loginUrl = "http://localhost:8080/login/microsoft";
+  // window.location.href = loginUrl;
+  // await loginMicrosoft();
+  logout();
 };
 </script>
 

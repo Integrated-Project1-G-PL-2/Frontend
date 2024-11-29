@@ -1,39 +1,48 @@
-<template></template>
+<template>callback</template>
 
 <script setup>
-import { onMounted } from "vue";
-onMounted(() => {
-  const fragment = new URL(window.location.href).hash.substring(1);
-  if (fragment) {
-    const params = new URLSearchParams(fragment);
-    const code = params.get("code");
-    console.log(code);
+import { msalService } from "../utils/msalService.js";
+const getCookie = (name) => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(";").shift();
+};
 
-    if (code) {
-      window.history.replaceState(null, null, window.location.pathname);
+const accessToken = getCookie("access_token");
+const refreshToken = getCookie("refresh_token");
 
-      fetch(`http://localhost:8080/callback/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ code }),
-      })
-        .then(async (response) => {
-          if (!response.ok) {
-            const error = await response.text();
-            throw new Error(`Server error: ${error}`);
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log("Token received:", data);
-          window.location.href = "/";
-        })
-        .catch((error) => {
-          console.error("Error handling code:", error);
-        });
-    }
-  }
-});
+console.log(accessToken);
+console.log(refreshToken);
+
+// const handleRedirect = async () => {
+//   const urlFragment = window.location.hash.substring(1); // Remove the leading #
+//   const fragmentParams = new URLSearchParams(urlFragment);
+//   const code = fragmentParams.get("code");
+//   console.log(code);
+
+//   if (code) {
+//     console.log("test");
+
+//     try {
+//       // Send the code to the backend for token exchange
+//       const response = await fetch("http://localhost:8080/callback/login", {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({ code }),
+//       });
+
+//       if (!response.ok) {
+//         throw new Error("Failed to exchange authorization code");
+//       }
+
+//       console.log("Tokens received from backend:", await response.json());
+//     } catch (error) {
+//       console.error("Error during token exchange:", error);
+//     }
+//   }
+// };
+
+// handleRedirect();
 </script>

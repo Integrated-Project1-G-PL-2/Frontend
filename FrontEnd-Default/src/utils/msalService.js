@@ -36,11 +36,16 @@ export function msalService() {
 
   const handleRedirect = async () => {
     try {
-      await msalInstance.handleRedirectPromise();
-      state.isAuthenticated = msalInstance.getAllAccounts().length > 0;
-      state.user = msalInstance.getAllAccounts()[0];
+      await msalInstance.handleRedirectPromise(); // Handles the redirect and processes tokens
+      const accounts = msalInstance.getAllAccounts();
+      state.isAuthenticated = accounts.length > 0;
+
+      if (state.isAuthenticated) {
+        state.user = accounts[0]; // Set the authenticated user's account
+        console.log("User logged in:", state.user);
+      }
     } catch (error) {
-      console.error("Redirect error:", error);
+      console.error("Error handling redirect:", error);
     }
   };
 
