@@ -118,10 +118,10 @@ onMounted(async () => {
 });
 
 const handleMSIPLogin = async () => {
-  // const loginUrl = "http://localhost:8080/login/microsoft";
-  // window.location.href = loginUrl;
-  // await loginMicrosoft();
-  logout();
+  const loginUrl = "http://localhost:8080/login/microsoft";
+  window.location.href = loginUrl;
+  await loginMicrosoft();
+  // logout();
 };
 </script>
 
