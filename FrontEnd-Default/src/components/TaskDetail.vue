@@ -76,6 +76,7 @@ const isAttachmentsOverLimit = ref(false);
 const isAttachmentsSizeOverLimit = ref(false);
 const clickedIndex = ref([]);
 const fileInput = ref(null);
+const attachmentLoop = task.taskAttachments
 const checkTitleLength = () => {
   isTitleOverLimit.value = task.taskTitle.length > 100;
 };
@@ -184,23 +185,25 @@ const handleClick = async () => {
     addOrUpdateTaskDetail.status = statusManager.findStatusByName(
       task.taskStatus
     ).id;
-    if (removeList.length != 0) {
-      removeList.forEach(async (element) => {
-        const fetchRemoveFile = await deleteFile(
-          `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
-          task.id,
-          element
-        );
-        console.log(fetchRemoveFile)
-      });
-    }
-    const editTask = await editItemWithFile(
+    console.log(removeList)
+    if (removeList.length !== 0) {
+  for (const element of removeList) {
+    await deleteFile(
       `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
       task.id,
-      file,
-      addOrUpdateTaskDetail
+      element
     );
-    console.log(editTask)
+    console.log("delete");
+  }
+}
+console.log(file);
+const editTask = await editItemWithFile(
+  `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
+  task.id,
+  file,
+  addOrUpdateTaskDetail
+);
+
 
     if (editTask.status != "500" && editTask.status != "404") {
       console.log(editTask);
@@ -245,19 +248,7 @@ const confirmDeleteAttachmentDetail = async function () {
 };
 const attachments = ref([]);
 const errorMessages = ref([]);
-// Function to handle attachment click based on file type
-function handleAttachmentClick(attachment) {
-  if (supportedTypes.includes(attachment.type)) {
-    // Open file in a new tab if supported by browser
-    window.open(attachment.url, "_blank");
-  } else {
-    // Otherwise, trigger download
-    const link = document.createElement("a");
-    link.href = attachment.url;
-    link.download = attachment.name;
-    link.click();
-  }
-}
+
 // ฟังก์ชันแสดงข้อความ error
 const displayErrorMessage = (messages) => {
   errorMessages.value = messages;
@@ -283,14 +274,16 @@ const selectFiles = (event) => {
     );
   }
 
+  function removeExtension(fileName) {
+  const lastDotIndex = fileName.lastIndexOf('.');
+  if (lastDotIndex === -1) return fileName; // No dot found, return the original name
+  return fileName.slice(0, lastDotIndex); // Return the part before the last dot
+}
   // Filter out duplicate files based on filename in both attachments and task.taskAttachments
-  const duplicateFiles = [
-    ...selectedFiles.filter(
-      (file) =>
-        attachments.value.some((att) => att.name === file.name) ||
-        task.taskAttachments.some((att) => att.name === file.name)
-    ),
-  ];
+  const duplicateFiles = selectedFiles.filter((file) =>
+  attachments.value.some((att) => removeExtension(att.name) === removeExtension(file.name)) ||
+  task.taskAttachments.some((att) => removeExtension(att.name) === removeExtension(file.name))
+);
 
   if (duplicateFiles.length > 0) {
     errors.push(
@@ -320,8 +313,8 @@ const selectFiles = (event) => {
   const validFiles = selectedFiles.filter(
     (file) =>
       file.size <= MAX_FILE_SIZE_BYTES &&
-      !attachments.value.some((att) => att.name === file.name) &&
-      !task.taskAttachments.some((att) => att.name === file.name) &&
+      !attachments.value.some((att) => removeExtension(att.name) === removeExtension(file.name)) &&
+      !task.taskAttachments.some((att) => removeExtension(att.name) === removeExtension(file.name)) &&
       !unSupportedTypes.includes(file.type)
   );
 
@@ -360,7 +353,13 @@ const removeAttachment = function (index) {
 };
 
 const removeAttachmentList = function (id, name, type, indexClick) {
-  const pushData = id + "_" + name + "." + type;
+  attachmentLoop.splice(indexClick, 1)
+  let pushData =  ''
+  if(type.length == 0){
+   pushData = id + "_" + name ;
+  } else {
+  pushData = id + "_" + name + "." + type;
+  }
   console.log(indexClick);
   const index = removeList.indexOf(pushData);
   if (index !== -1) {
@@ -381,6 +380,14 @@ const downloadFile = function (url) {
   link.click();
   link.remove();
 };
+const viewFile = function (url) {
+  const fileUrl = url;
+  const link = document.createElement("a");
+  link.href = fileUrl;
+  link.target = "_blank";
+  link.click();
+  link.remove();
+}
 
 </script>
 
@@ -527,7 +534,7 @@ const downloadFile = function (url) {
                   <button
                     @click="$refs.fileInput.click()"
                     class="bg-blue-500 text-white px-4 py-2 rounded"
-                    :disabled="task.taskAttachments.length > 10"
+                    :disabled="attachments.length + task.taskAttachments.length >= 10"
                   >
                     Add Files
                   </button>
@@ -540,7 +547,7 @@ const downloadFile = function (url) {
                   />
                   <ul>
                     <li
-                      v-for="(file, index) in task.taskAttachments"
+                      v-for="(file, index) in attachmentLoop"
                       :key="index"
                       class="flex items-center justify-between"
                     >
@@ -568,9 +575,6 @@ const downloadFile = function (url) {
                         ></iframe>
                       </div>
                       <div
-                        :class="{
-                          'text-red-500': clickedIndex.includes(index),
-                        }"
                         @click="
                           removeAttachmentList(
                             file.id,
@@ -589,6 +593,13 @@ const downloadFile = function (url) {
                         class="text-blue-500 cursor-pointer scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
                       >
                         <u>Download</u>
+                      </div>
+                      <div
+                        v-if="file.type == 'txt'"
+                        @click="viewFile(file.path)"
+                        class="text-blue-500 cursor-pointer scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
+                      >
+                        <u>View</u>
                       </div>
                     </li>
                   </ul>
