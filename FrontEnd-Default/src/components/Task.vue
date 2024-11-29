@@ -813,6 +813,7 @@ const closeSameFilesAlter = function () {
           :key="task.id"
           class="itbkk-item border-b cursor-pointer"
         >
+        kuy
           <td class="itbkk-button-action px-4 py-3">
             {{ index + 1 }}
             <div class="relative group">
