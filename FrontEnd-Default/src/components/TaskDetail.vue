@@ -145,81 +145,89 @@ onMounted(async () => {
 })
 
 const handleClick = async () => {
-  if (prop.operate == 'show') {
-    emits('showTaskDetailModal', false)
-    router.replace({ name: 'Task' })
-    return
-  }
-  const addOrUpdateTaskDetail = {
-    title: task.taskTitle?.length > 0 ? task.taskTitle : null,
-    assignees: task.taskAssignees?.length > 0 ? task.taskAssignees : null,
-    description: task.taskDescription?.length > 0 ? task.taskDescription : null
-  }
-  if (
-    isTitleOverLimit.value ||
-    isDescriptionOverLimit.value ||
-    isAssigneesOverLimit.value
-  ) {
-    return
-  }
-  if (prop.operate == 'add') {
-    addOrUpdateTaskDetail.status = statusManager.findStatusByName(
-      task.taskStatus
-    ).id
-    const newTask = await addItem(
-      `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
-      addOrUpdateTaskDetail
-    )
-    console.log(newTask)
-    router.replace({ name: 'Task' })
-    if (newTask.status != '500') {
-      taskManager.addTask(newTask)
-      emits('showGreenPopup', {
-        taskTitle: newTask.title,
-        operate: prop.operate
-      })
+  try {
+    emits('showLoadingScreen', true)
+    if (prop.operate == 'show') {
+      emits('showTaskDetailModal', false)
+      router.replace({ name: 'Task' })
+      return
     }
-    emits('showTaskDetailModal', false)
-  } else if (prop.operate == 'edit') {
-    const file = Array.from(attachments.value)
-    console.log(file)
-    addOrUpdateTaskDetail.status = statusManager.findStatusByName(
-      task.taskStatus
-    ).id
-    console.log(removeList)
-    if (removeList.length !== 0) {
-      for (const element of removeList) {
-        await deleteFile(
-          `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
-          task.id,
-          element
-        )
-        console.log('delete')
+    const addOrUpdateTaskDetail = {
+      title: task.taskTitle?.length > 0 ? task.taskTitle : null,
+      assignees: task.taskAssignees?.length > 0 ? task.taskAssignees : null,
+      description:
+        task.taskDescription?.length > 0 ? task.taskDescription : null
+    }
+    if (
+      isTitleOverLimit.value ||
+      isDescriptionOverLimit.value ||
+      isAssigneesOverLimit.value
+    ) {
+      return
+    }
+    if (prop.operate == 'add') {
+      addOrUpdateTaskDetail.status = statusManager.findStatusByName(
+        task.taskStatus
+      ).id
+      const newTask = await addItem(
+        `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
+        addOrUpdateTaskDetail
+      )
+      console.log(newTask)
+      router.replace({ name: 'Task' })
+      if (newTask.status != '500') {
+        taskManager.addTask(newTask)
+        emits('showGreenPopup', {
+          taskTitle: newTask.title,
+          operate: prop.operate
+        })
       }
-    }
-    console.log(file)
-    const editTask = await editItemWithFile(
-      `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
-      task.id,
-      file,
-      addOrUpdateTaskDetail
-    )
+      emits('showTaskDetailModal', false)
+    } else if (prop.operate == 'edit') {
+      const file = Array.from(attachments.value)
+      console.log(file)
+      addOrUpdateTaskDetail.status = statusManager.findStatusByName(
+        task.taskStatus
+      ).id
+      console.log(removeList)
+      if (removeList.length !== 0) {
+        for (const element of removeList) {
+          await deleteFile(
+            `${import.meta.env.VITE_BASE_URL}/v3/boards/${
+              route.params.id
+            }/tasks`,
+            task.id,
+            element
+          )
+          console.log('delete')
+        }
+      }
+      console.log(file)
+      const editTask = await editItemWithFile(
+        `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
+        task.id,
+        file,
+        addOrUpdateTaskDetail
+      )
 
-    if (editTask.status != '500' && editTask.status != '404') {
-      console.log(editTask)
-      taskManager.editTask(editTask.id, editTask)
-      emits('showGreenPopup', {
-        taskTitle: editTask.title,
-        operate: prop.operate
-      })
-    } else {
-      emits('showRedPopup', {
-        taskTitle: !editTask.title ? task.taskTitle : editTask.title,
-        operate: prop.operate
-      })
+      if (editTask.status != '500' && editTask.status != '404') {
+        console.log(editTask)
+        taskManager.editTask(editTask.id, editTask)
+        emits('showGreenPopup', {
+          taskTitle: editTask.title,
+          operate: prop.operate
+        })
+      } else {
+        emits('showRedPopup', {
+          taskTitle: !editTask.title ? task.taskTitle : editTask.title,
+          operate: prop.operate
+        })
+      }
+      router.replace({ name: 'Task' })
+      emits('showTaskDetailModal', false)
     }
-    router.replace({ name: 'Task' })
-    emits('showTaskDetailModal', false)
+  } finally {
+    deClareemit('showLoadingScreen', false) // Stop loading
   }
 }
 const showAddPopUpAttachmentsDetail = async function () {
