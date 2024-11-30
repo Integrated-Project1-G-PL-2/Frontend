@@ -28,7 +28,7 @@ import boardsList from './../components/BoardList.vue'
 import { useBoardManager } from '@/stores/BoardManager'
 import VisibilityChangedPopUp from './../components/VisibilityChangedPopUP.vue'
 import ChangeRemoveLeaveCollab from './../components/ChangeRemoveLeaveCollab.vue'
-
+import LoadingPopUp from './LoadingPopUp.vue'
 const statusManager = useStatusManager()
 const showStatusDetailModal = ref(false)
 const showCollabDetailModal = ref(false)

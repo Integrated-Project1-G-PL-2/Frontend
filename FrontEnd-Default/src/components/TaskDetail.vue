@@ -1,296 +1,300 @@
 <script setup>
-import { onMounted, reactive, ref } from "vue";
-import { useRouter, useRoute } from "vue-router";
-import { useTaskManager } from "@/stores/TaskManager";
+import { onMounted, reactive, ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { useTaskManager } from '@/stores/TaskManager'
 import {
   getItems,
   getItemById,
   addItem,
   editItem,
   editItemWithFile,
-  deleteFile,
-} from "@/utils/fetchUtils";
-import { useStatusManager } from "@/stores/StatusManager";
-import { useBoardManager } from "@/stores/BoardManager";
-import AttachmentsDetail from "./AttachmentsDetail.vue";
-import DeleteAttachment from "./DeleteAttachment.vue";
+  deleteFile
+} from '@/utils/fetchUtils'
+import { useStatusManager } from '@/stores/StatusManager'
+import { useBoardManager } from '@/stores/BoardManager'
+import AttachmentsDetail from './AttachmentsDetail.vue'
+import DeleteAttachment from './DeleteAttachment.vue'
 const emits = defineEmits([
-  "showTaskDetailModal",
-  "showRedPopup",
-  "showGreenPopup",
-]);
-const MAX_FILE_SIZE = ref();
-const taskManager = useTaskManager();
-const statusManager = useStatusManager();
-const router = useRouter();
-const route = useRoute();
+  'showTaskDetailModal',
+  'showRedPopup',
+  'showGreenPopup'
+])
+const MAX_FILE_SIZE = ref()
+const taskManager = useTaskManager()
+const statusManager = useStatusManager()
+const router = useRouter()
+const route = useRoute()
 const prop = defineProps({
   taskDetail: Object,
-  operate: String,
-});
-const supportedTypes = ["pdf", "image", "png"];
-const unSupportedTypes = ["application/x-msdownload"];
-const boardManager = useBoardManager();
-let task;
+  operate: String
+})
+const supportedTypes = ['pdf', 'image', 'png']
+const unSupportedTypes = ['application/x-msdownload']
+const boardManager = useBoardManager()
+let task
 if (prop.taskDetail.value) {
   task = reactive({
     createdOn: new Date(prop.taskDetail.value.createdOn)
-      .toLocaleString("en-GB")
-      .replace(",", ""),
+      .toLocaleString('en-GB')
+      .replace(',', ''),
     id: prop.taskDetail.value.id,
     taskAssignees:
       prop.taskDetail.value.assignees != null
         ? prop.taskDetail.value.assignees
-        : "",
+        : '',
     taskDescription:
       prop.taskDetail.value.description != null
         ? prop.taskDetail.value.description
-        : "",
+        : '',
     taskStatus: prop.taskDetail.value.status.name,
     taskTitle: prop.taskDetail.value.title,
     updatedOn: new Date(prop.taskDetail.value.updatedOn)
-      .toLocaleString("en-GB")
-      .replace(",", ""),
-    taskAttachments: prop.taskDetail.value.filesDataList,
-  });
+      .toLocaleString('en-GB')
+      .replace(',', ''),
+    taskAttachments: prop.taskDetail.value.filesDataList
+  })
 } else {
   task = reactive({
     createdOn: null,
     id: null,
-    taskAssignees: "Unassigned",
-    taskDescription: "No Description Provided",
+    taskAssignees: 'Unassigned',
+    taskDescription: 'No Description Provided',
     taskStatus: {},
-    taskAttachments: "-",
+    taskAttachments: '-',
     taskTitle: null,
-    updatedOn: null,
-  });
+    updatedOn: null
+  })
 }
-console.log(task);
-const showAttachmentsDetail = ref(false);
-const showDeleteAttachmentsDetail = ref(false);
-const taskSet = ref((task.taskStatus = "No Status"));
-const isTitleOverLimit = ref(false);
-const isDescriptionOverLimit = ref(false);
-const isAssigneesOverLimit = ref(false);
-const isAttachmentsOverLimit = ref(false);
-const isAttachmentsSizeOverLimit = ref(false);
-const clickedIndex = ref([]);
-const fileInput = ref(null);
+console.log(task)
+const showAttachmentsDetail = ref(false)
+const showDeleteAttachmentsDetail = ref(false)
+const taskSet = ref((task.taskStatus = 'No Status'))
+const isTitleOverLimit = ref(false)
+const isDescriptionOverLimit = ref(false)
+const isAssigneesOverLimit = ref(false)
+const isAttachmentsOverLimit = ref(false)
+const isAttachmentsSizeOverLimit = ref(false)
+const clickedIndex = ref([])
+const fileInput = ref(null)
 const attachmentLoop = task.taskAttachments
 const checkTitleLength = () => {
-  isTitleOverLimit.value = task.taskTitle.length > 100;
-};
+  isTitleOverLimit.value = task.taskTitle.length > 100
+}
 const checkDescriptionLength = () => {
-  isDescriptionOverLimit.value = task.taskDescription.length > 500;
-};
+  isDescriptionOverLimit.value = task.taskDescription.length > 500
+}
 const checkAssigneesLength = () => {
-  isAssigneesOverLimit.value = task.taskAssignees.length > 30;
-};
+  isAssigneesOverLimit.value = task.taskAssignees.length > 30
+}
 const checkAttachmentsLength = () => {
-  isAttachmentsOverLimit.value = task.taskAttachments >= 11;
-};
+  isAttachmentsOverLimit.value = task.taskAttachments >= 11
+}
 const checkAttachmentsSizeLength = () => {
-  isAttachmentsSizeOverLimit.value = task.taskAttachments >= 20;
-};
+  isAttachmentsSizeOverLimit.value = task.taskAttachments >= 20
+}
 
-const privateTask = ref();
-const boardOwner = ref();
-const thisUser = ref();
-const userName = ref();
-const boardVisibility = ref();
-const haveFiles = ref(false);
-const removeList = reactive([]);
+const privateTask = ref()
+const boardOwner = ref()
+const thisUser = ref()
+const userName = ref()
+const boardVisibility = ref()
+const haveFiles = ref(false)
+const removeList = reactive([])
 
-const MAX_FILES = 10;
-const MAX_FILE_SIZE_MB = 20;
-const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+const MAX_FILES = 10
+const MAX_FILE_SIZE_MB = 20
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024
 
 onMounted(async () => {
   const taskItems = await getItems(
     `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`
-  );
+  )
   const currentBoard = await getItemById(
     `${import.meta.env.VITE_BASE_URL}/v3/boards`,
     route.params.id
-  );
-  privateTask.value = taskItems;
+  )
+  privateTask.value = taskItems
   if (taskItems == 401) {
-    router.replace({ name: "Login" });
-    return;
+    router.replace({ name: 'Login' })
+    return
   }
-  boardManager.setCurrentBoard(currentBoard);
-  taskManager.setTasks(taskItems);
+  boardManager.setCurrentBoard(currentBoard)
+  taskManager.setTasks(taskItems)
   statusManager.setStatuses(
     await getItems(
       `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/statuses`
     )
-  );
-  const storedUserName = localStorage.getItem("userName");
+  )
+  const storedUserName = localStorage.getItem('userName')
   if (storedUserName) {
-    userName.value = storedUserName;
+    userName.value = storedUserName
   }
 
-  const board = boardManager.getCurrentBoard();
-  boardVisibility.value = board.visibility;
-  boardOwner.value = currentBoard.owner.name;
-  thisUser.value = storedUserName;
-  console.log(thisUser.value);
+  const board = boardManager.getCurrentBoard()
+  boardVisibility.value = board.visibility
+  boardOwner.value = currentBoard.owner.name
+  thisUser.value = storedUserName
+  console.log(thisUser.value)
   if (
-    boardVisibility.value == "PUBLIC" &&
+    boardVisibility.value == 'PUBLIC' &&
     thisUser.value !== boardOwner.value
   ) {
-    console.log("test");
+    console.log('test')
   }
-});
+})
 
 const handleClick = async () => {
-  if (prop.operate == "show") {
-    emits("showTaskDetailModal", false);
-    router.replace({ name: "Task" });
-    return;
+  if (prop.operate == 'show') {
+    emits('showTaskDetailModal', false)
+    router.replace({ name: 'Task' })
+    return
   }
   const addOrUpdateTaskDetail = {
     title: task.taskTitle?.length > 0 ? task.taskTitle : null,
     assignees: task.taskAssignees?.length > 0 ? task.taskAssignees : null,
-    description: task.taskDescription?.length > 0 ? task.taskDescription : null,
-  };
+    description: task.taskDescription?.length > 0 ? task.taskDescription : null
+  }
   if (
     isTitleOverLimit.value ||
     isDescriptionOverLimit.value ||
     isAssigneesOverLimit.value
   ) {
-    return;
+    return
   }
-  if (prop.operate == "add") {
+  if (prop.operate == 'add') {
     addOrUpdateTaskDetail.status = statusManager.findStatusByName(
       task.taskStatus
-    ).id;
+    ).id
     const newTask = await addItem(
       `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
       addOrUpdateTaskDetail
-    );
-    console.log(newTask);
-    router.replace({ name: "Task" });
-    if (newTask.status != "500") {
-      taskManager.addTask(newTask);
-      emits("showGreenPopup", {
+    )
+    console.log(newTask)
+    router.replace({ name: 'Task' })
+    if (newTask.status != '500') {
+      taskManager.addTask(newTask)
+      emits('showGreenPopup', {
         taskTitle: newTask.title,
-        operate: prop.operate,
-      });
+        operate: prop.operate
+      })
     }
-    emits("showTaskDetailModal", false);
-  } else if (prop.operate == "edit") {
-    const file = Array.from(attachments.value);
-    console.log(file);
+    emits('showTaskDetailModal', false)
+  } else if (prop.operate == 'edit') {
+    const file = Array.from(attachments.value)
+    console.log(file)
     addOrUpdateTaskDetail.status = statusManager.findStatusByName(
       task.taskStatus
-    ).id;
+    ).id
     console.log(removeList)
     if (removeList.length !== 0) {
-  for (const element of removeList) {
-    await deleteFile(
+      for (const element of removeList) {
+        await deleteFile(
+          `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
+          task.id,
+          element
+        )
+        console.log('delete')
+      }
+    }
+    console.log(file)
+    const editTask = await editItemWithFile(
       `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
       task.id,
-      element
-    );
-    console.log("delete");
+      file,
+      addOrUpdateTaskDetail
+    )
+
+    if (editTask.status != '500' && editTask.status != '404') {
+      console.log(editTask)
+      taskManager.editTask(editTask.id, editTask)
+      emits('showGreenPopup', {
+        taskTitle: editTask.title,
+        operate: prop.operate
+      })
+    } else {
+      emits('showRedPopup', {
+        taskTitle: !editTask.title ? task.taskTitle : editTask.title,
+        operate: prop.operate
+      })
+    }
+    router.replace({ name: 'Task' })
+    emits('showTaskDetailModal', false)
   }
 }
-console.log(file);
-const editTask = await editItemWithFile(
-  `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/tasks`,
-  task.id,
-  file,
-  addOrUpdateTaskDetail
-);
-
-
-    if (editTask.status != "500" && editTask.status != "404") {
-      console.log(editTask);
-      taskManager.editTask(editTask.id, editTask);
-      emits("showGreenPopup", {
-        taskTitle: editTask.title,
-        operate: prop.operate,
-      });
-    } else {
-      emits("showRedPopup", {
-        taskTitle: !editTask.title ? task.taskTitle : editTask.title,
-        operate: prop.operate,
-      });
-    }
-    router.replace({ name: "Task" });
-    emits("showTaskDetailModal", false);
-  }
-};
 const showAddPopUpAttachmentsDetail = async function () {
-  router.push({ name: "AddAttachmentsDetail" });
-  showAttachmentsDetail.value = true;
-};
+  router.push({ name: 'AddAttachmentsDetail' })
+  showAttachmentsDetail.value = true
+}
 const closeAttachmentDetail = async function () {
-  router.push({ name: "EditTaskDetail" });
-  showAttachmentsDetail.value = false;
-};
+  router.push({ name: 'EditTaskDetail' })
+  showAttachmentsDetail.value = false
+}
 const saveAttachmentDetail = async function () {
-  router.push({ name: "EditTaskDetail" });
-  showAttachmentsDetail.value = false;
-};
+  router.push({ name: 'EditTaskDetail' })
+  showAttachmentsDetail.value = false
+}
 const showDeletePopUpAttachmentsDetail = async function () {
-  router.push({ name: "DeleteAttachmentsDetail" });
-  showDeleteAttachmentsDetail.value = true;
-};
+  router.push({ name: 'DeleteAttachmentsDetail' })
+  showDeleteAttachmentsDetail.value = true
+}
 const closeDeleteAttachmentDetail = async function () {
-  router.push({ name: "EditTaskDetail" });
-  showDeleteAttachmentsDetail.value = false;
-};
+  router.push({ name: 'EditTaskDetail' })
+  showDeleteAttachmentsDetail.value = false
+}
 const confirmDeleteAttachmentDetail = async function () {
-  router.push({ name: "EditTaskDetail" });
-  showDeleteAttachmentsDetail.value = false;
-};
-const attachments = ref([]);
-const errorMessages = ref([]);
+  router.push({ name: 'EditTaskDetail' })
+  showDeleteAttachmentsDetail.value = false
+}
+const attachments = ref([])
+const errorMessages = ref([])
 
 // ฟังก์ชันแสดงข้อความ error
 const displayErrorMessage = (messages) => {
-  errorMessages.value = messages;
-};
+  errorMessages.value = messages
+}
 
 const selectFiles = (event) => {
-  const selectedFiles = Array.from(event.target.files);
+  const selectedFiles = Array.from(event.target.files)
 
   // Reset error messages before new selection
-  let errors = [];
+  let errors = []
 
   // Check oversized files in both selected files and task.taskAttachments
   const oversizedFiles = [
     ...selectedFiles.filter((file) => file.size > MAX_FILE_SIZE_BYTES),
-    ...task.taskAttachments.filter((file) => file.size > MAX_FILE_SIZE_BYTES),
-  ];
+    ...task.taskAttachments.filter((file) => file.size > MAX_FILE_SIZE_BYTES)
+  ]
 
   if (oversizedFiles.length > 0) {
     errors.push(
       `Each file must be under ${MAX_FILE_SIZE_MB} MB. The following files exceed the size limit: ${oversizedFiles
         .map((file) => file.name)
-        .join(", ")}`
-    );
+        .join(', ')}`
+    )
   }
 
   function removeExtension(fileName) {
-  const lastDotIndex = fileName.lastIndexOf('.');
-  if (lastDotIndex === -1) return fileName; // No dot found, return the original name
-  return fileName.slice(0, lastDotIndex); // Return the part before the last dot
-}
+    const lastDotIndex = fileName.lastIndexOf('.')
+    if (lastDotIndex === -1) return fileName // No dot found, return the original name
+    return fileName.slice(0, lastDotIndex) // Return the part before the last dot
+  }
   // Filter out duplicate files based on filename in both attachments and task.taskAttachments
-  const duplicateFiles = selectedFiles.filter((file) =>
-  attachments.value.some((att) => removeExtension(att.name) === removeExtension(file.name)) ||
-  task.taskAttachments.some((att) => removeExtension(att.name) === removeExtension(file.name))
-);
+  const duplicateFiles = selectedFiles.filter(
+    (file) =>
+      attachments.value.some(
+        (att) => removeExtension(att.name) === removeExtension(file.name)
+      ) ||
+      task.taskAttachments.some(
+        (att) => removeExtension(att.name) === removeExtension(file.name)
+      )
+  )
 
   if (duplicateFiles.length > 0) {
     errors.push(
       `File with the same filename cannot be added. Please delete the attachment and add again to update the file: ${duplicateFiles
         .map((file) => file.name)
-        .join(", ")}`
-    );
+        .join(', ')}`
+    )
   }
 
   // Unsupported file types check in both selected files and task.taskAttachments
@@ -298,97 +302,100 @@ const selectFiles = (event) => {
     ...selectedFiles.filter((file) => unSupportedTypes.includes(file.type)),
     ...task.taskAttachments.filter((file) =>
       unSupportedTypes.includes(file.type)
-    ),
-  ];
+    )
+  ]
 
   if (unsupportedFiles.length > 0) {
     errors.push(
       `The following files have unsupported types: ${unsupportedFiles
         .map((file) => file.name)
-        .join(", ")}`
-    );
+        .join(', ')}`
+    )
   }
 
   // Add valid files to attachments
   const validFiles = selectedFiles.filter(
     (file) =>
       file.size <= MAX_FILE_SIZE_BYTES &&
-      !attachments.value.some((att) => removeExtension(att.name) === removeExtension(file.name)) &&
-      !task.taskAttachments.some((att) => removeExtension(att.name) === removeExtension(file.name)) &&
+      !attachments.value.some(
+        (att) => removeExtension(att.name) === removeExtension(file.name)
+      ) &&
+      !task.taskAttachments.some(
+        (att) => removeExtension(att.name) === removeExtension(file.name)
+      ) &&
       !unSupportedTypes.includes(file.type)
-  );
+  )
 
   // Check file count limit
   const currentFileCount =
-    attachments.value.length + task.taskAttachments.length;
-  const remainingSlots = MAX_FILES - currentFileCount;
+    attachments.value.length + task.taskAttachments.length
+  const remainingSlots = MAX_FILES - currentFileCount
 
   if (validFiles.length > remainingSlots) {
-    const allowedFiles = validFiles.slice(0, remainingSlots);
-    const excessFiles = validFiles.slice(remainingSlots);
+    const allowedFiles = validFiles.slice(0, remainingSlots)
+    const excessFiles = validFiles.slice(remainingSlots)
 
-    attachments.value.push(...allowedFiles);
+    attachments.value.push(...allowedFiles)
     errors.push(
       `Each task can have a maximum of ${MAX_FILES} files. The following files were not added due to the file count limit: ${excessFiles
         .map((file) => file.name)
-        .join(", ")}`
-    );
+        .join(', ')}`
+    )
   } else {
-    attachments.value.push(...validFiles);
+    attachments.value.push(...validFiles)
   }
 
   // Update error messages reactively
-  errorMessages.value = errors;
+  errorMessages.value = errors
 
   // Clear messages after 5 seconds
   if (errors.length > 0) {
     setTimeout(() => {
-      errorMessages.value = [];
-    }, 5000);
+      errorMessages.value = []
+    }, 5000)
   }
-};
+}
 
 const removeAttachment = function (index) {
-  attachments.value.splice(index, 1);
-};
+  attachments.value.splice(index, 1)
+}
 
 const removeAttachmentList = function (id, name, type, indexClick) {
   attachmentLoop.splice(indexClick, 1)
-  let pushData =  ''
-  if(type.length == 0){
-   pushData = id + "_" + name ;
+  let pushData = ''
+  if (type.length == 0) {
+    pushData = id + '_' + name
   } else {
-  pushData = id + "_" + name + "." + type;
+    pushData = id + '_' + name + '.' + type
   }
-  console.log(indexClick);
-  const index = removeList.indexOf(pushData);
+  console.log(indexClick)
+  const index = removeList.indexOf(pushData)
   if (index !== -1) {
-    removeList.splice(index, 1);
-    clickedIndex.value.splice(index, 1);
-    console.log(clickedIndex.value);
-    return;
+    removeList.splice(index, 1)
+    clickedIndex.value.splice(index, 1)
+    console.log(clickedIndex.value)
+    return
   }
-  clickedIndex.value.push(indexClick);
-  removeList.push(pushData);
-  console.log(clickedIndex.value);
-};
-
-const downloadFile = function (url) {
-  const fileUrl = url;
-  const link = document.createElement("a");
-  link.href = fileUrl;
-  link.click();
-  link.remove();
-};
-const viewFile = function (url) {
-  const fileUrl = url;
-  const link = document.createElement("a");
-  link.href = fileUrl;
-  link.target = "_blank";
-  link.click();
-  link.remove();
+  clickedIndex.value.push(indexClick)
+  removeList.push(pushData)
+  console.log(clickedIndex.value)
 }
 
+const downloadFile = function (url) {
+  const fileUrl = url
+  const link = document.createElement('a')
+  link.href = fileUrl
+  link.click()
+  link.remove()
+}
+const viewFile = function (url) {
+  const fileUrl = url
+  const link = document.createElement('a')
+  link.href = fileUrl
+  link.target = '_blank'
+  link.click()
+  link.remove()
+}
 </script>
 
 <template>
@@ -534,7 +541,9 @@ const viewFile = function (url) {
                   <button
                     @click="$refs.fileInput.click()"
                     class="bg-blue-500 text-white px-4 py-2 rounded"
-                    :disabled="attachments.length + task.taskAttachments.length >= 10"
+                    :disabled="
+                      attachments.length + task.taskAttachments.length >= 10
+                    "
                   >
                     Add Files
                   </button>
@@ -551,7 +560,7 @@ const viewFile = function (url) {
                       :key="index"
                       class="flex items-center justify-between"
                     >
-                      <span>{{ index + 1 + "." }} {{ file.name }}</span>
+                      <span>{{ index + 1 + '.' }} {{ file.name }}</span>
                       <div
                         v-if="file.type == 'jpg' || file.type == 'png'"
                         class="flex items-center space-x-2"
@@ -563,12 +572,10 @@ const viewFile = function (url) {
                         />
                       </div>
                       <div
-                        v-else-if="
-                          file.type ==='pdf'
-                        "
+                        v-else-if="file.type === 'pdf'"
                         class="flex items-center space-x-2"
                       >
-                      <iframe
+                        <iframe
                           :src="file.path"
                           alt="File preview"
                           class="w-16 h-16 object-cover"
@@ -611,7 +618,7 @@ const viewFile = function (url) {
                 :key="index"
                 class="flex items-center justify-between"
               >
-                <span>{{ index + 1 + "." }} {{ file.name }}</span>
+                <span>{{ index + 1 + '.' }} {{ file.name }}</span>
                 <div
                   @click="removeAttachment(index)"
                   class="cursor-pointer ml-2"
@@ -703,10 +710,10 @@ const viewFile = function (url) {
           </button>
           <button
             @click="
-              [
+              ;[
                 $emit('showTaskDetailModal', false),
-                $router.replace({ name: 'EditTaskDetail' }),
-              ];
+                $router.replace({ name: 'EditTaskDetail' })
+              ]
             "
             class="itbkk-button-cancel bg-gray-400 scr-m:btn-sm scr-l:btn-md scr-l:rounded-[10px] rounded-[2px] w-[50px] h-[25px] font-sans btn-xs scr-l:btn-m text-center gap-2 hover:text-gray-200 mr-3 mt-2"
           >

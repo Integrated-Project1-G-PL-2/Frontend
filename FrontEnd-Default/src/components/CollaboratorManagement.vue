@@ -24,6 +24,7 @@ import ChangeRemoveLeaveCollab from './../components/ChangeRemoveLeaveCollab.vue
 import AlertPopUp from './../components/AlertPopUp.vue'
 import { useCollaboratorManager } from '@/stores/CollaboratorManager'
 import CancelInvitation from './../components/CancelInvitation.vue'
+import LoadingPopUp from './LoadingPopUp.vue'
 const router = useRouter()
 const removeCollab = ref()
 const cancelInvitationCollab = ref(false)
