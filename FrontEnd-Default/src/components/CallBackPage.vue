@@ -2,14 +2,22 @@
 
 <script setup>
 import { msalService } from "../utils/msalService.js";
+import { useRouter } from 'vue-router'
 const getCookie = (name) => {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) return parts.pop().split(";").shift();
 };
 
+const router = useRouter()
+
 const accessToken = getCookie("access_token");
 const refreshToken = getCookie("refresh_token");
+
+localStorage.setItem('jwt', accessToken);
+localStorage.setItem('refresh_token', refreshToken);
+localStorage.setItem('loginFormMicrosoft', true);
+router.replace({ name: 'Board' })
 
 console.log(accessToken);
 console.log(refreshToken);

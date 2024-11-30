@@ -4,6 +4,21 @@ import { ref } from 'vue'
 export const userName = ref('')
 export const userEmail = ref('')
 export const userRole = ref('')
+import { msalService } from "@/utils/msalService";
+import { useRouter } from 'vue-router'
+import { msalInstance } from "@/stores/msalConfig";
+const {  msalLogout } = msalService();
+const router = useRouter()
+
+const initialize = async () => {
+  try {
+    await msalInstance.initialize();
+  } catch (error) {
+    console.log("Initialization error", error);
+  }
+};
+
+initialize()
 
 // ฟังก์ชันถอดรหัส JWT
 export function decodeJWT(token) {
@@ -76,6 +91,13 @@ export async function login(userCredentials, router) {
 
 // ฟังก์ชันสำหรับออกจากระบบ (logout)
 export function logout() {
+  if (localStorage.getItem('loginFormMicrosoft') == 'true') {
+    localStorage.removeItem('jwt')
+    localStorage.removeItem('refresh_token')
+    localStorage.removeItem('loginFormMicrosoft')
+    msalLogout();  
+    return
+}
   localStorage.removeItem('jwt')
   localStorage.removeItem('refresh_token')
   localStorage.removeItem('userName')
@@ -98,16 +120,31 @@ export async function refreshToken(router) {
     router.replace({ name: 'Login' })
     return null // Return null if refresh token is missing
   }
-
-  try {
-    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/token`, {
+ 
+  try { 
+    let response 
+    if(localStorage.getItem('loginFormMicrosoft') == 'true'){
+      response = await fetch(`${import.meta.env.VITE_BASE_URL}/token`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${refresh_token}`,
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          msal: true,
+        }),
+      });
+    }      
+    else {
+      response = await fetch(`${import.meta.env.VITE_BASE_URL}/token`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${refresh_token}` // Use refresh token
       },
       credentials: 'include'
-    })
+    })}
 
     // If refresh token request is successful
     if (response.ok) {

@@ -23,7 +23,7 @@ export function msalService() {
     }
   };
 
-  const logout = () => {
+  const msalLogout = () => {
     if (!msalInstance) {
       throw new Error(
         "MSAL not initialized. Call initialize() before using MSAL API."
@@ -76,7 +76,7 @@ export function msalService() {
   return {
     initialize,
     loginMicrosoft,
-    logout,
+    msalLogout,
     handleRedirect,
     getToken,
   };
