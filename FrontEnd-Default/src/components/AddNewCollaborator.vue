@@ -14,7 +14,8 @@ const deClareemit = defineEmits([
   'errorNotExitCollab',
   'errorExitCollab',
   'problemSendEmail',
-  'inviteEmail'
+  'inviteEmail',
+  'showLoadingScreen'
 ])
 const props = defineProps(['EmailCollabBoard'])
 const isNameOverLimit = ref(false)

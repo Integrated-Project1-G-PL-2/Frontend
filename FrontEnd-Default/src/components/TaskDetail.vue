@@ -17,7 +17,8 @@ import DeleteAttachment from './DeleteAttachment.vue'
 const emits = defineEmits([
   'showTaskDetailModal',
   'showRedPopup',
-  'showGreenPopup'
+  'showGreenPopup',
+  'showLoadingScreen'
 ])
 const MAX_FILE_SIZE = ref()
 const taskManager = useTaskManager()
