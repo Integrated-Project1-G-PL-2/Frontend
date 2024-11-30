@@ -118,9 +118,9 @@ onMounted(async () => {
 });
 
 const handleMSIPLogin = async () => {
-  const loginUrl = "http://localhost:8080/login/microsoft";
+  const loginUrl =  `${import.meta.env.VITE_BASE_URL}/login/microsoft`;
   window.location.href = loginUrl;
-  await loginMicrosoft();
+  // await loginMicrosoft();
   // logout();
 };
 </script>
