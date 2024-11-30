@@ -233,6 +233,9 @@ const closeInviteProblemCollabAlter = function () {
 const showRequestInvitationListPopUp = () => {
   router.replace({ name: 'AddInvitation' })
 }
+const showLoading = function () {
+  loadingScreen.value = false
+}
 </script>
 
 <template>
@@ -517,6 +520,7 @@ const showRequestInvitationListPopUp = () => {
       @errorCollab="showErrorMessage"
       :EmailCollabBoard="collabEmail"
       @inviteEmail="showInvite"
+      @showLoadingScreen="showLoading"
     ></AddNewCollaborator>
   </teleport>
   <teleport to="body" v-if="changeCollab">

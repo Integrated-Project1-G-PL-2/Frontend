@@ -370,6 +370,9 @@ const closeListsSameFilesAlter = function () {
 const closeSameFilesAlter = function () {
   sameFiles.value = false
 }
+const showLoading = function () {
+  loadingScreen.value = false
+}
 </script>
 
 <template>
@@ -942,6 +945,7 @@ const closeSameFilesAlter = function () {
       :operate="operation"
       @showRedPopup="openRedPopup"
       @showGreenPopup="openGreenPopup"
+      @showLoadingScreen="showLoading"
     ></TaskDetail>
   </teleport>
   <teleport to="body" v-if="showDeleteTaskDetail">
