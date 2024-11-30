@@ -55,6 +55,7 @@ const largeFiles = ref(false)
 const sameFiles = ref(false)
 const listsSameFiles = ref(false)
 const limitListsFiles = ref(false)
+const loadingScreen = ref(false)
 const visibilityToggle = reactive({
   public: { state: false },
   private: { state: false }
@@ -559,6 +560,7 @@ const closeSameFilesAlter = function () {
       message="Error!!"
       styleType="red"
     />
+    <LoadingPopUp v-if="loadingScreen" />
     <div class="flex justify-end">
       <div
         class="itbkk-status-filter flex items-center space-x-2 mr-auto ml-4 my-3 border"

@@ -42,6 +42,7 @@ const closeAccessRight = ref(false)
 const closeRemoveRight = ref(false)
 const closeNotCollaborator = ref(false)
 const errorCollab = ref(false)
+const loadingScreen = ref(false)
 const returnPage = ref(false)
 const errorRemoveCollab = ref(false)
 const errorChangeCollab = ref(false)
@@ -365,6 +366,7 @@ const showRequestInvitationListPopUp = () => {
       message="You have a new invitation!"
       styleType="yellow"
     />
+    <LoadingPopUp v-if="loadingScreen" />
 
     <div class="flex justify-end">
       <div
