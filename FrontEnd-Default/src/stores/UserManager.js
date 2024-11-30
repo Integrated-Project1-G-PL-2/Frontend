@@ -46,8 +46,9 @@ export function decodeJWT(token) {
         throw new Error(`Missing required field in JWT payload: ${field}`)
       }
     }
-    
+   
     userEmail.value = decodedPayload.email
+    localStorage.setItem('role',decodedPayload.role)
     localStorage.setItem('userEmail', decodedPayload.email)
     userName.value = decodedPayload.name
     localStorage.setItem('userName', decodedPayload.name)

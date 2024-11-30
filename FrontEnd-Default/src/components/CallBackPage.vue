@@ -3,6 +3,9 @@
 <script setup>
 import { msalService } from "../utils/msalService.js";
 import { useRouter } from 'vue-router'
+import {
+  decodeJWT
+} from "@/stores/UserManager";
 const getCookie = (name) => {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
@@ -13,6 +16,9 @@ const router = useRouter()
 
 const accessToken = getCookie("access_token");
 const refreshToken = getCookie("refresh_token");
+const data = document.cookie.split('=')[1]
+const decodedToken = decodeJWT(data)
+
 
 localStorage.setItem('jwt', accessToken);
 localStorage.setItem('refresh_token', refreshToken);
