@@ -31,21 +31,21 @@ export function decodeJWT(token) {
       throw new Error('Invalid JWT header')
     }
 
-    const requiredFields = [
-      'role',
-      'name',
-      'oid',
-      'email',
-      'sub',
-      'iat',
-      'exp',
-      'iss'
-    ]
-    for (const field of requiredFields) {
-      if (!decodedPayload.hasOwnProperty(field)) {
-        throw new Error(`Missing required field in JWT payload: ${field}`)
-      }
-    }
+    // const requiredFields = [
+    //   'role',
+    //   'name',
+    //   'oid',
+    //   'email',
+    //   'sub',
+    //   'iat',
+    //   'exp',
+    //   'iss'
+    // ]
+    // for (const field of requiredFields) {
+    //   if (!decodedPayload.hasOwnProperty(field)) {
+    //     throw new Error(`Missing required field in JWT payload: ${field}`)
+    //   }
+    // }
    
     userEmail.value = decodedPayload.email
     localStorage.setItem('role',decodedPayload.role)
@@ -96,12 +96,13 @@ export function logout() {
     localStorage.removeItem('jwt')
     localStorage.removeItem('refresh_token')
     localStorage.removeItem('loginFormMicrosoft')
+    localStorage.removeItem('userEmail')
     msalLogout();  
-    return
 }
   localStorage.removeItem('jwt')
   localStorage.removeItem('refresh_token')
   localStorage.removeItem('userName')
+  localStorage.removeItem('role')
   sessionStorage.removeItem('userRole')
 
   // ลบข้อมูลที่เกี่ยวข้องจาก sessionStorage (ถ้ามี)
