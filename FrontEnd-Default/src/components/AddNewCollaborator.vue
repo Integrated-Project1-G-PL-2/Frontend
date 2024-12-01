@@ -82,18 +82,22 @@ const newCollab = async () => {
 
     // Check for specific error responses
     if (newCollabBoards == 401) {
+      deClareemit('showLoadingScreen', false) // Stop loading
       deClareemit('cancelCollab', true)
       refreshToken(router)
       return
     } else if (newCollabBoards == 403) {
+      deClareemit('showLoadingScreen', false) // Stop loading
       deClareemit('errorAddCollab', true)
       deClareemit('cancelCollab', true)
       return
     } else if (newCollabBoards == 404) {
+      deClareemit('showLoadingScreen', false) // Stop loading
       deClareemit('errorNotExitCollab', true)
       deClareemit('cancelCollab', true)
       return
     } else if (newCollabBoards == 409) {
+      deClareemit('showLoadingScreen', false) // Stop loading
       deClareemit('errorExitCollab', true)
       deClareemit('cancelCollab', true)
       return
@@ -102,10 +106,12 @@ const newCollab = async () => {
     // Handle successful collaborator creation
     if (!newCollabBoards.mailStatus) {
       // We couldn't send email to ...
+      deClareemit('showLoadingScreen', false) // Stop loading
       deClareemit('problemSendEmail', true)
       collabManager.addCollaborator(newCollabBoards, 'pending')
       deClareemit('cancelCollab', true)
     } else if (newCollabBoards.oid) {
+      deClareemit('showLoadingScreen', false) // Stop loading
       deClareemit('inviteEmail', true)
       collabManager.addCollaborator(newCollabBoards, 'pending')
       console.log(collabManager.getCollaborators())
@@ -115,6 +121,7 @@ const newCollab = async () => {
       console.log(newCollabBoards)
     } else {
       // Handle unexpected responses
+      deClareemit('showLoadingScreen', false) // Stop loading
       deClareemit('errorCollabs', true)
       deClareemit('cancelCollab', true)
     }

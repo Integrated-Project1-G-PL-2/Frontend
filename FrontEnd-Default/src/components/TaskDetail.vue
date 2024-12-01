@@ -148,6 +148,7 @@ const handleClick = async () => {
   try {
     emits('showLoadingScreen', true)
     if (prop.operate == 'show') {
+      emits('showLoadingScreen', false) // Stop loading
       emits('showTaskDetailModal', false)
       router.replace({ name: 'Task' })
       return
@@ -177,11 +178,13 @@ const handleClick = async () => {
       router.replace({ name: 'Task' })
       if (newTask.status != '500') {
         taskManager.addTask(newTask)
+        emits('showLoadingScreen', false) // Stop loading
         emits('showGreenPopup', {
           taskTitle: newTask.title,
           operate: prop.operate
         })
       }
+      emits('showLoadingScreen', false) // Stop loading
       emits('showTaskDetailModal', false)
     } else if (prop.operate == 'edit') {
       const file = Array.from(attachments.value)
@@ -213,21 +216,24 @@ const handleClick = async () => {
       if (editTask.status != '500' && editTask.status != '404') {
         console.log(editTask)
         taskManager.editTask(editTask.id, editTask)
+        emits('showLoadingScreen', false) // Stop loading
         emits('showGreenPopup', {
           taskTitle: editTask.title,
           operate: prop.operate
         })
       } else {
+        emits('showLoadingScreen', false) // Stop loading
         emits('showRedPopup', {
           taskTitle: !editTask.title ? task.taskTitle : editTask.title,
           operate: prop.operate
         })
       }
       router.replace({ name: 'Task' })
+      emits('showLoadingScreen', false) // Stop loading
       emits('showTaskDetailModal', false)
     }
   } finally {
-    deClareemit('showLoadingScreen', false) // Stop loading
+    emits('showLoadingScreen', false) // Stop loading
   }
 }
 const showAddPopUpAttachmentsDetail = async function () {
