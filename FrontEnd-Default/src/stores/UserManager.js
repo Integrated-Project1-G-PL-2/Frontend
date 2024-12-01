@@ -96,9 +96,9 @@ export function logout() {
     localStorage.removeItem('jwt')
     localStorage.removeItem('refresh_token')
     localStorage.removeItem('loginFormMicrosoft')
-    localStorage.removeItem('userEmail')
     msalLogout();  
 }
+  localStorage.removeItem('userEmail')
   localStorage.removeItem('jwt')
   localStorage.removeItem('refresh_token')
   localStorage.removeItem('userName')
