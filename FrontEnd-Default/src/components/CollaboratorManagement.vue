@@ -234,7 +234,7 @@ const showRequestInvitationListPopUp = () => {
   router.replace({ name: 'AddInvitation' })
 }
 const showLoading = function () {
-  loadingScreen.value = false
+  loadingScreen.value = true
 }
 </script>
 

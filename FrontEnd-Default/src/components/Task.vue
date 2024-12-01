@@ -371,7 +371,7 @@ const closeSameFilesAlter = function () {
   sameFiles.value = false
 }
 const showLoading = function () {
-  loadingScreen.value = false
+  loadingScreen.value = true
 }
 </script>
 
