@@ -66,68 +66,64 @@ const checkNameLength = () => {
 
 // Handle creating a new collaborator
 const newCollab = async () => {
-  try {
-    deClareemit('showLoadingScreen', true) // Start loading
-    console.log(selectedAccessLevel.value)
+  deClareemit('showLoadingScreen', true) // Start loading
+  console.log(selectedAccessLevel.value)
 
-    // Attempt to add a new collaborator
-    const newCollabBoards = await addItem(
-      `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`,
-      {
-        email: newCollabEmailName.value,
-        accessRight: selectedAccessLevel.value
-      }
-    )
-
-    console.log(newCollabBoards)
-
-    // Check for specific error responses
-    if (newCollabBoards == 401) {
-      deClareemit('finishLoadingScreen', true) // Stop loading
-      deClareemit('cancelCollab', true)
-      refreshToken(router)
-      return
-    } else if (newCollabBoards == 403) {
-      deClareemit('finishLoadingScreen', true) // Stop loading
-      deClareemit('errorAddCollab', true)
-      deClareemit('cancelCollab', true)
-      return
-    } else if (newCollabBoards == 404) {
-      deClareemit('finishLoadingScreen', true) // Stop loading
-      deClareemit('errorNotExitCollab', true)
-      deClareemit('cancelCollab', true)
-      return
-    } else if (newCollabBoards == 409) {
-      deClareemit('finishLoadingScreen', true) // Stop loading
-      deClareemit('errorExitCollab', true)
-      deClareemit('cancelCollab', true)
-      return
+  // Attempt to add a new collaborator
+  const newCollabBoards = await addItem(
+    `${import.meta.env.VITE_BASE_URL}/v3/boards/${route.params.id}/collabs`,
+    {
+      email: newCollabEmailName.value,
+      accessRight: selectedAccessLevel.value
     }
+  )
 
-    // Handle successful collaborator creation
-    if (!newCollabBoards.mailStatus) {
-      // We couldn't send email to ...
-      deClareemit('finishLoadingScreen', true) // Stop loading
-      deClareemit('problemSendEmail', true)
-      collabManager.addCollaborator(newCollabBoards, 'pending')
-      deClareemit('cancelCollab', true)
-    } else if (newCollabBoards.oid) {
-      deClareemit('finishLoadingScreen', true) // Stop loading
-      deClareemit('inviteEmail', true)
-      collabManager.addCollaborator(newCollabBoards, 'pending')
-      console.log(collabManager.getCollaborators())
-      deClareemit('cancelCollab', true)
-      // Optionally redirect or perform further actions here
-      // router.replace({ name: 'CollabList' });
-      console.log(newCollabBoards)
-    } else {
-      // Handle unexpected responses
-      deClareemit('finishLoadingScreen', true) // Stop loading
-      deClareemit('errorCollabs', true)
-      deClareemit('cancelCollab', true)
-    }
-  } finally {
+  console.log(newCollabBoards)
+
+  // Check for specific error responses
+  if (newCollabBoards == 401) {
     deClareemit('finishLoadingScreen', true) // Stop loading
+    deClareemit('cancelCollab', true)
+    refreshToken(router)
+    return
+  } else if (newCollabBoards == 403) {
+    deClareemit('finishLoadingScreen', true) // Stop loading
+    deClareemit('errorAddCollab', true)
+    deClareemit('cancelCollab', true)
+    return
+  } else if (newCollabBoards == 404) {
+    deClareemit('finishLoadingScreen', true) // Stop loading
+    deClareemit('errorNotExitCollab', true)
+    deClareemit('cancelCollab', true)
+    return
+  } else if (newCollabBoards == 409) {
+    deClareemit('finishLoadingScreen', true) // Stop loading
+    deClareemit('errorExitCollab', true)
+    deClareemit('cancelCollab', true)
+    return
+  }
+
+  // Handle successful collaborator creation
+  if (!newCollabBoards.mailStatus) {
+    // We couldn't send email to ...
+    deClareemit('finishLoadingScreen', true) // Stop loading
+    deClareemit('problemSendEmail', true)
+    collabManager.addCollaborator(newCollabBoards, 'pending')
+    deClareemit('cancelCollab', true)
+  } else if (newCollabBoards.oid) {
+    deClareemit('finishLoadingScreen', true) // Stop loading
+    deClareemit('inviteEmail', true)
+    collabManager.addCollaborator(newCollabBoards, 'pending')
+    console.log(collabManager.getCollaborators())
+    deClareemit('cancelCollab', true)
+    // Optionally redirect or perform further actions here
+    // router.replace({ name: 'CollabList' });
+    console.log(newCollabBoards)
+  } else {
+    // Handle unexpected responses
+    deClareemit('finishLoadingScreen', true) // Stop loading
+    deClareemit('errorCollabs', true)
+    deClareemit('cancelCollab', true)
   }
 }
 </script>
