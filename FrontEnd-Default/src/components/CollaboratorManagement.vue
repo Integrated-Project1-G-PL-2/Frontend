@@ -236,6 +236,9 @@ const showRequestInvitationListPopUp = () => {
 const showLoading = function () {
   loadingScreen.value = true
 }
+const closeLoading = function () {
+  loadingScreen.value = false
+}
 </script>
 
 <template>
@@ -521,6 +524,7 @@ const showLoading = function () {
       :EmailCollabBoard="collabEmail"
       @inviteEmail="showInvite"
       @showLoadingScreen="showLoading"
+      @finishLoadingScreen="closeLoading"
     ></AddNewCollaborator>
   </teleport>
   <teleport to="body" v-if="changeCollab">
