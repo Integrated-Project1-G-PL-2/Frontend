@@ -98,6 +98,8 @@ export function logout() {
     localStorage.removeItem('loginFormMicrosoft')
     msalLogout();  
 }
+  deleteCookie('access_token')
+  deleteCookie('refresh_token')
   localStorage.removeItem('userEmail')
   localStorage.removeItem('jwt')
   localStorage.removeItem('refresh_token')

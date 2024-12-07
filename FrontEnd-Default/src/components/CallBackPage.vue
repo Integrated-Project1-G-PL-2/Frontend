@@ -25,8 +25,6 @@ localStorage.setItem('refresh_token', refreshToken);
 localStorage.setItem('loginFormMicrosoft', true);
 router.replace({ name: 'Board' })
 
-console.log(accessToken);
-console.log(refreshToken);
 
 // const handleRedirect = async () => {
 //   const urlFragment = window.location.hash.substring(1); // Remove the leading #
