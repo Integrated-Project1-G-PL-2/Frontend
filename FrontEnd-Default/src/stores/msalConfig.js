@@ -7,7 +7,7 @@ export const msalConfig = {
     authority:
       "https://login.microsoftonline.com/79845616-9df0-43e0-8842-e300feb2642a",
     redirectUri: "http://localhost:5173/callback/login",
-    postLogoutRedirectUri: "http://localhost:5173/login"
+    postLogoutRedirectUri: "https://intproj23.sit.kmutt.ac.th/pl2/login"
   },
   cache: {
     cacheLocation: "sessionStorage",
