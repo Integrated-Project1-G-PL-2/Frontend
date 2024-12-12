@@ -101,6 +101,7 @@ onMounted(async () => {
     ...(boardManager.getBoards().personal || []),
     ...(boardManager.getBoards().collab || [])
   ].find((item) => item.id.boardId === route.params.id)?.role
+  console.log(userRole)
   sessionStorage.setItem('userRole', userRole)
   storedUserRole.value = sessionStorage.getItem('userRole')
 
@@ -642,7 +643,7 @@ const closeLoading = function () {
         </label>
         <div
           v-if="
-            isSwitch &&
+            !isSwitch &&
             (storedUserRole == 'READ' || storedUserRole == 'undefined')
           "
           class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
@@ -668,7 +669,7 @@ const closeLoading = function () {
       <div class="relative group">
         <button
           :disabled="
-            isSwitch &&
+            !isSwitch &&
             (storedUserRole == 'READ' || storedUserRole == 'undefined')
           "
           @click="showAddPopUpTaskDetail('add')"
@@ -678,7 +679,7 @@ const closeLoading = function () {
         </button>
         <!-- <button
           :disabled="
-            isSwitch &&
+            !isSwitch &&
             (storedUserRole == 'READ' || storedUserRole == 'undefined')
           "
           @click="showAddPopUpAttachmentsDetail()"
@@ -688,7 +689,7 @@ const closeLoading = function () {
         </button> -->
         <div
           v-if="
-            isSwitch &&
+            !isSwitch &&
             (storedUserRole == 'READ' || storedUserRole == 'undefined')
           "
           class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
@@ -697,7 +698,7 @@ const closeLoading = function () {
         </div>
         <div
           v-if="
-            isSwitch &&
+            !isSwitch &&
             (storedUserRole == 'READ' || storedUserRole == 'undefined')
           "
           class="absolute hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-center text-sm rounded-lg -top-10 left-1/2 transform -translate-x-1/2 py-1"
